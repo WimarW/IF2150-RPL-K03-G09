@@ -87,10 +87,15 @@ Buatlah daftar seluruh aktor (pengguna) yang akan berinteraksi langsung dengan s
 
 ## 3.2 Kebutuhan Pengguna Awal
 
+
+
 | ID | Aktor | Kebutuhan / Aktivitas | Tujuan / Nilai |
+| :--- | :--- | :--- | :--- |
 | 9N-01 | Pemberi Jasa |  Melakukan pekerjaan fisik di lokasi pelanggan sesuai dengan persetujuan dengan pelanggan  | Menjual jasa untuk mendapatkan upah  |
 | 9N-02 | Pelanggan | Pihak yang memerlukan, memesan, dan membayar layanan jasa | Menyelesaikan masalah yang dimiliki oleh pelanggan|
 | 9N-03 | Layanan Pelanggan | menyelesaikan permasalahan yang terjadi dalam aktivitas pemberi dan penerimaan jasa | Menyelesaikan permasalahan yang terjadi antara pihak Pemberi Jasa dan Pelanggan |
+| ... | ... | ... | ... |
+
 
 
 ## 3.3 Model Proses Bisnis
