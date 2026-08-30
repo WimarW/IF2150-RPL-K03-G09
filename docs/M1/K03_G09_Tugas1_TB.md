@@ -116,8 +116,15 @@ Buatlah daftar seluruh aktor (pengguna) yang akan berinteraksi langsung dengan s
 | 9N-03 | Layanan Pelanggan | menyelesaikan permasalahan yang terjadi dalam aktivitas pemberi dan penerimaan jasa | Menyelesaikan permasalahan yang terjadi antara pihak Pemberi Jasa dan Pelanggan |
 
 
+## 3.3 Deskripsi Aktivitas
+Buatlah daftar seluruh aktivitas yang terdapat dalam sistem solusi, lengkap dengan ID dan penjelasan. Telusuri hubungan aktivitas tersebut dengan *user story* yang sudah dituliskan sebelumnya. Bisa dibuat dalam bentuk tabel.
+| ID | Aktivitas | Penjelasan | ID User Story |
+| :--- | :--- | :--- | :--- |
+| A01 | *Melakukan Pemesanan* | *Pelanggan memulai proses dengan memesan produk.* | *US-01* |
+| A02 | *Memproses Pesanan* | *Sistem memproses dan menyiapkan detail sesuai dengan pesanan.* | *US-02*|
+| ... | ... | ... | ... |
 
-## 3.3 Model Proses Bisnis
+## 3.4 Model Proses Bisnis
 <br>
 
 <p align="center">
