@@ -82,7 +82,6 @@ Buatlah daftar seluruh aktor (pengguna) yang akan berinteraksi langsung dengan s
 |  Pelanggan| Pengguna ini berperan sebagai pihak yang memerlukan, memesan, dan membayar layanan jasa kasar. |
 | Layanan Pelanggan | Pengguna ini sebagai pihak yang berjaga jaga apabila terdapat sebuah masalah pada sistem atau masalah pada pengguna lain |
 
-| ... | ... |
 
 
 ## 3.2 Kebutuhan Pengguna Awal
@@ -94,7 +93,6 @@ Buatlah daftar seluruh aktor (pengguna) yang akan berinteraksi langsung dengan s
 | 9N-01 | Pemberi Jasa |  Melakukan pekerjaan fisik di lokasi pelanggan sesuai dengan persetujuan dengan pelanggan  | Menjual jasa untuk mendapatkan upah  |
 | 9N-02 | Pelanggan | Pihak yang memerlukan, memesan, dan membayar layanan jasa | Menyelesaikan masalah yang dimiliki oleh pelanggan|
 | 9N-03 | Layanan Pelanggan | menyelesaikan permasalahan yang terjadi dalam aktivitas pemberi dan penerimaan jasa | Menyelesaikan permasalahan yang terjadi antara pihak Pemberi Jasa dan Pelanggan |
-| ... | ... | ... | ... |
 
 
 
