@@ -55,6 +55,6 @@ Kami yang bertanda tangan di bawah ini menyatakan bahwa seluruh log penggunaan A
 | :---: | :--- |
 | <img src="./assets/Document19_1.jpg" width="100"> | **[13525126 - Raymond Edson Sabajan]** |
 | <img src="./assets/Tanda-Tangan-Naufal-Hasbialhaq.png" width="100"> | **[13525120 - Naufal Hasbialhaq]** |
-| <img src="./assets/ttd-anggota3.png" width="100"> | **[NIM - Nama Anggota 3]** |
+| <img src="./assets/Screenshot 2026-08-30 203410.png" width="100"> | **[13525048 - Yohanes Nicholas Setiawan]** |
 | <img src="./assets/ttd-anggota4.png" width="100"> | **[NIM - Nama Anggota 4]** |
 | <img src="./assets/ttd-anggota5.png" width="100"> | **[NIM - Nama Anggota 5]** |
