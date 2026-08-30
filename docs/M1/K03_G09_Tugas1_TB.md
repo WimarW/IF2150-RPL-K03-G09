@@ -102,7 +102,7 @@ Buatlah daftar seluruh aktor (pengguna) yang akan berinteraksi langsung dengan s
 <br>
 
 <p align="center">
-<img alt="Diagram Swimlane Pemakaian Aplikasi" src="./assets/diagram/Diagram_Swimlane.png" width="70%">
+<img alt="Diagram Swimlane Pemakaian Aplikasi" src="assets/diagram/Diagram_Swimlane.png" width="70%">
 </p>
 <p align="center">
 <i>Gambar 1. Diagram Swimlane Pemakaian Aplikasi</i>
