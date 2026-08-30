@@ -86,13 +86,12 @@ Buatlah daftar seluruh aktor (pengguna) yang akan berinteraksi langsung dengan s
 
 
 ## 3.2 Kebutuhan Pengguna Awal
-Definisikan apa yang ingin dicapai oleh pengguna saat menggunakan sistem ini dalam format *User Story* (Sebagai [Aktor], saya ingin [Aktivitas/Kebutuhan], sehingga [Tujuan/Nilai]). Pastikan kalian berfokus pada "apa yang ingin dilakukan pengguna".
 
 | ID | Aktor | Kebutuhan / Aktivitas | Tujuan / Nilai |
-| :--- | :--- | :--- | :--- |
-| US-01 | *Kasir* |  *Memindai barcode barang* | *Proses pembayaran berjalan cepat dan akurat* |
-| US-02 | *[Nama Aktor]* | *[Kebutuhan pengguna]* | *[Tujuan yang dicapai pengguna]* |
-| ... | ... | ... | ... |
+| 9N-01 | Pemberi Jasa |  Melakukan pekerjaan fisik di lokasi pelanggan sesuai dengan persetujuan dengan pelanggan  | Menjual jasa untuk mendapatkan upah  |
+| 9N-02 | Pelanggan | Pihak yang memerlukan, memesan, dan membayar layanan jasa | Menyelesaikan masalah yang dimiliki oleh pelanggan|
+| 9N-03 | Layanan Pelanggan | menyelesaikan permasalahan yang terjadi dalam aktivitas pemberi dan penerimaan jasa | Menyelesaikan permasalahan yang terjadi antara pihak Pemberi Jasa dan Pelanggan |
+
 
 ## 3.3 Model Proses Bisnis
 Buatlah *Activity Diagram* atau *Swimlane Diagram* yang menunjukkan alur kerja proses bisnis dari sistem solusi. Diagram ini harus memvisualisasikan bagaimana alur operasional di dunia nyata berjalan lebih efisien dengan adanya interaksi antara aktor (yang didefinisikan pada poin 3.1) dan sistem perangkat lunak. Perhatikan notasi yang digunakan dalam pembuatannya.

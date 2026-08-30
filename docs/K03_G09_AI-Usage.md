@@ -37,6 +37,7 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | :--- | :--- | :--- | :--- |
 | *[Nama AI]* | *[Sertakan Tujuan Penggunaan]* | *[Tuliskan Prompt Utama]* | *[Tuliskan Keputusan Hasil Validasi]* |
 | Gemini | Mencari penjelasan secara lengkap mengenai SDG 10 | Berikan penjelasan SDG 10 dengan beberapa masalah merupakan sdg 10 | AI menjelaskan bahwa SDG 10 adalah SDG yang menyelesaikan masalah "ketertinggalan" dalam bidang sosial, ekonomi, dan politik dengan masalah utama ketimpangan pendapatan, diskriminasi tempat kerja, dan hukum dan kebijakan berpihak |
+| Gemini | Brainstorming Ide | bantu aku brainstorming mengenai masalah apa (menyangkut sdg 10) yang bisa diselesaikan oleh anak teknik informatika tingkat 2 ITB, outputnya adalah berupa perangkat lunak | AI memberikan beberapa ide-ide dan salah satunya adalah mengenai ide yang kami ambil yaitu masalah mengenai kesenjangan antara orang yang mempunyai fasilitas untuk usahanya dan yang tidak  |
 | | | | | |
 
 ### Milestone 2
@@ -53,7 +54,7 @@ Kami yang bertanda tangan di bawah ini menyatakan bahwa seluruh log penggunaan A
 | Tanda Tangan | Nama Anggota |
 | :---: | :--- |
 | <img src="./assets/Document19_1.jpg" width="100"> | **[13525126 - Raymond Edson Sabajan]** |
-| <img src="./assets/ttd-anggota2.png" width="100"> | **[NIM - Nama Anggota 2]** |
+| <img src="./assets/Tanda-Tangan-Naufal-Hasbialhaq.png" width="100"> | **[13525120 - Naufal Hasbialhaq]** |
 | <img src="./assets/ttd-anggota3.png" width="100"> | **[NIM - Nama Anggota 3]** |
 | <img src="./assets/ttd-anggota4.png" width="100"> | **[NIM - Nama Anggota 4]** |
 | <img src="./assets/ttd-anggota5.png" width="100"> | **[NIM - Nama Anggota 5]** |
