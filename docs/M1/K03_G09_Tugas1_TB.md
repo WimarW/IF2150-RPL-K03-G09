@@ -80,7 +80,7 @@ b. Menyutujui persetujuan dan harga
 c. Melakukan pekerjaan
 
 Layanan Pelanggan:
-a. Membantu proses mediasi jika terdapat masalah, baik dari pembayaran atau yang lainnya
+a. Membantu proses mediasi jika terdapat masalah baik dari pembayaran atau yang lainnya
 
 ## 2.2 Asumsi dan Batasan
 
