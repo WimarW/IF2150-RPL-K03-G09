@@ -37,7 +37,8 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | :--- | :--- | :--- | :--- |
 | *[Nama AI]* | *[Sertakan Tujuan Penggunaan]* | *[Tuliskan Prompt Utama]* | *[Tuliskan Keputusan Hasil Validasi]* |
 | Gemini | Mencari penjelasan secara lengkap mengenai SDG 10 | Berikan penjelasan SDG 10 dengan beberapa masalah merupakan sdg 10 | AI menjelaskan bahwa SDG 10 adalah SDG yang menyelesaikan masalah "ketertinggalan" dalam bidang sosial, ekonomi, dan politik dengan masalah utama ketimpangan pendapatan, diskriminasi tempat kerja, dan hukum dan kebijakan berpihak |
-| | | | | |
+| Gemini | Brainstorming Ide | bantu aku brainstorming mengenai masalah apa (menyangkut sdg 10) yang bisa diselesaikan oleh anak teknik informatika tingkat 2 ITB, outputnya adalah berupa perangkat lunak | AI memberikan beberapa ide-ide dan salah satunya adalah mengenai ide yang kami ambil yaitu masalah mengenai kesenjangan antara orang yang mempunyai fasilitas untuk usahanya dan yang tidak  |
+| Claude | Mencari pekerjaan yang akan dimasukan ke dalam jasa yang akan ditawarkan pada software kami | coba carikan saya list2 pekerjaan yang memiliki permintaan pasar yang banyak tetapi jarang ditemukan pada platform2 online dan juga pekerjaannya tidak memiliki tempat yang pasti | AI memberi beberapa list pekerjaan tetapi ada yang sudah memiliki tempat/platformnya menjual jasanya, seperti: pet grooming, cuci mobil, service laptop, dll. Sehingga saya harus menyaring dan memverifikasih apakah pekerjaan tersebut sesuai kriteria yang saya mau  |
 
 ### Milestone 2
 | Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
@@ -53,7 +54,7 @@ Kami yang bertanda tangan di bawah ini menyatakan bahwa seluruh log penggunaan A
 | Tanda Tangan | Nama Anggota |
 | :---: | :--- |
 | <img src="./assets/Document19_1.jpg" width="100"> | **[13525126 - Raymond Edson Sabajan]** |
-| <img src="./assets/ttd-anggota2.png" width="100"> | **[NIM - Nama Anggota 2]** |
-| <img src="./assets/ttd-anggota3.png" width="100"> | **[NIM - Nama Anggota 3]** |
-| <img src="./assets/ttd-anggota4.png" width="100"> | **[NIM - Nama Anggota 4]** |
-| <img src="./assets/ttd-anggota5.png" width="100"> | **[NIM - Nama Anggota 5]** |
+| <img src="./assets/Tanda-Tangan-Naufal-Hasbialhaq.png" width="100"> | **[13525120 - Naufal Hasbialhaq]** |
+| <img src="./assets/Screenshot 2026-08-30 203410.png" width="100"> | **[13525048 - Yohanes Nicholas Setiawan]** |
+| <img src="./assets/ttd-anggota4.png" width="100"> | **[13525009 - Wimar Widiarto]** |
+| <img src="./assets/WhatsApp Image 2025-10-03 at 22.17.43_c8e1b52e.jpg" width="100"> | **[13525093 - Vinsensius Juan Setiady]** | docs/assets/WhatsApp Image 2025-10-03 at 22.17.43_c8e1b52e.jpg

@@ -34,8 +34,11 @@
 | Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
 | :--- | :--- | :--- | :--- | :--- | :--- | 
 | *04-05-2026* | *[Nama Mahasiswa]* | *[Jelaskan Pekerjaan secara Singkat]* | *[Durasi Pengerjaan]* | *[On Progress/Done]* | [Kendala yang dialami, jika tidak ada cukup tandai "-"] | 
-| 30-08-2026 | Raymond Edson Sabajan | Mengerjakan identifikasi aktor sekaligus berdiskusi dengan teman | 1 jam 30 menit | Done | - | 
-| | | | | | | |
+| 30-08-2026 | Raymond Edson Sabajan | Mengerjakan identifikasi aktor sekaligus berdiskusi dengan teman | 1 jam 30 menit | Done | - |
+| 30-08-2026 | Naufal Hasbialhaq | Mengerjakan Kebutuhan Pengguna awal pada BAB 3 sekaligus berdiskusi dengan teman | 1 jam 30 menit | Done | - | 
+| 30-08-2026 | Wimar Widiarto | Membuat diagram swimlane BAB 3 sekaligus berdiskusi dengan teman | 1 jam 30 menit | Done | - | 
+| 30-08-2026 | Vinsensius Juan Setiady | Mengerjakan deskripsi perangkat lunak dan asumsi dan batasan | 1 jam | Done | - | 
+| 30-08-2026 | Yohanes Nicholas Setiawan | Mengerjakan latar belakang dan juga analisis kondisi | 2 jam | On Progress | - |
 
 **Catatan/Evaluasi Milestone 1:**
 * *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
