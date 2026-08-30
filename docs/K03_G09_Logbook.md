@@ -36,6 +36,7 @@
 | *04-05-2026* | *[Nama Mahasiswa]* | *[Jelaskan Pekerjaan secara Singkat]* | *[Durasi Pengerjaan]* | *[On Progress/Done]* | [Kendala yang dialami, jika tidak ada cukup tandai "-"] | 
 | 30-08-2026 | Raymond Edson Sabajan | Mengerjakan identifikasi aktor sekaligus berdiskusi dengan teman | 1 jam 30 menit | Done | - |
 | 30-08-2026 | Naufal Hasbialhaq | Mengerjakan Kebutuhan Pengguna awal pada BAB 3 sekaligus berdiskusi dengan teman | 1 jam 30 menit | Done | - | 
+| 30-08-2026 | Wimar Widiarto | Membuat diagram swimlane BAB 3 sekaligus berdiskusi dengan teman | 1 jam 30 menit | Done | - | 
 | | | | | | | |
 
 **Catatan/Evaluasi Milestone 1:**
