@@ -64,8 +64,6 @@ masalah:
 # BAB 2: Analisis Solusi
 
 ## 2.1 Deskripsi Perangkat Lunak
-Abstraksikan solusi perangkat lunak yang diusulkan dari sudut pandang pengguna. Jelaskan target platform yang akan digunakan (misalnya: desktop application) beserta alasan pemilihannya. Deskripsikan juga nilai unik (inovasi inti) dari perangkat lunak kalian dan apa yang membedakannya dari solusi yang sudah ada.
-
 Ketika pengguna membutuhkan suatu jasa spesifik yang bisa didapatkan dari para pekerja jasa informal (freelance), sering kali pengguna sulit mendapatkan informasi mengenai keberadaan para pekerja yang dapat membantunya. Sebaliknya, para pekerja jasa juga sering kali sulit untuk mendapatkan pelanggan karena ketidaktahuan pelanggan terhadap keberadaan para pekerja. Contohnya, seorang pengguna ingin menjahit pakaian mereka yang rusak namun tidak dapat menemukan lokasi penjahit yang dapat memperbaikinya. Oleh karena itu, kami ingin menghubungkan pengguna yang membutuhkan jasa dengan para pekerja yang membutuhkan pelanggan melalui sebuah platform aplikasi berbentuk mobile application. Platform mobile application dipilih karena perangkat mobile lebih mudah dijangkau oleh berbagai kalangan dan mudah bagi pekerja/pengguna jasa dalam melakukan mobilisasi.
 
 Pelanggan: 
@@ -83,7 +81,6 @@ Layanan Pelanggan:
 a. Membantu proses mediasi jika terdapat masalah baik dari pembayaran atau yang lainnya
 
 ## 2.2 Asumsi dan Batasan
-
 Asumsi:
 a. Pengguna dan pekerja jasa memiliki smartphone
 b. Pemilik jasa mengaktifkan GPS setiap menerima layanan jasa (jika memiliki smartphone)
