@@ -57,4 +57,4 @@ Kami yang bertanda tangan di bawah ini menyatakan bahwa seluruh log penggunaan A
 | <img src="./assets/Tanda-Tangan-Naufal-Hasbialhaq.png" width="100"> | **[13525120 - Naufal Hasbialhaq]** |
 | <img src="./assets/Screenshot 2026-08-30 203410.png" width="100"> | **[13525048 - Yohanes Nicholas Setiawan]** |
 | <img src="./assets/ttd-anggota4.png" width="100"> | **[13525009 - Wimar Widiarto]** |
-| <img src="./assets/ttd-anggota5.png" width="100"> | **[NIM - Nama Anggota 5]** |
+| <img src="./assets/WhatsApp Image 2025-10-03 at 22.17.43_c8e1b52e.jpg" width="100"> | **[13525093 - Vinsensius Juan Setiady]** | docs/assets/WhatsApp Image 2025-10-03 at 22.17.43_c8e1b52e.jpg
