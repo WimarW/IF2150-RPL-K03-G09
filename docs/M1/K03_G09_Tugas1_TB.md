@@ -151,3 +151,5 @@ Buatlah daftar seluruh aktivitas yang terdapat dalam sistem solusi, lengkap deng
 
 # Referensi
 - Diagram UML: https://www.drawio.com/
+<br>
+- Latar belakang: https://www.un.org/sustainabledevelopment/inequality/ https://www.bps.go.id/id/pressrelease/2024/11/05/2373/tingkat-pengangguran-terbuka--tpt--sebesar-4-91-persen-.html https://ilostat.ilo.org/data/country-profiles/idn/ https://kemnaker.go.id/news/detail/kemnaker-terus-berupaya-tingkatkan-kepesertaan-bpjs-ketenagakerjaan-sektor-informal https://www.bpjsketenagakerjaan.go.id/berita/29210/BPJS-Ketenagakerjaan-fokus-perbesar-kepesertaan-pekerja-informal
