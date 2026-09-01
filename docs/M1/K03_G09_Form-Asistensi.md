@@ -4,13 +4,13 @@
 
 | Informasi | Keterangan |
 | --- | --- |
-| **Hari** | *\[Hari\]* |
-| **Tanggal** | *\[DD/MM/YYYY\]* |
+| **Hari** | Selasa |
+| **Tanggal** | 01/09/2026 |
 | **Kelas** | K03 |
-| **Nomor Kelompok** | 09  |
+| **Nomor Kelompok** | 09  |v
 | **Nama Kelompok** | 9naga  |
 | **Nama Perangkat Lunak** | *\[Nama P/L\]*  |
-| **Dokumen** | *\[Nama Dokumen yang diasistensikan\]*  |
+| **Dokumen** | K03_G09_TB  |
 
 ### Anggota Kelompok
 
@@ -26,13 +26,13 @@
 
 | Catatan |
 | --- |
-| 1. *\[Berikan catatan hasil asistensi\]*  |
-| 2. ... |
-| 3. ... |
-| 4. ... |
-
-**Notes for this section:**  
-*Catatan dapat dituliskan dalam bentuk paragraf atau poin-poin, disesuaikan saja.* 
+| 1. Untuk bagian analisis kondisi saat ini, sebaiknya ditambahin apa yang sedang dilakukan orang-orang saat ini. Bagaimana mereka biasanya mencari pemberi jasa serupa? |
+| 2. Untuk deskripsi perangkat lunak, perlu ditambahkan deskripsi yang lebih detail dan juga bentuk aplikasi (Mobile App, Website, dll) |
+| 3. Untuk bagian asumsi dan batasan, bisa ditambah batasan dan asumsi teknis untuk perangkat lunak, seperti sistem operasi yang ditarget (iOS, Android, dll) |
+| 4. Untuk diagram swimlane, dapat ditambahkan lane baru untuk sistem dan swimlane yang dibuat hanya harus memuat outcome yang diharapkan saja |
+| 5. Bagian User story dapat menggunakan informasi dari wawancara agar dapat menambah fitur atau kebutuhan pelaku. |
+| 6.  Deskripsi aktivitas saat ini tidak harus detail dan spesifik, hanya apa saja yang dapat dilakukan user |
+| 7. Bagian referensi, dapat ditambahkan daftar pustaka untuk sumber yang digunakan dan juga bagian lampiran berisi link yang digunakan dalam pembuatan swimlane |
 
 ## Dokumentasi
 
