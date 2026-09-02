@@ -38,9 +38,11 @@
 | 30-08-2026 | Naufal Hasbialhaq | Mengerjakan Kebutuhan Pengguna awal pada BAB 3 sekaligus berdiskusi dengan teman | 1 jam 30 menit | Done | - | 
 | 30-08-2026 | Wimar Widiarto | Membuat diagram swimlane BAB 3 sekaligus berdiskusi dengan teman | 1 jam 30 menit | Done | - | 
 | 30-08-2026 | Vinsensius Juan Setiady | Mengerjakan deskripsi perangkat lunak dan asumsi dan batasan | 1 jam | Done | - | 
-| 30-08-2026 | Yohanes Nicholas Setiawan | Mengerjakan latar belakang dan juga analisis kondisi | 2 jam | On Progress | - |
+| 30-08-2026 | Yohanes NichoWlas Setiawan | Mengerjakan latar belakang dan juga analisis kondisi | 2 jam | On Progress | - |
 | 31-08-2026 | Yohanes Nicholas Setiawan | Mengerjakan narasi dan mencari data2 yang dibutuhkan di latar belakang | 2 jam | Done | - |
-| 02-09-2026 | Yohanes Nicholas Setiawam | Melanjutkan mengerjakan analisis kondisi | 30 menit | Done | - | 
+| 02-09-2026 | Yohanes Nicholas Setiawam | Melanjutkan mengerjakan analisis kondisi | 30 menit | Done | - |
+| 02-09-2026 | Naufal Hasbialhaq | Memperbaiki swimlane dari hasil asistensi | 30 menit | Done | - |
+| 02-09-2026 | Wimar Widiarto| Memperbaiki swimlane dari hasil asistensi | 30 menit | Done | - | 
 
 
 **Catatan/Evaluasi Milestone 1:**
