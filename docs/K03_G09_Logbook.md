@@ -42,7 +42,8 @@
 | 31-08-2026 | Yohanes Nicholas Setiawan | Mengerjakan narasi dan mencari data2 yang dibutuhkan di latar belakang | 2 jam | Done | - |
 | 02-09-2026 | Yohanes Nicholas Setiawam | Melanjutkan mengerjakan analisis kondisi | 30 menit | Done | - |
 | 02-09-2026 | Naufal Hasbialhaq | Memperbaiki swimlane dari hasil asistensi | 30 menit | Done | - |
-| 02-09-2026 | Wimar Widiarto| Memperbaiki swimlane dari hasil asistensi | 30 menit | Done | - | 
+| 02-09-2026 | Wimar Widiarto| Memperbaiki swimlane dari hasil asistensi | 30 menit | Done | - |
+| 02-09-2026 | Vinsensiu Juan Setiady | Formating laporan bagian dua dan menambahkan isi bab 2 | 60 menit | Done | - |  
 
 
 **Catatan/Evaluasi Milestone 1:**
