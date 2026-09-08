@@ -44,7 +44,7 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 ### Milestone 2
 | Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
 | :--- | :--- | :--- | :--- |
-| | | | | |
+| Gemini| mencari pengertian yang relevan dari suatu fitur| apakah payment gateaway lebih berfungsi pada keamanan atau keadalan?| payment gateaway ternyata bermanfaat dalam aspek keamanan dan keandalan, di mana payment gateaway dapat mengenkripsi data sensitif serta memastikan sistem berjalan setiap saat tanpa downtime atau kegagalan teknis ketika volume traffic pembayaran sedang melonjak| |
 | | | | | |
 
 ---
