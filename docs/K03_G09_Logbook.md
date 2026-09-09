@@ -7,7 +7,7 @@
 | Kelas | K03 |
 | Nomor Kelompok | 9 |
 | Nama Kelompok | 9naga |
-| Nama Perangkat Lunak | *[Nama P/L]* |
+| Nama Perangkat Lunak | Cari Uang |
 
 **Anggota Kelompok:**
 
@@ -44,8 +44,6 @@
 | 02-09-2026 | Naufal Hasbialhaq | Memperbaiki swimlane dari hasil asistensi | 30 menit | Done | - |
 | 02-09-2026 | Wimar Widiarto| Memperbaiki swimlane dari hasil asistensi | 30 menit | Done | - |
 | 02-09-2026 | Vinsensiu Juan Setiady | Formating laporan bagian dua dan menambahkan isi bab 2 | 60 menit | Done | - |
-| 07-09-2026 | Naufal Hasbialhaq | Draft untuk bagian 2.3(pemetaan kebutuhan) | 60 menit | Done | - |
-| 09-09-2026 | Naufal Hasbialhaq | Mengisi tabel untuk 2.3 (bagian pemetaan kebutuhan) | 60 menit | Done | - |  
 
 
 **Catatan/Evaluasi Milestone 1:**
