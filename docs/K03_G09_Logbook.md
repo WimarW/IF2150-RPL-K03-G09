@@ -43,7 +43,7 @@
 | 02-09-2026 | Yohanes Nicholas Setiawam | Melanjutkan mengerjakan analisis kondisi | 30 menit | Done | - |
 | 02-09-2026 | Naufal Hasbialhaq | Memperbaiki swimlane dari hasil asistensi | 30 menit | Done | - |
 | 02-09-2026 | Wimar Widiarto| Memperbaiki swimlane dari hasil asistensi | 30 menit | Done | - |
-| 02-09-2026 | Vinsensiu Juan Setiady | Formating laporan bagian dua dan menambahkan isi bab 2 | 60 menit | Done | - |
+| 02-09-2026 | Vinsensius Juan Setiady | Formating laporan bagian dua dan menambahkan isi bab 2 | 60 menit | Done | - |
 
 
 **Catatan/Evaluasi Milestone 1:**
@@ -58,10 +58,12 @@
 | 06-09-2026 | Raymond Edson Sabajan | Menyalin bagian Deskripsi pengguna (1.2) dari T1 | 10 menit | Done | - |
 | 06-09-2026 | Yohanes Nicholas Setiawan | Membuat draft sementara untuk kebutuhan fungsional (bagian 2.4) | 1 jam | Done | - | 
 | 06-09-2026 | Wimar Widiarto | Membuat draft sementara untuk bagian 1.1 | 60 menit | Done | - | 
-| 07-09-2026 | Naufal Hasbialhaq | Draft untuk bagian 2.3(pemetaan kebutuhan) | 60 menit | Done | - |
+| 06-09-2026 | Vinsensius Juan Setiady | Membuat draft sementara untuk kebutuhan non fungsional (bagian 2.5) | 1 jam | Done | - |
+| 07-09-2026 | Naufal Hasbialhaq | Draft untuk bagian 2.3 (pemetaan kebutuhan) | 60 menit | Done | - |
 | 08-09-2026 | Raymond Edson Sabajan | Melengkapi bagian deskripsi aktivitas | 60 menit | Done | - |
 | 09-09-2026 | Naufal Hasbialhaq | Mengisi tabel untuk 2.3 (bagian pemetaan kebutuhan) dan mengisi form asistensi| 90 menit | Done | - |  
 | 08-09-2026 | Yohanes Nicholas Setiawan | Membuat dan menambahkan kebutuhan fungsional (bagian 2.4) | 1 jam 30 menit | Done | - | 
 | 09-09-2026 | Yohanes Nicholas Setiawan | Membuat ulang kebutuhan fungsional (bagian 2.4) karena ada revisi dan perombakan di bagian 2.3 | 1 jam | Done | - | 
+| 09-09-2026 | Vinsensius Juan Setiady | Mengisi dan melengkapi kebutuhan non fungsional (bagian 2.5) | 3 jam | Done | - |
 
 ``Gunakan format penulisan Logbook yang sama untuk setiap Milestone dan pastikan pembuatan Daftar Isi juga sudah sesuai sebelum Logbook dikumpulkan. ``
