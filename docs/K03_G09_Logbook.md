@@ -44,13 +44,20 @@
 | 02-09-2026 | Naufal Hasbialhaq | Memperbaiki swimlane dari hasil asistensi | 30 menit | Done | - |
 | 02-09-2026 | Wimar Widiarto| Memperbaiki swimlane dari hasil asistensi | 30 menit | Done | - |
 | 02-09-2026 | Vinsensiu Juan Setiady | Formating laporan bagian dua dan menambahkan isi bab 2 | 60 menit | Done | - |
-| 07-09-2026 | Naufal Hasbialhaq | Draft untuk bagian 2.3(pemetaan kebutuhan) | 60 menit | Done | - |  
+| 07-09-2026 | Naufal Hasbialhaq | Draft untuk bagian 2.3(pemetaan kebutuhan) | 60 menit | Done | - |
+| 09-09-2026 | Naufal Hasbialhaq | Mengisi tabel untuk 2.3 (bagian pemetaan kebutuhan) | 60 menit | Done | - |  
 
 
 **Catatan/Evaluasi Milestone 1:**
 * *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
 
 ---
+### Milestone 2
+**Periode:** 2/09/2026 - 09/09/2026
 
+| Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
+| :--- | :--- | :--- | :--- | :--- | :--- | 
+| 07-09-2026 | Naufal Hasbialhaq | Draft untuk bagian 2.3(pemetaan kebutuhan) | 60 menit | Done | - |
+| 09-09-2026 | Naufal Hasbialhaq | Mengisi tabel untuk 2.3 (bagian pemetaan kebutuhan) dan mengisi form asistensi| 90 menit | Done | - |  
 
 ``Gunakan format penulisan Logbook yang sama untuk setiap Milestone dan pastikan pembuatan Daftar Isi juga sudah sesuai sebelum Logbook dikumpulkan. ``
