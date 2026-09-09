@@ -57,5 +57,8 @@
 | :--- | :--- | :--- | :--- | :--- | :--- | 
 | 07-09-2026 | Naufal Hasbialhaq | Draft untuk bagian 2.3(pemetaan kebutuhan) | 60 menit | Done | - |
 | 09-09-2026 | Naufal Hasbialhaq | Mengisi tabel untuk 2.3 (bagian pemetaan kebutuhan) dan mengisi form asistensi| 90 menit | Done | - |  
+| 06-09-2026 | Yohanes Nicholas Setiawan | Membuat draft sementara untuk kebutuhan fungsional (bagian 2.4) | 1 jam | Done | - | 
+| 08-09-2026 | Yohanes Nicholas Setiawan | Membuat dan menambahkan kebutuhan fungsional (bagian 2.4) | 1 jam 30 menit | Done | - | 
+| 09-09-2026 | Yohanes Nicholas Setiawan | Membuat ulang kebutuhan fungsional (bagian 2.4) karena ada revisi dan perombakan di bagian 2.3 | 1 jam | Done | - | 
 
 ``Gunakan format penulisan Logbook yang sama untuk setiap Milestone dan pastikan pembuatan Daftar Isi juga sudah sesuai sebelum Logbook dikumpulkan. ``
