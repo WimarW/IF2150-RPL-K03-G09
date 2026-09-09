@@ -15,16 +15,21 @@ Repository original disusun per milestone:
 ```
 docs/
 	assets/                        # aset dokumen umum
-	KXX_GYY_AI-Usage.md            # dokumentasi penggunaan AI
-	KXX_GYY_Logbook.md             # dokumentasi logbook pekerjaan kelompok
+	K03_G09_AI-Usage.md            # dokumentasi penggunaan AI
+	K03_G09_Logbook.md             # dokumentasi logbook pekerjaan kelompok
 	M1/                            # milestone 1
 		assets/                    # gambar, diagram, dll untuk milestone ini
-			diagram/               # diagram UML, activity, dll
-		KXX_GYY_Form-Asistensi.md  # dokumentasi asistensi
-		KXX_GYY_Template1_TB.md    # dokumen tugas besar
+			diagram/              
+				Swimlane.png	   # Gambar diagram swimlane perangkat lunak
+			foto-asistensi.png	   # foto dokumentasi asistensi
+		K03_G09_Form-Asistensi.md  # dokumentasi asistensi
+		K03_G09_Final_TB.md    # dokumen tugas besar
 	M2/                            # milestone 2
-		...
-	...
+		assets/                    # gambar, diagram, dll untuk milestone ini
+			diagram/              
+			foto-asistensi.png	   # foto dokumentasi asistensi
+		K03_G09_Form-Asistensi.md  # dokumentasi asistensi
+		K03_G09_RG.md    # dokumen tugas besar
 src/                               # source code perangkat lunak
 ```
 
