@@ -53,36 +53,28 @@ Dipersiapkan oleh:
 # BAB 2: Kebutuhan Fungsional (KF)
 Salin ulang **seluruh Kebutuhan Fungsional (KF)** yang telah didefinisikan pada dokumen *Requirement Gathering*. Tabel ini menjadi acuan *traceability*, dimana setiap Use Case pada BAB 3 wajib ditelusuri ke satu atau lebih ID KF di tabel ini, dan sebaliknya setiap KF idealnya tercakup oleh minimal satu Use Case. Pastikan juga sudah menggunakan **format EARS** dalam penulisan KF.
 
-| ID KF | ID Kebutuhan | Penjelasan |
+| ID KF | Kebutuhan | Penjelasan |
 | :--- | :--- | :--- |
-| KF01 | R01 | Perangkat lunak dapat menampilkan halaman utama berisi daftar kategori dan jasa yang tersedia ketika pelanggan membuka aplikasi. |
-| KF02 | R02 | Perangkat lunak harus menampilkan daftar jasa dalam bentuk list, kartu, atau tampilan lainnya yang informatif dan mudah dibaca pelanggan. |
-| KF03 | R03 | Perangkat lunak harus menyediakan fitur pemesanan jasa yang dapat digunakan pelanggan untuk memilih dan memesan jasa yang diinginkan. |
-| KF04 | R04 | Perangkat lunak harus memproses pesanan yang masuk dan mengirimkan notifikasi secara otomatis kepada pemberi jasa yang bersangkutan. |
-| KF05 | R05 | Perangkat lunak harus menampilkan lokasi pemberi jasa beserta informasi jarak dari posisi pelanggan saat ini. |
-| KF06 | R06 | Perangkat lunak harus menampilkan peta interaktif yang memuat titik-titik lokasi pemberi jasa yang sedang aktif. |
-| KF07 | R07 | Perangkat lunak harus menyediakan formulir pendaftaran bagi pemberi jasa untuk mengisi data diri dan jenis jasa yang akan ditawarkan. |
-| KF08 | R09 | Perangkat lunak harus menyimpan seluruh data pemberi jasa yang telah mendaftar ke dalam basis data. |
-| KF09 | R10 | Perangkat lunak harus menampilkan notifikasi pesanan yang masuk pada tampilan pemberi jasa agar dapat segera ditanggapi. |
-| KF10 | R11 | Perangkat lunak membatalkan pesanan secara otomatis apabila pemberi jasa tidak menerima pesanan dalam rentang waktu 30 menit sejak notifikasi dikirim. |
-| KF11 | R12 | Perangkat lunak harus mengirimkan notifikasi kepada pemberi jasa setiap kali ada pesanan baru yang masuk dan menunggu konfirmasi. |
-| KF12 | R13 | Perangkat lunak menampilkan halaman detail yang memuat informasi lengkap mengenai jasa dan lokasi pemberi jasa kepada pelanggan. |
-| KF13 | R14 | Perangkat lunak harus menyediakan halaman detail jasa yang menampilkan deskripsi layanan, portofolio, dan informasi lokasi pemberi jasa secara lengkap. |
-| KF14 | R15 | Perangkat lunak harus menyediakan fitur komunikasi antara pemberi jasa dan pelanggan untuk keperluan negosiasi harga sebelum pekerjaan dimulai. |
-| KF15 | R17 | Perangkat lunak harus menyediakan fitur chat atau komunikasi langsung agar pemberi jasa dan pelanggan dapat berinteraksi dalam satu platform. |
-| KF16 | R18 | Perangkat lunak harus menyediakan form input bagi pelanggan untuk memasukkan detail kesepakatan pekerjaan dan harga yang telah disetujui bersama. |
-| KF17 | R19 | Perangkat lunak harus menerima input kesepakatan pekerjaan dan harga, lalu mengubah status pekerjaan secara otomatis menjadi 'On Process'. |
-| KF18 | R20 | Perangkat lunak harus menyediakan tombol atau fitur bagi pemberi jasa untuk melaporkan kepada pelanggan bahwa pekerjaan telah selesai dilaksanakan. |
-| KF19 | R21 | Perangkat lunak harus menyediakan tombol konfirmasi bagi pelanggan untuk menerima laporan penyelesaian, melakukan pembayaran, dan mengubah status pekerjaan menjadi 'Done'. |
-| KF20 | R22 | Perangkat lunak harus mengubah status pekerjaan secara otomatis dari 'On Process' menjadi 'Done' setelah pelanggan mengonfirmasi penyelesaian dan pembayaran berhasil. |
-| KF21 | R23 | Perangkat lunak harus menyediakan fitur bagi pelanggan untuk melaporkan masalah yang dialami selama proses penggunaan jasa kepada layanan pengguna. |
-| KF22 | R24 | Perangkat lunak harus membuat tiket laporan secara otomatis dan menyediakan ruang komunikasi antara pelanggan dan layanan pengguna untuk penyelesaian masalah. |
-| KF23 | R25 | Perangkat lunak harus menyediakan fitur bagi pemberi jasa untuk melaporkan masalah yang dialami selama proses pengerjaan jasa kepada layanan pengguna. |
-| KF24 | R26 | Perangkat lunak membuat tiket laporan secara otomatis dan menyediakan ruang komunikasi antara pemberi jasa dan layanan pengguna untuk penyelesaian masalah. |
-| KF25 | R27 | Perangkat lunak harus mengirimkan notifikasi kepada layanan pelanggan setiap kali ada tiket laporan baru yang masuk dari pelanggan maupun pemberi jasa. |
-| KF26 | R28 | Perangkat lunak harus memberikan notifikasi kepada layanan pelanggan dan menyediakan ruang komunikasi khusus untuk memfasilitasi penyelesaian setiap tiket laporan yang masuk. |
-| KF27 | R29 | Perangkat lunak harus menyediakan fitur penilaian dua arah yang memungkinkan pelanggan dan pemberi jasa saling memberikan rating setelah pekerjaan selesai. |
-| KF28 | R31 | Perangkat lunak harus menyimpan data rating yang diberikan, mengakumulasikan seluruh nilai, dan menghitung rata-rata rating untuk ditampilkan pada profil masing-masing pengguna. |
+| KF01 | Menampilkan daftar jasa | Perangkat lunak dapat menampilkan halaman utama berisi daftar kategori dan jasa yang tersedia ketika pelanggan membuka aplikasi. |
+| KF02 | Pemesanan jasa | Perangkat lunak harus menyediakan fitur pemesanan jasa yang dapat digunakan pelanggan untuk memilih dan memesan jasa yang diinginkan. |
+| KF03 | Menampilkan lokasi pemberi jasa | Perangkat lunak harus menampilkan lokasi (dalam bentuk peta) pemberi jasa beserta informasi jarak dari posisi pelanggan saat ini. |
+| KF04 | Menyediakan form pendaftaran | Perangkat lunak harus menyediakan formulir pendaftaran bagi pemberi jasa untuk mengisi data diri dan jenis jasa yang akan ditawarkan. |
+| KF05 | Menyimpan data pemberi jasa | Perangkat lunak harus menyimpan seluruh data pemberi jasa yang telah mendaftar ke dalam basis data. |
+| KF06 | Notifikasi pesanan | Perangkat lunak harus menampilkan notifikasi pesanan yang masuk pada tampilan pemberi jasa agar dapat segera ditanggapi. |
+| KF07 | Pembatalan pesanan | Perangkat lunak membatalkan pesanan secara otomatis apabila pemberi jasa tidak menerima pesanan dalam rentang waktu 30 menit sejak notifikasi dikirim. |
+| KF08 | Halaman detail pemberi jasa | Perangkat lunak menampilkan halaman detail yang memuat informasi lengkap mengenai jasa dan lokasi pemberi jasa kepada pelanggan. |
+| KF09 | Fitur komunikasi pelanggan dan pemberi jasa | Perangkat lunak harus menyediakan fitur komunikasi antara pemberi jasa dan pelanggan untuk keperluan negosiasi harga sebelum pekerjaan dimulai. |
+| KF10 | Form kesepakatan harga dan pekerjaan | Perangkat lunak harus menyediakan form input bagi pelanggan untuk memasukkan detail kesepakatan pekerjaan dan harga yang telah disetujui bersama. |
+| KF11 | Mengubah status pekerjaan | Perangkat lunak harus menerima input kesepakatan pekerjaan dan harga, lalu mengubah status pekerjaan secara otomatis menjadi 'On Process'. |
+| KF12 | Fitur mengubah status pekerjaan bagi pemberi jasa | Perangkat lunak harus menyediakan tombol atau fitur bagi pemberi jasa untuk melaporkan kepada pelanggan bahwa pekerjaan telah selesai dilaksanakan. |
+| KF13 | Fitur mengonfirmasi status pekerjaan bagi pelanggan | Perangkat lunak harus menyediakan tombol konfirmasi bagi pelanggan untuk menerima laporan penyelesaian, melakukan pembayaran, dan mengubah status pekerjaan menjadi 'Done'. |
+| KF14 | Pelanggan melaporkan masalah | Perangkat lunak harus menyediakan fitur bagi pelanggan untuk melaporkan masalah yang dialami selama proses penggunaan jasa kepada layanan pengguna. |
+| KF15 | Ruang komunikasi pelanggan dan layanan pelanggan | Perangkat lunak harus membuat tiket laporan secara otomatis dan menyediakan ruang komunikasi antara pelanggan dan layanan pengguna untuk penyelesaian masalah. |
+| KF16 | Pemberi jasa melaporkan masalah | Perangkat lunak harus menyediakan fitur bagi pemberi jasa untuk melaporkan masalah yang dialami selama proses pengerjaan jasa kepada layanan pengguna. |
+| KF17 | Ruang komunikasi pemberi jasan dan layanan pelanggan | Perangkat lunak membuat tiket laporan secara otomatis dan menyediakan ruang komunikasi antara pemberi jasa dan layanan pengguna untuk penyelesaian masalah. |
+| KF18 | Notifikasi tiket laporan  | Perangkat lunak harus mengirimkan notifikasi kepada layanan pelanggan setiap kali ada tiket laporan baru yang masuk dari pelanggan maupun pemberi jasa. |
+| KF19 | Fitur rating | Perangkat lunak harus menyediakan fitur penilaian dua arah yang memungkinkan pelanggan dan pemberi jasa saling memberikan rating setelah pekerjaan selesai. |
+| KF20 | Menyimpan data rating | Perangkat lunak harus menyimpan data rating yang diberikan, mengakumulasikan seluruh nilai, dan menghitung rata-rata rating untuk ditampilkan pada profil masing-masing pengguna. |
 
 <sub> ***Catatan***: *Jika ada KF dari ML2 yang berubah/bertambah/dihapus setelah asistensi, pastikan tabel ini konsisten dengan versi KF terbaru sebelum dikumpulkan.*
 <sub>
@@ -108,11 +100,18 @@ Identifikasi seluruh use case yang mencakup Kebutuhan Fungsional pada BAB 2. Sat
 
 | ID UC | Nama Use Case | Deskripsi Singkat | Aktor Terlibat | ID KF Terkait |
 | :--- | :--- | :--- | :--- | :--- |
-| *UC01* | *Melakukan Pembayaran Digital* | *Pelanggan memilih metode pembayaran dan menyelesaikan transaksi.* | *Pelanggan* | *KF01, KF02* |
-| *UC02* | *Memverifikasi Status Pembayaran* | *Kasir mengecek status transaksi pelanggan sebelum menyerahkan barang.* | *Kasir* | *KF03* |
+| UC01 | Pemberi jasa mendaftarkan jasa | Pemberi jasa mendaftarkan diri pada aplikasi terkait jasa yang akan diberikan | Pemberi jasa | KF07, KF08 |
+| UC02 | Pelanggan memilih dan memesan jasa | Pelanggan memilih jasa yang tersedia dan sesuai dengan kebutuhannya lalu memesannya| Pelanggan | KF01, KF02, KF03 |
+| UC03 | Pelanggan memberi detail pekerjaan dan harga awal  | Pelanggan mengirimkan pesan kepada pemberi jasa mengenai detail pekerjaannya dan harga awal yang ditawarkan | Pelanggan | KF14,KF15 |
+| UC04 | Pemberi jasa melakukan pekerjaan | Pemberi jasa menerima notifikasi ketika ada pemesanan dan  | Pemberi jasa | KF04, KF09, KF10 |
+| UC05 | Pemberi jasa dan pelanggan melakukan rating | Pemberi jasa menerima notifikasi ketika ada pemesanan dan  | Pemberi jasa | KF04, KF09, KF10 |
+| UC06 | Pemberi jasa atau pelanggan melaporkan masalah | Pem  | Pemberi jasa | KF04, KF09, KF10 |
+
+
+
 | *...* | *...* | *...* | *...* | *...* |
 
-## 3.3 Use Case Diagram
+## 3.3 Use Case Diagram 
 Buatlah **satu** use case diagram yang mencakup seluruh aktor dan use case. Sertakan relasi *include*/*extend* apabila ada use case yang saling bergantung.
 <br>
 <p align="center">
