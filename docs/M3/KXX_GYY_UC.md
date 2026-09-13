@@ -100,12 +100,22 @@ Identifikasi seluruh use case yang mencakup Kebutuhan Fungsional pada BAB 2. Sat
 
 | ID UC | Nama Use Case | Deskripsi Singkat | Aktor Terlibat | ID KF Terkait |
 | :--- | :--- | :--- | :--- | :--- |
-| UC01 | Pemberi jasa mendaftarkan jasa | Pemberi jasa mendaftarkan diri pada aplikasi terkait jasa yang akan diberikan | Pemberi jasa | KF07, KF08 |
-| UC02 | Pelanggan memilih dan memesan jasa | Pelanggan memilih jasa yang tersedia dan sesuai dengan kebutuhannya lalu memesannya| Pelanggan | KF01, KF02, KF03 |
-| UC03 | Pelanggan memberi detail pekerjaan dan harga awal  | Pelanggan mengirimkan pesan kepada pemberi jasa mengenai detail pekerjaannya dan harga awal yang ditawarkan | Pelanggan | KF14,KF15 |
-| UC04 | Pemberi jasa melakukan pekerjaan | Pemberi jasa menerima notifikasi ketika ada pemesanan dan  | Pemberi jasa | KF04, KF09, KF10 |
-| UC05 | Pemberi jasa dan pelanggan melakukan rating | Pemberi jasa menerima notifikasi ketika ada pemesanan dan  | Pemberi jasa | KF04, KF09, KF10 |
-| UC06 | Pemberi jasa atau pelanggan melaporkan masalah | Pem  | Pemberi jasa | KF04, KF09, KF10 |
+| UC01 | Pemberi jasa mendaftarkan jasa | Pemberi jasa mendaftarkan diri pada aplikasi terkait jasa yang akan diberikan | Pemberi jasa | KF04, KF05 |
+| UC02 | Pelanggan memilih dan memesan jasa | Pelanggan memilih jasa yang tersedia dan sesuai dengan kebutuhannya lalu memesannya| Pelanggan | KF01, KF08, KF03|
+| UC03 | Pelanggan memberi detail pekerjaan dan harga awal  | Pelanggan mengirimkan pesan kepada pemberi jasa mengenai detail pekerjaannya dan harga awal yang ditawarkan | Pelanggan | KF09 |
+| UC04 | Pemberi jasa merespon pelanggan | Pemberi jasa merespon pelanggan, bisa berupa tawaran harga lain, menyetujui, atau menolak tawaran dari pelanggan  | Pemberi jasa | KF09 |
+| UC05 | Pelanggan memasukkan kesepakatan harga dan pekerjaan | Pelanggan memasukkan detail kesepakatan harga dan pekerjaan kepada aplikasi dan aplikasi merubah status pekerjaan menjadi 'On Progress'  | Pelanggan | KF10, KF11 |
+| UC06 | Pemberi jasa telah selesai bekerja  | Pemberi jasa menekan tombol atau fitur lainnya pada aplikasi bahwa pekerjaan telah selesai dan menunggu konfirmasi dari pelanggan | Pemberi jasa | KF12 |
+| UC07 | Pelanggan mengonfirmasi pekerjaan  | Pelanggan mengonfirmasi pemberi jasa mengenai status pekerjaan | Pelanggan | KF13 |
+| UC08 | Pelanggan melaporkan masalah  | Pelanggan melaporkan ketika ada masalah kepada layanan pelanggan saat proses penggunaan jasa| Pelanggan | KF14, KF15 |
+| UC09 | Layanan pelanggan merespon pelanggan  | Layanan pengguna merespon masalah yang diajukan pelanggan | Layanan Pelanggan | KF15, KF18 |
+| UC10 | Pemberi jasa melaporkan masalah  | Pemberi jasa melaporkan kepada layanan pelanggan ketika ada masalah saat proses pengerjaan jasa | Pemberi jasa | KF16, KF17 |
+| UC11 | Layanan pelanggan merespon pemberi jasa  | Layanan pengguna merespon masalah yang diajukan pemberi jasa | Layanan Pelanggan | KF18, KF17 |
+| UC11 | Pelanggan memberi rating  | Pelanggan memberi rating kepada pemberi jasa | Pelanggan | KF19, KF20 |
+| UC12 | Pemberi jasa memberi rating  | Pelanggan memberi rating kepada pemberi jasa | Pelanggan | KF19, KF20 |
+
+
+
 
 
 
