@@ -148,46 +148,45 @@ Format tabel skenario: kolom **Aksi Aktor** berisi apa yang dilakukan/diinput ak
 
 ### 3.4.1 Skenario UC01
 
-**Nama Use Case:** *Melakukan Pembayaran Digital*
+**Nama Use Case:** *Pemberi jasa mendaftarkan jasa*
 
 **Skenario Normal**
 
 | No | Aksi Aktor | Reaksi Perangkat Lunak |
 | :--- | :--- | :--- |
-| 1 | *Pelanggan memilih menu checkout* | *Sistem menampilkan ringkasan pesanan dan pilihan metode pembayaran* |
-| 2 | *Pelanggan memilih metode pembayaran (misal: e-wallet)* | *Sistem mengarahkan pelanggan ke halaman konfirmasi e-wallet* |
-| 3 | *Pelanggan mengonfirmasi pembayaran* | *Sistem menerima respons pembayaran berhasil, memperbarui status pesanan menjadi "Lunas", dan menampilkan notifikasi pembayaran berhasil* |
+| 1 | *Pemberi jasa menekan tombol daftar jasa dan mengisi formulir* | *Sistem menampilkan formulir untuk mendaftarkan jasa* |
+| 2 | *Pelanggan mengunggah formulir pendaftaran jasa* | *Sistem memverifikasi data yang dikirimkan dan memperbarui data pemberi jasa* |
 
 
 <br>
 
-**Skenario Alternatif 1: Otorisasi Pembayaran Gagal**
+**Skenario Alternatif 1: Verifikasi Input Gagal**
 
 
 | No | Aksi Aktor | Reaksi Perangkat Lunak |
 | :--- | :--- | :--- |
-| 1 | *Pelanggan memilih menu checkout* | *Sistem menampilkan ringkasan pesanan dan pilihan metode pembayaran* |
-| 2 | *Pelanggan memilih metode pembayaran (misal: e-wallet)* | *Sistem mengarahkan pelanggan ke halaman konfirmasi e-wallet* |
-| 3 | *Pelanggan mengonfirmasi pembayaran* | *Sistem menerima respons pembayaran gagal (misal: saldo tidak cukup). Sistem menampilkan pesan error dan meminta pelanggan memilih metode pembayaran lain* |
-| 4 | *Pelanggan memilih metode pembayaran lain* | *Sistem kembali ke langkah 2 skenario normal* |
+| 1 | *Pemberi jasa menekan tombol daftar jasa dan mengisi formulir* | *Sistem menampilkan formulir untuk mendaftarkan jasa* |
+| 2 | *Pemberi jasa mengunggah formulir pendaftaran jasa* | *Sistem memverifikasi data yang dikirimkan dan menerima verifikasi gagal* |
+| 3 | *Pemberi jasa mengisi formulir ulang* | *Sistem kembali ke langkah 1 skenario normal* |
 
 ### 3.4.2 Skenario UC02
 
-**Nama Use Case:** *Memverifikasi Status Pembayaran*
+**Nama Use Case:** *Pelanggan memilih dan memesan jasa*
 
 **Skenario Normal**
 
 | No | Aksi Aktor | Reaksi Perangkat Lunak |
 | :--- | :--- | :--- |
-| 1 | *Kasir memasukkan ID Pesanan pelanggan* | *Sistem menampilkan status pembayaran ("Lunas") beserta detail transaksi* |
+| 1 | *Pelanggan menekan tombol menu untuk mencari jasa* | *Sistem menampilkan daftar jasa yang dapat dipesan* |
+
 
 <br>
 
-**Skenario Alternatif 1: ID Pesanan Tidak Ditemukan**
+**Skenario Alternatif 1: Pemberi jasa tidak ditemukan**
 
 | No | Aksi Aktor | Reaksi Perangkat Lunak |
 | :--- | :--- | :--- |
-| 1 | *Kasir memasukkan ID Pesanan yang salah/tidak ada* | *Sistem menampilkan pesan "ID Pesanan tidak ditemukan" dan meminta kasir memasukkan ulang* |
+| 1 | *Pelanggan mencari jasa yang tidak terdaftar di dalam sistem* | *Sistem menampilkan pesan "Jasa yang kamu inginkan tidak tersedia" dan meminta pelanggan untuk memasukkan kembali jasa yang diinginkan* |
 
 ### 3.4.5 Skenario UC05
 
@@ -197,39 +196,14 @@ Format tabel skenario: kolom **Aksi Aktor** berisi apa yang dilakukan/diinput ak
 
 | No | Aksi Aktor | Reaksi Perangkat Lunak |
 | :--- | :--- | :--- |
-| 1 | Pelanggan Masuk ke bagian kesepakatan | Sistem menampilkan bagian form pengisian detail harga dan pekerjaan|
-| 2 | Pelanggan mengisi form kesepakatan hingga selesai | Sistem menyimpan data kesepakatan dan membuat status pekerjaan menjadi "on progress" |
-
-<br>
+| 1 | Layanan Pelanggan menerima sebuah notifikasi dan membuka notifikasi tersebut | Sistem menampilkan tiket layanan yang telah diisi oleh pelanggan |
+| 2 | Layanan Pelanggan mengisi form balasa terkait masalah yang dihadapi oleh pelanggan | Sistem menyimpan data dari form yang diisi oleh layanan pelanggan |
+| 3 | Layanan Pelanggan mengirim form yang telah diisi tadi | Sistem mengirim form yang telah diisi oleh layanan pelanggan dan memberikan notifikasi kepada pelanggan yang melaporkan masalahnya |
 
 
 ### 3.4.6 Skenario UC06
 
 **Nama Use Case:** Pemberi jasa telah selesai bekerja
-
-**Skenario Normal**
-
-| No | Aksi Aktor | Reaksi Perangkat Lunak |
-| :--- | :--- | :--- |
-| 1 | Pemberi jasa menekan tombol pekerjaan telah selesai| Sistem mengubah status pekerjaan "on progress" menjadi "menunggu konfirmasi Pelanggan" |
-
-<br>
-
-### 3.4.7 Skenario UC07
-
-**Nama Use Case:** 	Pelanggan mengonfirmasi pekerjaan
-
-**Skenario Normal**
-
-| No | Aksi Aktor | Reaksi Perangkat Lunak |
-| :--- | :--- | :--- |
-| 1 | Pelanggan menekan tombol konfirmasi pekerjaan | Sistem mengubah status pekerjaan menjadi selesai |
-
-<br>
-
-### 3.4.8 Skenario UC08
-
-**Nama Use Case:** Pelanggan melaporkan masalah
 
 **Skenario Normal**
 
@@ -243,32 +217,6 @@ Format tabel skenario: kolom **Aksi Aktor** berisi apa yang dilakukan/diinput ak
 
 ### 3.4.9 Skenario UC9
 **Nama Use Case:** Layanan pelanggan merespon pelanggan
-
-**Skenario Normal**
-
-| No | Aksi Aktor | Reaksi Perangkat Lunak |
-| :--- | :--- | :--- |
-| 1 | Layanan Pelanggan menerima sebuah notifikasi dan membuka notifikasi tersebut | Sistem menampilkan tiket layanan yang telah diisi oleh pelanggan |
-| 2 | Layanan Pelanggan mengisi form balasa terkait masalah yang dihadapi oleh pelanggan | Sistem menyimpan data dari form yang diisi oleh layanan pelanggan |
-| 3 | Layanan Pelanggan mengirim form yang telah diisi tadi | Sistem mengirim form yang telah diisi oleh layanan pelanggan dan memberikan notifikasi kepada pelanggan yang melaporkan masalahnya |
-
-<br>
-
-### 3.4.10 Skenario UC10
-**Nama Use Case:** Pemberi jasa melaporkan masalah
-
-**Skenario Normal**
-
-| No | Aksi Aktor | Reaksi Perangkat Lunak |
-| :--- | :--- | :--- |
-| 1 | Penyedia jasa menekan tombol bantuan layanan pengguna | Sistem menampilkan form tiket pengajuan bantuan |
-| 2 | Penyedia jasa mengisi form dengan kriteria yang tertera di form | Sistem mencatat semua data dari form yang diisi |
-| 3 | Penyedia jasa menekan tombol kirim pada bagian bawah form yang sudah diisi tadi | Sistem mengirim form yang telah diisi tadi ke layanan pengguna |
-
-<br>
-
-### 3.4.11 Skenario UC11
-**Nama Use Case:** Layanan pelanggan merespon pemberi jasa
 
 **Skenario Normal**
 
