@@ -29,7 +29,7 @@ Dipersiapkan oleh:
 
 | Revisi | Deskripsi |
 | :--- | :--- |
-| *A* | *Deskripsikan perubahan yang dilakukan dari dokumen sebelumnya pada dokumen ini. Jika tidak terdapat perubahan, harap kosongkan tabel.* |
+| *A* | *Revisi pada Kebutuhan Fungsional karena ada beberapa kebutuhan yang tumpang tindih* |
 | *B* |  |
 | *C* |  |
 | ... |  |
