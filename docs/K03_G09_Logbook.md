@@ -66,4 +66,10 @@
 | 09-09-2026 | Yohanes Nicholas Setiawan | Membuat ulang kebutuhan fungsional (bagian 2.4) karena ada revisi dan perombakan di bagian 2.3 | 1 jam | Done | - | 
 | 09-09-2026 | Vinsensius Juan Setiady | Mengisi dan melengkapi kebutuhan non fungsional (bagian 2.5) | 3 jam | Done | - |
 
+### Milestone 3
+**Periode:** 10/09/2026 - XX/09/2026
+
+| Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
+| :--- | :--- | :--- | :--- | :--- | :--- | 
+| 13-09-2026 | Naufal Hasbialhaq | Merevisi kebutuhan fungsional (Bab 2) serta mengerjakan Bab 3.1 dan 3.2 | 120 menit | Done | - |
 ``Gunakan format penulisan Logbook yang sama untuk setiap Milestone dan pastikan pembuatan Daftar Isi juga sudah sesuai sebelum Logbook dikumpulkan. ``
