@@ -75,6 +75,7 @@ Salin ulang **seluruh Kebutuhan Fungsional (KF)** yang telah didefinisikan pada 
 | KF18 | Notifikasi tiket laporan  | Perangkat lunak harus mengirimkan notifikasi kepada layanan pelanggan setiap kali ada tiket laporan baru yang masuk dari pelanggan maupun pemberi jasa. |
 | KF19 | Fitur rating | Perangkat lunak harus menyediakan fitur penilaian dua arah yang memungkinkan pelanggan dan pemberi jasa saling memberikan rating setelah pekerjaan selesai. |
 | KF20 | Menyimpan data rating | Perangkat lunak harus menyimpan data rating yang diberikan, mengakumulasikan seluruh nilai, dan menghitung rata-rata rating untuk ditampilkan pada profil masing-masing pengguna. |
+| KF21 | Fitur pendaftaran dan login aplikasi | Perangkat lunak menyediakan fitur pendaftaran dan login pada aplikasi untuk pelanggan, pemberi jasa, serta layanan pelanggan |
 
 <sub> ***Catatan***: *Jika ada KF dari ML2 yang berubah/bertambah/dihapus setelah asistensi, pastikan tabel ini konsisten dengan versi KF terbaru sebelum dikumpulkan.*
 <sub>
@@ -100,19 +101,19 @@ Identifikasi seluruh use case yang mencakup Kebutuhan Fungsional pada BAB 2. Sat
 
 | ID UC | Nama Use Case | Deskripsi Singkat | Aktor Terlibat | ID KF Terkait |
 | :--- | :--- | :--- | :--- | :--- |
-| UC01 | Pemberi jasa mendaftarkan jasa | Pemberi jasa mendaftarkan diri pada aplikasi terkait jasa yang akan diberikan | Pemberi jasa | KF04, KF05 |
-| UC02 | Pelanggan memilih dan memesan jasa | Pelanggan memilih jasa yang tersedia dan sesuai dengan kebutuhannya lalu memesannya| Pelanggan | KF01, KF08, KF03|
-| UC03 | Pelanggan memberi detail pekerjaan dan harga awal  | Pelanggan mengirimkan pesan kepada pemberi jasa mengenai detail pekerjaannya dan harga awal yang ditawarkan | Pelanggan | KF09 |
-| UC04 | Pemberi jasa merespon pelanggan | Pemberi jasa merespon pelanggan, bisa berupa tawaran harga lain, menyetujui, atau menolak tawaran dari pelanggan  | Pemberi jasa | KF09 |
-| UC05 | Pelanggan memasukkan kesepakatan harga dan pekerjaan | Pelanggan memasukkan detail kesepakatan harga dan pekerjaan kepada aplikasi dan aplikasi merubah status pekerjaan menjadi 'On Progress'  | Pelanggan | KF10, KF11 |
-| UC06 | Pemberi jasa telah selesai bekerja  | Pemberi jasa menekan tombol atau fitur lainnya pada aplikasi bahwa pekerjaan telah selesai dan menunggu konfirmasi dari pelanggan | Pemberi jasa | KF12 |
-| UC07 | Pelanggan mengonfirmasi pekerjaan  | Pelanggan mengonfirmasi pemberi jasa mengenai status pekerjaan | Pelanggan | KF13 |
-| UC08 | Pelanggan melaporkan masalah  | Pelanggan melaporkan ketika ada masalah kepada layanan pelanggan saat proses penggunaan jasa| Pelanggan | KF14, KF15 |
+| UC01 | Mendaftarkan jasa | Pemberi jasa mendaftarkan diri pada aplikasi terkait jasa yang akan diberikan | Pemberi jasa | KF04, KF05 |
+| UC02 | Memilih jasa | Pelanggan memilih jasa yang tersedia dan sesuai dengan kebutuhannya | Pelanggan | KF01, KF08, KF03|
+| UC03 | Menghubungi pemberi jasa  | Pelanggan mengirimkan pesan kepada pemberi jasa mengenai detail pekerjaannya dan harga awal yang ditawarkan | Pelanggan | KF09 |
+| UC04 | Merespon pelanggan | Pemberi jasa merespon pelanggan, bisa berupa tawaran harga lain, menyetujui, atau menolak tawaran dari pelanggan  | Pemberi jasa | KF09 |
+| UC05 | Memasukkan kesepakatan harga dan pekerjaan | Pelanggan memasukkan detail kesepakatan harga dan pekerjaan kepada aplikasi dan aplikasi merubah status pekerjaan menjadi 'On Progress'  | Pelanggan | KF10, KF11 |
+| UC06 | Mengonfirmasi mengenai status pekerjaan  | Pemberi jasa menekan tombol atau fitur lainnya pada aplikasi bahwa pekerjaan telah selesai dan menunggu konfirmasi dari pelanggan | Pemberi jasa | KF12 |
+| UC07 | Mengonfirmasi pekerjaan  | Pelanggan mengonfirmasi pemberi jasa mengenai status pekerjaan | Pelanggan | KF13 |
+| UC08 | Melaporkan masalah  | Pelanggan dan pemberi jasa melaporkan ketika ada masalah kepada layanan pelanggan saat proses penggunaan jasa| Pelanggan, Pemberi jasa | KF14, KF15 |
 | UC09 | Layanan pelanggan merespon pelanggan  | Layanan pengguna merespon masalah yang diajukan pelanggan | Layanan Pelanggan | KF15, KF18 |
-| UC10 | Pemberi jasa melaporkan masalah  | Pemberi jasa melaporkan kepada layanan pelanggan ketika ada masalah saat proses pengerjaan jasa | Pemberi jasa | KF16, KF17 |
-| UC11 | Layanan pelanggan merespon pemberi jasa  | Layanan pengguna merespon masalah yang diajukan pemberi jasa | Layanan Pelanggan | KF18, KF17 |
-| UC11 | Pelanggan memberi rating  | Pelanggan memberi rating kepada pemberi jasa | Pelanggan | KF19, KF20 |
-| UC12 | Pemberi jasa memberi rating  | Pelanggan memberi rating kepada pemberi jasa | Pelanggan | KF19, KF20 |
+| UC10 | Layanan pelanggan merespon pemberi jasa  | Layanan pengguna merespon masalah yang diajukan pemberi jasa | Layanan Pelanggan | KF18, KF17 |
+| UC11 | Memberi rating  | Pelanggan dan pemberi jasa saling memberi rating satu sama lain | Pelanggan, Pemberi jasa | KF19, KF20 |
+| UC12 | Mendaftar atau masuk ke perangkat lunak  | Layanan pelanggan, pelanggan, pemberi jasa dapat melakukan pendaftaran akun atau masuk ke perangkat lunak dengan akun yang sudah ada | Pelanggan, Pemberi Jasa, Layanan Pelanggan | KF19, KF20 |
+
 
 
 
