@@ -248,32 +248,59 @@ Format tabel skenario: kolom **Aksi Aktor** berisi apa yang dilakukan/diinput ak
 | No | Aksi Aktor | Reaksi Perangkat Lunak |
 | :--- | :--- | :--- |
 | 1 | Layanan Pelanggan menerima sebuah notifikasi dan membuka notifikasi tersebut | Sistem menampilkan tiket layanan yang telah diisi oleh penyedia jasa |
-| 2 | Layanan Pelanggan mengisi form balasa terkait masalah yang dihadapi oleh penyedia jasa | Sistem menyimpan data dari form yang diisi oleh layanan pelanggan |
+| 2 | Layanan Pelanggan mengisi form balasan terkait masalah yang dihadapi oleh penyedia jasa | Sistem menyimpan data dari form yang diisi oleh layanan pelanggan |
 | 3 | Layanan Pelanggan mengirim form yang telah diisi tadi | Sistem mengirim form yang telah diisi oleh layanan pelanggan dan memberikan notifikasi kepada penyedia jasa yang melaporkan masalahnya |
 
 <br>
 
-### 3.4.12 Skenario UC12
-**Nama Use Case:** 	Pelanggan memberi rating
-
-**Skenario Normal**
-
-| No | Aksi Aktor | Reaksi Perangkat Lunak |
-| :--- | :--- | :--- |
-| 1 | Pelanggan mengisi sebuah form berbentuk popup yang muncul ketika penyedia jasa telah mengonfirmasi bahwa biaya jasa telah dibayarkan | Menyimpan data dari rating yang diisi pengguna |
-| 2 | Pelanggan menekan tombol kirim | Sistem menyimpan data di dalam database |
-
-<br>
-
-### 3.4.13 Skenario UC13
+### 3.4.10 Skenario UC10
 **Nama Use Case:** Pemberi jasa memberi rating
 
 **Skenario Normal**
 
 | No | Aksi Aktor | Reaksi Perangkat Lunak |
 | :--- | :--- | :--- |
-| 1 | Penyedia Jasa mengisi sebuah form berbentuk popup yang muncul ketika penyedia jasa telah mengonfirmasi bahwa biaya jasa telah dibayarkan | Menyimpan data dari rating yang diisi pengguna |
-| 2 | Penyedia jasa menekan tombol kirim | Sistem menyimpan data di dalam database |
+| 1 | Penyedia Jasa maupun pelanggan mengisi sebuah form berbentuk popup yang muncul ketika penyedia jasa telah mengonfirmasi bahwa biaya jasa telah dibayarkan | Sistem menyimpan data dari rating yang diisi pengguna |
+| 2 | Penyedia jasa maupun pelanggan menekan tombol kirim | Sistem menyimpan data di dalam database |
+
+<br>
+
+**Skenario Alternatif 1: Penyedia Jasa atau pengguna menutup popup yang telah dimunculkan atau menutup aplikasi setelah proses transaksi selesai**
+
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1 | *Penyedia Jasa maupun pelanggan menekan tombol close pada popup yang telah dimunculkan atau menutup aplikasi* | *Sistem menutup popup dan menampilkannya kembali pada halaman aktivitas/riwayat pesanan* |
+
+<br>
+
+### 3.4.11 Skenario UC11
+**Nama Use Case:** Layanan pelanggan, pelanggan, pemberi jasa dapat melakukan pendaftaran akun atau masuk ke perangkat lunak dengan akun yang sudah ada
+
+**Skenario Normal**
+
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1 | Layanan pelanggan, pelanggan dan pemberi jasa mengisi email dan password jika sudah memiliki akun dan mengklik tombol masuk | Sistem menyimpan data yang diinput pengguna kemudian mencocokan data tersebut dari data base |
+| 2 | Layanan pelanggan, pelanggan dan pemberi jasa mengklik daftar  | Sistem mendirect laman aplikasi ke laman daftar |
+| 3 | Layanan pelanggan, pelanggan dan pemberi jasa mengisi form kebutuhan yang dibutuhkan untuk membuat akun | Sistem menyimpan semua data yang diisi oleh pengguna dan mendirect ke dashboard aplikasi kemudian memberikan notifikasi ke layanan peanggan untuk memverifikasi data pengguna |
+| 4 | Layanan pelanggan memverifikasi data penting pengguna apakah sudah dipakai atau belum dan mengecek validitas dari data tersebut | Sistem notifiikasi dan data yang akan diverifikasi oleh layanan pelanggan |
+
+<br>
+
+**Skenario Alternatif 1: verifikasi data yng invalid pada daftar**
+
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1 | Layanan pelanggan, pelanggan dan pemberi jasa mengisi email dan password jika sudah memiliki akun dan mengklik tombol masuk | Sistem menyimpan data yang diinput pengguna kemudian mencocokan data tersebut dari data base |
+| 2 | Layanan pelanggan, pelanggan dan pemberi jasa mengklik daftar  | Sistem mendirect laman aplikasi ke laman daftar |
+| 3 | Layanan pelanggan, pelanggan dan pemberi jasa mengisi form kebutuhan yang dibutuhkan untuk membuat akun | Sistem menyimpan semua data yang diisi oleh pengguna dan mendirect ke dashboard aplikasi kemudian memberikan notifikasi ke layanan peanggan untuk memverifikasi data pengguna |
+| 4 | Layanan pelanggan memverifikasi data penting pengguna apakah sudah dipakai atau belum dan mengecek validitas dari data tersebut | Sistem notifiikasi dan data yang akan diverifikasi oleh layanan pelanggan |
+| 5 | Layanan pelanggan menemukan kejanggalan pada data pengguna yang baru diinput seperti ktp orang yang tidak cocok dengan nama pengguna dll, kemudian layanan pelanggan membuat sebuah laporan terkait data yang invalid kepada pengguna | Sistem memberikan sebuah notifikasi dan laporan dari layanan pelanggan kepada pengguna yang memiliki data yang invalid |
+
+<br>
+
+
+
 
 
 <sub>*Lanjutkanlah pola 3.4.x ini untuk setiap ID UC yang telah diidentifikasi pada 3.2, sampai seluruh use case memiliki skenario normal dan skenario alternatif (tidak usah dibuat jika use case tersebut memang tidak memiliki skenario alternatif).*<sub>
