@@ -196,14 +196,39 @@ Format tabel skenario: kolom **Aksi Aktor** berisi apa yang dilakukan/diinput ak
 
 | No | Aksi Aktor | Reaksi Perangkat Lunak |
 | :--- | :--- | :--- |
-| 1 | Layanan Pelanggan menerima sebuah notifikasi dan membuka notifikasi tersebut | Sistem menampilkan tiket layanan yang telah diisi oleh pelanggan |
-| 2 | Layanan Pelanggan mengisi form balasa terkait masalah yang dihadapi oleh pelanggan | Sistem menyimpan data dari form yang diisi oleh layanan pelanggan |
-| 3 | Layanan Pelanggan mengirim form yang telah diisi tadi | Sistem mengirim form yang telah diisi oleh layanan pelanggan dan memberikan notifikasi kepada pelanggan yang melaporkan masalahnya |
+| 1 | Pelanggan Masuk ke bagian kesepakatan | Sistem menampilkan bagian form pengisian detail harga dan pekerjaan|
+| 2 | Pelanggan mengisi form kesepakatan hingga selesai | Sistem menyimpan data kesepakatan dan membuat status pekerjaan menjadi "on progress" |
+
+<br>
 
 
 ### 3.4.6 Skenario UC06
 
 **Nama Use Case:** Pemberi jasa telah selesai bekerja
+
+**Skenario Normal**
+
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1 | Pemberi jasa menekan tombol pekerjaan telah selesai| Sistem mengubah status pekerjaan "on progress" menjadi "menunggu konfirmasi Pelanggan" |
+
+<br>
+
+### 3.4.7 Skenario UC07
+
+**Nama Use Case:** 	Pelanggan mengonfirmasi pekerjaan
+
+**Skenario Normal**
+
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1 | Pelanggan menekan tombol konfirmasi pekerjaan | Sistem mengubah status pekerjaan menjadi selesai |
+
+<br>
+
+### 3.4.8 Skenario UC08
+
+**Nama Use Case:** Pelanggan melaporkan masalah
 
 **Skenario Normal**
 
