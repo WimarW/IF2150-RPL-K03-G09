@@ -72,4 +72,5 @@
 | Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
 | :--- | :--- | :--- | :--- | :--- | :--- | 
 | 13-09-2026 | Naufal Hasbialhaq | Merevisi kebutuhan fungsional (Bab 2) serta mengerjakan Bab 3.1 dan 3.2 | 120 menit | Done | - |
+| 14-09-2026 | Naufal Hasbialhaq | Merevisi 3.2 berdasarkan hasil asistensi | 30 menit | Done | - |
 ``Gunakan format penulisan Logbook yang sama untuk setiap Milestone dan pastikan pembuatan Daftar Isi juga sudah sesuai sebelum Logbook dikumpulkan. ``
