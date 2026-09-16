@@ -73,8 +73,10 @@
 | :--- | :--- | :--- | :--- | :--- | :--- | 
 | 13-09-2026 | Naufal Hasbialhaq | Merevisi kebutuhan fungsional (Bab 2) serta mengerjakan Bab 3.1 dan 3.2 | 120 menit | Done | - |
 | 13-09-2026 | Vinsensius Juan Setiady | Membuat draft 3.4.1 dan 3.4.2 | 30 menit | Done | - |
+| 13-09-2026 | Wimar Widiarto | Membuat draft use case diagram | 30 menit | Done | - |
 | 14-09-2026 | Naufal Hasbialhaq | Merevisi 3.2 berdasarkan hasil asistensi | 30 menit | Done | - |
 | 13-09-2026 | Raymond Edson Sabajan | Mengerjakan 3.4.5 - 3.4.8 | 40 menit | Done | - |
 | 16-09-2026 | Raymon Edson Sabajan | Merevisi 3.4.5-3.4.8 berdasarkan hasil asistensi | 30 menit | Done | - |
 | 16-09-2026 | Vinsensius Juan Setiady | Mengerjakan 3.4.1 - 3.4.4 berdasarkan hasil asistensi | 2 jam | Done | - |
 ``Gunakan format penulisan Logbook yang sama untuk setiap Milestone dan pastikan pembuatan Daftar Isi juga sudah sesuai sebelum Logbook dikumpulkan. ``
+| 16-09-2026 | Wimar Widiarto | Membuat use case diagram final | 30 menit | Done | - |
