@@ -51,7 +51,6 @@ Dipersiapkan oleh:
 ---
 
 # BAB 2: Kebutuhan Fungsional (KF)
-Salin ulang **seluruh Kebutuhan Fungsional (KF)** yang telah didefinisikan pada dokumen *Requirement Gathering*. Tabel ini menjadi acuan *traceability*, dimana setiap Use Case pada BAB 3 wajib ditelusuri ke satu atau lebih ID KF di tabel ini, dan sebaliknya setiap KF idealnya tercakup oleh minimal satu Use Case. Pastikan juga sudah menggunakan **format EARS** dalam penulisan KF.
 
 | ID KF | Kebutuhan | Penjelasan |
 | :--- | :--- | :--- |
@@ -77,15 +76,12 @@ Salin ulang **seluruh Kebutuhan Fungsional (KF)** yang telah didefinisikan pada 
 | KF20 | Menyimpan data rating | Perangkat lunak harus menyimpan data rating yang diberikan, mengakumulasikan seluruh nilai, dan menghitung rata-rata rating untuk ditampilkan pada profil masing-masing pengguna. |
 | KF21 | Fitur pendaftaran dan login aplikasi | Perangkat lunak menyediakan fitur pendaftaran dan login pada aplikasi untuk pelanggan, pemberi jasa, serta layanan pelanggan |
 
-<sub> ***Catatan***: *Jika ada KF dari ML2 yang berubah/bertambah/dihapus setelah asistensi, pastikan tabel ini konsisten dengan versi KF terbaru sebelum dikumpulkan.*
-<sub>
 
 ---
 
 # BAB 3: Model Use Case
 
 ## 3.1 Identifikasi Aktor
-Daftarkan seluruh aktor yang terlibat dalam use case yang akan dimodelkan. Aktor berupa pengguna manusia yang berinteraksi dengan solusi. Perlu diperhatikan bahwa Admin/Developer/ Pihak Eksternal lain yang bisa diotomisasi, tidak perlu dijadikan aktor.
 
 | Aktor | Deskripsi |
 | :--- | :--- |
@@ -97,8 +93,6 @@ Daftarkan seluruh aktor yang terlibat dalam use case yang akan dimodelkan. Aktor
 
 
 ## 3.2 Identifikasi Use Case
-Identifikasi seluruh use case yang mencakup Kebutuhan Fungsional pada BAB 2. Satu use case boleh mencakup lebih dari satu KF, dan sebaliknya satu KF boleh muncul di lebih dari satu use case bila memang relevan.
-
 | ID UC | Nama Use Case | Deskripsi Singkat | Aktor Terlibat | ID KF Terkait |
 | :--- | :--- | :--- | :--- | :--- |
 | UC01 | Mendaftarkan jasa | Pemberi jasa mendaftarkan diri pada aplikasi terkait jasa yang akan diberikan | Pemberi jasa | KF04, KF05 |
@@ -120,10 +114,7 @@ Identifikasi seluruh use case yang mencakup Kebutuhan Fungsional pada BAB 2. Sat
 
 
 
-| *...* | *...* | *...* | *...* | *...* |
-
 ## 3.3 Use Case Diagram 
-Buatlah **satu** use case diagram yang mencakup seluruh aktor dan use case. Sertakan relasi *include*/*extend* apabila ada use case yang saling bergantung.
 <br>
 <p align="center">
 <img alt="Contoh Activity Diagram" src="./assets/diagram/draft-diagram.png" width="70%">
@@ -133,20 +124,7 @@ Buatlah **satu** use case diagram yang mencakup seluruh aktor dan use case. Sert
 </p>
 <br>
 
-Hal-hal yang perlu diperhatikan dalam pembuatan use case diagram:
-- Pastikan notasi UML use case (aktor, oval use case, garis asosiasi, *include/extend*) digambar dengan benar.
-- Seluruh aktor dan use case yang telah didefinisikan harus muncul di diagram, tidak ada yang terlewat maupun berlebih.
-- Hindari garis yang saling bersilangan tanpa alasan jelas, susun diagram agar mudah dibaca.
-- Hindari istilah solusi teknis (misalnya nama tabel database, nama endpoint API) muncul di dalam diagram use case karena use case menjelaskan *interaksi fungsional*, bukan detail implementasi.
-
 ## 3.4 Skenario Use Case
-Buat skenario untuk **setiap** use case yang telah diidentifikasi pada 3.2. Setiap skenario dapat terdiri dari dua jenis alur:
-- **Skenario Normal**: alur utama (*happy path*) di mana interaksi aktor-sistem berjalan lancar tanpa kendala hingga tujuan use case tercapai.
-- **Skenario Alternatif**: alur percabangan dari skenario normal, misalnya kondisi gagal, input tidak valid, atau pilihan lain yang tersedia bagi aktor. Boleh ada lebih dari satu skenario alternatif per use case jika ada beberapa titik percabangan berbeda.
-
-Format tabel skenario: kolom **Aksi Aktor** berisi apa yang dilakukan/diinput aktor, kolom **Reaksi Perangkat Lunak** berisi respons sistem terhadap aksi tersebut secara **berurutan** (nomor langkah harus berpasangan/selaras antar dua kolom).
-
-
 ### 3.4.1 Skenario UC01
 
 **Nama Use Case:** *Pemberi jasa mendaftarkan jasa*
