@@ -275,16 +275,36 @@ Format tabel skenario: kolom **Aksi Aktor** berisi apa yang dilakukan/diinput ak
 <br>
 
 ### 3.4.11 Skenario UC11
-**Nama Use Case:** Layanan pelanggan, pelanggan, pemberi jasa dapat melakukan pendaftaran akun atau masuk ke perangkat lunak dengan akun yang sudah ada
+**Nama Use Case:** Layanan pelanggan, pelanggan, pemberi jasa dapat melakukan login ke perangkat lunak dengan akun yang sudah ada/dibuat
 
 **Skenario Normal**
 
 | No | Aksi Aktor | Reaksi Perangkat Lunak |
 | :--- | :--- | :--- |
-| 1 | Layanan pelanggan, pelanggan dan pemberi jasa mengisi email dan password jika sudah memiliki akun dan mengklik tombol masuk | Sistem menyimpan data yang diinput pengguna kemudian mencocokan data tersebut dari data base |
-| 2 | Layanan pelanggan, pelanggan dan pemberi jasa mengklik daftar  | Sistem mendirect laman aplikasi ke laman daftar |
-| 3 | Layanan pelanggan, pelanggan dan pemberi jasa mengisi form kebutuhan yang dibutuhkan untuk membuat akun | Sistem menyimpan semua data yang diisi oleh pengguna dan mendirect ke dashboard aplikasi kemudian memberikan notifikasi ke layanan peanggan untuk memverifikasi data pengguna |
-| 4 | Layanan pelanggan memverifikasi data penting pengguna apakah sudah dipakai atau belum dan mengecek validitas dari data tersebut | Sistem notifiikasi dan data yang akan diverifikasi oleh layanan pelanggan |
+| 1 | Layanan pelanggan, pelanggan dan pemberi jasa mengisi email dan password jika sudah memiliki akun | Sistem menyimpan data yang diinput pengguna kemudian mencocokan data tersebut dari data base |
+| 2 | Layanan pelanggan, pelanggan dan pemberi jasa mengklik tombol masuk | Sistem memvalidasi email dan password yang diisi dan mendirect ke dashboard aplikasi |
+
+<br>
+
+**Skenario Alternatif 1: verifikasi data yang invalid**
+
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1 | Layanan pelanggan, pelanggan dan pemberi jasa mengisi email dan password jika sudah memiliki akun | Sistem menyimpan data yang diinput pengguna kemudian mencocokan data tersebut dari data base |
+| 2 | Layanan pelanggan, pelanggan dan pemberi jasa mengklik tombol masuk | Sistem memvalidasi email dan password yang diisi dan terdapat kesalahan password atau email yang dimasukan pengguna kemudian Sistem memberikan notifikasi di laman bahwa password atau email salah |
+
+<br>
+
+### 3.4.12 Skenario UC12
+**Nama Use Case:** Pelanggan dan pemberi jasa dapat melakukan pendaftaran akun
+
+**Skenario Normal**
+
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1 | Pelanggan dan pemberi jasa mengklik daftar  | Sistem mendirect laman aplikasi ke laman daftar |
+| 2 | Pelanggan dan pemberi jasa mengisi form kebutuhan yang dibutuhkan untuk membuat akun | Sistem menyimpan semua data yang diisi oleh pengguna kemudian memberikan notifikasi ke layanan peanggan untuk memverifikasi data pengguna |
+| 3 | Layanan pelanggan memverifikasi data penting pengguna apakah sudah dipakai atau belum dan mengecek validitas dari data tersebut | Sistem notifiikasi dan data yang akan diverifikasi oleh layanan pelanggan |
 
 <br>
 
@@ -292,11 +312,10 @@ Format tabel skenario: kolom **Aksi Aktor** berisi apa yang dilakukan/diinput ak
 
 | No | Aksi Aktor | Reaksi Perangkat Lunak |
 | :--- | :--- | :--- |
-| 1 | Layanan pelanggan, pelanggan dan pemberi jasa mengisi email dan password jika sudah memiliki akun dan mengklik tombol masuk | Sistem menyimpan data yang diinput pengguna kemudian mencocokan data tersebut dari data base |
-| 2 | Layanan pelanggan, pelanggan dan pemberi jasa mengklik daftar  | Sistem mendirect laman aplikasi ke laman daftar |
-| 3 | Layanan pelanggan, pelanggan dan pemberi jasa mengisi form kebutuhan yang dibutuhkan untuk membuat akun | Sistem menyimpan semua data yang diisi oleh pengguna dan mendirect ke dashboard aplikasi kemudian memberikan notifikasi ke layanan peanggan untuk memverifikasi data pengguna |
-| 4 | Layanan pelanggan memverifikasi data penting pengguna apakah sudah dipakai atau belum dan mengecek validitas dari data tersebut | Sistem notifiikasi dan data yang akan diverifikasi oleh layanan pelanggan |
-| 5 | Layanan pelanggan menemukan kejanggalan pada data pengguna yang baru diinput seperti ktp orang yang tidak cocok dengan nama pengguna dll, kemudian layanan pelanggan membuat sebuah laporan terkait data yang invalid kepada pengguna | Sistem memberikan sebuah notifikasi dan laporan dari layanan pelanggan kepada pengguna yang memiliki data yang invalid |
+| 1 | Pelanggan dan pemberi jasa mengklik daftar  | Sistem mendirect laman aplikasi ke laman daftar |
+| 2 | Pelanggan dan pemberi jasa mengisi form kebutuhan yang dibutuhkan untuk membuat akun | Sistem menyimpan semua data yang diisi oleh pengguna kemudian memberikan notifikasi ke layanan peanggan untuk memverifikasi data pengguna |
+| 3 | Layanan pelanggan memverifikasi data penting pengguna apakah sudah dipakai atau belum dan mengecek validitas dari data tersebut | Sistem notifiikasi dan data yang akan diverifikasi oleh layanan pelanggan |
+| 4 | Layanan pelanggan menemukan kejanggalan pada data pengguna yang baru diinput seperti ktp orang yang tidak cocok dengan nama pengguna dll, kemudian layanan pelanggan membuat sebuah laporan terkait data yang invalid kepada pengguna | Sistem memberikan sebuah notifikasi dan laporan dari layanan pelanggan kepada pengguna yang memiliki data yang invalid |
 
 <br>
 
