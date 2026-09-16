@@ -107,12 +107,12 @@ Identifikasi seluruh use case yang mencakup Kebutuhan Fungsional pada BAB 2. Sat
 | UC04 | Merespon pelanggan | Pemberi jasa merespon pelanggan, bisa berupa tawaran harga lain, menyetujui, atau menolak tawaran dari pelanggan  | Pemberi jasa | KF09 |
 | UC05 | Memasukkan kesepakatan harga dan pekerjaan | Pelanggan memasukkan detail kesepakatan harga dan pekerjaan kepada aplikasi dan aplikasi merubah status pekerjaan menjadi 'On Progress'  | Pelanggan | KF10, KF11 |
 | UC06 | Mengonfirmasi mengenai status pekerjaan  | Pemberi jasa menekan tombol atau fitur lainnya pada aplikasi bahwa pekerjaan telah selesai dan menunggu konfirmasi dari pelanggan | Pemberi jasa | KF12 |
-| UC07 | Mengonfirmasi pekerjaan  | Pelanggan mengonfirmasi pemberi jasa mengenai status pekerjaan | Pelanggan | KF13 |
+| UC07 | Mengonfirmasi status pekerjaan  | Pelanggan mengonfirmasi pemberi jasa mengenai status pekerjaan | Pelanggan | KF13 |
 | UC08 | Melaporkan masalah  | Pelanggan dan pemberi jasa melaporkan ketika ada masalah kepada layanan pelanggan saat proses penggunaan jasa| Pelanggan, Pemberi jasa | KF14, KF15 |
 | UC09 | Merespon laporan masalah  | Layanan pengguna merespon masalah yang diajukan pelanggan atau pemberi masalah | Layanan Pelanggan, Pelanggan, Pemberi jasa | KF15, KF18, KF17 |
 | UC10 | Memberi rating  | Pelanggan dan pemberi jasa saling memberi rating satu sama lain | Pelanggan, Pemberi jasa | KF19, KF20 |
-| UC11 | Memasuki perangkat lunak  | Layanan pelanggan, pelanggan, pemberi jasa masuk ke perangkat lunak dengan akun yang sudah ada | Pelanggan, Pemberi Jasa, Layanan Pelanggan | KF21 |
-| UC12 | Mendaftar ke perangkat lunak  | Pelanggan dan pemberi jasa dapat mendaftar ke perangkat lunak | Pelanggan, Pemberi Jasa, | KF21 |
+| UC11 | Memasuki akun dalam perangkat lunak  | Layanan pelanggan, pelanggan, pemberi jasa masuk ke perangkat lunak dengan akun yang sudah ada | Pelanggan, Pemberi Jasa, Layanan Pelanggan | KF21 |
+| UC12 | Mendaftar akun ke perangkat lunak  | Pelanggan dan pemberi jasa dapat mendaftar ke perangkat lunak | Pelanggan, Pemberi Jasa, | KF21 |
 
 
 
