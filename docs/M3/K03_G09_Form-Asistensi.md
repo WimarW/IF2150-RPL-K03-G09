@@ -42,7 +42,7 @@
 
 <!-- ![](./assets/foto-asistensi.jpg) -->
 <p align="center">
-  <img src="docs/M3/assets/Screenshot 2026-09-14 at 19.10.33.png" width="100%">
+  <img src="./assets/Screenshot 2026-09-14 at 19.10.33.png" width="100%">
 </p>
 
 <p align="center">
