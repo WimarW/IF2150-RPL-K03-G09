@@ -117,7 +117,7 @@ Dipersiapkan oleh:
 ## 3.3 Use Case Diagram 
 <br>
 <p align="center">
-<img alt="Contoh Activity Diagram" src="./assets/diagram/draft-diagram.png" width="70%">
+<img alt="Contoh Activity Diagram" src="./assets/diagram/USE-CASE-DIAGRAM.png" width="70%">
 </p>
 <p align="center">
 <i>Gambar 1. Use Case Diagram</i>
