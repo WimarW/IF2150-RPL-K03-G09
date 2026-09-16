@@ -253,7 +253,7 @@ Dipersiapkan oleh:
 <br>
 
 ### 3.4.11 Skenario UC11
-**Nama Use Case:** Layanan pelanggan, pelanggan, pemberi jasa dapat melakukan login ke perangkat lunak dengan akun yang sudah ada/dibuat
+**Nama Use Case:** Memasuki akun dalam perangkat lunak
 
 **Skenario Normal**
 
@@ -264,7 +264,7 @@ Dipersiapkan oleh:
 
 <br>
 
-**Skenario Alternatif 1: verifikasi data yang invalid**
+**Skenario Alternatif 1: verifikasi data login yang invalid**
 
 | No | Aksi Aktor | Reaksi Perangkat Lunak |
 | :--- | :--- | :--- |
@@ -274,7 +274,7 @@ Dipersiapkan oleh:
 <br>
 
 ### 3.4.12 Skenario UC12
-**Nama Use Case:** Pelanggan dan pemberi jasa dapat melakukan pendaftaran akun
+**Nama Use Case:** Mendaftar akun ke perangkat lunak
 
 **Skenario Normal**
 
