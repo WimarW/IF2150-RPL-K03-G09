@@ -53,10 +53,11 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | *Google Gemini* | *Penjelasan lebih lanjut tentang use case karena sempat kebingunan dalam pembuatan use case* | *Jelaskan lebih lanjut mengenai use case dan apakah 2 aktor primer bisa berada dalam 1 use case* | *Gemini memberi dan sumber yang bisa menjamin jawabannya bahwa satu use case hanya ada 1 aktor primer dan gemini menjelaskan alternatif penulisan use case jika ada 2 aktor yang terlibat* |
 | | | | | |
 
-### Milestone 3
+### Milestone 4
 | Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
 | :--- | :--- | :--- | :--- |
 | claude | Penjelasan tentang cara pembuatan diagram class | Coba jelasin cara pembuatan diagram class dengan referensi dari slide ppt ini | - |
+| Gemini | Contoh Class Diagram | Berikan contoh class diagram mengenai topik  | - |
 
 ---
 ### Pernyataan Integritas dan Persetujuan
