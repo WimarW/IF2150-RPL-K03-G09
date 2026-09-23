@@ -81,3 +81,14 @@
 | 16-09-2026 | Vinsensius Juan Setiady | Mengerjakan 3.4.1 - 3.4.4 berdasarkan hasil asistensi | 2 jam | Done | - |
 | 16-09-2026 | Wimar Widiarto | Membuat use case diagram final | 30 menit | Done | - |
 | 16-09-2026 | Yohanes Nicholas Setiawan | Menambahkan isi 3.4.9-3.4.12  | 1 jam 30 menit | Done | - | 
+
+
+### Milestone 4
+
+| Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
+| :--- | :--- | :--- | :--- | :--- | :--- | 
+| 20-09-2026 | Naufal Hasbialhaq | Draft 4.2 | 60 menit | Done | - 
+| 23-09-2026 | Naufal Hasbialhaq | Revisi dari hasil asistensi | 60 menit | Done | - 
+| 23-09-2026 | Vinsensius Juan Setiady | Revisi dari hasil asistensi | 180 menit | Done | - 
+| 23-09-2026 | Wimar Widiarto | Revisi dari hasil asistensi | 180 menit | Done | - 
+| 23-09-2026 | Yohanes Nicholas Setiawan | Revisi dari hasil asistensi | 180 menit | Done | - 
