@@ -41,7 +41,7 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | Claude | Mencari pekerjaan yang akan dimasukan ke dalam jasa yang akan ditawarkan pada software kami | coba carikan saya list2 pekerjaan yang memiliki permintaan pasar yang banyak tetapi jarang ditemukan pada platform2 online dan juga pekerjaannya tidak memiliki tempat yang pasti | AI memberi beberapa list pekerjaan tetapi ada yang sudah memiliki tempat/platformnya menjual jasanya, seperti: pet grooming, cuci mobil, service laptop, dll. Sehingga saya harus menyaring dan memverifikasih apakah pekerjaan tersebut sesuai kriteria yang saya mau  |
 | Claude | mencari data2 yang relevan dan alur untuk penjabaran di bagian latar belakang | jadi aku ingin membuat software yang berhubungan dengan sdg 10 terus hal yang mau dibahas adalah kesenjangan lapangan pekerjaan, dan pekerjaan yang saya ingin masukan ke layanan jasa software saya adalah tukang listrik, handy man, tukang jahit, tukang sol sepatu, tukang potong tanaman, tukang bersih2 rumah, dan pest control. Coba list2 data serta referensi yang dapat digunakan dan dalam buat dalam poin2 yang terstruktur dengan jelas, untuk bagian latar belakang dan buatkan alur penjelasannya dari awal sampai ke urgensi penyelesaian masalah ini | ada beberapa data yang tidak logis untuk dimasukan sebagai reasoning dalam urgensi penyelesaian masalah ini, contohnya: valuasi platform jasa rumah tangga di india |
 
-### Milestone 3
+### Milestone 2
 | Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
 | :--- | :--- | :--- | :--- |
 | | | | | |
