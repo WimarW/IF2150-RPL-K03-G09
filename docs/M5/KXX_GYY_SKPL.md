@@ -85,13 +85,34 @@ Tuliskan sistematika pembahasan dokumen SKPL ini secara runut (misalnya: BAB 2 m
 # BAB 2: Deskripsi Perangkat Lunak
 
 ## 2.1 Deskripsi Umum Sistem
-Bagian ini dapat disalin dari BAB 1.1 *Deskripsi Umum Sistem* pada dokumen *Requirement Gathering*, disesuaikan bila ada perubahan alur bisnis. Lengkapi dengan gambaran proses bisnis dalam bentuk *Activity Diagram* (boleh disalin dan diperbarui dari 3.3 *Model Proses Bisnis* pada dokumen *Topic Brainstorming*).
+### 2.1.1 Ekspektasi Pengguna Terhadap Sistem
+<p align="justify">Sistem ini melibatkan 3 aktor yang memiliki ekspektasi masing-masing yang berbeda.</p>
+<ol>
+    <li>Pelanggan: Sistem mampu menyelesaikan masalah yang sedang dialami. </li>
+    <li>Pemberi Jasa: Sistem dapat memfasilitasi proses penjualan jasa mereka</li>
+    <li>Layanan Pelanggan: Sistem mampu menunjukkan permasalahan yang dialami antar pelanggan dan pemberi jasa sehingga dapat menyelesaikan masalahnya</li>
+</ol>
 
+### 2.1.2 Alur kerja Sistem
+<ol>
+    <li>Pelanggan mengunggah/mendaftarkan informasi kebutuhan jasa ke perangkat lunak </li>
+    <li>Aplikasi memberikan rekomendasi pemberi jasa relevan untuk kebutuhan pelanggan </li>
+    <li>Pelanggan dan pemberi jasa melakukan negosiasi harga untuk pekerjaan yang ingin dilakukan</li>
+    <li>Jika disetujui, pelanggan menginput persetujuan ke dalam aplikasi</li>
+    <li>Pemilik jasa melakukan dan menyelesaikan pekerjaan fisik sesuai dengan persetujuan</li>
+    <li>Setelah pekerjaan selesai, pelanggan akan melakukan pembayaran sebesar harga yang ditetapkan</li>
+    <li>Proses diakhiri dengan kedua pihak saling memberi penilaian terkait kinerja pemberi jasa dan perilaku pelanggan</li>
+</ol>
+
+### 2.1.3 Harapan Penerapan Solusi
+<p align="justify">Penerapan sistem ini diharapkan dapat menjaga standar kualitas dan profesionalisme penggunanya melalui sistem penilaian. Dengan sistem ini, pihak pelanggan dan pemberi jasa diwajibkan memberikan pelayanan dan perilaku yang terbaik untuk menjaga penilaian mereka. Sistem juga diharapkan dapat memberikan rasa aman dengan menyediakan lyananan ticket aduan apabila terdapat keluhan yang tidak bisa diselesaikan antara kedua belah pihak.</p>
+
+### 2.1.4 Model Proses Bisnis
 <p align="center">
-<img alt="Contoh Activity Diagram" src="./assets/diagram/diagram-act-1.avif" width="70%">
+<img alt="Diagram Swimlane Pemakaian Aplikasi" src="assets/diagram/Swimlane.png" width="70%">
 </p>
 <p align="center">
-<i>Gambar 1. Contoh Activity Diagram Proses Bisnis</i>
+<i>Gambar X. Diagram Swimlane Pemakaian Aplikasi</i>
 </p>
 
 ## 2.2 Deskripsi Umum Perangkat Lunak
