@@ -129,11 +129,37 @@ Tuliskan seluruh jenis pengguna (*role*/aktor) yang terlibat dalam perangkat lun
 | *...* | *...* |
 
 ## 2.4 Batasan Perangkat Lunak
-Batasan yang harus dituliskan, di antaranya:
-1. *P/L harus memakai file data/API dari sistem lain (sebutkan, misal Payment Gateway dummy).*
-2. *P/L harus memakai format data yang sama dengan sistem lain.*
-3. *P/L harus berfungsi pada platform tertentu (misal: web browser modern, atau desktop Windows dan Linux).*
-4. *...*
+### 2.4.1 Asumsi Pengguna
+<ul>
+    <li>Pengguna memiliki smartphone yang dapat mengoperasikan perangkat lunak </li>
+    <li>Pengguna mengunggah kebutuhan jasa yang ril (bukan fiktif atau penipuan) </li>
+    <li>Profil pengguna yang terdapat di aplikasi tidak bersifat fiktif </li>
+    <li>Pengguna memiliki koneksi internet yang aktif </li>
+</ul>
+
+### 2.4.2 Asumsi Pemilik Jasa
+<ul>
+    <li>Pemilik jasa profesional dalam melakukan pekerjaannya </li>
+    <li>Pemilik jasa mengaktifkan GPS setiap menerima layanan jasa (jika memiliki smartphone) </li>
+    <li>Profil pemilik jasa yang terdapat di aplikasi tidak bersifat fiktif </li>
+    <li>Pemilik jasa memiliki koneksi internet yang aktif </li>
+</ul>
+
+### 2.4.3 Batasan Pengguna 
+<ul>
+    <li>Terdapat pengguna atau pemilik jasa yang tidak memiliki smartphone </li>
+    <li>Pengguna atau pemilik jasa yang kurang memiliki literasi digital </li>
+    <li>Pemilik jasa tidak dapat melakukan jasa yang ditawarkan </li>
+</ul>
+
+### 2.4.4 Batasan Teknis
+<ul>
+    <li>Sistem operasi yang terbatas pada Android berdasarkan jumlah pengguna terbanyak </li>
+    <li>Aplikasi hanya tersedia untuk Android versi terbaru </li>
+    <li>Hanya mendukung sedikit bahasa (Indonesia) </li>
+    <li>Skalabilitas arsitektur perangkat lunak terbatas </li>
+</ul>
+
 
 ## 2.5 Lingkungan Operasi Perangkat Lunak
 
