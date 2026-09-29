@@ -92,3 +92,10 @@
 | 23-09-2026 | Vinsensius Juan Setiady | Revisi dari hasil asistensi | 180 menit | Done | - 
 | 23-09-2026 | Wimar Widiarto | Revisi dari hasil asistensi | 180 menit | Done | - 
 | 23-09-2026 | Yohanes Nicholas Setiawan | Revisi dari hasil asistensi | 180 menit | Done | - 
+
+### Milestone 5
+
+| Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
+| :--- | :--- | :--- | :--- | :--- | :--- | 
+| 28-09-2026 | Naufal Hasbialhaq | Menempel dari milestone sebelumnya | 30 menit | Done | - 
+
