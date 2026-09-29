@@ -437,14 +437,38 @@ Salin ulang daftar aktor final dari BAB 3.1 dokumen *Use Case & Scenario Use Cas
 # BAB 5: Pemodelan Kelas
 
 ## 5.1 Identifikasi Kelas
-| ID Kelas | Nama Kelas | Deskripsi Kelas |
-| :--- | :--- | :--- |
-| C01 | Pengguna | Kelas abstrak yang menyimpan data-data para pengguna aplikasi, seperti pelanggan, pemberi jasa, dan layanan pelanggan |
-| C02 | PemberiJasa | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian |
-| C03 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan |
-| C13 | Database | Tempat penyimpnan data perangkat lunak |
-| C19 | RegisterUI | Halaman registrasi akun | 
-| C20 | RegisterController | Menjembatani RegisterUI dengan database | 
+| ID Kelas | Nama Kelas | Deskripsi Kelas | ID Use Case |
+| :--- | :--- | :--- | :--- |
+| C01 | Pengguna | Kelas abstrak yang menyimpan data-data para pengguna aplikasi, seperti pelanggan, pemberi jasa, dan layanan pelanggan | UC11, UC12 |
+| C02 | PenggunaUI |  | UC11, UC12 |
+| C03 | PenggunaController |  | UC11, UC12 |
+| C04 | PemberiJasa | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian | UC01, UC02, UC04, UC06, UC08, UC10, UC11, UC12 |
+| C05 | PemberiJasaUI |  | UC01, UC02, UC04, UC06, UC08, UC10, UC11, UC12 |
+| C06 | PemberiJasaController |  | UC01, UC02, UC04, UC06, UC08, UC10, UC11, UC12 |
+| C07 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan| UC02, UC03, UC05, UC07, UC08, UC10, UC11, UC12 |
+| C08 | PelangganUI | | UC02, UC03, UC05, UC07, UC08, UC10, UC11, UC12 |
+| C09 | PelangganController | | UC02, UC03, UC05, UC07, UC08, UC10, UC11, UC12 |
+| C10 | LayananPelanggan | Bertanggung jawab dalam proses merespon tiket masalah atau laporan dari pemberi jasa dan pelanggan  | UC09 |
+| C11 | LayananPelangganUI |   | UC09 |
+| C12 | LayananPelangganController |   | UC09 |
+| C13 | KategoriJasa | Menyimpan data spesifik jasa yang ditawarkan oleh PemberiJasa | UC01, UC02 |
+| C14 | KategoriJasaUI |  | UC01, UC02 |
+| C15 | KategoriJasaController |  | UC01, UC02 |
+| C16 | KontrakPekerjaan | Menyimpan data detail kesepakatan antara Pelanggan dan PemberiJasa, seperti harga, detail pekerjaan, status pekerjaan (On Progress/Done) | UC05, UC06, UC07, UC10 |
+| C17 | KontrakPekerjaanUI |  | UC05, UC06, UC07, UC10 |
+| C18 | KontrakPekerjaanController |  | UC05, UC06, UC07, UC10 |
+| C19 | Komunikasi |  | UC03, UC04, UC09|
+| C20 | KomunikasiUI |  | UC03, UC04, UC09|
+| C21 | KomunikasiController |  | UC03, UC04, UC09|
+| C22 | TiketLaporan | Merealisasikan fitur tiket antrian dari laporan yang diberikan Pelanggan dan PemberiJasa | UC08, UC09|
+| C23 | TiketLaporanUI |  | UC08, UC09|
+| C24 | TiketLaporanController |  | UC08, UC09|
+| C25 | Rating |  | UC10 |
+| C26 | RatingUI |  | UC10 |
+| C27 | RatingController |  | UC10 |
+| C28 | Notifikasi | Merealisasikan fitur notifikasi yang akan diberikan kepada PemberiJasa ketika jasanya dipesan | UC08, UC09 |
+| C29 | NotifikasiUI | | UC08, UC09 |
+| C30 | NotifikasiController | | UC08, UC09 |
 
 ## 5.2 Diagram Kelas per Use Case
 Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diagram*, lengkap dengan tabel atribut dan metode/operasinya.
