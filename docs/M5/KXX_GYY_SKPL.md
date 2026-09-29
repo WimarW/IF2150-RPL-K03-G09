@@ -115,14 +115,13 @@ Batasan yang harus dituliskan, di antaranya:
 4. *...*
 
 ## 2.5 Lingkungan Operasi Perangkat Lunak
-Spesifikasi *operating system* atau lingkungan yang dibutuhkan P/L untuk beroperasi. Bagian ini digunakan untuk memastikan pengguna memiliki spesifikasi yang cukup untuk menjalankan P/L. Misalnya mencakup komponen server, client, OS, DBMS, tetapi tidak menutupi kemungkinan komponen lain.
 
 | Komponen | Spesifikasi |
 | :--- | :--- |
-| *Server* | *[contoh: Node.js v20, dijalankan pada layanan cloud]* |
-| *Client* | *[contoh: Web Browser modern (Chrome, Firefox terbaru)]* |
-| *DBMS* | *[contoh: PostgreSQL 15]* |
-| *OS* | *[contoh: Cross-platform (Windows/Linux/MacOS) melalui browser]* |
+| *Server* | NodeJS (v24 LTS) dengan framework Express.js |
+| *Client* | Aplikasi andorid dan Web Browser |
+| *DBMS* | Postgresql 16 |
+| *OS* | Android OS dan Cross Platform Browser |
 | *...* | *...* |
 
 ---
