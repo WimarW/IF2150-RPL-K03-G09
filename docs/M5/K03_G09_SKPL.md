@@ -7,24 +7,24 @@ SPESIFIKASI KEBUTUHAN PERANGKAT LUNAK (SKPL)
 </h1>
 <br>
 
-## *Nama Perangkat Lunak*
+## Cari Uang
 
-### Untuk: *[Nama Asisten]*
+### Untuk: Agatha Tatianingseto
 
 Dipersiapkan oleh:
 | Informasi | Keterangan |
 | --- | --- |
-| Kelas | *\[Kelas\]* |
-| Kelompok | *\[Nomor Kelompok\]*  |
+| Kelas | 3 |
+| Kelompok | 9  |
 
 | NIM | Nama |
 |---|---|
-| *[NIM 1]* | *[Nama Anggota 1]* |
-| *[NIM 2]* | *[Nama Anggota 2]* |
-| *[NIM 3]* | *[Nama Anggota 3]* |
-| *[NIM 4]* | *[Nama Anggota 4]* |
-| *[NIM 5]* | *[Nama Anggota 5]* |
----
+| 13525120 | Naufal Hasbialhaq |
+| 13525009 | Wimar Widiarto |
+| 13525093 | Vinsensius Juan Setiady |
+| 13525126 | Raymond Edson Sabajan |
+| 13525048 | Yohanes Nicholas Setiawan |
+
 
 ## Daftar Perubahan
 
@@ -43,7 +43,7 @@ Dipersiapkan oleh:
 Tuliskan dengan ringkas tujuan dokumen SKPL ini dibuat dan siapa saja yang akan menggunakan dokumen ini.
 
 ## 1.2 Lingkup Masalah
-Tuliskan dengan ringkas nama aplikasi dan deskripsi singkatnya. Bagian ini maksimal berisi satu paragraf, dapat diringkas dari BAB 1 *Analisis Permasalahan* pada dokumen *Topic Brainstorming*.
+<p align="justify">Mayoritas pekerja informal di Indonesia masih menghadapi kesulitan ekonomi akibat tidak adanya tarif standar dan jaminan sosial yang minimal. Di sisi lain, konsumen juga mengalami kesulitan menemukan tenaga kerja terdekat yang terpercaya dan terverifikasi karena solusi digital saat ini masih terbatas dan kurang mencakup seluruh segmen jasa. Oleh karena itu, diperlukan suatu platform digital yang mampu menghubungkan pekerja informal ini dengan konsumen untuk mendukung pengurangan kesenjangan sosial-ekonomi (SDG 10).</p>
 
 ## 1.3 Definisi, Istilah, dan Singkatan
 Semua definisi dan singkatan yang digunakan dalam dokumen ini beserta penjelasannya.
@@ -85,13 +85,34 @@ Tuliskan sistematika pembahasan dokumen SKPL ini secara runut (misalnya: BAB 2 m
 # BAB 2: Deskripsi Perangkat Lunak
 
 ## 2.1 Deskripsi Umum Sistem
-Bagian ini dapat disalin dari BAB 1.1 *Deskripsi Umum Sistem* pada dokumen *Requirement Gathering*, disesuaikan bila ada perubahan alur bisnis. Lengkapi dengan gambaran proses bisnis dalam bentuk *Activity Diagram* (boleh disalin dan diperbarui dari 3.3 *Model Proses Bisnis* pada dokumen *Topic Brainstorming*).
+### 2.1.1 Ekspektasi Pengguna Terhadap Sistem
+<p align="justify">Sistem ini melibatkan 3 aktor yang memiliki ekspektasi masing-masing yang berbeda.</p>
+<ol>
+    <li>Pelanggan: Sistem mampu menyelesaikan masalah yang sedang dialami. </li>
+    <li>Pemberi Jasa: Sistem dapat memfasilitasi proses penjualan jasa mereka</li>
+    <li>Layanan Pelanggan: Sistem mampu menunjukkan permasalahan yang dialami antar pelanggan dan pemberi jasa sehingga dapat menyelesaikan masalahnya</li>
+</ol>
 
+### 2.1.2 Alur kerja Sistem
+<ol>
+    <li>Pelanggan mengunggah/mendaftarkan informasi kebutuhan jasa ke perangkat lunak </li>
+    <li>Aplikasi memberikan rekomendasi pemberi jasa relevan untuk kebutuhan pelanggan </li>
+    <li>Pelanggan dan pemberi jasa melakukan negosiasi harga untuk pekerjaan yang ingin dilakukan</li>
+    <li>Jika disetujui, pelanggan menginput persetujuan ke dalam aplikasi</li>
+    <li>Pemilik jasa melakukan dan menyelesaikan pekerjaan fisik sesuai dengan persetujuan</li>
+    <li>Setelah pekerjaan selesai, pelanggan akan melakukan pembayaran sebesar harga yang ditetapkan</li>
+    <li>Proses diakhiri dengan kedua pihak saling memberi penilaian terkait kinerja pemberi jasa dan perilaku pelanggan</li>
+</ol>
+
+### 2.1.3 Harapan Penerapan Solusi
+<p align="justify">Penerapan sistem ini diharapkan dapat menjaga standar kualitas dan profesionalisme penggunanya melalui sistem penilaian. Dengan sistem ini, pihak pelanggan dan pemberi jasa diwajibkan memberikan pelayanan dan perilaku yang terbaik untuk menjaga penilaian mereka. Sistem juga diharapkan dapat memberikan rasa aman dengan menyediakan lyananan ticket aduan apabila terdapat keluhan yang tidak bisa diselesaikan antara kedua belah pihak.</p>
+
+### 2.1.4 Model Proses Bisnis
 <p align="center">
-<img alt="Contoh Activity Diagram" src="./assets/diagram/diagram-act-1.avif" width="70%">
+<img alt="Diagram Swimlane Pemakaian Aplikasi" src="assets/diagram/Swimlane.png" width="70%">
 </p>
 <p align="center">
-<i>Gambar 1. Contoh Activity Diagram Proses Bisnis</i>
+<i>Gambar X. Diagram Swimlane Pemakaian Aplikasi</i>
 </p>
 
 ## 2.2 Deskripsi Umum Perangkat Lunak
@@ -108,11 +129,37 @@ Tuliskan seluruh jenis pengguna (*role*/aktor) yang terlibat dalam perangkat lun
 | *...* | *...* |
 
 ## 2.4 Batasan Perangkat Lunak
-Batasan yang harus dituliskan, di antaranya:
-1. *P/L harus memakai file data/API dari sistem lain (sebutkan, misal Payment Gateway dummy).*
-2. *P/L harus memakai format data yang sama dengan sistem lain.*
-3. *P/L harus berfungsi pada platform tertentu (misal: web browser modern, atau desktop Windows dan Linux).*
-4. *...*
+### 2.4.1 Asumsi Pengguna
+<ul>
+    <li>Pengguna memiliki smartphone yang dapat mengoperasikan perangkat lunak </li>
+    <li>Pengguna mengunggah kebutuhan jasa yang ril (bukan fiktif atau penipuan) </li>
+    <li>Profil pengguna yang terdapat di aplikasi tidak bersifat fiktif </li>
+    <li>Pengguna memiliki koneksi internet yang aktif </li>
+</ul>
+
+### 2.4.2 Asumsi Pemilik Jasa
+<ul>
+    <li>Pemilik jasa profesional dalam melakukan pekerjaannya </li>
+    <li>Pemilik jasa mengaktifkan GPS setiap menerima layanan jasa (jika memiliki smartphone) </li>
+    <li>Profil pemilik jasa yang terdapat di aplikasi tidak bersifat fiktif </li>
+    <li>Pemilik jasa memiliki koneksi internet yang aktif </li>
+</ul>
+
+### 2.4.3 Batasan Pengguna 
+<ul>
+    <li>Terdapat pengguna atau pemilik jasa yang tidak memiliki smartphone </li>
+    <li>Pengguna atau pemilik jasa yang kurang memiliki literasi digital </li>
+    <li>Pemilik jasa tidak dapat melakukan jasa yang ditawarkan </li>
+</ul>
+
+### 2.4.4 Batasan Teknis
+<ul>
+    <li>Sistem operasi yang terbatas pada Android berdasarkan jumlah pengguna terbanyak </li>
+    <li>Aplikasi hanya tersedia untuk Android versi terbaru </li>
+    <li>Hanya mendukung sedikit bahasa (Indonesia) </li>
+    <li>Skalabilitas arsitektur perangkat lunak terbatas </li>
+</ul>
+
 
 ## 2.5 Lingkungan Operasi Perangkat Lunak
 
@@ -168,7 +215,6 @@ Tabel 3.2. Kebutuhan Non-Fungsional
 | *KNF02* | *R04* | *Security* | *Sistem harus mengenkripsi PIN atau password pengguna menggunakan algoritma SHA-256 sebelum data dikirimkan ke server, serta tidak menyimpannya dalam bentuk plain-text di database.* |
 | *...* | *...* | *...* | *...* |
 
-<sub>*Silakan pilih parameter yang relevan dengan P/L kalian (Availability, Reliability, Ergonomy, Portability, Memory, Response time, Safety, Security, dsb), tidak perlu semua parameter diisi. Lihat kembali dokumen Requirement Gathering untuk penjelasan tiap parameter.*<sub>
 
 ---
 
