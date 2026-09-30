@@ -98,4 +98,5 @@
 | Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
 | :--- | :--- | :--- | :--- | :--- | :--- | 
 | 28-09-2026 | Naufal Hasbialhaq | Menempel dari milestone sebelumnya | 30 menit | Done | - 
+| 30-09-2026 | Naufal Hasbialhaq | Membuat Bab 2 dan Bab 1 | 60 menit | Done | - 
 
