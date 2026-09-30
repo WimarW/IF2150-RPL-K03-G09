@@ -870,7 +870,7 @@ Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diag
 
 | ID Kelas | Nama Kelas | Atribut | Metode/Operasi |
 | :--- | :--- | :--- | :--- |
-| C01 | Pengguna | idPenggguna<br>nomorTelpon <br>email<br>namaPengguna <br>akumulasiRating<br>riwayatRating | +getAkumulasiRating()<br>+getRiwayatRating()<br>+addNewRatingRiwayat()<br>+getPekerjaanSelesai() |
+| C01 | Pengguna | idPenggguna<br>nomorTelpon <br>email<br>namaPengguna<br>username<br>password <br>akumulasiRating<br>riwayatRating | +getAkumulasiRating()<br>+getRiwayatRating()<br>+addNewRatingRiwayat()<br>+getPekerjaanSelesai() |
 | C02 | PenggunaUI | - | +showDaftarPekerjaanSelesai()<br>+pressBeriRating() |
 | C03 | PenggunaController | - | +requestPekerjaanSelesai()<br>|
 | C04 | PemberiJasa | jenisJasa | - |
@@ -885,13 +885,16 @@ Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diag
 #### Identifikasi Kelas
 | ID Kelas | Nama Kelas | Deskripsi Kelas |
 | :--- | :--- | :--- |
-| C01 | Pengguna | Kelas abstrak yang menyimpan data-data para pengguna aplikasi, seperti pelanggan, pemberi jasa, dan layanan pelanggan |
-| C02 | PemberiJasa | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian |
-| C03 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan |
-| C04 | LayananPelanggan | Bertanggung jawab dalam proses merespon tiket masalah atau laporan dari pemberi jasa dan pelanggan |
-| C13 | Database | Tempat penyimpnan data perangkat lunak |
-| C14 | LoginUI | Halaman login aplikasi |
-| C16 | LoginController | Menjebatani LoginUI dengan database |
+| C04 | PemberiJasa | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian | UC01, UC02, UC04, UC06, UC08, UC10, UC11, UC12 |
+| C05 | PemberiJasaUI | Kelas yang mengatur penampilan halaman pemberi jasa | UC01, UC02, UC04, UC06, UC08, UC10, UC11, UC12 |
+| C06 | PemberiJasaController | Kelas yang mengatur logika program untuk pemberi jasa | UC01, UC02, UC04, UC06, UC08, UC10, UC11, UC12 |
+| C07 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan| UC02, UC03, UC05, UC07, UC08, UC10, UC11, UC12 |
+| C08 | PelangganUI | Kelas yang mengatur penampilan halaman pelanggan | UC02, UC03, UC05, UC07, UC08, UC10, UC11, UC12 |
+| C09 | PelangganController | Kelas yang mengatur logika program pelanggan | UC02, UC03, UC05, UC07, UC08, UC10, UC11, UC12 |
+| C10 | LayananPelanggan | Bertanggung jawab dalam proses merespon tiket masalah atau laporan dari pemberi jasa dan pelanggan  | UC09 |
+| C11 | LayananPelangganUI | Kelas yang mengatur penampilan halaman pengguna  | UC09 |
+| C12 | LayananPelangganController | Kelas yang mengatur logika program untuk pengguna  | UC09 |
+
 
 
 #### Diagram Kelas
@@ -904,13 +907,16 @@ Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diag
 
 | ID Kelas | Nama Kelas | Atribut | Metode/Operasi |
 | :--- | :--- | :--- | :--- |
-| C01 | Pengguna | idPengguna, email, noTelpon, password, akumulasiRating | +bukaHalamanLogin() |
-| C02 | PemberiJasa | jenisJasa | - |
-| C03 | Pelanggan | - | - |
-| C04 | LayananPelanggan | idLayananPelanggan, password | +bukaHalamanLogin()|
-| C13 | Database | - | +queryLogin() |
-| C14 | LoginUI | inputEmail, inputPassword | +inputInfoLogin()<br>+login()<br>+error()<br>+pindahHalaman()<br>+lupaPassword() |
-| C16 | LoginController | idPengguna, databaseHandler | +autentikasiUser()<br>-hashPassword() |
+| C04 | PemberiJasa | jenisJasa<br>username<br>password | +cekInfoLogin() |
+| C05 | PemberiJasaUI | - | +tunjukkanHalamanLogin()<br>+pressLogin()<br>+pindahHalaman() |
+| C06 | PemberiJasaController | - | +validasiInput()<br>+triggerQueryLogin() | 
+| C07 | Pelanggan | username<br>password | +cekInfoLogin() |
+| C08 | PelangganUI | - | +tunjukkanHalamanLogin()<br>+pressLogin()<br>+pindahHalaman() | 
+| C09 | PelangganController | - | +validasiInput()<br>+triggerQueryLogin() |
+| C10 | LayananPelanggan | username<br>password | +cekInfoLogin() |
+| C11 | LayananPelangganUI | - | +tunjukkanHalamanLogin()<br>+pressLogin()<br>+pindahHalaman() |
+| C12 | LayananPelangganController | - |+validasiInput()<br>+triggerQueryLogin() | 
+
 
 ### 5.2.12 Use Case UC12
 **Nama Use Case:** Mendaftar akun ke perangkat lunak
