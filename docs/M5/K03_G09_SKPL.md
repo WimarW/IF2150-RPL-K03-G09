@@ -40,7 +40,8 @@ Dipersiapkan oleh:
 # BAB 1: Pendahuluan
 
 ## 1.1 Tujuan Penulisan Dokumen
-Tuliskan dengan ringkas tujuan dokumen SKPL ini dibuat dan siapa saja yang akan menggunakan dokumen ini.
+
+Dokumen SKPL ini dibuat dengan tujuan mendeskripsikan perangkat lunak yang bernama CariUang, mulai dari mendeskripsikan kebutuhan-kebutuhan yang diperlukan untuk membangun perangkat lunak tersebut, baik fungsional maupun non fungsional, batasan-batasan yang diterapkan pada perangkat lunak tersebut, hingga skenario-skenario yang mungkin terjadi di dalam perangkat lunak tersebut. Dokumen ini akan digunakan untuk seorang pengembang perangkat lunak mengimplementasikan hal-hal yang sudah dijelaskan di dokumen ini.
 
 ## 1.2 Lingkup Masalah
 <p align="justify">Mayoritas pekerja informal di Indonesia masih menghadapi kesulitan ekonomi akibat tidak adanya tarif standar dan jaminan sosial yang minimal. Di sisi lain, konsumen juga mengalami kesulitan menemukan tenaga kerja terdekat yang terpercaya dan terverifikasi karena solusi digital saat ini masih terbatas dan kurang mencakup seluruh segmen jasa. Oleh karena itu, diperlukan suatu platform digital yang mampu menghubungkan pekerja informal ini dengan konsumen untuk mendukung pengurangan kesenjangan sosial-ekonomi (SDG 10).</p>
@@ -61,27 +62,59 @@ Tabel 1.3. Definisi Istilah dan Singkatan
 | *...* | *...* |
 
 ## 1.4 Aturan Penomoran
-Tuliskan aturan penomoran (ID) yang digunakan dalam dokumen ini. Gunakan pola ID yang **sama** dengan yang sudah dipakai pada dokumen-dokumen sebelumnya, jangan membuat pola baru di dokumen ini.
-
 Tabel 1.4. Aturan Penomoran
 
 | Hal/Bagian | Penomoran | Keterangan |
 | :--- | :--- | :--- |
-| *Kebutuhan Fungsional* | *KFXX* | |
-| *Kebutuhan Non-Fungsional* | *KNFXX* | |
-| *Aktor* | *AXX* | |
-| *Use Case* | *UCXX* | |
-| *Kelas* | *CXX* | |
+| *Kebutuhan* | *RXX* | Menyatakan ID kebutuhan dari perangkat lunak|
+| *Kebutuhan Fungsional* | *KFXX* | Menyatakan ID kebutuhan fungsional dari perangkat lunak|
+| *Kebutuhan Non-Fungsional* | *KNFXX* | Menyatakan ID kebutuhan non fungsional dari perangkat lunak |
+| *Aktor* | *AXX* | Menyatakan ID aktor yang terlibat dalam perangkat lunak|
+| *Use Case* | *UCXX* | Menyatakan ID kasus yang mungkin terjadi di perangkat lunak|
+| *Kelas* | *CXX* | Menyatakan ID kelas di perangkat lunak|
 | *...* | *...* |
 
 ## 1.5 Referensi
-Dokumentasi P/L yang dirujuk oleh dokumen ini. Referensi dapat berupa buku, panduan, ataupun dokumentasi lain yang dipakai dalam pengembangan P/L ini.
+<!-- Dokumentasi P/L yang dirujuk oleh dokumen ini. Referensi dapat berupa buku, panduan, ataupun dokumentasi lain yang dipakai dalam pengembangan P/L ini. -->
+
+Dokumen ini merujuk pada dokumentasi-dokumentasi milestone sebelumnya, seperti dokumen Topic Brainstorming, Requirement Gathering, Use Case, dan Class Diagram
 
 ## 1.6 Deskripsi Umum Dokumen (Ikhtisar)
-Tuliskan sistematika pembahasan dokumen SKPL ini secara runut (misalnya: BAB 2 membahas deskripsi umum P/L, BAB 3 membahas kebutuhan fungsional dan non-fungsional, dst).
+<!-- Tuliskan sistematika pembahasan dokumen SKPL ini secara runut (misalnya: BAB 2 membahas deskripsi umum P/L, BAB 3 membahas kebutuhan fungsional dan non-fungsional, dst). -->
 
----
-
+<h3>BAB 2 Deskripsi Perangkat Lunak:</h3>
+<ul>
+    <li>2.1 Deskripsi Umum Sistem</li>
+    <li>2.2 Deskripsi Umum Perangkat Lunak</li>
+    <li>2.3 Pengguna dan Kebutuhan Pengguna Perangkat Lunak</li>
+    <li>2.4 Batasan Perangkat Lunak</li>
+    <li>2.5 Lingkunan Operasi Perangkat Lunak</li>
+</ul>
+<br>
+<h3>BAB 3 Deskripsi Kebutuhan Perangkat Lunak:</h3>
+<ul>
+    <li>3.1 Kebutuhan Fungsional</li>
+    <li>3.2 Kebutuhan Non Fungsional</li>
+</ul>
+<br>
+<h3>BAB 4 Pemodelan Use Case:</h3>
+<ul>
+    <li>4.1 Identifikasi Aktor</li>
+    <li>4.2 Identifikasi Use Case</li>
+    <li>4.3 Use Case Diagram</li>
+    <li>4.4 Skenario Use Case</li>
+</ul>
+<br>
+<h3>BAB 5 Pemodelan Kelas:</h3>
+<ul>
+    <li>5.1 Identifikasi Kelas</li>
+    <li>5.2 Diagram Kelas per Use Case</li>
+    <li>5.3 Diagram Kelas Keseluruhan</li>
+</ul>
+<br>
+<h3>BAB 6 Tracebility Pemodelan Kelas:</h3>
+<br>
+<hr>
 # BAB 2: Deskripsi Perangkat Lunak
 
 ## 2.1 Deskripsi Umum Sistem
@@ -116,17 +149,22 @@ Tuliskan sistematika pembahasan dokumen SKPL ini secara runut (misalnya: BAB 2 m
 </p>
 
 ## 2.2 Deskripsi Umum Perangkat Lunak
-Diisi dengan deskripsi umum perangkat lunak untuk mendukung proses bisnis yang telah diuraikan pada sub-bab sebelumnya. Uraian harus menunjukkan lingkup perangkat lunak, mencakup keterkaitan perangkat lunak dengan sistem lain di luar (misalnya *Payment Gateway* atau layanan pihak ketiga lain yang dipakai).
+<p align="justify"> "CariUang" adalah suatu perangkat lunak berbasis *mobile application* pada sistem operasi Android yang menjadi jembatan antara pekerja jasa (freelance) dan pengguna yang ingin menggunakan jasa mereka. Perangkat lunak ini memungkinkan pengguna untuk mengunggah kebutuhan jasa dan memilih jasa mereka. Kemudian, pemilik jasa dapat terhubung dengan pengguna untuk memberikan estimasi harga. Jika harga disetujui, pengguna akan menginput persetujuan/deskripsi pekerjaan dan harga ke apikasi sebelum disetujui oleh pemilik jasa. Jika tidak disetujui, pengguna akan kembali memilih pemilik jasa yang lain. Setelah itu, pemilik jasa akan melakukan pekerjaan sesuai persetujuan/deskripsi pekerjaan. Setelah semua pekerjaan selesai, pengguna akan membayar harga yang telah ditetapkan sebelumnya. <br>
 
-*Contoh narasi:* "*[Nama P/L]* merupakan aplikasi *[deskripsi singkat]* yang berinteraksi dengan *Payment Gateway (dummy)* untuk memproses otorisasi pembayaran. Sistem menerima input dari *Pelanggan* melalui antarmuka aplikasi dan mengirimkan permintaan transaksi ke *Payment Gateway* setiap kali pelanggan melakukan checkout."
+<p align="justify"> Jika pengguna bingung akan pekerja jasa mana yang memiliki performa terbaik mengenai salah satu pekerjaan spesifik, perangkat lunak ini memiliki sistem rekomendasi pemilik jasa yang dikelompokkan kepada berbagai kelompok pekerjaan. Pengguna kemudian dapat langsung menghubungi pemilik jasa untuk menggunakan jasa mereka.<br>
+
+<p align="justify"> Di dalam perangkat lunak yang kami buat, terdapat sistem *rating* untuk memberi penilaian terhadap kinerja pemilik jasa dan perilaku pengguna jasa. Rating diberikan oleh pengguna kepada pemilik jasa dan begitupun sebaliknya, sehingga baik pengguna atau pemilik jasa harus memberikan pelayanan atau perilaku yang terbaik untuk menjaga rating mereka. Jika rating melewati batas bawah yang telah ditentukan, baik pemilik atau pengguna jasa akan mendapatkan sanksi tertentu. <br>
+
+<p align="justify"> Jika pengguna atau pemilik jasa memiliki beberapa keluhan yang tidak dapat diselesaikan antara kedua belah pihak, pengguna dapat membuat aduan kepada pihak Customer Service untuk ditindaklanjuti. Pengguna dapat mengirim tiket laporan mengenai berbagai topik spesifik dengan cara mengisi suatu form yang terdapat di menu Laporan. Setelah tiket dikirim, pihak Customer Service kemudian akan meninjau laporan tersebut untuk mencari langkah penyelesaian yang paling baik. Setelah selesai, pihak Customer Service akan memberikan tanggapan kepada pelapor mengenai hal yang telah dilakukan atau tindakan lanjutan yang perlu dilakukan. <br>
+
+<p align="justify"> <br>
 
 ## 2.3 Pengguna dan Kebutuhan Pengguna Perangkat Lunak
-Tuliskan seluruh jenis pengguna (*role*/aktor) yang terlibat dalam perangkat lunak (P/L), beserta kebutuhannya secara umum. Bagian ini dapat disalin dari 1.2 *Deskripsi Pengguna Perangkat Lunak* (dokumen Requirement Gathering) atau 3.1 *Identifikasi Aktor* (dokumen Use Case), pastikan sudah konsisten dengan aktor final yang dipakai di BAB 4.
-
-| Pengguna | Kebutuhan |
+| Aktor | Deskripsi |
 | :--- | :--- |
-| *Pelanggan* | *Pelanggan harus dapat memesan produk, mengelola keranjang, dan menyelesaikan pembayaran melalui sistem.* |
-| *...* | *...* |
+| Pemberi Jasa | Pengguna ini bertindak sebagai pihak penyedia jasa yang menerima pesanan, melakukan pekerjaan fisik di lokasi pelanggan, dan menyelesaikan tugas sesuai dengan persetujuannya dengan pelanggan.  |
+|  Pelanggan| Pengguna ini berperan sebagai pihak yang memerlukan, memesan, dan membayar layanan jasa kasar. |
+| Layanan Pelanggan | Pengguna ini sebagai pihak yang berjaga jaga apabila terdapat sebuah masalah pada sistem atau masalah pada pengguna lain |
 
 ## 2.4 Batasan Perangkat Lunak
 ### 2.4.1 Asumsi Pengguna
@@ -166,9 +204,9 @@ Tuliskan seluruh jenis pengguna (*role*/aktor) yang terlibat dalam perangkat lun
 | Komponen | Spesifikasi |
 | :--- | :--- |
 | *Server* | NodeJS (v24 LTS) dengan framework Express.js |
-| *Client* | Aplikasi andorid dan Web Browser |
+| *Client* | Aplikasi andorid|
 | *DBMS* | Postgresql 16 |
-| *OS* | Android OS dan Cross Platform Browser |
+| *OS* | Android OS |
 | *...* | *...* |
 
 ---
@@ -486,35 +524,35 @@ Salin ulang daftar aktor final dari BAB 3.1 dokumen *Use Case & Scenario Use Cas
 | ID Kelas | Nama Kelas | Deskripsi Kelas | ID Use Case |
 | :--- | :--- | :--- | :--- |
 | C01 | Pengguna | Kelas abstrak yang menyimpan data-data para pengguna aplikasi, seperti pelanggan, pemberi jasa, dan layanan pelanggan | UC11, UC12 |
-| C02 | PenggunaUI |  | UC11, UC12 |
-| C03 | PenggunaController |  | UC11, UC12 |
+| C02 | PenggunaUI | Kelas yang mengatur penampilkan halaman pengguna  | UC11, UC12 |
+| C03 | PenggunaController | Kelas yang mengatur logika program untuk pengguna | UC11, UC12 |
 | C04 | PemberiJasa | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian | UC01, UC02, UC04, UC06, UC08, UC10, UC11, UC12 |
-| C05 | PemberiJasaUI |  | UC01, UC02, UC04, UC06, UC08, UC10, UC11, UC12 |
-| C06 | PemberiJasaController |  | UC01, UC02, UC04, UC06, UC08, UC10, UC11, UC12 |
+| C05 | PemberiJasaUI | Kelas yang mengatur penampilan halaman pemberi jasa | UC01, UC02, UC04, UC06, UC08, UC10, UC11, UC12 |
+| C06 | PemberiJasaController | Kelas yang mengatur logika program untuk pemberi jasa | UC01, UC02, UC04, UC06, UC08, UC10, UC11, UC12 |
 | C07 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan| UC02, UC03, UC05, UC07, UC08, UC10, UC11, UC12 |
-| C08 | PelangganUI | | UC02, UC03, UC05, UC07, UC08, UC10, UC11, UC12 |
-| C09 | PelangganController | | UC02, UC03, UC05, UC07, UC08, UC10, UC11, UC12 |
+| C08 | PelangganUI | Kelas yang mengatur penampilan halaman pelanggan | UC02, UC03, UC05, UC07, UC08, UC10, UC11, UC12 |
+| C09 | PelangganController | Kelas yang mengatur logika program pelanggan | UC02, UC03, UC05, UC07, UC08, UC10, UC11, UC12 |
 | C10 | LayananPelanggan | Bertanggung jawab dalam proses merespon tiket masalah atau laporan dari pemberi jasa dan pelanggan  | UC09 |
-| C11 | LayananPelangganUI |   | UC09 |
-| C12 | LayananPelangganController |   | UC09 |
+| C11 | LayananPelangganUI | Kelas yang mengatur penampilan halaman pengguna  | UC09 |
+| C12 | LayananPelangganController | Kelas yang mengatur logika program untuk pengguna  | UC09 |
 | C13 | KategoriJasa | Menyimpan data spesifik jasa yang ditawarkan oleh PemberiJasa | UC01, UC02 |
-| C14 | KategoriJasaUI |  | UC01, UC02 |
-| C15 | KategoriJasaController |  | UC01, UC02 |
+| C14 | KategoriJasaUI | Kelas yang mengatur penampilan halaman pada kategori jasa | UC01, UC02 |
+| C15 | KategoriJasaController | Kelas yang mengatur logika program kategori jasa | UC01, UC02 |
 | C16 | KontrakPekerjaan | Menyimpan data detail kesepakatan antara Pelanggan dan PemberiJasa, seperti harga, detail pekerjaan, status pekerjaan (On Progress/Done) | UC05, UC06, UC07, UC10 |
-| C17 | KontrakPekerjaanUI |  | UC05, UC06, UC07, UC10 |
-| C18 | KontrakPekerjaanController |  | UC05, UC06, UC07, UC10 |
-| C19 | Komunikasi |  | UC03, UC04, UC09|
-| C20 | KomunikasiUI |  | UC03, UC04, UC09|
-| C21 | KomunikasiController |  | UC03, UC04, UC09|
+| C17 | KontrakPekerjaanUI | Kelas yang mengatur penampilan halaman pada kelas kontrak pekerjaan | UC05, UC06, UC07, UC10 |
+| C18 | KontrakPekerjaanController | Kelas yang mengatur logika program kontrak pekerjaan | UC05, UC06, UC07, UC10 |
+| C19 | Komunikasi | Merealisasikan fitur komunikasi | UC03, UC04, UC09|
+| C20 | KomunikasiUI | Kelas yang mengatur penampilan halaman pada halaman komunikasi | UC03, UC04, UC09|
+| C21 | KomunikasiController | Kelas yang mengatur logika program komunikasi | UC03, UC04, UC09|
 | C22 | TiketLaporan | Merealisasikan fitur tiket antrian dari laporan yang diberikan Pelanggan dan PemberiJasa | UC08, UC09|
-| C23 | TiketLaporanUI |  | UC08, UC09|
-| C24 | TiketLaporanController |  | UC08, UC09|
-| C25 | Rating |  | UC10 |
-| C26 | RatingUI |  | UC10 |
-| C27 | RatingController |  | UC10 |
+| C23 | TiketLaporanUI | Kelas yang mengatur penampilan halaman pada halaman tiket laporan | UC08, UC09|
+| C24 | TiketLaporanController | Kelas yang mengatur logika program tiket laporan | UC08, UC09|
+| C25 | Rating | Merealisasikan fitur rating | UC10 |
+| C26 | RatingUI | Kelas yang mengatur penampilan halaman rating | UC10 |
+| C27 | RatingController | Kelas yang mengatur logika program rating | UC10 |
 | C28 | Notifikasi | Merealisasikan fitur notifikasi yang akan diberikan kepada PemberiJasa ketika jasanya dipesan | UC08, UC09 |
-| C29 | NotifikasiUI | | UC08, UC09 |
-| C30 | NotifikasiController | | UC08, UC09 |
+| C29 | NotifikasiUI | Kelas yang mengatur penampilan halaman notifikasi | UC08, UC09 |
+| C30 | NotifikasiController | Kelas yang mengatur logika program notifikasi | UC08, UC09 |
 
 ## 5.2 Diagram Kelas per Use Case
 Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diagram*, lengkap dengan tabel atribut dan metode/operasinya.
