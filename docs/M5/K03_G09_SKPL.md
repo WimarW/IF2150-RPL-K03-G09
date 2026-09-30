@@ -547,9 +547,9 @@ Salin ulang daftar aktor final dari BAB 3.1 dokumen *Use Case & Scenario Use Cas
 | C13 | KategoriJasa | Menyimpan data spesifik jasa yang ditawarkan oleh PemberiJasa | UC01, UC02 |
 | C14 | KategoriJasaUI | Kelas yang mengatur penampilan halaman pada kategori jasa | UC01, UC02 |
 | C15 | KategoriJasaController | Kelas yang mengatur logika program kategori jasa | UC01, UC02 |
-| C16 | KontrakPekerjaan | Menyimpan data detail kesepakatan antara Pelanggan dan PemberiJasa, seperti harga, detail pekerjaan, status pekerjaan (On Progress/Done) | UC05, UC06, UC07, UC10 |
-| C17 | KontrakPekerjaanUI | Kelas yang mengatur penampilan halaman pada kelas kontrak pekerjaan | UC05, UC06, UC07, UC10 |
-| C18 | KontrakPekerjaanController | Kelas yang mengatur logika program kontrak pekerjaan | UC05, UC06, UC07, UC10 |
+| C16 | KontrakPekerjaan | Menyimpan data detail kesepakatan antara Pelanggan dan PemberiJasa, seperti harga, detail pekerjaan, status pekerjaan (On Progress/Done) | UC05, UC06, UC07 |
+| C17 | KontrakPekerjaanUI | Kelas yang mengatur penampilan halaman pada kelas kontrak pekerjaan | UC05, UC06, UC07 |
+| C18 | KontrakPekerjaanController | Kelas yang mengatur logika program kontrak pekerjaan | UC05, UC06, UC07 |
 | C19 | Komunikasi | Merealisasikan fitur komunikasi | UC03, UC04, UC09|
 | C20 | KomunikasiUI | Kelas yang mengatur penampilan halaman pada halaman komunikasi | UC03, UC04, UC09|
 | C21 | KomunikasiController | Kelas yang mengatur logika program komunikasi | UC03, UC04, UC09|
@@ -1042,39 +1042,36 @@ Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diag
 
 | ID Kelas | ID Use Case | ID KF |
 | :--- | :--- | :--- |
-| C01 | UC08, UC10, UC11, UC12 | KF14, KF16, KF19, KF20, KF21 |
-| C02 | UC01, UC02, UC04, UC06, UC08, UC10, UC11, UC12 | KF02, KF03, KF04, KF05, KF06, KF07, KF08, KF09, KF12, KF16, KF17, KF19, KF20, KF21 |
-| C03 | UC02, UC03, UC05, UC07, UC08, UC10, UC11, UC12 | KF01, KF02, KF03, KF08, KF09, KF10, KF11, KF13, KF14, KF15, KF19, KF20, KF21 |
-| C04 | UC09, UC11 | KF15, KF17, KF18, KF21 |
-| C05 | UC01, UC02 | KF01, KF02, KF04, KF05, KF08 |
-| C06 | UC05, UC06, UC07, UC10 | KF10, KF11, KF12, KF13, KF19 |
-| C07 | UC03, UC04, UC09 | KF09, KF15, KF17 |
-| C08 | UC08, UC09 | KF14, KF15, KF16, KF17, KF18 |
-| C09 | UC10 | KF19, KF20 |
-| C10 | UC02, UC04, UC08, UC09 | KF06, KF18 |
-| C11 | UC10 | KF19 |
-| C12 | UC10 | KF19, KF20 |
-| C13 | UC01, UC03, UC07, UC10, UC11, UC12 | KF05, KF09, KF13, KF20, KF21 |
-| C14 | UC11 | KF21 |
-| C16 | UC11 | KF21 |
-| C17 | UC02 | KF01, KF02, KF03 |
-| C18 | UC02 | KF01, KF02, KF03, KF08 |
-| C19 | UC12 | KF21 |
-| C20 | UC12 | KF21 |
-| C21 | UC08 | KF14, KF16 |
-| C22 | UC08 | KF14, KF16 |
-| C23 | UC05 | KF10 |
-| C24 | UC06 | KF12 |
-| C25 | UC05, UC06, UC07 | KF10, KF11, KF12, KF13 |
-| C26 | UC07 | KF13 |
-| C27 | UC08 | KF14, KF16 |
-| C28 | UC03, UC04 | KF09 |
-| C29 | UC03, UC04 | KF09 |
-| C30 | UC01 | KF04, KF05 |
-| C31 | UC01 | KF04 |
-| C32 | UC09 | KF15, KF17, KF18 |
-| C33 | UC09 | KF15, KF17, KF18 |
-| C34 | UC02, UC06, UC08, UC09, UC12 | KF06, KF07, KF12, KF18, KF21 |
+| C01 | UC11, UC12 | KF21 |
+| C02 | UC11, UC12 | KF21 |
+| C03 | UC11, UC12 | KF21 |
+| C04 | UC01, UC02, UC04, UC06, UC08, UC10, UC11, UC12 | KF04, KF05, KF06, KF07, KF09, KF12, KF16, KF17, KF19, KF20, KF21 |
+| C05 | UC01, UC02, UC04, UC06, UC08, UC10, UC11, UC12 | KF04, KF05, KF06, KF07, KF09, KF12, KF16, KF17, KF19, KF20, KF21 |
+| C06 | UC01, UC02, UC04, UC06, UC08, UC10, UC11, UC12 | KF04, KF05, KF06, KF07, KF09, KF12, KF16, KF17, KF19, KF20, KF21 |
+| C07 | UC02, UC03, UC05, UC07, UC08, UC10, UC11, UC12 | KF01, KF02, KF03, KF08, KF09, KF10, KF11, KF13, KF14, KF15, KF19, KF20, KF21 |
+| C08 | UC02, UC03, UC05, UC07, UC08, UC10, UC11, UC12 | KF01, KF02, KF03, KF08, KF09, KF10, KF11, KF13, KF14, KF15, KF19, KF20, KF21 |
+| C09 | UC02, UC03, UC05, UC07, UC08, UC10, UC11, UC12 | KF01, KF02, KF03, KF08, KF09, KF10, KF11, KF13, KF14, KF15, KF19, KF20, KF21 |
+| C10 | UC09 | KF15, KF17, KF18 |
+| C11 | UC09 | KF15, KF17, KF18 |
+| C12 | UC09 | KF15, KF17, KF18 |
+| C13 | UC01, UC02 | KF01, KF02, KF04, KF05, KF08 |
+| C14 | UC01, UC02 | KF01, KF02, KF04, KF05, KF08 |
+| C15 | UC01, UC02 | KF01, KF02, KF04, KF05, KF08 |
+| C16 | UC05, UC06, UC07 | KF10, KF11, KF12, KF13 |
+| C17 | UC05, UC06, UC07 | KF10, KF11, KF12, KF13 |
+| C18 | UC05, UC06, UC07 | KF10, KF11, KF12, KF13 |
+| C19 | UC03, UC04, UC09 | KF09, KF15, KF17 |
+| C20 | UC03, UC04, UC09 | KF09, KF15, KF17 |
+| C21 | UC03, UC04, UC09 | KF09, KF15, KF17 |
+| C22 | UC08, UC09 | KF14, KF15, KF16, KF17 |
+| C23 | UC08, UC09 | KF14, KF15, KF16, KF17 |
+| C24 | UC08, UC09 | KF14, KF15, KF16, KF17 |
+| C25 | UC10 | KF19, KF20 |
+| C26 | UC10 | KF19, KF20 |
+| C27 | UC10 | KF19, KF20 |
+| C28 | UC08, UC09 | KF18 |
+| C29 | UC08, UC09 | KF18 |
+| C30 | UC08, UC09 | KF18 |
 
 ---
 
