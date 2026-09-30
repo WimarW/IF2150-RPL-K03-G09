@@ -782,11 +782,12 @@ Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diag
 #### Identifikasi Kelas
 | ID Kelas | Nama Kelas | Deskripsi Kelas |
 | :--- | :--- | :--- |
-| C03 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan |
-| C06 | KontrakPekerjaan | Menyimpan data detail kesepakatan antara Pelanggan dan PemberiJasa, seperti harga, detail pekerjaan, status pekerjaan (On Progress/Done) |
-| C13 | Database | Tempat penyimpanan data perangkat lunak |
-| C25 | KontrakPekerjaanController | Menjembatani KontrakPekerjaanUI, database, dan KontrakPekerjaan (status) |
-| C26 | KontrakPekerjaanUI | Halaman ketika pekerjaan sudah selesai |
+| C07 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan |
+| C08 | PelangganUI | Kelas yang mengatur penampilan halaman pelanggan |
+| C09 | PelangganController | Kelas yang mengatur logika program pelanggan |
+| C16 | KontrakPekerjaan | Menyimpan data detail kesepakatan antara Pelanggan dan PemberiJasa, seperti harga, detail pekerjaan, status pekerjaan (On Progress/Done) |
+| C17 | KontrakPekerjaanUI | Kelas yang mengatur penampilan halaman pada kelas kontrak pekerjaan |
+| C18 | KontrakPekerjaanController | Kelas yang mengatur logika program kontrak pekerjaan |
 
 
 #### Diagram Kelas
@@ -799,11 +800,12 @@ Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diag
 
 | ID Kelas | Nama Kelas | Atribut | Metode/Operasi |
 | :--- | :--- | :--- | :--- |
-| C03 | Pelanggan | idPelanggan | - |
-| C06 | KontrakPekerjaan | detailPekerjaan, persetujuanHarga, idKontrak, statusPekerjaan | simpanBayaran()<br>simpanDatabase()<br>updateStatus() |
-| C13 | Database | riwayatPekerjaan | +simpanriwayat() |
-| C25 | KontrakPekerjaanController | databaseHandler | -buatKontrak()<br>-validasiData()<br>-simpanData()<br>-ubahStatus() |
-| C26 | KontrakPekerjaanUI | - | +showkontrakpekerjaan() |
+| C07 | Pelanggan | - | +konfirmasiPekerjaan() |
+| C08 | PelangganUI | - | +pressPekerjaan() |
+| C09 | PelangganController | - | +requestKontrakPekerjaan() |
+| C16 | KontrakPekerjaan | -idKontrak<br>-detailPekerjaan<br>-persetujuanHarga<br>-statusPekerjaan | +getDetailKontrak()<br>+getStatusPekerjaan()<br>+updateStatus()<br>+simpanBayaran() |
+| C17 | KontrakPekerjaanUI | - | +showKontrakPekerjaan()<br>+pressKonfirmasiPekerjaan() |
+| C18 | KontrakPekerjaanController | - | +getKontrakPekerjaan()<br>+konfirmasiPekerjaan()<br>+ubahStatus() |
 
 ### 5.2.8 Use Case UC8
 **Nama Use Case:** Pelanggan dan pemberi jasa melaporkan masalah
@@ -811,14 +813,18 @@ Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diag
 #### Identifikasi Kelas
 | ID Kelas | Nama Kelas | Deskripsi Kelas |
 | :--- | :--- | :--- |
-| C01 | Pengguna | Kelas abstrak yang menyimpan data-data para pengguna aplikasi, seperti pelanggan, pemberi jasa, dan layanan pelanggan |
-| C02 | PemberiJasa | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian |
-| C03 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan |
-| C08 | TiketLaporan | Merealisasikan fitur tiket antrian dari laporan yang diberikan Pelanggan dan PemberiJasa |
-| C21 | FormTiket | Menyimpan data form pengajuan tiket laporan yang diisi pengguna sebelum menjadi TiketLaporan resmi |
-| C22 | FormTiketUI | Halaman tampilan form pengisian tiket laporan |
-| C27 | FormTiketController | Menjembatani FormTiketUI, FormTiket, dan TiketLaporan |
-
+| C04 | PemberiJasa | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian |
+| C05 | PemberiJasaUI | Kelas yang mengatur penampilan halaman pemberi jasa |
+| C06 | PemberiJasaController | Kelas yang mengatur logika program untuk pemberi jasa |
+| C07 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan |
+| C08 | PelangganUI | Kelas yang mengatur penampilan halaman pelanggan |
+| C09 | PelangganController | Kelas yang mengatur logika program pelanggan |
+| C22 | TiketLaporan | Merealisasikan fitur tiket antrian dari laporan yang diberikan Pelanggan dan PemberiJasa |
+| C23 | TiketLaporanUI | Kelas yang mengatur penampilan halaman pada halaman tiket laporan |
+| C24 | TiketLaporanController | Kelas yang mengatur logika program tiket laporan |
+| C28 | Notifikasi | Merealisasikan fitur notifikasi yang akan diberikan kepada PemberiJasa ketika jasanya dipesan |
+| C29 | NotifikasiUI | Kelas yang mengatur penampilan halaman notifikasi |
+| C30 | NotifikasiController | Kelas yang mengatur logika program notifikasi |
 
 
 #### Diagram Kelas
@@ -831,13 +837,18 @@ Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diag
 
 | ID Kelas | Nama Kelas | Atribut | Metode/Operasi |
 | :--- | :--- | :--- | :--- |
-| C01 | Pengguna | idPengguna, email, noTelpon | - |
-| C02 | PemberiJasa | jenisJasa | - |
-| C03 | Pelanggan | - | - |
-| C08 | TiketLaporan | idTiket, idTugas | +simpanantrean() |
-| C21 | FormTiket | idTiket, idPengguna, jenisTiket, keteranganTiket, tanggalTiket | - |
-| C22 | FormTiketUI | - | +tampilkanTiket() |
-| C27 | FormTiketController | databaseHandler | +buatTiket()<br>+balasTiket()<br>+tutupTiket() |
+| C04 | PemberiJasa | -jenisJasa | +laporkanMasalah() |
+| C05 | PemberiJasaUI | - | +pressBantuanLayanan() |
+| C06 | PemberiJasaController | - | +requestFormTiket() |
+| C07 | Pelanggan | - | +laporkanMasalah() |
+| C08 | PelangganUI | - | +pressBantuanLayanan() |
+| C09 | PelangganController | - | +requestFormTiket() |
+| C22 | TiketLaporan | -idTiket<br>-idPengguna<br>-jenisTiket<br>-keteranganTiket<br>-tanggalTiket<br>-statusTiket | +simpanAntrean()<br>+getStatusTiket() |
+| C23 | TiketLaporanUI | - | +showFormTiket()<br>+isiFormTiket()<br>+pressKirimTiket() |
+| C24 | TiketLaporanController | - | +buatTiket()<br>+validasiFormTiket()<br>+teruskanKeNotifikasi() |
+| C28 | Notifikasi | -idNotifikasi<br>-idPenerima<br>-isiNotifikasi<br>-waktuNotifikasi<br>-statusBaca | +getIsiNotifikasi()<br>+tandaiTerbaca() |
+| C29 | NotifikasiUI | - | -playSound()<br>-stopSound()<br>+showNotifikasi()<br>+closeNotifikasi() |
+| C30 | NotifikasiController | - | +buatNotifikasi()<br>+kirimNotifikasi() |
 
 
 ### 5.2.9 Use Case UC9
@@ -846,13 +857,18 @@ Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diag
 #### Identifikasi Kelas
 | ID Kelas | Nama Kelas | Deskripsi Kelas |
 | :--- | :--- | :--- |
-| C01 | Pengguna | Kelas abstrak yang menyimpan data-data para pengguna aplikasi, seperti pelanggan, pemberi jasa, dan layanan pelanggan |
-| C02 | PemberiJasa | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan |
-| C03 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, melaporkan masalah, dan memberikan rating kepada pemberi jasa |
-| C04 | LayananPelanggan | Bertanggung jawab dalam proses merespon tiket masalah atau laporan dari pemberi jasa dan pelanggan |
-| C07 | Komunikasi | Merealisasikan fitur chat langsung antara Pelanggan, PemberiJasa, ataupun LayananPelanggan |
-| C27 | FormTiketController | Menjembatani FormTiketUI, FormTiket, TiketLaporan, dan Notifikasi |
-| C33 | TiketLaporanController | Menjebatani ke FormTiketLaporan |
+| C10 | LayananPelanggan | Bertanggung jawab dalam proses merespon tiket masalah atau laporan dari pemberi jasa dan pelanggan |
+| C11 | LayananPelangganUI | Kelas yang mengatur penampilan halaman layanan pelanggan |
+| C12 | LayananPelangganController | Kelas yang mengatur logika program untuk layanan pelanggan |
+| C19 | Komunikasi | Merealisasikan fitur komunikasi |
+| C20 | KomunikasiUI | Kelas yang mengatur penampilan halaman pada halaman komunikasi |
+| C21 | KomunikasiController | Kelas yang mengatur logika program komunikasi |
+| C22 | TiketLaporan | Merealisasikan fitur tiket antrian dari laporan yang diberikan Pelanggan dan PemberiJasa |
+| C23 | TiketLaporanUI | Kelas yang mengatur penampilan halaman pada halaman tiket laporan |
+| C24 | TiketLaporanController | Kelas yang mengatur logika program tiket laporan |
+| C28 | Notifikasi | Merealisasikan fitur notifikasi yang akan diberikan kepada PemberiJasa ketika jasanya dipesan |
+| C29 | NotifikasiUI | Kelas yang mengatur penampilan halaman notifikasi |
+| C30 | NotifikasiController | Kelas yang mengatur logika program notifikasi |
 
 #### Diagram Kelas
 <p align="center">
@@ -864,13 +880,18 @@ Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diag
 
 | ID Kelas | Nama Kelas | Atribut | Metode/Operasi |
 | :--- | :--- | :--- | :--- |
-| C01 | Pengguna | idPengguna | - |
-| C02 | PemberiJasa | jenisJasa | - |
-| C03 | Pelanggan | - | - |
-| C04 | LayananPelanggan | idLayananPelanggan | - |
-| C07 | Komunikasi | idChat, idPengguna, waktuTerkirim, isChatTerbaca,  statusChat, durasiChat | - |
-| C33 | TiketLaporanController | databasehandler, idTiket | +getTiketLaporan()<br>+teruskanKeFormTiket( |
-| C27 | FormTiketController | databaseHandler | +buatTiket()<br>+balasTiket()<br>+tutupTiket() |
+| C10 | LayananPelanggan | -idLayananPelanggan | +responTiket() |
+| C11 | LayananPelangganUI | - | +showDaftarTiket()<br>+pressBukaTiket() |
+| C12 | LayananPelangganController | - | +requestTiketLaporan()<br>+teruskanBalasan() |
+| C19 | Komunikasi | -idChat<br>-idPengguna<br>-isiPesan<br>-waktuTerkirim<br>-isChatTerbaca<br>-statusChat<br>-durasiChat | +simpanPesan()<br>+getPesan() |
+| C20 | KomunikasiUI | - | +showChat()<br>+pressKirimBalasan() |
+| C21 | KomunikasiController | - | +kirimPesan()<br>+getRiwayatChat() |
+| C22 | TiketLaporan | -idTiket<br>-idPengguna<br>-jenisTiket<br>-keteranganTiket<br>-tanggalTiket<br>-statusTiket | +getDetailTiket()<br>+updateStatusTiket() |
+| C23 | TiketLaporanUI | - | +showDetailTiket()<br>+pressBalasTiket() |
+| C24 | TiketLaporanController | - | +getTiketLaporan()<br>+balasTiket()<br>+tutupTiket() |
+| C28 | Notifikasi | -idNotifikasi<br>-idPenerima<br>-isiNotifikasi<br>-waktuNotifikasi<br>-statusBaca | +getIsiNotifikasi()<br>+tandaiTerbaca() |
+| C29 | NotifikasiUI | - | -playSound()<br>-stopSound()<br>+showNotifikasi()<br>+closeNotifikasi() |
+| C30 | NotifikasiController | - | +buatNotifikasi()<br>+kirimNotifikasi() |
 
 ### 5.2.10 Use Case UC10
 **Nama Use Case:** Memberi rating
