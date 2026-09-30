@@ -626,7 +626,7 @@ Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diag
 #### Diagram Kelas
 
 <p align="center">
-<img alt="Class Diagram UC01" src="./assets/diagram/Diagram-Class-UC02.jpeg" width="70%">
+<img alt="Class Diagram UC01" src="./assets/diagram/Diagram-Class-UC02.png" width="70%">
 </p>
 <p align="center">
 <i>Gambar 4. Diagram Kelas Use Case UC02</i>
@@ -679,7 +679,7 @@ Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diag
 #### Diagram Kelas
 
 <p align="center">
-<img alt="Class Diagram UC01" src="./assets/diagram/Diagram-Class-UC03.jpeg" width="70%">
+<img alt="Class Diagram UC01" src="./assets/diagram/Diagram-Class-UC0304.png" width="70%">
 </p>
 <p align="center">
 <i>Gambar 5. Diagram Kelas Use Case UC03</i>
@@ -718,7 +718,7 @@ Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diag
 
 #### Diagram Kelas
 <p align="center">
-<img alt="Class Diagram UC01" src="./assets/diagram/Diagram-Class-UC04.jpeg" width="70%">
+<img alt="Class Diagram UC01" src="./assets/diagram/Diagram-Class-UC0304.jpeg" width="70%">
 </p>
 <p align="center">
 <i>Gambar 6. Diagram Kelas Use Case UC04</i>
