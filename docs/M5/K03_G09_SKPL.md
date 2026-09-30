@@ -563,10 +563,11 @@ Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diag
 
 | ID Kelas | Nama Kelas | Deskripsi Kelas |
 | :--- | :--- | :--- |
-| *C02* | *PemberiJasa* | *Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian* |
-| *C13* | *Database* | *Tempat penyimpanan data perangkat lunak* |
-| *C30* | *FormJasaController* | *Mengatur pengisian formulir untuk jenis jasa* |
-| *C31* | *FormJasaUI* | *Menampilkan formulir jenis jasa ke layar* |
+| C04 | PemberiJasa | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian | UC01, UC02, UC04, UC06, UC08, UC10, UC11, UC12 |
+| C06 | PemberiJasaController | Kelas yang mengatur logika program untuk pemberi jasa | UC01, UC02, UC04, UC06, UC08, UC10, UC11, UC12 |
+| C13 | KategoriJasa | Menyimpan data spesifik jasa yang ditawarkan oleh PemberiJasa | UC01, UC02 |
+| C14 | KategoriJasaUI | Kelas yang mengatur penampilan halaman pada kategori jasa | UC01, UC02 |
+| C15 | KategoriJasaController | Kelas yang mengatur logika program kategori jasa | UC01, UC02 |
 
 
 #### Diagram Kelas
@@ -581,10 +582,11 @@ Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diag
 
 | ID Kelas | Nama Kelas | Atribut | Metode/Operasi |
 | :--- | :--- | :--- | :--- |
-| *C02* | *PemberiJasa* | *jenisJasa* | *-* |
-| *C13* | *Database* | *-* | *simpanJasa()* |
-| *C30* | *FormJasaController* | *databaseHandler* | *+isiJenisJasa(), +sendJasaToDatabase()* |
-| *C31* | *FormJasaUI* | *-* | *+tampilkanFormJasa()* |
+| C02 | PemberiJasa | idPemberiJasa, idKategoriJasa | +getIDPemberiJasa(), +getIDKategoriJasa(), +setIDKategoriJasa(), +savePemberiJasa() |
+| C06 | PemberiJasaController | - | +validatePemberiJasa() |
+| C13 | KategoriJasa | idKategoriJasa, jenisJasa, tarif, jamKerja, daerahKerja | +getIDKategoriJasa(), +getJenisJasa(), +getTarif(), +getJamKerja(), +getDaerahKerja(), +setTarif(), +setJamKerja(), +setDaerahKerja(), +saveKategoriJasa() |
+| C14 | KategoriJasaUI | - | +pressOpenKategoriJasa(), +showFormKategoriJasa(), +pressSubmitKategoriJasa(), +inputDataKategoriJasa() |
+| C15 | KategoriJasaController | - | +validateKategoriJasa(), +submitFormKategoriJasa() |
 
 
 ### 5.2.2 Use Case UC02
@@ -595,15 +597,20 @@ Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diag
 
 | ID Kelas | Nama Kelas | Deskripsi Kelas |
 | :--- | :--- | :--- |
-| *C02* | *PemberiJasa* | *Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian* |
-| *C03* | *Pelanggan* | *Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan* |
-| *C10* | *NotifikasiController* | *Mengatur pengiriman notifikasi kepada pemberi jasa atau pengguna* |
-| *C13* | *Database* | *tempat penyimpanan data perangkat lunak* |
-| *C15* | *NotifikasiUI* | *Menampilkan notifikasi pada layar pemberi jasa atau pengguna* | 
-| *C17* | *ListJasaController* | *Mengatur pengambilan data list jasa yang tersedia* |
-| *C18* | *ListJasaUI* | *Menampilkan daftar jenis jasa yang tersedia ke layar* |
-| *C34* | *Notifikasi* | *Menyimpan data notifikasi* |
-
+| C04 | PemberiJasa | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian | UC01, UC02, UC04, UC06, UC08, UC10, UC11, UC12 |
+| C05 | PemberiJasaUI | Mengatur interaksi pengguna dengan aplikasi yang berhubungan dengan pemberi jasa | UC01, UC02, UC04, UC06, UC08, UC10, UC11, UC12 |
+| C06 | PemberiJasaController | Kelas yang mengatur logika program untuk pemberi jasa | UC01, UC02, UC04, UC06, UC08, UC10, UC11, UC12 |
+| C07 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan| UC02, UC03, UC05, UC07, UC08, UC10, UC11, UC12 |
+| C09 | PelangganController | Kelas yang mengatur logika program pelanggan | UC02, UC03, UC05, UC07, UC08, UC10, UC11, UC12 |
+| C13 | KategoriJasa | Menyimpan data spesifik jasa yang ditawarkan oleh PemberiJasa | UC01, UC02 |
+| C14 | KategoriJasaUI | Kelas yang mengatur penampilan halaman pada kategori jasa | UC01, UC02 |
+| C15 | KategoriJasaController | Kelas yang mengatur logika program kategori jasa | UC01, UC02 |
+| C19 | Komunikasi | Merealisasikan fitur komunikasi | UC03, UC04, UC09|
+| C20 | KomunikasiUI | Kelas yang mengatur penampilan halaman pada halaman komunikasi | UC03, UC04, UC09|
+| C21 | KomunikasiController | Kelas yang mengatur logika program komunikasi | UC03, UC04, UC09 |
+| C28 | Notifikasi | Merealisasikan fitur notifikasi yang akan diberikan kepada PemberiJasa ketika jasanya dipesan | UC08, UC09 |
+| C29 | NotifikasiUI | Kelas yang mengatur penampilan halaman notifikasi | UC08, UC09 |
+| C30 | NotifikasiController | Kelas yang mengatur logika program notifikasi | UC08, UC09 |
 
 #### Diagram Kelas
 
@@ -617,13 +624,21 @@ Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diag
 
 | ID Kelas | Nama Kelas | Atribut | Metode/Operasi |
 | :--- | :--- | :--- | :--- |
-| *C02* | *PemberiJasa* | *jenisJasa* | *-* |
-| *C03* | *Pelanggan* | *-* | *-* |
-| *C13* | *Database* | *databaseHandler* | |
-| *C15* | *NotifikasiUI | *-playSound(), -stopSound(), +showNotifikasi(), closeNotifikasi()* |
-| *C17* | *ListJasaController* | *databaseHandler* | *+getListJasa()* |
-| *C18* | *ListJasaUI* | - | *+showListJasa()* |
-| *C34* | *Notifikasi* | *idPengguna, idChat, idNotifikasi, statusNotifikasi, durasiNotifikasi, teksNotifikasi, sound* | *-* |
+| C04 | PemberiJasa | idPemberiJasa, namaPemberiJasa, idKategori, alamat, deskripsi, rating | +getIDPemberiJasa(), +getNamaPemberiJasa(), +getLokasi(), +getDeskripsi() |
+| C05 | PemberiJasaUI | - | +pressPemberiJasa(), +pressChat(), +showPemberiJasaMap() |
+| C06 | PemberiJasaController | - | +showPemberiJasaFromKategori(), +choosePemberiJasa() |
+| C07 | Pelanggan | idPelanggan, namaPelanggan | +getIDPelanggan(), +getNamaPelanggan() |
+| C09 | PelangganController | - |  
+| C13 | KategoriJasa | idKategori, jenisJasa | - | +getKategoriJasa(), +getIDKategori() |
+| C14 | KategoriJasaUI | - | +showKategoriJasa(), +pressKategoriJasa(), +pressMenu() |
+| C15 | KategoriJasaController | - | +filterKategoriJasa() |
+| C19 | Komunikasi | idChat, idPelanggan, idPemberiJasa, waktu, isiPesan | +getIDChat(), +getChatHistory(), +saveChat() |
+| C20 | KomunikasiUI | - | +showChatHistory(), +showChatChannel(), +showMessage() |
+| C21 | KomunikasiController | - | +loadChat() |
+| C28 | Notifikasi | waktuNotifikasi, namaPelanggan, idPelanggan, isiNotifikasi | +getNamaPelanggan(), +getIDPelanggan() +getChatHistory(), +getIsiNotifikasi() |
+| C29 | NotifikasiUI | - | +showNotifikasi(), +pressNotifikasi() |
+| C30 | NotifikasiController | - | +createNotifikasi() +sendNotifikasi() |
+
 
 ### 5.2.3 Use Case UC03
 
@@ -631,13 +646,21 @@ Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diag
 
 ### Identifikasi Kelas
 
+| 1 | *Pelanggan mengirimkan penawaran pekerjaan dan harga kepada pemberi jasa* | *Sistem mengirimkan pesan kepada pemberi jasa* |
+
 | ID Kelas | Nama Kelas | Deskripsi Kelas |
 | :--- | :--- | :--- |
-| *C03* | *Pelanggan* | *Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan* |
-| *C13* | *Database* | *Tempat penyimpanan data perangkat lunak* |
-| *C07* | *Komunikasi* | *Menyimpan data-data yang diperlukan mengenai pesan yang dikirim atau kanal yang diinisiasi* |
-| *C28* | *KomunikasiController* | *Mengontrol jalannya komunikasi antarpengguna* |
-| *C29* | *KomunikasiUI* | *Menampilkan pesan yang dikirim pengguna* |
+| C04 | PemberiJasa | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian | UC01, UC02, UC04, UC06, UC08, UC10, UC11, UC12 |
+| C07 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan| UC02, UC03, UC05, UC07, UC08, UC10, UC11, UC12 |
+| C19 | Komunikasi | Merealisasikan fitur komunikasi | UC03, UC04, UC09|
+| C20 | KomunikasiUI | Kelas yang mengatur penampilan halaman pada halaman komunikasi | UC03, UC04, UC09|
+| C21 | KomunikasiController | Kelas yang mengatur logika program komunikasi | UC03, UC04, UC09 |
+| C28 | Notifikasi | Merealisasikan fitur notifikasi yang akan diberikan kepada PemberiJasa ketika jasanya dipesan | UC08, UC09 |
+| C29 | NotifikasiUI | Kelas yang mengatur penampilan halaman notifikasi | UC08, UC09 |
+| C30 | NotifikasiController | Kelas yang mengatur logika program notifikasi | UC08, UC09 |
+| C28 | Notifikasi | waktuNotifikasi, namaPelanggan, idPelanggan, isiNotifikasi | +getNamaPelanggan(), +getIDPelanggan() +getChatHistory() |
+| C29 | NotifikasiUI | - | +showNotifikasi(), +pressNotifikasi() |
+| C30 | NotifikasiController | - | +createNotifikasi() +sendNotifikasi() |
 
 
 #### Diagram Kelas
@@ -652,11 +675,14 @@ Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diag
 
 | ID Kelas | Nama Kelas | Atribut | Metode/Operasi |
 | :--- | :--- | :--- | :--- |
-| *C03* | *Pelanggan* | *idPengguna* | *+getUserId(), +bukaLamanKomunikasi()* |
-| *C13* | *Database* | *databaseHandler* | *+getPesan(), +savePesan()* |
-| *C07* | *Komunikasi* | *-* |
-| *C28* | *KomunikasiController* | *databaseHandler* | *+lihatPesan()<br>+kirimPesan()<br>+ubahStatus()<br>+bukaTutupChat()<br>+sendChatToDatabase()* |
-| C29 | *KomunikasiUI* | - | *tampilkanPesan*() |
+| C04 | PemberiJasa | idPemberiJasa | +getIDPemberiJasa() |
+| C07 | Pelanggan | idPelanggan | +getIDPelanggan() |
+| C19 | Komunikasi | idChat, idPelanggan, idPemberiJasa, waktu, isiPesan | +getIDChat(), +getChatHistory(), +saveChat() |
+| C20 | KomunikasiUI | - | +pressSendChat(), +showChatHistory(), +showMessage(), +showChatChannel(), +inputMessage() |
+| C21 | KomunikasiController | - | +sendChat(), +loadChat() |
+| C28 | Notifikasi | waktuNotifikasi, namaPelanggan, idPelanggan, isiNotifikasi | +getNamaPelanggan(), +getIDPelanggan(), +getLastMessage() |
+| C29 | NotifikasiUI | - | +showNotifikasi(), +pressNotifikasi() |
+| C30 | NotifikasiController | - | +createNotifikasi() +sendNotifikasi() |
 
 
 ### 5.2.4 Use Case UC04
