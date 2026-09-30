@@ -654,17 +654,15 @@ Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diag
 
 | ID Kelas | Nama Kelas | Deskripsi Kelas |
 | :--- | :--- | :--- |
-| C04 | PemberiJasa | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian | UC01, UC02, UC04, UC06, UC08, UC10, UC11, UC12 |
-| C07 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan| UC02, UC03, UC05, UC07, UC08, UC10, UC11, UC12 |
-| C19 | Komunikasi | Merealisasikan fitur komunikasi | UC03, UC04, UC09|
-| C20 | KomunikasiUI | Kelas yang mengatur penampilan halaman pada halaman komunikasi | UC03, UC04, UC09|
-| C21 | KomunikasiController | Kelas yang mengatur logika program komunikasi | UC03, UC04, UC09 |
-| C28 | Notifikasi | Merealisasikan fitur notifikasi yang akan diberikan kepada PemberiJasa ketika jasanya dipesan | UC08, UC09 |
-| C29 | NotifikasiUI | Kelas yang mengatur penampilan halaman notifikasi | UC08, UC09 |
-| C30 | NotifikasiController | Kelas yang mengatur logika program notifikasi | UC08, UC09 |
-| C28 | Notifikasi | waktuNotifikasi, namaPelanggan, idPelanggan, isiNotifikasi | +getNamaPelanggan(), +getIDPelanggan() +getChatHistory() |
-| C29 | NotifikasiUI | - | +showNotifikasi(), +pressNotifikasi() |
-| C30 | NotifikasiController | - | +createNotifikasi() +sendNotifikasi() |
+| C04 | PemberiJasa | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian |
+| C07 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan|
+| C19 | Komunikasi | Merealisasikan fitur komunikasi |
+| C20 | KomunikasiUI | Kelas yang mengatur penampilan halaman pada halaman komunikasi |
+| C21 | KomunikasiController | Kelas yang mengatur logika program komunikasi |
+| C28 | Notifikasi | Merealisasikan fitur notifikasi yang akan diberikan kepada PemberiJasa ketika jasanya dipesan |
+| C29 | NotifikasiUI | Kelas yang mengatur penampilan halaman notifikasi |
+| C30 | NotifikasiController | Kelas yang mengatur logika program notifikasi |
+
 
 
 #### Diagram Kelas
@@ -696,11 +694,15 @@ Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diag
 #### Identifikasi Kelas
 | ID Kelas | Nama Kelas | Deskripsi Kelas |
 | :--- | :--- | :--- |
-| *C02* | *PemberiJasa* | *Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan* |
-| *C13* | *Database* | *Tempat penyimpanan data perangkat lunak* |
-| *C07* | *Komunikasi* | *Menyimpan data-data yang diperlukan mengenai pesan yang dikirim atau kanal yang diinisiasi* |
-| *C28* | *KomunikasiController* | *Mengontrol jalannya komunikasi antarpengguna* |
-| *C29* | *KomunikasiUI* | *Menampilkan pesan yang dikirim pengguna* |
+| C04 | PemberiJasa | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian |
+| C07 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan|
+| C19 | Komunikasi | Merealisasikan fitur komunikasi |
+| C20 | KomunikasiUI | Kelas yang mengatur penampilan halaman pada halaman komunikasi |
+| C21 | KomunikasiController | Kelas yang mengatur logika program komunikasi |
+| C28 | Notifikasi | Merealisasikan fitur notifikasi yang akan diberikan kepada PemberiJasa ketika jasanya dipesan | 
+| C29 | NotifikasiUI | Kelas yang mengatur penampilan halaman notifikasi | 
+| C30 | NotifikasiController | Kelas yang mengatur logika program notifikasi | 
+
 
 
 #### Diagram Kelas
@@ -713,11 +715,14 @@ Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diag
 
 | ID Kelas | Nama Kelas | Atribut | Metode/Operasi |
 | :--- | :--- | :--- | :--- |
-| *C04* | *Pelanggan* | *idPengguna* | *+getUserId(), +bukaLamanKomunikasi()* |
-| *C13* | *Database* | *databaseHandler* | *+getPesan(), +savePesan()* |
-| *C07* | *Komunikasi* | *-* |
-| *C28* | *KomunikasiController* | *databaseHandler* | *+lihatPesan()<br>+kirimPesan()<br>+ubahStatus()<br>+bukaTutupChat()<br>+sendChatToDatabase()* |
-| C29 | *KomunikasiUI* | - | *tampilkanPesan*() |
+| C04 | PemberiJasa | idPemberiJasa | +getIDPemberiJasa() |
+| C07 | Pelanggan | idPelanggan | +getIDPelanggan() |
+| C19 | Komunikasi | idChat, idPelanggan, idPemberiJasa, waktu, isiPesan | +getIDChat(), +getChatHistory(), +saveChat() |
+| C20 | KomunikasiUI | - | +pressSendChat(), +showChatHistory(), +showMessage(), +showChatChannel(), +inputMessage() |
+| C21 | KomunikasiController | - | +sendChat(), +loadChat() |
+| C28 | Notifikasi | waktuNotifikasi, namaPelanggan, idPelanggan, isiNotifikasi | +getNamaPelanggan(), +getIDPelanggan(), +getLastMessage() |
+| C29 | NotifikasiUI | - | +showNotifikasi(), +pressNotifikasi() |
+| C30 | NotifikasiController | - | +createNotifikasi() +sendNotifikasi() |
 
 
 ### 5.2.5 Use Case UC05
@@ -727,11 +732,10 @@ Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diag
 #### Identifikasi Kelas
 | ID Kelas | Nama Kelas | Deskripsi Kelas |
 | :--- | :--- | :--- |
-| C03 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan |
-| C06 | KontrakPekerjaan | Menyimpan data detail kesepakatan antara Pelanggan dan PemberiJasa, seperti harga, detail pekerjaan, status pekerjaan (On Progress/Done)|
-| C13 | Database | Tempat penyimpanan data perangkat lunak|
-| C23 | FormKontrakUI | Menampilkan form pengisian kontrak pekerjaan |
-| C25 | KontrakPekerjaanController | Menjembatani antara KontrakPekerjaan dengan FormKontrakUI dan FormPekerjaanUI serta database |
+| C07 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan| 
+| C16 | KontrakPekerjaan | Menyimpan data detail kesepakatan antara Pelanggan dan PemberiJasa, seperti harga, detail pekerjaan, status pekerjaan (On Progress/Done) | 
+| C17 | KontrakPekerjaanUI | Kelas yang mengatur penampilan halaman pada kelas kontrak pekerjaan | 
+| C18 | KontrakPekerjaanController | Kelas yang mengatur logika program kontrak pekerjaan |
 
 #### Diagram Kelas
 <p align="center">
@@ -743,11 +747,11 @@ Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diag
 
 | ID Kelas | Nama Kelas | Atribut | Metode/Operasi |
 | :--- | :--- | :--- | :--- |
-| C03 | Pelanggan | - | - |
-| C06 | KontrakPekerjaan | detailPekerjaan, persetujuanHarga, idKontrak, statusPekerjaan | +simpanBayaran() +updateStatus() |
-| C13 | Database | databaseHandler | +saveDataKontrak() |
-| C23 | FormKontrakUI | inputHarga inputDetailPekerjaan | +tampilkanForm() |
-| C25 | KontrakPekerjaanController | databaseHandler | +buatKontrak() +validasiData() +simpanData() +ubahStatus() +simpanDatabase |
+| C07 | Pelanggan | - | - |
+| C16 | KontrakPekerjaan | idKontrakPekerjaan detailPekerjaan, persetujuanHarga, statusPekerjaan | +getIdPelanggan() +getIdPemberiJasa() +setHarga() +setDetailPekerjaan() +setIdKontrakPekerjaan() +setStatusPekerjaan() |
+| C17 | KontrakPekerjaanUI | - | +showKontrakForm() +inputDetailPekerjaan() +klikKirimKontrak() |
+| C18 | KontrakPekerjaanController | - |validasiInput() saveKontrak() |
+
 
 ### 5.2.6 Use Case UC06
 **Nama Use Case:** Pemberi jasa telah selesai bekerja
@@ -756,7 +760,10 @@ Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diag
 #### Identifikasi Kelas
 | ID Kelas | Nama Kelas | Deskripsi Kelas |
 | :--- | :--- | :--- |
-| C01 | Pengguna | Kelas abstrak yang menyimpan data-data para pengguna aplikasi, seperti pelanggan, pemberi jasa, dan layanan pelanggan | 
+| C04 | PemberiJasa | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian |
+| C16 | KontrakPekerjaan | Menyimpan data detail kesepakatan antara Pelanggan dan PemberiJasa, seperti harga, detail pekerjaan, status pekerjaan (On Progress/Done) | 
+| C17 | KontrakPekerjaanUI | Kelas yang mengatur penampilan halaman pada kelas kontrak pekerjaan | 
+| C18 | KontrakPekerjaanController | Kelas yang mengatur logika program kontrak pekerjaan |
 
 
 #### Diagram Kelas
@@ -769,11 +776,10 @@ Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diag
 
 | ID Kelas | Nama Kelas | Atribut | Metode/Operasi |
 | :--- | :--- | :--- | :--- |
-| C03 | PemberiJasa | - | - |
-| C06 | KontrakPekerjaan | detailPekerjaan, persetujuanHarga, idKontrak, statusPekerjaan | +simpanBayaran() +simpanDatabase() +updateStatus() |
-| C13 | Database | databaseHandler | +getDataKontrak() |
-| C23 | FormPekerjaanUI | inputHarga inputDetailPekerjaan | +tampilkanForm() |
-| C25 | KontrakPekerjaanController | databaseHandler | +buatKontrak() +validasiData() +simpanData() +ubahStatus() +simpanDatabase() |
+| C04 | PemberiJasa | - | - |
+| C16 | KontrakPekerjaan | idKontrakPekerjaan detailPekerjaan, persetujuanHarga, statusPekerjaan, statusKontrak | +getDetailPekerjaan() +getPersetujuanHarga() +setStatusPekerjaan() |
+| C17 | KontrakPekerjaanUI | - | showDetailPekerjaan() klikPekerjaanSelesai() |
+| C18 | KontrakPekerjaanController | - | saveKontrak() |
 
 
 ### 5.2.7 Use Case UC7

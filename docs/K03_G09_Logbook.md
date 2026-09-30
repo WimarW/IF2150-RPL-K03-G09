@@ -99,4 +99,6 @@
 | :--- | :--- | :--- | :--- | :--- | :--- | 
 | 28-09-2026 | Naufal Hasbialhaq | Menempel dari milestone sebelumnya | 30 menit | Done | - 
 | 30-09-2026 | Naufal Hasbialhaq | Membuat Bab 2 dan Bab 1 | 60 menit | Done | - 
+| 30-09-2026 | Raymond Edson Sabajan | Memperbaiki Pemodelan Kelas | 120 menit | Done | - 
+
 
