@@ -925,11 +925,12 @@ Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diag
 | ID Kelas | Nama Kelas | Deskripsi Kelas |
 | :--- | :--- | :--- |
 | C01 | Pengguna | Kelas abstrak yang menyimpan data-data para pengguna aplikasi, seperti pelanggan, pemberi jasa, dan layanan pelanggan |
-| C02 | PemberiJasa | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian |
-| C03 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan |
-| C13 | Database | Tempat penyimpnan data perangkat lunak |
-| C19 | RegisterUI | Halaman registrasi akun | 
-| C20 | RegisterController | Menjembatani RegisterUI dengan database | 
+| C02 | PenggunaUI | Kelas yang mengatur penampilkan halaman pengguna  |
+| C03 | PenggunaController | Kelas yang mengatur logika program untuk pengguna |
+| C04 | PemberiJasa | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian | 
+| C07 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan| 
+
+
 
 #### Diagram Kelas
 <p align="center">
@@ -941,13 +942,11 @@ Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diag
 
 | ID Kelas | Nama Kelas | Atribut | Metode/Operasi |
 | :--- | :--- | :--- | :--- |
-| C01 | Pengguna | idPengguna, email, noTelpon, password, akumulasiRating | buatAkun() |
-| C02 | PemberiJasa | idPengguna, email, noTelpon, password, akumulasiRating | buatAkun() |
-| C03 | Pelanggan | idPengguna, email, noTelpon, password, akumulasiRating | buatAkun() |
-| C13 | Database | - | +queryLogin() |
-| C19 | RegisterUI | inputPassword, inputEmail | +inputRegisterInfo()<br>+register()<br>+error()<br>+pindahHalaman |
-| C20 | RegisterController | databaseHandler | +isEmailUnique()<br>+isPasswordValid()<br>+hashPassword() | 
-
+| C01 | Pengguna | idPengguna<br>nomorTelpon <br>email<br>namaPengguna <br>username<br>password | +getId()<br>+getNomor()<br>+getEmail()<br>+getNama()<br>+setNomor()<br>+setEmail()<br>+setNama() |
+| C02 | PenggunaUI | - | +tampilkanHalamanRegistrasi()<br>+pressRegister() | 
+| C03 | PenggunaController | - | +validasiInfoRegistrasi() |
+| C04 | PemberiJasa | jenisJasa | +makePemberiJasa() | 
+| C07 | Pelanggan  | - | +makePelanggan() |
 
 ## 5.3 Diagram Kelas Keseluruhan
 <p align="center">
