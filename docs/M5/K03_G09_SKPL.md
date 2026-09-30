@@ -871,13 +871,13 @@ Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diag
 | ID Kelas | Nama Kelas | Atribut | Metode/Operasi |
 | :--- | :--- | :--- | :--- |
 | C01 | Pengguna | idPenggguna<br>nomorTelpon <br>email<br>namaPengguna <br>akumulasiRating<br>riwayatRating | +getAkumulasiRating()<br>+getRiwayatRating()<br>+addNewRatingRiwayat()<br>+getPekerjaanSelesai() |
-| C02 | PenggunaUI |  | +showDaftarPekerjaanSelesai()<br>+pressBeriRating() |
-| C03 | PenggunaController |  | +requestPekerjaanSelesai()<br>|
-| C04 | PemberiJasa | jenisJasa |   |
-| C07 | Pelanggan |  |  |
+| C02 | PenggunaUI | - | +showDaftarPekerjaanSelesai()<br>+pressBeriRating() |
+| C03 | PenggunaController | - | +requestPekerjaanSelesai()<br>|
+| C04 | PemberiJasa | jenisJasa | - |
+| C07 | Pelanggan | - | - |
 | C25 | Rating | idPenggunaPemberi<br>idPenggunaPenerima<br>idRating<br>idKontrakPekerjaan<br>nilaiRating<br>tanggalRating | +getIdPemberi()<br>+getIdPenerima()<br>+getIdKontrakPekerjaan()<br>+getIdRating()<br>+getRatingValue()<br>+updateRatingPengguna() | 
 | C26 | RatingUI | | +tampilkanRatingForm()<br>+tampilkanHasilRating()<br>+pressJumlahBintang()<br>+pressSubmitRating()<br>+pressBatalRating()|
-| C27 | RatingController |  | +saveRating()<br>+validateRatingValue() |
+| C27 | RatingController | - | +saveRating()<br>+validateRatingValue() |
 
 ### 5.2.11 Use Case UC11
 **Nama Use Case:** Memasuki akun dalam perangkat lunak
