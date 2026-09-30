@@ -829,7 +829,7 @@ Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diag
 
 #### Diagram Kelas
 <p align="center">
-<img alt="Class Diagram UC08" src="./assets/diagram/Diagram-Class-UseCase08.png" width="70%">
+<img alt="Class Diagram UC08" src="./assets/diagram/Diagram-Class-UseCase08.jpeg" width="70%">
 </p>
 <p align="center">
 <i>Gambar 10. Diagram Kelas Use Case UC08</i>
