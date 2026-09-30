@@ -593,7 +593,7 @@ Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diag
 
 | ID Kelas | Nama Kelas | Atribut | Metode/Operasi |
 | :--- | :--- | :--- | :--- |
-| C02 | PemberiJasa | idPemberiJasa, idKategoriJasa | +getIDPemberiJasa(), +getIDKategoriJasa(), +setIDKategoriJasa(), +savePemberiJasa() |
+| C02 | PemberiJasa | idKategoriJasa | +getIDPemberiJasa(), +getIDKategoriJasa(), +setIDKategoriJasa(), +savePemberiJasa() |
 | C06 | PemberiJasaController | - | +validatePemberiJasa() |
 | C13 | KategoriJasa | idKategoriJasa, jenisJasa, tarif, jamKerja, daerahKerja | +getIDKategoriJasa(), +getJenisJasa(), +getTarif(), +getJamKerja(), +getDaerahKerja(), +setTarif(), +setJamKerja(), +setDaerahKerja(), +saveKategoriJasa() |
 | C14 | KategoriJasaUI | - | +pressOpenKategoriJasa(), +showFormKategoriJasa(), +pressSubmitKategoriJasa(), +inputDataKategoriJasa() |
@@ -626,7 +626,7 @@ Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diag
 #### Diagram Kelas
 
 <p align="center">
-<img alt="Class Diagram UC01" src="./assets/diagram/Diagram-Class-UC02.png" width="70%">
+<img alt="Class Diagram UC02" src="./assets/diagram/Diagram-Class-UC02.png" width="70%">
 </p>
 <p align="center">
 <i>Gambar 4. Diagram Kelas Use Case UC02</i>
