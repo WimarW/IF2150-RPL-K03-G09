@@ -73,12 +73,9 @@ Pengguna - Pengguna Controller - Pengguna UI
 Contoh dependency
 Notifikasi <- - class lain karena trigger create objeknya depen dari objek lain, konten notif juga bergantung isi kelas lain, kalo kelas lain berubah, notif juga berubah
 
-**Notes for this section:**  
-*Catatan dapat dituliskan dalam bentuk paragraf atau poin-poin, disesuaikan saja.* 
 
 ## Dokumentasi
 
-<!-- ![](./assets/foto-asistensi.jpg) -->
 <p align="center">
   <img src="./assets/foto-asistensi.jpg" width="100%">
 </p>

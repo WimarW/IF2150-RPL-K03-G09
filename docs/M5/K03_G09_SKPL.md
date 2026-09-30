@@ -66,7 +66,6 @@ Tabel 1.4. Aturan Penomoran
 | *Aktor* | *AXX* | Menyatakan ID aktor yang terlibat dalam perangkat lunak|
 | *Use Case* | *UCXX* | Menyatakan ID kasus yang mungkin terjadi di perangkat lunak|
 | *Kelas* | *CXX* | Menyatakan ID kelas di perangkat lunak|
-| *...* | *...* |
 
 ## 1.5 Referensi
 <!-- Dokumentasi P/L yang dirujuk oleh dokumen ini. Referensi dapat berupa buku, panduan, ataupun dokumentasi lain yang dipakai dalam pengembangan P/L ini. -->
