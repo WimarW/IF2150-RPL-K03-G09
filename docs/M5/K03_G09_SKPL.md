@@ -521,9 +521,9 @@ Salin ulang daftar aktor final dari BAB 3.1 dokumen *Use Case & Scenario Use Cas
 ## 5.1 Identifikasi Kelas
 | ID Kelas | Nama Kelas | Deskripsi Kelas | ID Use Case |
 | :--- | :--- | :--- | :--- |
-| C01 | Pengguna | Kelas abstrak yang menyimpan data-data para pengguna aplikasi, seperti pelanggan, pemberi jasa, dan layanan pelanggan | UC11, UC12 |
-| C02 | PenggunaUI | Kelas yang mengatur penampilkan halaman pengguna  | UC11, UC12 |
-| C03 | PenggunaController | Kelas yang mengatur logika program untuk pengguna | UC11, UC12 |
+| C01 | Pengguna | Kelas abstrak yang menyimpan data-data para pengguna aplikasi, seperti pelanggan, pemberi jasa, dan layanan pelanggan | UC10, UC11, UC12 |
+| C02 | PenggunaUI | Kelas yang mengatur penampilkan halaman pengguna  | UC10, UC11, UC12 |
+| C03 | PenggunaController | Kelas yang mengatur logika program untuk pengguna | UC10, UC11, UC12 |
 | C04 | PemberiJasa | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian | UC01, UC02, UC04, UC06, UC08, UC10, UC11, UC12 |
 | C05 | PemberiJasaUI | Kelas yang mengatur penampilan halaman pemberi jasa | UC01, UC02, UC04, UC06, UC08, UC10, UC11, UC12 |
 | C06 | PemberiJasaController | Kelas yang mengatur logika program untuk pemberi jasa | UC01, UC02, UC04, UC06, UC08, UC10, UC11, UC12 |
@@ -726,11 +726,7 @@ Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diag
 #### Identifikasi Kelas
 | ID Kelas | Nama Kelas | Deskripsi Kelas |
 | :--- | :--- | :--- |
-| C02 | PemberiJasa| Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian |
-| C06 | KontrakPekerjaan | Menyimpan data detail kesepakatan antara Pelanggan dan PemberiJasa, seperti harga, detail pekerjaan, status pekerjaan (On Progress/Done)|
-| C13 | Database | Tempat penyimpanan data perangkat lunak |
-| C24 | FormPekerjaanUI | Menampilkan detail pekerjaan dan mengubah status pekerjaan |
-| C25 | KontrakPekerjaanController | Menjembatani antara KontrakPekerjaan dengan FormKontrakUI dan FormPekerjaanUI serta database |
+| C01 | Pengguna | Kelas abstrak yang menyimpan data-data para pengguna aplikasi, seperti pelanggan, pemberi jasa, dan layanan pelanggan | 
 
 
 #### Diagram Kelas
@@ -853,13 +849,15 @@ Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diag
 #### Identifikasi Kelas
 | ID Kelas | Nama Kelas | Deskripsi Kelas |
 | :--- | :--- | :--- |
-| C01 | Pengguna | Kelas abstrak yang menyimpan data-data para pengguna aplikasi, seperti pelanggan, pemberi jasa, dan layanan pelanggan |
-| C02 | PemberiJasa | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian |
-| C03 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan |
-| C09 | Rating | Merealisasikan fitur rating untuk PemberiJasa dan Pelanggan, berupa skor skala 5 dan ulasan singkat |
-| C11 | RatingUI | Merealisasikan halaman pengisian rating setelah pekerjaan selesai |
-| C12 | RatingController | Menjembatani RatingUI dengan database  |
-| C13 | Database | Tempat penyimpnan data perangkat lunak  |
+| C01 | Pengguna | Kelas abstrak yang menyimpan data-data para pengguna aplikasi, seperti pelanggan, pemberi jasa, dan layanan pelanggan | 
+| C02 | PenggunaUI | Kelas yang mengatur penampilkan halaman pengguna  | 
+| C03 | PenggunaController | Kelas yang mengatur logika program untuk pengguna | 
+| C04 | PemberiJasa | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian | UC01, UC02, UC04, UC06, UC08, UC10, UC11, UC12 |
+| C07 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan| UC02, UC03, UC05, UC07, UC08, UC10, UC11, UC12 |
+| C25 | Rating | Merealisasikan fitur rating |
+| C26 | RatingUI | Kelas yang mengatur penampilan halaman rating |
+| C27 | RatingController | Kelas yang mengatur logika program rating |
+
 
 
 #### Diagram Kelas
@@ -872,13 +870,14 @@ Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diag
 
 | ID Kelas | Nama Kelas | Atribut | Metode/Operasi |
 | :--- | :--- | :--- | :--- |
-| C01 | Pengguna | idPengguna, email, noTelpon, password, akumulasiRating | +bukaHalamanRating()<br>+beriRating()<br>+bisaSubmitRatinh()<br>+tambahRatingKeRiwayat()<br>+ambilRiwayatRating()<br>+sudahMemberiRating() |
-| C02 | PemberiJasa | jenisJasa | - |
-| C03 | Pelanggan | - | - |
-| C09 | Rating | idTugas, pemberiRating, penerimaRating, angkaRating | - |
-| C11 | RatingUI | idTarget, skorRating | +ambilRating()<br>+kirimRating()<br>+success()<br>+error()<br>+close() |
-| C12 | RatingController | idPengguna, databaseHandler | +processRating()<br>-validasiInput()<br>-hasRated()<br>-createRating()<br>-saveToDatabase() |
-| C13 | Database | - | simpanRating() | 
+| C01 | Pengguna | idPenggguna<br>nomorTelpon <br>email<br>namaPengguna <br>akumulasiRating<br>riwayatRating | +getAkumulasiRating()<br>+getRiwayatRating()<br>+addNewRatingRiwayat() |
+| C02 | PenggunaUI |  | +showDaftarPekerjaanSelesai()<br>+pressBeriRating() |
+| C03 | PenggunaController |  | +showDaftarPekerjaanSelesai()<br>+pressBeriRating()|
+| C04 | PemberiJasa | jenisJasa |   |
+| C07 | Pelanggan |  |  |
+| C25 | Rating | idPenggunaPemberi<br>idPenggunaPenerima<br>idRating<br>idKontrakPekerjaan<br>nilaiRating<br>tanggalRating | +getIdPemberi()<br>+getIdPenerima()<br>+getIdKontrakPekerjaan()<br>+getIdRating()<br>+getRatingValue()<br>+updateRatingPengguna() | 
+| C26 | RatingUI | | +tampilkanRatingForm()<br>+tampilkanHasilRating()<br>+pressJumlahBintang()<br>+pressSubmitRating()<br>+pressBatalRating()|
+| C27 | RatingController |  | +saveRating()<br>+validateRatingValue() |
 
 ### 5.2.11 Use Case UC11
 **Nama Use Case:** Memasuki akun dalam perangkat lunak
