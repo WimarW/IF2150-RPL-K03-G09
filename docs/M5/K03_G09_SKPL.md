@@ -30,10 +30,7 @@ Dipersiapkan oleh:
 
 | Revisi | Deskripsi |
 | :--- | :--- |
-| *A* | *Deskripsikan perubahan yang dilakukan dari dokumen sebelumnya pada dokumen ini. Jika tidak terdapat perubahan, harap kosongkan tabel.* |
-| *B* |  |
-| *C* |  |
-| ... |  |
+| *A* | Merevisi Identifikasi kelas, diagram kelas usecase dan diagram kelas keseluruhan  |
 
 <br>
 
@@ -47,8 +44,6 @@ Dokumen SKPL ini dibuat dengan tujuan mendeskripsikan perangkat lunak yang berna
 <p align="justify">Mayoritas pekerja informal di Indonesia masih menghadapi kesulitan ekonomi akibat tidak adanya tarif standar dan jaminan sosial yang minimal. Di sisi lain, konsumen juga mengalami kesulitan menemukan tenaga kerja terdekat yang terpercaya dan terverifikasi karena solusi digital saat ini masih terbatas dan kurang mencakup seluruh segmen jasa. Oleh karena itu, diperlukan suatu platform digital yang mampu menghubungkan pekerja informal ini dengan konsumen untuk mendukung pengurangan kesenjangan sosial-ekonomi (SDG 10).</p>
 
 ## 1.3 Definisi, Istilah, dan Singkatan
-Semua definisi dan singkatan yang digunakan dalam dokumen ini beserta penjelasannya.
-
 Tabel 1.3. Definisi Istilah dan Singkatan
 
 | Singkatan, Akronim, atau Istilah | Penjelasan |
@@ -59,7 +54,6 @@ Tabel 1.3. Definisi Istilah dan Singkatan
 | *KNF* | *Singkatan dari Kebutuhan Non-Fungsional.* |
 | *UC* | *Singkatan dari Use Case.* |
 | *EARS* | *Easy Approach to Requirements Syntax, yaitu pola penulisan kebutuhan agar konsisten dan mudah diuji.* |
-| *...* | *...* |
 
 ## 1.4 Aturan Penomoran
 Tabel 1.4. Aturan Penomoran
@@ -114,9 +108,8 @@ Dokumen ini merujuk pada dokumentasi-dokumentasi milestone sebelumnya, seperti d
 <br>
 <h3>BAB 6 Tracebility Pemodelan Kelas:</h3>
 <br>
-<hr>
-# BAB 2: Deskripsi Perangkat Lunak
 
+# BAB 2: Deskripsi Perangkat Lunak
 ## 2.1 Deskripsi Umum Sistem
 ### 2.1.1 Ekspektasi Pengguna Terhadap Sistem
 <p align="justify">Sistem ini melibatkan 3 aktor yang memiliki ekspektasi masing-masing yang berbeda.</p>
@@ -207,15 +200,12 @@ Dokumen ini merujuk pada dokumentasi-dokumentasi milestone sebelumnya, seperti d
 | *Client* | Aplikasi andorid|
 | *DBMS* | Postgresql 16 |
 | *OS* | Android OS |
-| *...* | *...* |
 
----
+<br>
 
 # BAB 3: Deskripsi Kebutuhan Perangkat Lunak
 
 ## 3.1 Kebutuhan Fungsional (KF)
-Salin ulang **seluruh Kebutuhan Fungsional (KF)** versi terbaru dari BAB 2.1 dokumen *Class Diagram* (sudah versi final dan sudah memakai format EARS). Pastikan ID Kebutuhan (kolom "ID Kebutuhan") juga konsisten dengan ID pada tabel Pemetaan Kebutuhan di dokumen *Requirement Gathering*.
-
 Tabel 3.1. Kebutuhan Fungsional
 
 | ID KF | ID Kebutuhan | Penjelasan |
@@ -243,18 +233,40 @@ Tabel 3.1. Kebutuhan Fungsional
 | KF21 | R07 | Perangkat lunak menyediakan fitur pendaftaran dan login pada aplikasi untuk pelanggan, pemberi jasa, serta layanan pelanggan |
 
 ## 3.2 Kebutuhan Non-Fungsional (KNF)
-Salin ulang Kebutuhan Non-Fungsional dari BAB 2.5 dokumen *Requirement Gathering*, sesuaikan ID Kebutuhan (kolom "ID Kebutuhan") apabila terjadi perubahan penomoran pada BAB 3.1 di atas.
-
 Tabel 3.2. Kebutuhan Non-Fungsional
 
 | ID KNF | ID Kebutuhan | Parameter | Deskripsi Kebutuhan |
 | :--- | :--- | :--- | :--- |
-| *KNF01* | *R03* | *Reliability* | *Proses transaksi pembayaran harus memenuhi prinsip ACID untuk mencegah terjadinya data tersangkut (lost update) apabila terjadi kegagalan jaringan di tengah proses.* |
-| *KNF02* | *R04* | *Security* | *Sistem harus mengenkripsi PIN atau password pengguna menggunakan algoritma SHA-256 sebelum data dikirimkan ke server, serta tidak menyimpannya dalam bentuk plain-text di database.* |
-| *...* | *...* | *...* | *...* |
+| *KNF01* | *R02* | *Response time* | *Ketika user membuka aplikasi, sistem harus dapat menampilkan daftar jasa yang tersedia dalam waktu < 2 detik pada keadaan internet normal* |
+| *KNF02* | *R02* | *Ergonomy* | *Sistem harus menampilkan daftar jasa yang tersedia dengan pengelompokan jasa dalam bentuk kolom untuk setiap kelompok jasa* |
+| *KNF03* | *R04* | *Response time* | *Ketika pelanggan ingin menggunakan jasa, sistem harus dapat menampilkan informasi pemilik jasa dan menyediakan tombol untuk memesan jasa dalam waktu < 1 detik ketika kondisi internet normal* |
+| *KNF04* | *R04* | *Reliability* | *Ketika ada lebih dari 1 pelanggan yang melakukan pemesanan kepada 1 pemilik jasa yang sama, sistem harus dapat mengunci satu user yang paling dulu memesan, kemudian mengunci pemilik jasa agar tidak dapat dipesan oleh orang lain dengan metode Optimistic Locking* |
+| *KNF05* | *R06* | *Response time* | *Sistem harus dapat menampilkan daftar pemilik jasa dalam radius GPS dari pengguna jasa dalam waktu 2 detik* |
+| *KNF06* | *R06* | *Reliability* | *GPS harus dapat ditampilkan dengan akurat pada pengguna jasa hingga < radius 50 meter* |
+| *KNF07* | *R07* | *Availability* | *Sistem harus dapat menampilkan formulir untuk pendataan pelanggan dalam waktu 24 jam* |
+| *KNF08* | *R07* | *Security* | *Sistem harus memvalidasi input formulir oleh user pada sisi server untuk mencegah adanya serangan pada celah keamanan seperti SQL Injection* |
+| *KNF08* | *R07* | *Response time* | *Validasi input user pada formulir harus tidak melebihi 2 detik dalam kondisi internet normal* |
+| *KNF10* | *R09* | *Response time* | *Sistem harus dapat memperbarui database dalam waktu < 1 detik setelah pemilik jasa mengunggah data mereka pada formulir, baik sebelumnya data sudah ada ataupun belum* |
+| *KNF11* | *R11* | *Ergonomy* | *Ketika pemilik jasa tidak menyetujui pemesanan yang ditawarkan user dalam waktu 30 menit, sistem secara otomatis akan membatalkan pemesanan dan membuka kunci pada sistem agar user lain dapat melakukan pemesanan* |
+| *KNF12* | *R12* | *Response time* | *Sistem harus dapat menampilkan notifikasi kepada pemilik jasa dalam waktu < 1 detik setelah user memesan jasa, dalam kondisi internet normal* |
+| *KNF13* | *R14* | *Ergonomy* | *Sistem harus dapat menampilkan informasi pekerjaan dan lokasi yang diberikan pelanggan setelah pekerjaan disetujui oleh pemberi jasa* |
+| *KNF14* | *R17* | *Security* | *esan yang dikirim harus dienkripsi dengan End-to-End Encryption* |
+| *KNF15* | *R17* | *Response time* | *Pesan yang dikirim harus dapat sampai ke pihak yang menerima pesan dalam waktu 1 detik* |
+| *KNF16* | *R17* | *Reliability* | *Sistem harus dapat menangani hingga 1000 percakapan serentak dari semua pengguna tanpa adanya masalah dalam komunikasi pesan* |
+| *KNF17* | *R18* | *Ergonomy* | *Sistem dapat menampilkan formulir untuk menginput kesepakatan harga dan pekerjaan* |
+| *KNF18* | *R18* | *Security* | *Sistem harus dapat memverifikasi input pelanggan pada formulir agar input valid dan mencegah serangan pada celah keamanan* |
+| *KNF19* | *R19* | *Reliability* | *Sistem menerima kesepakatan harga dan pekerjaan yang kemudian diteruskan ke database, serta mengubah data ketersediaan pemberi jasa menjadi 'On Progress' dan pemberi jasa tidak dapat dipesan oleh orang lain sebelum pekerjaan selesai* |
+| *KNF20* | *R20* | *Ergonomy* | *Sistem harus memiliki fitur untuk memberikan notifikasi kepada pelanggan bahwa pekerjaan sudah selesai* |
+| *KNF21* | *R21* | *Reliability* | *Sistem harus dapat mengirimkan konfirmasi kepada pengguna dan menyediakan tombol untuk mengubah status menjadi 'Done'* |
+| *KNF22* | *R22* | *Reliability* | *Sistem memeriksa status yang aktif sebelumnya, jika status yang aktif adalah 'On Progress', maka status dapat diubah menjadi 'Done'* |
+| *KNF23* | *R24 R26* | *Availability* | *Sistem harus menyediakan fitur untuk pemberian tiket dan aktif selama 24 jam tanpa kendala* |
+| *KNF24* | *R28* | *Reliability* | *Sistem harus menyediakan tabel terpisah pada database untuk menyimpan tiket yang dikirimkan pelanggan atau pemberi jasa* |
+| *KNF25* | *R28* | *Response time* | *Tiket yang dikirim oleh pelanggan oleh pemberi jasa harus terkirim dalam waktu < 1 detik dalam kondisi internet normal dan terdapat notifikasi yang dikirimkan kepada layanan pelanggan* |
+| *KNF26* | *R28* | *Reliability* | *Sistem harus menyediakan kanal komunikasi khusus yang terhubung antara user dengan layanan pelanggan hingga masalah selesai. Jika masalah telah selesai, kanal komunikasi akan ditutup oleh sistem* |
+| *KNF27* | *R29* | *Ergonomy* | *Sistem harus menyediakan fitur untuk pemberian rating bagi pelanggan dan pemberi jasa setelah pekerjaan selesai dan status telah terverifikasi sebagai 'Done'* |
+| *KNF28* | *R31* | *Reliability* | *Sistem harus menyimpan data rating rata-rata pelanggan dan pemberi jasa di dalam database* |
 
 
----
 
 # BAB 4: Pemodelan Use Case
 
@@ -514,7 +526,6 @@ Salin ulang daftar aktor final dari BAB 3.1 dokumen *Use Case & Scenario Use Cas
 | 4 | Layanan pelanggan menemukan kejanggalan pada data pengguna yang baru diinput seperti ktp orang yang tidak cocok dengan nama pengguna dll, kemudian layanan pelanggan membuat sebuah laporan terkait data yang invalid kepada pengguna | Sistem memberikan sebuah notifikasi dan laporan dari layanan pelanggan kepada pengguna yang memiliki data yang invalid |
 
 <br>
----
 
 # BAB 5: Pemodelan Kelas
 
