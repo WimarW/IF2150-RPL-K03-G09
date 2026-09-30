@@ -870,9 +870,9 @@ Salin ulang diagram kelas untuk setiap use case dari BAB 4.2 dokumen *Class Diag
 
 | ID Kelas | Nama Kelas | Atribut | Metode/Operasi |
 | :--- | :--- | :--- | :--- |
-| C01 | Pengguna | idPenggguna<br>nomorTelpon <br>email<br>namaPengguna <br>akumulasiRating<br>riwayatRating | +getAkumulasiRating()<br>+getRiwayatRating()<br>+addNewRatingRiwayat() |
+| C01 | Pengguna | idPenggguna<br>nomorTelpon <br>email<br>namaPengguna <br>akumulasiRating<br>riwayatRating | +getAkumulasiRating()<br>+getRiwayatRating()<br>+addNewRatingRiwayat()<br>+getPekerjaanSelesai() |
 | C02 | PenggunaUI |  | +showDaftarPekerjaanSelesai()<br>+pressBeriRating() |
-| C03 | PenggunaController |  | +showDaftarPekerjaanSelesai()<br>+pressBeriRating()|
+| C03 | PenggunaController |  | +requestPekerjaanSelesai()<br>|
 | C04 | PemberiJasa | jenisJasa |   |
 | C07 | Pelanggan |  |  |
 | C25 | Rating | idPenggunaPemberi<br>idPenggunaPenerima<br>idRating<br>idKontrakPekerjaan<br>nilaiRating<br>tanggalRating | +getIdPemberi()<br>+getIdPenerima()<br>+getIdKontrakPekerjaan()<br>+getIdRating()<br>+getRatingValue()<br>+updateRatingPengguna() | 
