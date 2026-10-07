@@ -59,6 +59,12 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | claude | Penjelasan tentang cara pembuatan diagram class | Coba jelasin cara pembuatan diagram class dengan referensi dari slide ppt ini | - |
 | Gemini | Contoh Class Diagram | Berikan contoh class diagram mengenai topik  | - |
 
+### Milestone 6
+| Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
+| :--- | :--- | :--- | :--- |
+| Gemini | Menambah pehaman terkait M6 | Pelajari file ini (file asistensi bersama) dan jelaskan kepada saya dengan rinci | - |
+| Gemini | Mengevaluasi diagram yang telah dibuat | Pahami diagram ini, dan beri tahu jika ada yang kurang, dengan mengacu pada file ini(ppt asistensi akbar) | - |
+
 ---
 ### Pernyataan Integritas dan Persetujuan
 
