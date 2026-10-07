@@ -129,9 +129,10 @@ Tuliskan secara singkat mengenai model arsitektur perangkat lunak yang Anda pili
 <img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/Development View.drawio.png" width="100%">
 </p>
 <p align="center">
-<i>Package Diagram untuk Development View pada P/L CariUang</i>
+<i>Gambar 3.1 Package Diagram untuk Development View pada P/L CariUang</i>
 </p>
 
+## 3.1.1 Konten Package
 | Package | ID Kelas | Nama Kelas |
 | :---------------------------- | :---- | :--------- |
 | Client Pelanggan | C07<br>C08<br>C09 | Pelanggan<br>PelangganUI<br>PelangganController |

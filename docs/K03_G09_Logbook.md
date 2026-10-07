@@ -105,3 +105,11 @@
 | 30-09-2026 | Yohanes Nicholas Setiawan | Memperbaiki Pemodelan Kelas UC07-UC09  | 120 menit | Done | - 
 
 
+### Milestone 6
+| Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
+| :--- | :--- | :--- | :--- | :--- | :--- | 
+| 07-10-2026 | Naufal Hasbialhaq |  Mengerjakan Bab 1 dan 2 | 120 menit | Done | - |
+| 07-10-2026 | Raymond Edson Sabajan | Mengerjakan bab 3 | 120 menit | Done | - |
+| 07-10-2026 | Wimar Widiarto | Pembuatan Diagram Bab 1 dan Tabel Konten package bab 3 | 120 menit | Done | - |
+| 07-10-2026 | Yohanes Nicholas Setiawan | Pembuatan Diagram Bab 1 | 120 menit  | 120 menit | Done | - |
+| 07-10-2026 | Vensenius Juan Setiady | Membuat diagram bab 3 | 120 menit | Done | - |
