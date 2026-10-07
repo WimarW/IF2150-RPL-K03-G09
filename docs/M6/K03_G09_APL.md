@@ -37,7 +37,7 @@ Dipersiapkan oleh:
 <img alt="Contoh Arsitektur MVC" src="./assets/diagram/Diagram-MVC.png" width="50%" height="50%">
 </p>
 <p align="center">
-<i>Gambar 1. Arsitektur MVC Perangkat Lunak</i>
+<i>Gambar 1.1 Arsitektur MVC Perangkat Lunak</i>
 </p>
 
 
@@ -50,6 +50,7 @@ CariUang menggunakan *style*: **MVC (*Model-View-Controller*)**. Komponen P/L di
 | ***View*** | Menampilkan halaman (login/registrasi, katalog jasa dan peta, kontrak pekerjaan, chat, tiket laporan, rating, notifikasi) dan meneruskan aksi pengguna ke *Controller*. *View* tidak menyimpan aturan bisnis. |
 | ***Controller*** | Menerima permintaan dari *View*, memvalidasi input, menjalankan aturan bisnis (misalnya penguncian pemberi jasa, perubahan status 'On Progress' → 'Done', pembuatan tiket otomatis), lalu memanggil *Model*. |
 | ***Model*** | Merepresentasikan data (Pengguna, KategoriJasa, KontrakPekerjaan, Komunikasi, TiketLaporan, Rating, Notifikasi), serta membaca dan menyimpan data ke basis data.|
+<p align="center">Tabel 1.2 Tabel Pengertian dan Peran MVC</p>
 
 
 
@@ -60,7 +61,7 @@ Isi bab ini dengan hal-hal berikut:
 
 Pemilihan MVC sebagai style yang dipilih karena MVC memisahkan antara bagaimana data diroses, bagaimana navigasinya berjalan dan bagaimana tampilannya. Jika ada perubahan logika bisa langsung tanpa merusak UI yang sudah ada. Selain itu, pengerjaan dari perangkat lunak ini juga dapat dilakukan secara paralel sehingga pengerjaan UI dan bagian controller serta model dapat dilakukan secara bersamaan.
 
-Tabel 1.1. Lingkungan Operasi Perangkat Lunak
+
 
 | Komponen | Spesifikasi |
 | :--- | :--- |
@@ -68,13 +69,11 @@ Tabel 1.1. Lingkungan Operasi Perangkat Lunak
 | *Client* | Aplikasi andorid|
 | *DBMS* | Postgresql 16 |
 | *OS* | Android OS |
-<p align="center">Tabel 1.1. Lingkungan Operasi Perangkat Lunak</p>
+<p align="center">Tabel 1.2 Lingkungan Operasi Perangkat Lunak</p>
 
 
 
 # BAB 2: Identifikasi Komponen / Modul / Subsistem
-
-Tabel 2.1. Identifikasi Komponen/Modul/Subsistem
 
 | Nama Komponen/Modul/Subsistem | Jenis | Penjelasan |
 | :---------------------------- | :---- | :--------- |
@@ -110,7 +109,8 @@ Tabel 2.1. Identifikasi Komponen/Modul/Subsistem
 | Komunikasi | Model | Merepresentasikan data percakapan obrolan serta membaca dan menyimpan data. |
 | PostgreSQL 16 | Database | Menyimpan seluruh sistem CariUang, melayani operasi *query*, dan manipulasi data dari lapisan Model. |
 
----
+<p align="center">Tabel 2.1 Tabel Identifikasi Komponen / Modul / Subsistem</p>
+
 
 # BAB 3: Model Arsitektur Perangkat Lunak
 
@@ -150,6 +150,7 @@ Tuliskan secara singkat mengenai model arsitektur perangkat lunak yang Anda pili
 | Ticketing & Support | C22<br>C23<br>C24 | TiketLaporan<br>TiketLaporanUI<br>TiketLaporanController | 
 | Rating & Reputation | C25<br>C26<br>C27 | Rating<br>RatingUI<br>RatingController | 
 | Notification System | C28<br>C29<br>C30 | Notifikasi<br>NotifikasiUI<br>NotifikasiController |
+<p align="center">Tabel 3.1 Tabel Isi Package</p>
 
 
 # Referensi
