@@ -138,13 +138,21 @@ Tuliskan secara singkat mengenai model arsitektur perangkat lunak yang Anda pili
 <i>Gambar 2. Contoh Logical View pada P/L E-Commerce</i>
 </p>
 
-Gambar 2 adalah contoh *Logical View* dalam bentuk *block diagram*. Seluruh komponen pada Tabel 2.1 digambarkan dan dikelompokkan sesuai pola MVC (*View*, *Controller*, *Model*), ditambah komponen pendukung dan basis data. Sistem di luar P/L, seperti *Payment Gateway (dummy)*, digambarkan dengan garis putus-putus dan tidak perlu dimasukkan ke Tabel 2.1. Setiap garis diberi label: "Memanggil" untuk *View* yang memanggil *Controller*, "akses" untuk *Controller* yang mengakses *Model*, serta agregasi dan komposisi untuk hubungan antar-*Model*.
+| Package | ID Kelas | Nama Kelas |
+| :---------------------------- | :---- | :--------- |
+| Client Pelanggan | C07<br>C08<br>C09 | Pelanggan<br>PelangganUI<br>PelangganController |
+| Client Pemberi Jasa | C04<br>C05<br>C06 | PemberiJasa<br>PemberiJasaUI<br>PemberiJasaController |
+| Client Layanan Pelanggan | C10<br>C11<br>C12 | LayananPelanggan<br>LayananPelangganUI<br>LayananPenggunaController | 
+| User & Account | C01<br>C02<br>C03<br> | Pengguna<br>PenggunaUI<br>PenggunaController<br> |
+| Service & Catalog | C13<br>C14<br>C15 | KategoriJasa<br>KategoriJasaUI<br>KategoriJasaController<br> |
+| Contract & Order | C16<br>C17<br>C18 | KontrakPekerjaan <br> KontrakPekerjaanUI <br> KontrakPekerjaanController | 
+| Communication | C19<br>C20<br>C21 | Komunikasi <br> KomunikasiUI <br> KomunikasiController | 
+| Ticketing & Support | C22<br>C23<br>C24 | TiketLaporan<br>TiketLaporanUI<br>TiketLaporanController | 
+| Rating & Reputation | C25<br>C26<br>C27 | Rating<br>RatingUI<br>RatingController | 
+| Notification System | C28<br>C29<br>C30 | Notifikasi<br>NotifikasiUI<br>NotifikasiController |
 
-<sub><b><i>Catatan</i></b>: <i>Ganti XXX dengan nama view yang dibuat, misalnya Logical View. Gambar 2 hanya contoh untuk P/L e-commerce, ganti dengan view milik kelompok Anda yang memuat seluruh komponen pada Tabel 2.1. Jenis view dan notasinya boleh berbeda dari contoh. Jika membuat view tambahan, lanjutkan pola 3.x ini (3.2, 3.3, dan seterusnya).</i></sub>
-
----
 
 # Referensi
 
 - Sommerville, I. (2016). *Software Engineering* (10th ed.). Pearson. Chapter 6: *Architectural Design*: [https://software-engineering-book.com/slides/](https://software-engineering-book.com/slides/)
-- Diagram arsitektur: [https://www.drawio.com/](https://www.drawio.com/), [https://staruml.io/](https://staruml.io/)
+- Diagram arsitektur: [https://www.drawio.com/](https://www.drawio.com/)
