@@ -43,7 +43,7 @@ Dipersiapkan oleh:
 
 ## 1.1 Style/Pattern yang Dipilih
 
-CariUang menggunakan gabungan *style*: **MVC (*Model-View-Controller*)** (tingkat struktur aplikasi). Komponen P/L dibagi menjadi tiga peran:
+CariUang menggunakan *style*: **MVC (*Model-View-Controller*)**. Komponen P/L dibagi menjadi tiga peran:
 
 | Bagian | Peran |
 | :--- | :--- | 
@@ -51,24 +51,15 @@ CariUang menggunakan gabungan *style*: **MVC (*Model-View-Controller*)** (tingka
 | ***Controller*** | Menerima permintaan dari *View*, memvalidasi input, menjalankan aturan bisnis (misalnya penguncian pemberi jasa, perubahan status 'On Progress' → 'Done', pembuatan tiket otomatis), lalu memanggil *Model*. |
 | ***Model*** | Merepresentasikan data (Pengguna, KategoriJasa, KontrakPekerjaan, Komunikasi, TiketLaporan, Rating, Notifikasi), serta membaca dan menyimpan data ke basis data.|
 
-
-
-Isi bab ini dengan hal-hal berikut:
-1. **Style/pattern yang dipilih** beserta penjelasan singkat peran setiap bagiannya. Untuk MVC, jelaskan peran *Model*, *View*, dan *Controller*.
-2. **Alasan pemilihan** berdasarkan karakteristik P/L Anda, misalnya jenis pengguna, alur proses bisnis, serta KF dan KNF pada dokumen SKPL.
-3. **Gambar style/pattern yang diterapkan pada P/L Anda.** Jangan hanya menyalin Gambar 1. Isi setiap bagian pattern dengan komponen milik P/L Anda. Misalnya, kotak *Controller* berisi daftar *controller* yang ada di aplikasi dan kotak *Model* berisi daftar *model* yang ada di aplikasi.
-
-
-Tabel 1.1. Lingkungan Operasi Perangkat Lunak
-
 | Komponen | Spesifikasi |
 | :--- | :--- |
 | *Server* | NodeJS (v24 LTS) dengan framework Express.js |
 | *Client* | Aplikasi andorid|
 | *DBMS* | Postgresql 16 |
 | *OS* | Android OS |
+<p align="center">Tabel 1.1. Lingkungan Operasi Perangkat Lunak</p>
 
----
+
 
 # BAB 2: Identifikasi Komponen / Modul / Subsistem
 
@@ -97,14 +88,6 @@ Tabel 2.1. Identifikasi Komponen/Modul/Subsistem
 | *Database*                    | *Penyimpanan Data*    | *Menyimpan seluruh data model secara persisten, baik lokal (misalnya SQLite) maupun terpusat (misalnya Supabase).*   |
 | *...*                         | *...*                 | *...*                                                                                                                |
 
-Ketentuan pengisian Tabel 2.1:
-1. Kolom **Jenis** mengikuti pengelompokan pada *style/pattern* di BAB 1. Untuk MVC, jenisnya adalah *Model*, *View*, dan *Controller*. Jenis lain boleh ditambahkan, misalnya *Pendukung* untuk komponen bantu yang dipakai bersama, atau *Integrasi Eksternal* untuk penghubung ke sistem di luar P/L yang disebutkan pada subbab 2.2 dokumen SKPL. Kolom ini juga boleh diisi dengan *Subsistem*, *Modul*, atau *Komponen* apabila komponen dikelompokkan berdasarkan fungsinya. Tuliskan subsistem terlebih dahulu, lalu komponen penyusunnya di baris-baris berikutnya.
-2. Komponen **tidak sama dengan** kelas. Satu komponen boleh mewadahi beberapa kelas dari diagram kelas pada dokumen SKPL. Pastikan seluruh kelas tercakup oleh setidaknya satu komponen.
-3. Pastikan seluruh use case pada dokumen SKPL dapat dijalankan oleh komponen-komponen yang didaftarkan di tabel ini. Jangan menambahkan komponen untuk fitur yang tidak ada di SKPL.
-
-<sub><b><i>Catatan</i></b>: <i>Nama komponen pada Tabel 2.1 harus dipakai sama persis pada gambar di BAB 1 dan setiap view di BAB 3. Jika saat membuat view ternyata dibutuhkan komponen baru, tambahkan komponen tersebut ke Tabel 2.1 terlebih dahulu.</i></sub>
-
----
 
 # BAB 3: Model Arsitektur Perangkat Lunak
 
