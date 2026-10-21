@@ -124,7 +124,7 @@ Pemilihan MVC sebagai style yang dipilih karena MVC memisahkan antara bagaimana 
 <img alt="Contoh Arsitektur MVC" src="./assets/diagram/Diagram-MVC.png" width="40%">
 </p>
 <p align="center">
-<i>Gambar 1. Contoh Arsitektur MVC</i>
+<i>Gambar 2.1 Arsitektur MVC</i>
 </p>
 
 ## 2.3 Identifikasi Komponen / Modul / Subsistem
@@ -188,8 +188,6 @@ Penerapan *package diagram* pada pandangan ini memberikan batasan aksesantar bag
 <i>Gambar 2.4.1 Model Development View</i>
 </p>
 
-### 2.4.X View [Nama View]
-*[Lakukan hal yang sama dengan bagian sebelumnya]*
 
 <br>
 
