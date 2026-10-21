@@ -9,7 +9,7 @@ DESKRIPSI PERANCANGAN PERANGKAT LUNAK (DPPL)
 
 
 # CariUang
-### *[Logo Perangkat Lunak]*
+### <img src="./assets/diagram/cariuang.svg" width="100" height="100">
 
 ### Untuk: Agatha Tatianingseto
 
@@ -35,10 +35,9 @@ Dipersiapkan oleh:
 
 | Revisi | Deskripsi |
 | :--- | :--- |
-| *A* | Menambahkan atribut baru dan method baru di kelas PemberiJasa, PemberiJasaController, KategoriJasa, KategoriJasaController, dan KategoriJasaUI |
-| *B* | Mengubah dan menambahkan uc2 yang belum terdaftar pada class di traceability yang akan dipakai di matrix kerunutan |
-| *C* |  |
-| ... |  |
+| *A* | Menambahkan atribut baru dan method baru di beberapa kelas  |
+| *B* | Mengubah dan menambahkan UC2 yang belum terdaftar pada class di traceability yang akan dipakai di matrix kerunutan |
+| *C* | Skenario UC12, validasi yang dilakukan bukan kebenaran informasi, namun ketepatan data type input dengan data type input yang diharapkan. |
 
 ---
 
@@ -124,7 +123,7 @@ Pemilihan MVC sebagai style yang dipilih karena MVC memisahkan antara bagaimana 
 <img alt="Contoh Arsitektur MVC" src="./assets/diagram/Diagram-MVC.png" width="40%">
 </p>
 <p align="center">
-<i>Gambar 1. Contoh Arsitektur MVC</i>
+<i>Gambar 2.1 Arsitektur MVC</i>
 </p>
 
 ## 2.3 Identifikasi Komponen / Modul / Subsistem
@@ -187,9 +186,6 @@ Penerapan *package diagram* pada pandangan ini memberikan batasan aksesantar bag
 <p align="center">
 <i>Gambar 2.4.1 Model Development View</i>
 </p>
-
-### 2.4.X View [Nama View]
-*[Lakukan hal yang sama dengan bagian sebelumnya]*
 
 <br>
 
