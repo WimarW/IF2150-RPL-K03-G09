@@ -89,7 +89,7 @@ Tabel 1.4. Aturan Penomoran
 Dokumen ini merujuk pada dokumentasi-dokumentasi milestone sebelumnya, seperti dokumen Topic Brainstorming, Requirement Gathering, Use Case, Class Diagram, SKPL, APL.
 
 ## 1.6 Deskripsi Umum Dokumen (Ikhtisar)
-Tuliskan sistematika pembahasan dokumen ini secara ringkas dan runut, dengan maksimal 1 paragraf.
+Dokumen DPPL CariUang ini disusun secara runut untuk menjadi panduan perancangan teknis perangkat lunak, dimulai dari BAB 1 Pendahuluan yang menjelaskan tujuan, lingkup masalah, definisi istilah, aturan penomoran, referensi, serta ikhtisar dokumen; BAB 2 Perancangan Arsitektur yang membahas lingkungan implementasi, pemilihan style MVC (Model-View-Controller), identifikasi komponen/modul/subsistem, serta model arsitektur berupa Development View; BAB 3 Realisasi Use Case yang menjabarkan identifikasi kelas, sequence diagram untuk skenario normal dan alternatif, serta diagram kelas pada setiap use case; BAB 4 Diagram Kelas Keseluruhan yang menyajikan diagram kelas perancangan secara menyeluruh beserta daftar atribut dan metode/operasi seluruh kelas; dan BAB 5 Matriks Kerunutan yang memetakan keterkaitan antara kelas perancangan dengan use case terkait sebagai acuan implementasi dan penelusuran kebutuhan.
 
 <br>
 
@@ -219,7 +219,6 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 
 ### 3.1.2 Sequence Diagram
 
-Buat *sequence diagram* untuk **setiap skenario use case**, mencakup skenario normal dan alternatif pada subbab 4.4 SKPL. Diagram melibatkan kelas-kelas yang telah diidentifikasi pada SKPL. 
 
 - **Skenario Normal**
 
@@ -246,32 +245,74 @@ Buat *sequence diagram* untuk **setiap skenario use case**, mencakup skenario no
 <img alt="" src="./assets/diagram/cd-UC01.drawio.png" width="35%">
 </p>
 <p align="center">
-<i>Gambar 2. Diagram Kelas UC01 - Mendaftarkan Jasa</i>
+<i>Gambar 3. Diagram Kelas UC01 - Mendaftarkan Jasa</i>
 </p>
 
-Pada diagram, pastikan:
-- Atribut dituliskan beserta visibilitas dan tipe datanya, misalnya `- email: String`.
-- Operasi dituliskan beserta visibilitas, parameter, dan tipe kembaliannya, misalnya `+ login(email: String, password: String): Boolean`.
-- Relasi antarkelas (asosiasi, agregasi, komposisi, generalisasi, dan dependensi) digambarkan lengkap dengan multiplisitas.
-- Semua operasi yang dipanggil pada sequence diagram 3.1.2 (skenario normal dan alternatif) ada pada kelas yang bersangkutan.
-- Kelas yang sama dengan kelas di use case lain memakai nama, atribut, dan metode yang konsisten.
 
 ## 3.2 Use Case Memilih Jasa
 
-Silahkan lanjutkan untuk  *use case* berikutnya dengan content yang sama dengan 3.1
+**ID Use Case:** UC02 
+**Nama Use Case:** Memilih Jasa
 
 ## 3.2.1 Sequence Diagram
 
+<p align="center">
+<img alt="Sequence Diagram UC02" src="./assets/diagram/sq-UC02-Memilih-jasa-normal.drawio.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar 4. Sequence Diagram UC02</i>
+</p>
+
+- **Skenario Alternatif 1: Pemberi Jasa Tidak Ditemukan**
+
+<!-- <p align="center">
+<img alt="Sequence Diagram UC02 - Skenario 1" src="./assets/diagram/sq-UC02-Memilih-jasa-normal.drawio.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar 5. Sequence Diagram UC02 - Pemberi Jasa Tidak Ditemukan</i>
+</p> -->
+
 ## 3.2.2 Diagram Kelas
 
+<p align="center">
+<img alt="Sequence Diagram UC02 - Skenario 1" src="./assets/diagram/cd UC02.drawio.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar 6. Diagram Kelas UC02 </i>
+</p>
 
 ## 3.3 Use Case 03
 
-Silahkan lanjutkan untuk  *use case* berikutnya dengan content yang sama dengan 3.1
+**ID Use Case:** UC03 
+**Nama Use Case:** Menghubungi Pemberi Jasa
 
-## 3.3.1 Use Case 03
+## 3.3.1 Sequence Diagram
 
-## 3.3.2 Use Case 03
+<p align="center">
+<img alt="Sequence Diagram UC02" src="./assets/diagram/sq-UC03-Menghubungi-pemberi-jasa-Normal.drawio-2.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar 7. Sequence Diagram UC03</i>
+</p>
+
+- **Skenario Alternatif 1: Verifikasi Input Gagal**
+
+<p align="center">
+<img alt="Sequence Diagram UC0 - Skenario 1" src="./assets/diagram/sq-UC03-Menghubungi-pemberi-jasa-alt1.drawio.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar 8. Sequence Diagram UC02 - Verifikasi Input Gagal</i>
+</p>
+
+## 3.3.2 Class Diagram
+
+<p align="center">
+<img alt="" src="./assets/diagram/CD UC03.drawio.png" width="35%">
+</p>
+<p align="center">
+<i>Gambar 9. Diagram Kelas UC03 - Mendaftarkan Jasa</i>
+</p>
+
 <br>
 
 ## 3.10 Use Case 10
