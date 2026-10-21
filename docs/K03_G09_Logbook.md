@@ -116,8 +116,9 @@
 
 
 
-### Milestone 6
+### Milestone 7
 | Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
 | :--- | :--- | :--- | :--- | :--- | :--- | 
 | 18-10-2026 | Naufal Hasbialhaq |  sq UC01 normal | 120 menit | Done | - |
 | 21-10-2026 | Naufal Hasbialhaq |  sq UC01 normal (revisi) dan sq UC01 alt1 | 120 menit | Done | - |
+| 21-10-2026 | Yohanes Nicholas Setiawan | Bab 4 dan 5 | 1 jam  | Done | - |
