@@ -9,7 +9,7 @@ DESKRIPSI PERANCANGAN PERANGKAT LUNAK (DPPL)
 
 
 # CariUang
-### *[Logo Perangkat Lunak]*
+### <img src="./assets/diagram/cariuang.svg" width="100" height="100">
 
 ### Untuk: Agatha Tatianingseto
 
@@ -35,10 +35,9 @@ Dipersiapkan oleh:
 
 | Revisi | Deskripsi |
 | :--- | :--- |
-| *A* | Menambahkan atribut baru dan method baru di kelas PemberiJasa, PemberiJasaController, KategoriJasa, KategoriJasaController, dan KategoriJasaUI |
-| *B* | Mengubah dan menambahkan uc2 yang belum terdaftar pada class di traceability yang akan dipakai di matrix kerunutan |
-| *C* |  |
-| ... |  |
+| *A* | Menambahkan atribut baru dan method baru di beberapa kelas  |
+| *B* | Mengubah dan menambahkan UC2 yang belum terdaftar pada class di traceability yang akan dipakai di matrix kerunutan |
+| *C* | Skenario UC12, validasi yang dilakukan bukan kebenaran informasi, namun ketepatan data type input dengan data type input yang diharapkan. |
 
 ---
 
