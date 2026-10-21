@@ -311,6 +311,118 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 
 <br>
 
+
+## 3.7 Use Case 7
+
+### 3.7.1 Identifikasi Kelas Use Case Pelanggan dan Pemberi Jasa Melaporkan Masalah
+| ID Kelas | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+| :--- | :--- | :--- |
+| C04 | PemberiJasa | PemberiJasa | 
+| C05 | PemberiJasaUI | PemberiJasaUI | 
+| C06 | PemberiJasaController | PemberiJasaController | 
+| C07 | Pelanggan | Pelanggan | 
+| C08 | PelangganUI | PelangganUI | 
+| C09 | PelangganController | PelangganController | 
+| C22 | TiketLaporan | TiketLaporan | 
+| C23 | TiketLaporanUI | TiketLaporanUI | 
+| C24 | TiketLaporanController | TiketLaporanController | 
+| C28 | Notifikasi | Notifikasi | 
+| C29 | NotifikasiUI | NotifikasiUI | 
+| C30 | NotifikasiController | NotifikasiController | 
+
+
+### 3.7.2 Sequence Diagram
+<ul>
+    <p align="center">
+    <img src="./assets/diagram/sequence diagram 7.png" width="35%">
+    </p>
+    <p align="center">
+    <i>Gambar 15. Diagram Sequence UC7</i>
+    </p>
+</ul>
+
+### 3.7.3 Diagram Kelas
+<p align="center">
+<img src="./assets/diagram/class diagram 7.png" width="35%">
+</p>
+<p align="center">
+<i>Gambar 16. Diagram Kelas UC7</i>
+</p>
+
+## 3.8 Use Case 8
+
+### 3.8.1 Identifikasi Kelas Use Case Pelanggan dan Pemberi Jasa Melaporkan Masalah
+| ID Kelas | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+| :--- | :--- | :--- |
+| C04 | PemberiJasa | PemberiJasa | 
+| C05 | PemberiJasaUI | PemberiJasaUI | 
+| C06 | PemberiJasaController | PemberiJasaController | 
+| C07 | Pelanggan | Pelanggan | 
+| C08 | PelangganUI | PelangganUI | 
+| C09 | PelangganController | PelangganController | 
+| C22 | TiketLaporan | TiketLaporan | 
+| C23 | TiketLaporanUI | TiketLaporanUI | 
+| C24 | TiketLaporanController | TiketLaporanController | 
+| C28 | Notifikasi | Notifikasi | 
+| C29 | NotifikasiUI | NotifikasiUI | 
+| C30 | NotifikasiController | NotifikasiController | 
+
+
+### 3.8.2 Sequence Diagram
+<ul>
+    <p align="center">
+    <img src="./assets/diagram/sequence diagram 8.png" width="35%">
+    </p>
+    <p align="center">
+    <i>Gambar 17. Diagram Sequence UC8</i>
+    </p>
+</ul>
+
+### 3.8.3 Diagram Kelas
+<p align="center">
+<img src="./assets/diagram/class diagram 8.png" width="35%">
+</p>
+<p align="center">
+<i>Gambar 18. Diagram Kelas UC8</i>
+</p>
+
+## 3.9 Use Case 9
+
+### 3.9.1 Identifikasi Kelas Use Case Layanan Pelanggan Merespon Pelanggan
+| ID Kelas | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+| :--- | :--- | :--- |
+| C10 | LayananPelanggan | LayananPelanggan | 
+| C11 | LayananPelangganUI | LayananPelangganUI | 
+| C12 | LayananPelangganController | LayananPelangganController | 
+| C19 | Komunikasi | Komunikasi | 
+| C20 | KomunikasiUI | KomunikasiUI | 
+| C21 | KomunikasiController | KomunikasiController | 
+| C22 | TiketLaporan | TiketLaporan | 
+| C23 | TiketLaporanUI | TiketLaporanUI | 
+| C24 | TiketLaporanController | TiketLaporanController | 
+| C28 | Notifikasi | Notifikasi | 
+| C29 | NotifikasiUI | NotifikasiUI | 
+| C30 | NotifikasiController | NotifikasiController | 
+
+
+### 3.9.2 Sequence Diagram
+<ul>
+    <p align="center">
+    <img src="./assets/diagram/sequence diagram 9.png" width="35%">
+    </p>
+    <p align="center">
+    <i>Gambar 19. Diagram Sequence UC9</i>
+    </p>
+</ul>
+
+### 3.9.3 Diagram Kelas
+<p align="center">
+<img src="./assets/diagram/class diagram 9.png" width="35%">
+</p>
+<p align="center">
+<i>Gambar 20. Diagram Kelas UC9</i>
+</p>
+
 ## 3.10 Use Case 10
 <b>ID Use Case: </b> UC10<br>
 <b>Nama Use Case: </b> Memberi Rating
@@ -336,14 +448,14 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
         <img src="./assets/diagram/SequenceUC10.png" width="35%">
         </p>
         <p align="center">
-        <i>Gambar X. Diagram Sequence UC10</i>
+        <i>Gambar 21. Diagram Sequence UC10</i>
         </p>
     <li>Skenario Alternatif 1: Penyedia Jasa atau pengguna menutup popup yang telah dimunculkan atau menutup aplikasi setelah proses transaksi selesai
         <p align="center">
         <img src="./assets/diagram/SequenceUC10Alt1.png" width="75%">
         </p>
         <p align="center">
-        <i>Gambar X. Diagram Sequence UC10 Alternatif 1</i>
+        <i>Gambar 22. Diagram Sequence UC10 Alternatif 1</i>
         </p>
 </ul>
 
@@ -354,7 +466,7 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 <img src="./assets/diagram/DiagramClassUC10.png" width="35%">
 </p>
 <p align="center">
-<i>Gambar X. Diagram Kelas UC10</i>
+<i>Gambar 23. Diagram Kelas UC10</i>
 </p>
 
 
@@ -383,21 +495,21 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
         <img src="./assets/diagram/DiagramUC11SkenarioPelanggan.png" width="50%">
         </p>
         <p align="center">
-        <i>Gambar X. Diagram Sequence UC10 Skenario Pelanggan</i>
+        <i>Gambar 24. Diagram Sequence UC10 Skenario Pelanggan</i>
         </p>
     <li>Skenario Pemberi Jasa
         <p align="center">
         <img src="./assets/diagram/DiagramUC11SeknarioPemberiJasa.png" width="50%">
         </p>
         <p align="center">
-        <i>Gambar X. Diagram Sequence UC10 Skenario Pemberi Jasa</i>
+        <i>Gambar 25. Diagram Sequence UC10 Skenario Pemberi Jasa</i>
         </p>
     <li> Skenario Layanan Pelanggan
         <p align="center">
         <img src="./assets/diagram/DiagramUC11SkenarioLayananPelanggan.png" width="50%">
         </p>
         <p align="center">
-        <i>Gambar X. Diagram Sequence UC10 Skenario Layanan Pelanggan</i>
+        <i>Gambar 26. Diagram Sequence UC10 Skenario Layanan Pelanggan</i>
         </p>
 </ul>
 
@@ -406,7 +518,7 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 <img src="./assets/diagram/DiagramClassUC11.png" width="50%">
 </p>
 <p align="center">
-<i>Gambar X. Diagram Kelas UC11</i>
+<i>Gambar 27. Diagram Kelas UC11</i>
 </p>
 
 
@@ -431,13 +543,15 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
         <img src="./assets/diagram/SequenceUC12SkenarioPelanggan.png" width="50%">
         </p>
         <p align="center">
-        <i>Gambar X. Diagram Sequence UC10 Skenario Pelanggan</i>
+        <i>Gambar 28. Diagram Sequence UC10 Skenario Pelanggan</i>
         </p>
     <li>Skenario Pemberi Jasa
         <p align="center">
         <img src="./assets/diagram/SequenceUC12SkenarioPemberiJasa.png" width="50%">
         </p>
-        <p align="center">
+        <i>Gambar 29. Diagram Sequence UC10 Skenario Pelanggan</i>
+        </p>
+
 
 ### 3.12.2 Diagram Kelas
 
@@ -445,7 +559,7 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 <img src="./assets/diagram/DiagramClassUC12.png" width="50%">
 </p>
 <p align="center">
-<i>Gambar X. Diagram Kelas UC11</i>
+<i>Gambar 30. Diagram Kelas UC11</i>
 </p>
 
 
