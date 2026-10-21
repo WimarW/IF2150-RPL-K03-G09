@@ -89,7 +89,7 @@ Tabel 1.4. Aturan Penomoran
 Dokumen ini merujuk pada dokumentasi-dokumentasi milestone sebelumnya, seperti dokumen Topic Brainstorming, Requirement Gathering, Use Case, Class Diagram, SKPL, APL.
 
 ## 1.6 Deskripsi Umum Dokumen (Ikhtisar)
-Tuliskan sistematika pembahasan dokumen ini secara ringkas dan runut, dengan maksimal 1 paragraf.
+Dokumen DPPL CariUang ini disusun secara runut untuk menjadi panduan perancangan teknis perangkat lunak, dimulai dari BAB 1 Pendahuluan yang menjelaskan tujuan, lingkup masalah, definisi istilah, aturan penomoran, referensi, serta ikhtisar dokumen; BAB 2 Perancangan Arsitektur yang membahas lingkungan implementasi, pemilihan style MVC (Model-View-Controller), identifikasi komponen/modul/subsistem, serta model arsitektur berupa Development View; BAB 3 Realisasi Use Case yang menjabarkan identifikasi kelas, sequence diagram untuk skenario normal dan alternatif, serta diagram kelas pada setiap use case; BAB 4 Diagram Kelas Keseluruhan yang menyajikan diagram kelas perancangan secara menyeluruh beserta daftar atribut dan metode/operasi seluruh kelas; dan BAB 5 Matriks Kerunutan yang memetakan keterkaitan antara kelas perancangan dengan use case terkait sebagai acuan implementasi dan penelusuran kebutuhan.
 
 <br>
 
@@ -469,38 +469,38 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 
 Tabel 4.1. Daftar Kelas Perancangan Keseluruhan
 
-| ID Kelas | Nama Kelas | Atribut | Metode/Operasi |
+| Kode | Nama Class | Atribut | Metode |
 | :--- | :--- | :--- | :--- |
-| **C01** | Pengguna | - idPengguna<br>- nomorTelpon<br>- email<br>- namaPengguna<br>- username<br>- password<br>- akumulasiRating<br>- riwayatRating | + getId()<br>+ getNomor()<br>+ getEmail()<br>+ getNama()<br>+ setNomor()<br>+ setEmail()<br>+ setNama()<br>+ getAkumulasiRating()<br>+ getRiwayatRating()<br>+ addNewRatingRiwayat()<br>+ konfirmasiPekerjaan()<br>+ laporkanMasalah() |
-| **C02** | PenggunaUI | - | + showDaftarPekerjaanSelesai()<br>+ pressBeriRating()<br>+ tampilkanHalamanRegistrasi()<br>+ pressRegister()<br>+ pressBantuanLayanan() |
-| **C03** | PenggunaController | - | + triggerRating()<br>- verifikasiStatusPekerjaan()<br>+ validasiInfoRegistrasi()<br>+ requestKontrakPekerjaan()<br>+ requestFormTiket() |
-| **C04** | PemberiJasa | - jenisJasa<br>- idKategoriJasa | + getIDPemberiJasa()<br>+ getIDKategoriJasa()<br>+ setIDKategoriJasa()<br>+ savePemberiJasa()<br>+ makePemberiJasa()<br>+ cekInfoLogin()<br>+ laporkanMasalah() |
-| **C05** | PemberiJasaUI | - | + tunjukkanHalamanLogin()<br>+ pressLogin()<br>+ pindahHalaman()<br>+ pressPemberiJasa()<br>+ pressChat()<br>+ showPemberiJasaMap()<br>+ pressBantuanLayanan() |
-| **C06** | PemberiJasaController | - | + validatePemberiJasa()<br>+ validasiInput()<br>+ triggerQueryLogin()<br>+ showPemberiJasaFromKategori()<br>+ choosePemberiJasa()<br>+ requestFormTiket() |
-| **C07** | Pelanggan | - | + makePelanggan()<br>+ cekInfoLogin() |
-| **C08** | PelangganUI | - | + tunjukkanHalamanLogin()<br>+ pressLogin()<br>+ pindahHalaman() |
-| **C09** | PelangganController | - | + validasiInput()<br>+ triggerQueryLogin() |
-| **C10** | LayananPelanggan | - idLayananPelanggan | + makeLayananPelanggan()<br>+ cekInfoLogin()<br>+ responTiket() |
-| **C11** | LayananPelangganUI | - | + tunjukkanHalamanLogin()<br>+ pressLogin()<br>+ pindahHalaman()<br>+ showDaftarTiket()<br>+ pressBukaTiket() |
-| **C12** | LayananPelangganController | - | + validasiInput()<br>+ triggerQueryLogin()<br>+ requestTiketLaporan()<br>+ teruskanBalasan() |
-| **C13** | KategoriJasa | - idKategoriJasa<br>- jenisJasa<br>- tarif<br>- jamKerja<br>- daerahKerja | + getIDKategoriJasa()<br>+ getJenisJasa()<br>+ getTarif()<br>+ getJamKerja()<br>+ getDaerahKerja()<br>+ setTarif()<br>+ setJamKerja()<br>+ setDaerahKerja()<br>+ saveKategoriJasa() |
-| **C14** | KategoriJasaUI | - | + pressOpenKategoriJasa()<br>+ showFormKategoriJasa()<br>+ pressSubmitKategoriJasa()<br>+ inputDataKategoriJasa()<br>+ showKategoriJasa()<br>+ pressKategoriJasa()<br>+ pressMenu() |
-| **C15** | KategoriJasaController | - | + validateKategoriJasa()<br>+ submitFormKategoriJasa()<br>+ filterKategoriJasa() |
-| **C16** | KontrakPekerjaan | - idKontrakPekerjaan<br>- detailPekerjaan<br>- persetujuanHarga<br>- statusPekerjaan<br>- statusKontrak | + getIdPelanggan()<br>+ getIdPemberiJasa()<br>+ setHarga()<br>+ setDetailPekerjaan()<br>+ setIdKontrakPekerjaan()<br>+ setStatusPekerjaan()<br>+ getDetailPekerjaan() |
-| **C17** | KontrakPekerjaanUI | - | + showKontrakForm()<br>+ inputDetailPekerjaan()<br>+ klikKirimKontrak()<br>+ showDetailPekerjaan()<br>+ klikPekerjaanSelesai() |
-| **C18** | KontrakPekerjaanController | - | + validasiInput()<br>+ saveKontrak() |
-| **C19** | Komunikasi | - idChat<br>- idPengguna<br>- isiPesan<br>- waktuTerkirim<br>- isChatTerbaca<br>- statusChat<br>- durasiChat | + simpanPesan()<br>+ getPesan()<br>+ getIDChat()<br>+ getChatHistory()<br>+ saveChat() |
-| **C20** | KomunikasiUI | - | + showChat()<br>+ pressKirimBalasan()<br>+ showChatChannel()<br>+ inputMessage()<br>+ pressSendChat() |
-| **C21** | KomunikasiController | - | + kirimPesan()<br>+ getRiwayatChat()<br>+ loadChat()<br>+ startChat() |
-| **C22** | TiketLaporan | - idTiket<br>- idPengguna<br>- jenisTiket<br>- keteranganTiket<br>- tanggalTiket<br>- statusTiket | + getDetailTiket()<br>+ updateStatusTiket() |
-| **C23** | TiketLaporanUI | - | + showDetailTiket()<br>+ pressBalasTiket() |
-| **C24** | TiketLaporanController | - | + getTiketLaporan()<br>+ balasTiket()<br>+ tutupTiket() |
-| **C25** | Rating | - idRating<br>- idPenggunaPemberi<br>- idPenggunaPenerima<br>- idKontrakPekerjaan<br>- nilaiRating<br>- tanggalRating | + getIdPemberi()<br>+ getIdPenerima()<br>+ getIdKontrakPekerjaan()<br>+ getIdRating()<br>+ getRatingValue()<br>+ updateRatingPengguna() |
-| **C26** | RatingUI | - | + tampilkanRatingForm()<br>+ tampilkanHasilRating()<br>+ pressJumlahBintang()<br>+ pressSubmitRating()<br>+ pressBatalRating() |
-| **C27** | RatingController | - | + saveRating()<br>+ validateRatingValue() |
-| **C28** | Notifikasi | - idNotifikasi<br>- idPenerima<br>- isiNotifikasi<br>- waktuNotifikasi<br>- statusBaca | + getIsiNotifikasi()<br>+ tandaiTerbaca()<br>+ getLastMessage() |
-| **C29** | NotifikasiUI | - | - playSound()<br>- stopSound()<br>+ showNotifikasi()<br>+ closeNotifikasi()<br>+ pressNotifikasi() |
-| **C30** | NotifikasiController | - | + buatNotifikasi()<br>+ kirimNotifikasi() |
+| C01 | Pengguna | idPengguna<br>nomorTelpon<br>email<br>namaPengguna<br>username<br>password<br>akumulasiRating<br>riwayatRating | +getId()<br>+getNomor()<br>+getEmail()<br>+getNama()<br>+setNomor()<br>+setEmail()<br>+setNama()<br>+getAkumulasiRating()<br>+getRiwayatRating()<br>+addNewRatingRiwayat()<br>+konfirmasiPekerjaan()<br>+laporkanMasalah() |
+| C02 | PenggunaUI | - | +showDaftarPekerjaanSelesai()<br>+pressBeriRating()<br>+tampilkanHalamanRegistrasi()<br>+showInformasiPekerjaanSelesai()<br>+pressRegister()<br>+pressBantuanLayanan()<br>+showInformasiPekerjaanSelesai() |
+| C03 | PenggunaController | - | +triggerRating()<br>-verifikasiStatusPekerjaan()<br>+validasiInfoRegistrasi()<br>+requestKontrakPekerjaan()<br>+requestFormTiket() |
+| C04 | PemberiJasa | jenisJasa<br>idKategoriJasa | +getIDPemberiJasa()<br>+getIDKategoriJasa()<br>+setIDKategoriJasa()<br>+savePemberiJasa()<br>+makePemberiJasa()<br>+cekInfoLogin()<br>+laporkanMasalah()<br>+simpanKeDb()<br>+tampilkanSuksesRegistrasi() |
+| C05 | PemberiJasaUI | - | +tunjukkanHalamanLogin()<br>+pressLogin()<br>+pindahHalaman()<br>+pressPemberiJasa()<br>+pressChat()<br>+showPemberiJasaMap()<br>+pressBantuanLayanan()<br>+tampilkanError() |
+| C06 | PemberiJasaController | - | +validatePemberiJasa()<br>+validasiInput()<br>+triggerQueryLogin()<br>+showPemberiJasaFromKategori()<br>+choosePemberiJasa()<br>+requestFormTiket() |
+| C07 | Pelanggan | - | +makePelanggan()<br>+cekInfoLogin()<br>+simpanKeDb() |
+| C08 | PelangganUI | - | +tunjukkanHalamanLogin()<br>+pressLogin()<br>+pindahHalaman()<br>+tampilkanError()<br>+tampilkanSuksesRegistrasi() |
+| C09 | PelangganController | - | +validasiInput()<br>+triggerQueryLogin() |
+| C10 | LayananPelanggan | -idLayananPelanggan | +makeLayananPelanggan()<br>+cekInfoLogin()<br>+responTiket() |
+| C11 | LayananPelangganUI | - | +tunjukkanHalamanLogin()<br>+pressLogin()<br>+pindahHalaman()<br>+showDaftarTiket()<br>+pressBukaTiket()<br>+tampilkanError() |
+| C12 | LayananPelangganController | - | +validasiInput()<br>+triggerQueryLogin()<br>+requestTiketLaporan()<br>+teruskanBalasan() |
+| C13 | KategoriJasa | idKategoriJasa<br>jenisJasa<br>tarif<br>jamKerja<br>daerahKerja | +getIDKategoriJasa()<br>+getJenisJasa()<br>+getTarif()<br>+getJamKerja()<br>+getDaerahKerja()<br>+setTarif()<br>+setJamKerja()<br>+setDaerahKerja()<br>+saveKategoriJasa() |
+| C14 | KategoriJasaUI | - | +pressOpenKategoriJasa()<br>+showFormKategoriJasa()<br>+pressSubmitKategoriJasa()<br>+inputDataKategoriJasa()<br>+showKategoriJasa()<br>+pressKategoriJasa()<br>+pressMenu() |
+| C15 | KategoriJasaController | - | +validateKategoriJasa()<br>+submitFormKategoriJasa()<br>+filterKategoriJasa() |
+| C16 | KontrakPekerjaan | idKontrakPekerjaan<br>detailPekerjaan<br>persetujuanHarga<br>statusPekerjaan<br>hasRating | +fetchKontrakPekerjaan()<br>+saveKontrak()<br>+getDetailPekerjaan()<br>+newKontrak()<br>+makeKontrak()<br>+statusUpdate()<br>+saveKontrak()<br>+addRating() |
+| C17 | KontrakPekerjaanUI | - | +openHalamanKontrak()<br>+inputDetailPekerjaan()<br>+showKontrakForm()<br>+showDetailPekerjaan()<br>+pressPekerjaanSelesai()<br>+openDetailPekerjaan() |
+| C18 | KontrakPekerjaanController | - | -getKontrakPekerjaan()<br>-statusUpdate()<br>-showKontrakForm()<br>-kirimInput() |
+| C19 | Komunikasi | -idChat<br>-idPengguna<br>-isiPesan<br>-waktuTerkirim<br>-isChatTerbaca<br>-statusChat<br>-durasiChat | +simpanPesan()<br>+getPesan()<br>+getIDChat()<br>+getChatHistory()<br>+saveChat() |
+| C20 | KomunikasiUI | - | +showChat()<br>+pressKirimBalasan()<br>+showChatChannel()<br>+inputMessage()<br>+pressSendChat() |
+| C21 | KomunikasiController | - | +kirimPesan()<br>+getRiwayatChat()<br>+loadChat()<br>+startChat() |
+| C22 | TiketLaporan | -idTiket<br>-idPengguna<br>-jenisTiket<br>-keteranganTiket<br>-tanggalTiket<br>-statusTiket | +getDetailTiket()<br>+updateStatusTiket() |
+| C23 | TiketLaporanUI | - | +showDetailTiket()<br>+pressBalasTiket() |
+| C24 | TiketLaporanController | - | +getTiketLaporan()<br>+balasTiket()<br>+tutupTiket() |
+| C25 | Rating | idPenggunaPemberi<br>idPenggunaPenerima<br>idRating<br>idKontrakPekerjaan<br>nilaiRating<br>tanggalRating | +getIdPemberi()<br>+getIdPenerima()<br>+getIdKontrakPekerjaan()<br>+getIdRating()<br>+getRatingValue()<br>+updateRatingPengguna()<br>+makeRating()<br>+simpanKeDb() |
+| C26 | RatingUI | - | +tampilkanRatingForm()<br>+tampilkanHasilRating()<br>+pressJumlahBintang()<br>+pressSubmitRating()<br>+pressBatalRating() |
+| C27 | RatingController | - | +validateRatingValue() |
+| C28 | Notifikasi | -idNotifikasi<br>-idPenerima<br>-isiNotifikasi<br>-waktuNotifikasi<br>-statusBaca | +getIsiNotifikasi()<br>+tandaiTerbaca()<br>+getLastMessage() |
+| C29 | NotifikasiUI | - | -playSound()<br>-stopSound()<br>+showNotifikasi()<br>+closeNotifikasi()<br>+pressNotifikasi() |
+| C30 | NotifikasiController | - | +buatNotifikasi()<br>+kirimNotifikasi() |
 
 <br>
 
