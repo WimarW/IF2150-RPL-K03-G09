@@ -243,6 +243,8 @@ Silahkan lanjutkan untuk  *use case* berikutnya dengan content yang sama dengan 
 | C03 | PenggunaController | Kelas yang mengatur logika program untuk pengguna | 
 | C04 | PemberiJasa | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian |
 | C07 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan|
+| C16 | KontrakPekerjaan | Menyimpan data detail kesepakatan antara Pelanggan dan PemberiJasa, seperti harga, detail pekerjaan, status pekerjaan (On Progress/Done) |
+| C18 | KontrakPekerjaanController | Kelas yang mengatur logika program kontrak pekerjaan |
 | C25 | Rating | Merealisasikan fitur rating |
 | C26 | RatingUI | Kelas yang mengatur penampilan halaman rating |
 | C27 | RatingController | Kelas yang mengatur logika program rating |
