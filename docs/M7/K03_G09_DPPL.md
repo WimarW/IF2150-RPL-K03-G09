@@ -213,10 +213,22 @@ Pada diagram, pastikan:
 - Semua operasi yang dipanggil pada sequence diagram 3.1.2 (skenario normal dan alternatif) ada pada kelas yang bersangkutan.
 - Kelas yang sama dengan kelas di use case lain memakai nama, atribut, dan metode yang konsisten.
 
-## 3.2 Use Case XX
+## 3.2 Use Case 02
 
 Silahkan lanjutkan untuk  *use case* berikutnya dengan content yang sama dengan 3.1
 
+## 3.2.1 Use Case 02
+
+## 3.2.2 Use Case 02
+
+
+## 3.3 Use Case 03
+
+Silahkan lanjutkan untuk  *use case* berikutnya dengan content yang sama dengan 3.1
+
+## 3.3.1 Use Case 03
+
+## 3.3.2 Use Case 03
 <br>
 
 ---
