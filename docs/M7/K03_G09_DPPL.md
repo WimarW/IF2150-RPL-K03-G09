@@ -187,13 +187,13 @@ Buat *sequence diagram* untuk **setiap skenario use case**, mencakup skenario no
 <i>Gambar 1. Sequence Diagram UC01</i>
 </p>
 
-- **Skenario Alternatif 2: Verifikasi Input Gagal**
+- **Skenario Alternatif 1: Verifikasi Input Gagal**
 
 <p align="center">
-<img alt="Sequence Diagram UC01 - Skenario 1" src="./assets/diagram/contoh-sequence_diagram.png" width="50%">
+<img alt="Sequence Diagram UC01 - Skenario 1" src="./assets/diagram/sq-UC01-Mendaftarkan jasa-alt1.drawio.png" width="50%">
 </p>
 <p align="center">
-<i>Gambar 2. Sequence Diagram UC01 - [Nama skenario alternatif]</i>
+<i>Gambar 2. Sequence Diagram UC01 - Verifikasi Input Gagal</i>
 </p>
 
 ### 3.1.3 Diagram Kelas
