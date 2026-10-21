@@ -220,6 +220,57 @@ Silahkan lanjutkan untuk  *use case* berikutnya dengan content yang sama dengan 
 
 <br>
 
+## 3.10 Use Case 10
+<b>ID Use Case: </b> UC10
+<b>Nama Use Case: </b> Memberi Rating
+
+### 3.10.1 Identifikasi Kelas Use Case Memberi Rating
+| ID Kelas | Nama Kelas | Deskripsi Kelas |
+| :--- | :--- | :--- |
+| C01 | Pengguna | Kelas abstrak yang menyimpan data-data para pengguna aplikasi, seperti pelanggan, pemberi jasa, dan layanan pelanggan | 
+| C02 | PenggunaUI | Kelas yang mengatur penampilkan halaman pengguna  | 
+| C03 | PenggunaController | Kelas yang mengatur logika program untuk pengguna | 
+| C04 | PemberiJasa | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian |
+| C07 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan|
+| C25 | Rating | Merealisasikan fitur rating |
+| C26 | RatingUI | Kelas yang mengatur penampilan halaman rating |
+| C27 | RatingController | Kelas yang mengatur logika program rating |
+
+### 3.10.2 Sequence Diagram
+<ul>
+    <li>Skenario Normal <br>
+        <p align="center">
+        <img src="./assets/diagram/SequenceUC10.png" width="35%">
+        </p>
+        <p align="center">
+        <i>Gambar X. Diagram Sequence UC10</i>
+        </p>
+    <li>Skenario Alternatif 1: Penyedia Jasa atau pengguna menutup popup yang telah dimunculkan atau menutup aplikasi setelah proses transaksi selesai
+        <p align="center">
+        <img src="./assets/diagram/SequenceUC10Alt1.png" width="75%">
+        </p>
+        <p align="center">
+        <i>Gambar X. Diagram Sequence UC10 Alternatif 1</i>
+        </p>
+</ul>
+
+### 3.1.3 Diagram Kelas
+
+
+<p align="center">
+<img src="./assets/diagram/DiagramClassUC10.png" width="35%">
+</p>
+<p align="center">
+<i>Gambar X. Diagram Kelas UC10</i>
+</p>
+
+
+
+## 3.11 Use Case 11
+
+## 3.12 Use Case 
+
+
 ---
 
 # BAB 4: Diagram Kelas Keseluruhan
@@ -229,7 +280,7 @@ Silahkan lanjutkan untuk  *use case* berikutnya dengan content yang sama dengan 
 **Bagian ini diisi dengan diagram kelas keseluruhan.**
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/contoh-class_diargam.png" width="35%">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/contoh-class_diargam.png" width="50%">
 </p>
 <p align="center">
 <i>Gambar 4.1. Diagram Kelas Perancangan Keseluruhan [Nama P/L]</i>
