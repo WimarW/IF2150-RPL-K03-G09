@@ -265,12 +265,12 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 
 - **Skenario Alternatif 1: Pemberi Jasa Tidak Ditemukan**
 
-<!-- <p align="center">
-<img alt="Sequence Diagram UC02 - Skenario 1" src="./assets/diagram/sq-UC02-Memilih-jasa-normal.drawio.png" width="50%">
+<p align="center">
+<img alt="Sequence Diagram UC02 - Skenario 1" src="./assets/diagram/sq-UC02-Memilih-jasa-alt1.drawio.png" width="50%">
 </p>
 <p align="center">
 <i>Gambar 5. Sequence Diagram UC02 - Pemberi Jasa Tidak Ditemukan</i>
-</p> -->
+</p>
 
 ## 3.2.2 Diagram Kelas
 
@@ -295,13 +295,13 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 <i>Gambar 7. Sequence Diagram UC03</i>
 </p>
 
-- **Skenario Alternatif 1: Verifikasi Input Gagal**
+- **Skenario Alternatif 1: Pesan tidak terkirim ke pemberi jasa**
 
 <p align="center">
-<img alt="Sequence Diagram UC0 - Skenario 1" src="./assets/diagram/sq-UC03-Menghubungi-pemberi-jasa-alt1.drawio.png" width="50%">
+<img alt="Sequence Diagram UC03 - Skenario 1" src="./assets/diagram/sq-UC03-Menghubungi-pemberi-jasa-alt1.drawio.png" width="50%">
 </p>
 <p align="center">
-<i>Gambar 8. Sequence Diagram UC02 - Verifikasi Input Gagal</i>
+<i>Gambar 8. Sequence Diagram UC03 - Pesan tidak terkirim ke pemberi jasa</i>
 </p>
 
 ## 3.3.2 Class Diagram
