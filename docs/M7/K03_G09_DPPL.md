@@ -36,7 +36,7 @@ Dipersiapkan oleh:
 | Revisi | Deskripsi |
 | :--- | :--- |
 | *A* | Menambahkan atribut baru dan method baru di kelas PemberiJasa, PemberiJasaController, KategoriJasa, KategoriJasaController, dan KategoriJasaUI |
-| *B* |  |
+| *B* | Mengubah dan menambahkan uc2 yang belum terdaftar pada class di traceability yang akan dipakai di matrix kerunutan |
 | *C* |  |
 | ... |  |
 
@@ -356,20 +356,46 @@ Silahkan lanjutkan untuk  *use case* berikutnya dengan content yang sama dengan 
 **Bagian ini diisi dengan diagram kelas keseluruhan.**
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/contoh-class_diargam.png" width="50%">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/class-diagram.png" width="50%">
 </p>
 <p align="center">
-<i>Gambar 4.1. Diagram Kelas Perancangan Keseluruhan [Nama P/L]</i>
+<i>Gambar 4.1. Diagram Kelas Perancangan Keseluruhan Cari Uang</i>
 </p>
 
 Tabel 4.1. Daftar Kelas Perancangan Keseluruhan
 
 | ID Kelas | Nama Kelas | Atribut | Metode/Operasi |
 | :--- | :--- | :--- | :--- |
-| *[C01]* | *[Nama kelas]* | *[Daftar atribut]* | *[Daftar metode/operasi]* |
-| *[C02]* | *[Nama kelas]* | *[Daftar atribut]* | *[Daftar metode/operasi]* |
-| *[C03]* | *[Nama kelas]* | *[Daftar atribut]* | *[Daftar metode/operasi]* |
-| *...* | *...* | *...* | *...* |
+| **C01** | Pengguna | - idPengguna<br>- nomorTelpon<br>- email<br>- namaPengguna<br>- username<br>- password<br>- akumulasiRating<br>- riwayatRating | + getId()<br>+ getNomor()<br>+ getEmail()<br>+ getNama()<br>+ setNomor()<br>+ setEmail()<br>+ setNama()<br>+ getAkumulasiRating()<br>+ getRiwayatRating()<br>+ addNewRatingRiwayat()<br>+ konfirmasiPekerjaan()<br>+ laporkanMasalah() |
+| **C02** | PenggunaUI | - | + showDaftarPekerjaanSelesai()<br>+ pressBeriRating()<br>+ tampilkanHalamanRegistrasi()<br>+ pressRegister()<br>+ pressBantuanLayanan() |
+| **C03** | PenggunaController | - | + triggerRating()<br>- verifikasiStatusPekerjaan()<br>+ validasiInfoRegistrasi()<br>+ requestKontrakPekerjaan()<br>+ requestFormTiket() |
+| **C04** | PemberiJasa | - jenisJasa<br>- idKategoriJasa | + getIDPemberiJasa()<br>+ getIDKategoriJasa()<br>+ setIDKategoriJasa()<br>+ savePemberiJasa()<br>+ makePemberiJasa()<br>+ cekInfoLogin()<br>+ laporkanMasalah() |
+| **C05** | PemberiJasaUI | - | + tunjukkanHalamanLogin()<br>+ pressLogin()<br>+ pindahHalaman()<br>+ pressPemberiJasa()<br>+ pressChat()<br>+ showPemberiJasaMap()<br>+ pressBantuanLayanan() |
+| **C06** | PemberiJasaController | - | + validatePemberiJasa()<br>+ validasiInput()<br>+ triggerQueryLogin()<br>+ showPemberiJasaFromKategori()<br>+ choosePemberiJasa()<br>+ requestFormTiket() |
+| **C07** | Pelanggan | - | + makePelanggan()<br>+ cekInfoLogin() |
+| **C08** | PelangganUI | - | + tunjukkanHalamanLogin()<br>+ pressLogin()<br>+ pindahHalaman() |
+| **C09** | PelangganController | - | + validasiInput()<br>+ triggerQueryLogin() |
+| **C10** | LayananPelanggan | - idLayananPelanggan | + makeLayananPelanggan()<br>+ cekInfoLogin()<br>+ responTiket() |
+| **C11** | LayananPelangganUI | - | + tunjukkanHalamanLogin()<br>+ pressLogin()<br>+ pindahHalaman()<br>+ showDaftarTiket()<br>+ pressBukaTiket() |
+| **C12** | LayananPelangganController | - | + validasiInput()<br>+ triggerQueryLogin()<br>+ requestTiketLaporan()<br>+ teruskanBalasan() |
+| **C13** | KategoriJasa | - idKategoriJasa<br>- jenisJasa<br>- tarif<br>- jamKerja<br>- daerahKerja | + getIDKategoriJasa()<br>+ getJenisJasa()<br>+ getTarif()<br>+ getJamKerja()<br>+ getDaerahKerja()<br>+ setTarif()<br>+ setJamKerja()<br>+ setDaerahKerja()<br>+ saveKategoriJasa() |
+| **C14** | KategoriJasaUI | - | + pressOpenKategoriJasa()<br>+ showFormKategoriJasa()<br>+ pressSubmitKategoriJasa()<br>+ inputDataKategoriJasa()<br>+ showKategoriJasa()<br>+ pressKategoriJasa()<br>+ pressMenu() |
+| **C15** | KategoriJasaController | - | + validateKategoriJasa()<br>+ submitFormKategoriJasa()<br>+ filterKategoriJasa() |
+| **C16** | KontrakPekerjaan | - idKontrakPekerjaan<br>- detailPekerjaan<br>- persetujuanHarga<br>- statusPekerjaan<br>- statusKontrak | + getIdPelanggan()<br>+ getIdPemberiJasa()<br>+ setHarga()<br>+ setDetailPekerjaan()<br>+ setIdKontrakPekerjaan()<br>+ setStatusPekerjaan()<br>+ getDetailPekerjaan() |
+| **C17** | KontrakPekerjaanUI | - | + showKontrakForm()<br>+ inputDetailPekerjaan()<br>+ klikKirimKontrak()<br>+ showDetailPekerjaan()<br>+ klikPekerjaanSelesai() |
+| **C18** | KontrakPekerjaanController | - | + validasiInput()<br>+ saveKontrak() |
+| **C19** | Komunikasi | - idChat<br>- idPengguna<br>- isiPesan<br>- waktuTerkirim<br>- isChatTerbaca<br>- statusChat<br>- durasiChat | + simpanPesan()<br>+ getPesan()<br>+ getIDChat()<br>+ getChatHistory()<br>+ saveChat() |
+| **C20** | KomunikasiUI | - | + showChat()<br>+ pressKirimBalasan()<br>+ showChatChannel()<br>+ inputMessage()<br>+ pressSendChat() |
+| **C21** | KomunikasiController | - | + kirimPesan()<br>+ getRiwayatChat()<br>+ loadChat()<br>+ startChat() |
+| **C22** | TiketLaporan | - idTiket<br>- idPengguna<br>- jenisTiket<br>- keteranganTiket<br>- tanggalTiket<br>- statusTiket | + getDetailTiket()<br>+ updateStatusTiket() |
+| **C23** | TiketLaporanUI | - | + showDetailTiket()<br>+ pressBalasTiket() |
+| **C24** | TiketLaporanController | - | + getTiketLaporan()<br>+ balasTiket()<br>+ tutupTiket() |
+| **C25** | Rating | - idRating<br>- idPenggunaPemberi<br>- idPenggunaPenerima<br>- idKontrakPekerjaan<br>- nilaiRating<br>- tanggalRating | + getIdPemberi()<br>+ getIdPenerima()<br>+ getIdKontrakPekerjaan()<br>+ getIdRating()<br>+ getRatingValue()<br>+ updateRatingPengguna() |
+| **C26** | RatingUI | - | + tampilkanRatingForm()<br>+ tampilkanHasilRating()<br>+ pressJumlahBintang()<br>+ pressSubmitRating()<br>+ pressBatalRating() |
+| **C27** | RatingController | - | + saveRating()<br>+ validateRatingValue() |
+| **C28** | Notifikasi | - idNotifikasi<br>- idPenerima<br>- isiNotifikasi<br>- waktuNotifikasi<br>- statusBaca | + getIsiNotifikasi()<br>+ tandaiTerbaca()<br>+ getLastMessage() |
+| **C29** | NotifikasiUI | - | - playSound()<br>- stopSound()<br>+ showNotifikasi()<br>+ closeNotifikasi()<br>+ pressNotifikasi() |
+| **C30** | NotifikasiController | - | + buatNotifikasi()<br>+ kirimNotifikasi() |
 
 <br>
 
@@ -383,35 +409,33 @@ Tabel 7.1. Matriks Kerunutan Kelas terhadap Use Case
 
 | Kelas | Use Case Terkait |
 | :--- | :--- |
-| *[ID kelas - Nama kelas]* | *[ID UC - Nama use case]* |
-| *[ID kelas - Nama kelas]* | *[ID UC - Nama use case]* |
-| C01 - Pengguna | UC11 - Memasuki akun dalam perangkat lunak; UC12 - Mendaftar akun ke perangkat lunak |
-| C02 - PenggunaUI | UC11 - Memasuki akun dalam perangkat lunak; UC12 - Mendaftar akun ke perangkat lunak |
-| C03 - PenggunaController | UC11 - Memasuki akun dalam perangkat lunak; UC12 - Mendaftar akun ke perangkat lunak |
-| C04 - PemberiJasa | UC01 - Mendaftarkan jasa; UC02 - Memilih jasa; UC04 - Merespon pelanggan; UC06 - Mengubah status pekerjaan menjadi selesai; UC08 - Melaporkan masalah; UC10 - Memberi rating; UC11 - Memasuki akun dalam perangkat lunak; UC12 - Mendaftar akun ke perangkat lunak |
-| C05 - PemberiJasaUI | UC01 - Mendaftarkan jasa; UC02 - Memilih jasa; UC04 - Merespon pelanggan; UC06 - Mengubah status pekerjaan menjadi selesai; UC08 - Melaporkan masalah; UC10 - Memberi rating; UC11 - Memasuki akun dalam perangkat lunak; UC12 - Mendaftar akun ke perangkat lunak |
-| C06 - PemberiJasaController | UC01 - Mendaftarkan jasa; UC02 - Memilih jasa; UC04 - Merespon pelanggan; UC06 - Mengubah status pekerjaan menjadi selesai; UC08 - Melaporkan masalah; UC10 - Memberi rating; UC11 - Memasuki akun dalam perangkat lunak; UC12 - Mendaftar akun ke perangkat lunak |
-| C07 - Pelanggan | UC02 - Memilih jasa; UC03 - Menghubungi pemberi jasa; UC05 - Memasukkan kesepakatan harga dan pekerjaan; UC07 - Mengonfirmasi status pekerjaan; UC08 - Melaporkan masalah; UC10 - Memberi rating; UC11 - Memasuki akun dalam perangkat lunak; UC12 - Mendaftar akun ke perangkat lunak |
-| C08 - PelangganUI | UC02 - Memilih jasa; UC03 - Menghubungi pemberi jasa; UC05 - Memasukkan kesepakatan harga dan pekerjaan; UC07 - Mengonfirmasi status pekerjaan; UC08 - Melaporkan masalah; UC10 - Memberi rating; UC11 - Memasuki akun dalam perangkat lunak; UC12 - Mendaftar akun ke perangkat lunak |
-| C09 - PelangganController | UC02 - Memilih jasa; UC03 - Menghubungi pemberi jasa; UC05 - Memasukkan kesepakatan harga dan pekerjaan; UC07 - Mengonfirmasi status pekerjaan; UC08 - Melaporkan masalah; UC10 - Memberi rating; UC11 - Memasuki akun dalam perangkat lunak; UC12 - Mendaftar akun ke perangkat lunak |
-| C10 - LayananPelanggan | UC09 - Merespon laporan masalah |
-| C11 - LayananPelangganUI | UC09 - Merespon laporan masalah |
-| C12 - LayananPelangganController | UC09 - Merespon laporan masalah |
+| C01 - Pengguna | UC10 - Memberi rating; UC12 - Mendaftar akun ke perangkat lunak |
+| C02 - PenggunaUI | UC10 - Memberi rating; UC12 - Mendaftar akun ke perangkat lunak |
+| C03 - PenggunaController | UC10 - Memberi rating; UC12 - Mendaftar akun ke perangkat lunak |
+| C04 - PemberiJasa | UC01 - Mendaftarkan jasa; UC02 - Memilih jasa; UC03 - Menghubungi pemberi jasa; UC04 - Merespon pelanggan; UC06 - Mengubah status pekerjaan menjadi selesai; UC08 - Melaporkan masalah; UC10 - Memberi rating; UC11 - Memasuki akun dalam perangkat lunak; UC12 - Mendaftar akun ke perangkat lunak |
+| C05 - PemberiJasaUI | UC02 - Memilih jasa; UC08 - Melaporkan masalah; UC11 - Memasuki akun dalam perangkat lunak |
+| C06 - PemberiJasaController | UC01 - Mendaftarkan jasa; UC02 - Memilih jasa; UC08 - Melaporkan masalah; UC11 - Memasuki akun dalam perangkat lunak |
+| C07 - Pelanggan | UC02 - Memilih jasa; UC03 - Menghubungi pemberi jasa; UC04 - Merespon pelanggan; UC05 - Memasukkan kesepakatan harga dan pekerjaan; UC07 - Mengonfirmasi status pekerjaan; UC08 - Melaporkan masalah; UC10 - Memberi rating; UC11 - Memasuki akun dalam perangkat lunak; UC12 - Mendaftar akun ke perangkat lunak |
+| C08 - PelangganUI | UC07 - Mengonfirmasi status pekerjaan; UC08 - Melaporkan masalah; UC11 - Memasuki akun dalam perangkat lunak |
+| C09 - PelangganController | UC02 - Memilih jasa; UC07 - Mengonfirmasi status pekerjaan; UC08 - Melaporkan masalah; UC11 - Memasuki akun dalam perangkat lunak |
+| C10 - LayananPelanggan | UC09 - Merespon laporan masalah; UC11 - Memasuki akun dalam perangkat lunak |
+| C11 - LayananPelangganUI | UC09 - Merespon laporan masalah; UC11 - Memasuki akun dalam perangkat lunak |
+| C12 - LayananPelangganController | UC09 - Merespon laporan masalah; UC11 - Memasuki akun dalam perangkat lunak |
 | C13 - KategoriJasa | UC01 - Mendaftarkan jasa; UC02 - Memilih jasa |
 | C14 - KategoriJasaUI | UC01 - Mendaftarkan jasa; UC02 - Memilih jasa |
 | C15 - KategoriJasaController | UC01 - Mendaftarkan jasa; UC02 - Memilih jasa |
 | C16 - KontrakPekerjaan | UC05 - Memasukkan kesepakatan harga dan pekerjaan; UC06 - Mengubah status pekerjaan menjadi selesai; UC07 - Mengonfirmasi status pekerjaan |
 | C17 - KontrakPekerjaanUI | UC05 - Memasukkan kesepakatan harga dan pekerjaan; UC06 - Mengubah status pekerjaan menjadi selesai; UC07 - Mengonfirmasi status pekerjaan |
 | C18 - KontrakPekerjaanController | UC05 - Memasukkan kesepakatan harga dan pekerjaan; UC06 - Mengubah status pekerjaan menjadi selesai; UC07 - Mengonfirmasi status pekerjaan |
-| C19 - Komunikasi | UC03 - Menghubungi pemberi jasa; UC04 - Merespon pelanggan; UC09 - Merespon laporan masalah |
-| C20 - KomunikasiUI | UC03 - Menghubungi pemberi jasa; UC04 - Merespon pelanggan; UC09 - Merespon laporan masalah |
-| C21 - KomunikasiController | UC03 - Menghubungi pemberi jasa; UC04 - Merespon pelanggan; UC09 - Merespon laporan masalah |
+| C19 - Komunikasi | UC02 - Memilih jasa; UC03 - Menghubungi pemberi jasa; UC04 - Merespon pelanggan; UC09 - Merespon laporan masalah |
+| C20 - KomunikasiUI | UC02 - Memilih jasa; UC03 - Menghubungi pemberi jasa; UC04 - Merespon pelanggan; UC09 - Merespon laporan masalah |
+| C21 - KomunikasiController | UC02 - Memilih jasa; UC03 - Menghubungi pemberi jasa; UC04 - Merespon pelanggan; UC09 - Merespon laporan masalah |
 | C22 - TiketLaporan | UC08 - Melaporkan masalah; UC09 - Merespon laporan masalah |
 | C23 - TiketLaporanUI | UC08 - Melaporkan masalah; UC09 - Merespon laporan masalah |
 | C24 - TiketLaporanController | UC08 - Melaporkan masalah; UC09 - Merespon laporan masalah |
 | C25 - Rating | UC10 - Memberi rating |
 | C26 - RatingUI | UC10 - Memberi rating |
 | C27 - RatingController | UC10 - Memberi rating |
-| C28 - Notifikasi | UC08 - Melaporkan masalah; UC09 - Merespon laporan masalah |
-| C29 - NotifikasiUI | UC08 - Melaporkan masalah; UC09 - Merespon laporan masalah |
-| C30 - NotifikasiController | UC08 - Melaporkan masalah; UC09 - Merespon laporan masalah |
+| C28 - Notifikasi | UC02 - Memilih jasa; UC03 - Menghubungi pemberi jasa; UC04 - Merespon pelanggan; UC08 - Melaporkan masalah; UC09 - Merespon laporan masalah |
+| C29 - NotifikasiUI | UC02 - Memilih jasa; UC03 - Menghubungi pemberi jasa; UC04 - Merespon pelanggan; UC08 - Melaporkan masalah; UC09 - Merespon laporan masalah |
+| C30 - NotifikasiController | UC02 - Memilih jasa; UC03 - Menghubungi pemberi jasa; UC04 - Merespon pelanggan; UC08 - Melaporkan masalah; UC09 - Merespon laporan masalah |
