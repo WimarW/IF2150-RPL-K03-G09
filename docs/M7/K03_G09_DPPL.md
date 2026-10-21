@@ -187,9 +187,6 @@ Penerapan *package diagram* pada pandangan ini memberikan batasan aksesantar bag
 <i>Gambar 2.4.1 Model Development View</i>
 </p>
 
-### 2.4.X View [Nama View]
-*[Lakukan hal yang sama dengan bagian sebelumnya]*
-
 <br>
 
 ---
