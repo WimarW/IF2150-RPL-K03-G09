@@ -116,8 +116,13 @@
 
 
 
-### Milestone 6
+### Milestone 7
 | Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
 | :--- | :--- | :--- | :--- | :--- | :--- | 
 | 18-10-2026 | Naufal Hasbialhaq |  sq UC01 normal | 120 menit | Done | - |
 | 21-10-2026 | Naufal Hasbialhaq |  sq UC01 normal (revisi) dan sq UC01 alt1 | 120 menit | Done | - |
+| 21-10-2026 | Yohanes Nicholas Setiawan | Bab 4 dan 5 | 1 jam  | Done | - |
+| 21-10-2026 | Wimar Widiarto | UC10-12 | 3 jam  | Done | - |
+| 21-10-2026 | Vensenius Juan Setiady | UC07-UC09 | 3 jam  | Done | - |
+| 21-10-2026 | Raymond Edson Sabajan | UC04-UC06 | 3 jam  | Done | - |
+| 21-10-2026 | Yohanes Nicholas Setiawan | UC02 dan UC03 | 3 jam  | Done | - |
