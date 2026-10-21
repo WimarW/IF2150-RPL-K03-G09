@@ -113,3 +113,11 @@
 | 07-10-2026 | Wimar Widiarto | Pembuatan Diagram Bab 1 dan Tabel Konten package bab 3 | 120 menit | Done | - |
 | 07-10-2026 | Yohanes Nicholas Setiawan | Pembuatan Diagram Bab 1 | 120 menit  | 120 menit | Done | - |
 | 07-10-2026 | Vensenius Juan Setiady | Membuat diagram bab 3 | 120 menit | Done | - |
+
+
+
+### Milestone 6
+| Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
+| :--- | :--- | :--- | :--- | :--- | :--- | 
+| 18-10-2026 | Naufal Hasbialhaq |  sq UC01 normal | 120 menit | Done | - |
+| 21-10-2026 | Naufal Hasbialhaq |  sq UC01 normal (revisi) dan sq UC01 alt1 | 120 menit | Done | - |

@@ -65,6 +65,14 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | Gemini | Menambah pehaman terkait M6 | Pelajari file ini (file asistensi bersama) dan jelaskan kepada saya dengan rinci | - |
 | Gemini | Mengevaluasi diagram yang telah dibuat | Pahami diagram ini, dan beri tahu jika ada yang kurang, dengan mengacu pada file ini(ppt asistensi akbar) | - |
 
+
+### Milestone 7
+| Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
+| :--- | :--- | :--- | :--- |
+| Gemini | Menambah pemahaman terkait SQ | Contoh ketika Use Case ini dipetakan ke sebuah sequence diagram | - |
+
+
+
 ---
 ### Pernyataan Integritas dan Persetujuan
 

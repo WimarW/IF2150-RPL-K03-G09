@@ -35,7 +35,7 @@ Dipersiapkan oleh:
 
 | Revisi | Deskripsi |
 | :--- | :--- |
-| *A* | *Deskripsikan perubahan yang dilakukan dari dokumen sebelumnya pada dokumen ini. Jika tidak terdapat perubahan, harap kosongkan tabel.* |
+| *A* | Menambahkan atribut baru dan method baru di kelas PemberiJasa, PemberiJasaController, KategoriJasa, KategoriJasaController, dan KategoriJasaUI |
 | *B* |  |
 | *C* |  |
 | ... |  |
@@ -181,30 +181,29 @@ Buat *sequence diagram* untuk **setiap skenario use case**, mencakup skenario no
 - **Skenario Normal**
 
 <p align="center">
-<img alt="Sequence Diagram UC01" src="./assets/diagram/contoh-sequence_diagram.png" width="50%">
+<img alt="Sequence Diagram UC01" src="./assets/diagram/sq-UC01-Mendaftarkan jasa-normal.drawio.png" width="50%">
 </p>
 <p align="center">
 <i>Gambar 1. Sequence Diagram UC01</i>
 </p>
 
-- **Skenario Alternatif [Nomor]: [Nama Skenario]**
+- **Skenario Alternatif 1: Verifikasi Input Gagal**
 
 <p align="center">
-<img alt="Sequence Diagram UC01 - Skenario X" src="./assets/diagram/contoh-sequence_diagram.png" width="50%">
+<img alt="Sequence Diagram UC01 - Skenario 1" src="./assets/diagram/sq-UC01-Mendaftarkan jasa-alt1.drawio.png" width="50%">
 </p>
 <p align="center">
-<i>Gambar 2. Sequence Diagram UC01 - [Nama skenario alternatif]</i>
+<i>Gambar 2. Sequence Diagram UC01 - Verifikasi Input Gagal</i>
 </p>
 
 ### 3.1.3 Diagram Kelas
 
-Buatlah diagram kelas untuk use case ini yang terdiri atas kelas-kelas dari 3.1.1. **Setiap kelas pada diagram wajib menampilkan atribut dan metode/operasi langsung di dalam kotak kelasnya**, sehingga tidak perlu membuat tabel daftar atribut dan metode per kelas pada subbab ini. Daftar lengkap atribut dan metode seluruh kelas disajikan pada Tabel 4.1 (Bab 4).
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/contoh_class-diagram2.jpg" width="35%">
+<img alt="" src="./assets/diagram/cd-UC01.drawio.png" width="35%">
 </p>
 <p align="center">
-<i>Gambar X. Diagram Kelas [Nama Uce Case]</i>
+<i>Gambar 2. Diagram Kelas UC01 - Mendaftarkan Jasa</i>
 </p>
 
 Pada diagram, pastikan:
@@ -214,10 +213,22 @@ Pada diagram, pastikan:
 - Semua operasi yang dipanggil pada sequence diagram 3.1.2 (skenario normal dan alternatif) ada pada kelas yang bersangkutan.
 - Kelas yang sama dengan kelas di use case lain memakai nama, atribut, dan metode yang konsisten.
 
-## 3.2 Use Case XX
+## 3.2 Use Case Memilih Jasa
 
 Silahkan lanjutkan untuk  *use case* berikutnya dengan content yang sama dengan 3.1
 
+## 3.2.1 Sequence Diagram
+
+## 3.2.2 Diagram Kelas
+
+
+## 3.3 Use Case 03
+
+Silahkan lanjutkan untuk  *use case* berikutnya dengan content yang sama dengan 3.1
+
+## 3.3.1 Use Case 03
+
+## 3.3.2 Use Case 03
 <br>
 
 ## 3.10 Use Case 10
@@ -309,4 +320,33 @@ Tabel 7.1. Matriks Kerunutan Kelas terhadap Use Case
 | :--- | :--- |
 | *[ID kelas - Nama kelas]* | *[ID UC - Nama use case]* |
 | *[ID kelas - Nama kelas]* | *[ID UC - Nama use case]* |
-| *...* | *...* |
+| C01 - Pengguna | UC11 - Memasuki akun dalam perangkat lunak; UC12 - Mendaftar akun ke perangkat lunak |
+| C02 - PenggunaUI | UC11 - Memasuki akun dalam perangkat lunak; UC12 - Mendaftar akun ke perangkat lunak |
+| C03 - PenggunaController | UC11 - Memasuki akun dalam perangkat lunak; UC12 - Mendaftar akun ke perangkat lunak |
+| C04 - PemberiJasa | UC01 - Mendaftarkan jasa; UC02 - Memilih jasa; UC04 - Merespon pelanggan; UC06 - Mengubah status pekerjaan menjadi selesai; UC08 - Melaporkan masalah; UC10 - Memberi rating; UC11 - Memasuki akun dalam perangkat lunak; UC12 - Mendaftar akun ke perangkat lunak |
+| C05 - PemberiJasaUI | UC01 - Mendaftarkan jasa; UC02 - Memilih jasa; UC04 - Merespon pelanggan; UC06 - Mengubah status pekerjaan menjadi selesai; UC08 - Melaporkan masalah; UC10 - Memberi rating; UC11 - Memasuki akun dalam perangkat lunak; UC12 - Mendaftar akun ke perangkat lunak |
+| C06 - PemberiJasaController | UC01 - Mendaftarkan jasa; UC02 - Memilih jasa; UC04 - Merespon pelanggan; UC06 - Mengubah status pekerjaan menjadi selesai; UC08 - Melaporkan masalah; UC10 - Memberi rating; UC11 - Memasuki akun dalam perangkat lunak; UC12 - Mendaftar akun ke perangkat lunak |
+| C07 - Pelanggan | UC02 - Memilih jasa; UC03 - Menghubungi pemberi jasa; UC05 - Memasukkan kesepakatan harga dan pekerjaan; UC07 - Mengonfirmasi status pekerjaan; UC08 - Melaporkan masalah; UC10 - Memberi rating; UC11 - Memasuki akun dalam perangkat lunak; UC12 - Mendaftar akun ke perangkat lunak |
+| C08 - PelangganUI | UC02 - Memilih jasa; UC03 - Menghubungi pemberi jasa; UC05 - Memasukkan kesepakatan harga dan pekerjaan; UC07 - Mengonfirmasi status pekerjaan; UC08 - Melaporkan masalah; UC10 - Memberi rating; UC11 - Memasuki akun dalam perangkat lunak; UC12 - Mendaftar akun ke perangkat lunak |
+| C09 - PelangganController | UC02 - Memilih jasa; UC03 - Menghubungi pemberi jasa; UC05 - Memasukkan kesepakatan harga dan pekerjaan; UC07 - Mengonfirmasi status pekerjaan; UC08 - Melaporkan masalah; UC10 - Memberi rating; UC11 - Memasuki akun dalam perangkat lunak; UC12 - Mendaftar akun ke perangkat lunak |
+| C10 - LayananPelanggan | UC09 - Merespon laporan masalah |
+| C11 - LayananPelangganUI | UC09 - Merespon laporan masalah |
+| C12 - LayananPelangganController | UC09 - Merespon laporan masalah |
+| C13 - KategoriJasa | UC01 - Mendaftarkan jasa; UC02 - Memilih jasa |
+| C14 - KategoriJasaUI | UC01 - Mendaftarkan jasa; UC02 - Memilih jasa |
+| C15 - KategoriJasaController | UC01 - Mendaftarkan jasa; UC02 - Memilih jasa |
+| C16 - KontrakPekerjaan | UC05 - Memasukkan kesepakatan harga dan pekerjaan; UC06 - Mengubah status pekerjaan menjadi selesai; UC07 - Mengonfirmasi status pekerjaan |
+| C17 - KontrakPekerjaanUI | UC05 - Memasukkan kesepakatan harga dan pekerjaan; UC06 - Mengubah status pekerjaan menjadi selesai; UC07 - Mengonfirmasi status pekerjaan |
+| C18 - KontrakPekerjaanController | UC05 - Memasukkan kesepakatan harga dan pekerjaan; UC06 - Mengubah status pekerjaan menjadi selesai; UC07 - Mengonfirmasi status pekerjaan |
+| C19 - Komunikasi | UC03 - Menghubungi pemberi jasa; UC04 - Merespon pelanggan; UC09 - Merespon laporan masalah |
+| C20 - KomunikasiUI | UC03 - Menghubungi pemberi jasa; UC04 - Merespon pelanggan; UC09 - Merespon laporan masalah |
+| C21 - KomunikasiController | UC03 - Menghubungi pemberi jasa; UC04 - Merespon pelanggan; UC09 - Merespon laporan masalah |
+| C22 - TiketLaporan | UC08 - Melaporkan masalah; UC09 - Merespon laporan masalah |
+| C23 - TiketLaporanUI | UC08 - Melaporkan masalah; UC09 - Merespon laporan masalah |
+| C24 - TiketLaporanController | UC08 - Melaporkan masalah; UC09 - Merespon laporan masalah |
+| C25 - Rating | UC10 - Memberi rating |
+| C26 - RatingUI | UC10 - Memberi rating |
+| C27 - RatingController | UC10 - Memberi rating |
+| C28 - Notifikasi | UC08 - Melaporkan masalah; UC09 - Merespon laporan masalah |
+| C29 - NotifikasiUI | UC08 - Melaporkan masalah; UC09 - Merespon laporan masalah |
+| C30 - NotifikasiController | UC08 - Melaporkan masalah; UC09 - Merespon laporan masalah |
