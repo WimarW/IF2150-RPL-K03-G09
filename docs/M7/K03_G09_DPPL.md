@@ -293,7 +293,7 @@ Silahkan lanjutkan untuk  *use case* berikutnya dengan content yang sama dengan 
 **Bagian ini diisi dengan diagram kelas keseluruhan.**
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/class_diagram.png" width="50%">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/class-diagram.png" width="50%">
 </p>
 <p align="center">
 <i>Gambar 4.1. Diagram Kelas Perancangan Keseluruhan Cari Uang</i>
