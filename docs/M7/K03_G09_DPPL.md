@@ -335,7 +335,7 @@ Silahkan lanjutkan untuk  *use case* berikutnya dengan content yang sama dengan 
 <b>ID Use Case: </b> UC11<br>
 <b>Nama Use Case: </b> Memasuki akun dalam perangkat lunak
 
-### 3.11.1 Identifikasi Kelas Use Case Memasuki akun dalam perangkat lunak
+### 3.12.1 Identifikasi Kelas Use Case Memasuki akun dalam perangkat lunak
 | ID Kelas | Nama Kelas | Deskripsi Kelas |
 | :--- | :--- | :--- |
 | C01 | Pengguna | Kelas abstrak yang menyimpan data-data para pengguna aplikasi, seperti pelanggan, pemberi jasa, dan layanan pelanggan |
@@ -344,8 +344,29 @@ Silahkan lanjutkan untuk  *use case* berikutnya dengan content yang sama dengan 
 | C04 | PemberiJasa | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian | 
 | C07 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan| 
 
+### 3.12.2 Sequence Diagram
+<ul>
+    <li>Skenario Pelanggan 
+        <p align="center">
+        <img src="./assets/diagram/SequenceUC12SkenarioPelanggan.png" width="50%">
+        </p>
+        <p align="center">
+        <i>Gambar X. Diagram Sequence UC10 Skenario Pelanggan</i>
+        </p>
+    <li>Skenario Pemberi Jasa
+        <p align="center">
+        <img src="./assets/diagram/SequenceUC12SkenarioPemberiJasa.png" width="50%">
+        </p>
+        <p align="center">
 
+### 3.12.2 Diagram Kelas
 
+<p align="center">
+<img src="./assets/diagram/DiagramClassUC12.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar X. Diagram Kelas UC11</i>
+</p>
 
 
 
