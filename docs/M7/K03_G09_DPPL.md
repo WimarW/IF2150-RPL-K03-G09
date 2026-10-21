@@ -316,18 +316,18 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 <b>Nama Use Case: </b> Memberi Rating
 
 ### 3.10.1 Identifikasi Kelas Use Case Memberi Rating
-| ID Kelas | Nama Kelas | Deskripsi Kelas |
+| ID Kelas | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
 | :--- | :--- | :--- |
-| C01 | Pengguna | Kelas abstrak yang menyimpan data-data para pengguna aplikasi, seperti pelanggan, pemberi jasa, dan layanan pelanggan | 
-| C02 | PenggunaUI | Kelas yang mengatur penampilkan halaman pengguna  | 
-| C03 | PenggunaController | Kelas yang mengatur logika program untuk pengguna | 
-| C04 | PemberiJasa | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian |
-| C07 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan|
-| C16 | KontrakPekerjaan | Menyimpan data detail kesepakatan antara Pelanggan dan PemberiJasa, seperti harga, detail pekerjaan, status pekerjaan (On Progress/Done) |
-| C18 | KontrakPekerjaanController | Kelas yang mengatur logika program kontrak pekerjaan |
-| C25 | Rating | Merealisasikan fitur rating |
-| C26 | RatingUI | Kelas yang mengatur penampilan halaman rating |
-| C27 | RatingController | Kelas yang mengatur logika program rating |
+| C01 | Pengguna | Pengguna |     
+| C02 | PenggunaUI | PenggunaUI |     
+| C03 | PenggunaController | PenggunaController |     
+| C04 | PemberiJasa | PemberiJasa |    
+| C07 | Pelanggan | Pelanggan |    
+| C16 | KontrakPekerjaan | KontrakPekerjaan |    
+| C18 | KontrakPekerjaanController | KontrakPekerjaanController |    
+| C25 | Rating | Rating |    
+| C26 | RatingUI | RatingUI |    
+| C27 | RatingController | RatingController |    
 
 ### 3.10.2 Sequence Diagram
 <ul>
@@ -366,15 +366,15 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 ### 3.11.1 Identifikasi Kelas Use Case Memasuki akun dalam perangkat lunak
 | ID Kelas | Nama Kelas | Deskripsi Kelas |
 | :--- | :--- | :--- |
-| C04 | PemberiJasa | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian |
-| C05 | PemberiJasaUI | Kelas yang mengatur penampilan halaman pemberi jasa |
-| C06 | PemberiJasaController | Kelas yang mengatur logika program untuk pemberi jasa |
-| C07 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan|
-| C08 | PelangganUI | Kelas yang mengatur penampilan halaman pelanggan | 
-| C09 | PelangganController | Kelas yang mengatur logika program pelanggan | 
-| C10 | LayananPelanggan | Bertanggung jawab dalam proses merespon tiket masalah atau laporan dari pemberi jasa dan pelanggan  | 
-| C11 | LayananPelangganUI | Kelas yang mengatur penampilan halaman pengguna  | 
-| C12 | LayananPelangganController | Kelas yang mengatur logika program untuk pengguna  | 
+| C04 | PemberiJasa | PemberiJasa | 
+| C05 | PemberiJasaUI | PemberiJasaUI | 
+| C06 | PemberiJasaController | PemberiJasaController | 
+| C07 | Pelanggan | Pelanggan | 
+| C08 | PelangganUI | PelangganUI | 
+| C09 | PelangganController | PelangganController | 
+| C10 | LayananPelanggan | LayananPelanggan | 
+| C11 | LayananPelangganUI | LayananPelangganUI | 
+| C12 | LayananPelangganController | LayananPelangganController | 
 
 ### 3.11.2 Sequence Diagram
 <ul>
@@ -418,11 +418,11 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 ### 3.12.1 Identifikasi Kelas Use Case Memasuki akun dalam perangkat lunak
 | ID Kelas | Nama Kelas | Deskripsi Kelas |
 | :--- | :--- | :--- |
-| C01 | Pengguna | Kelas abstrak yang menyimpan data-data para pengguna aplikasi, seperti pelanggan, pemberi jasa, dan layanan pelanggan |
-| C02 | PenggunaUI | Kelas yang mengatur penampilkan halaman pengguna  |
-| C03 | PenggunaController | Kelas yang mengatur logika program untuk pengguna |
-| C04 | PemberiJasa | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian | 
-| C07 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan| 
+| C01 | Pengguna | Pengguna | 
+| C02 | PenggunaUI | PenggunaUI | 
+| C03 | PenggunaController | PenggunaController | 
+| C04 | PemberiJasa | PemberiJasa | 
+| C07 | Pelanggan | Pelanggan | 
 
 ### 3.12.2 Sequence Diagram
 <ul>
