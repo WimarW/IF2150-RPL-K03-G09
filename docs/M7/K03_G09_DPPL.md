@@ -232,7 +232,7 @@ Silahkan lanjutkan untuk  *use case* berikutnya dengan content yang sama dengan 
 <br>
 
 ## 3.10 Use Case 10
-<b>ID Use Case: </b> UC10
+<b>ID Use Case: </b> UC10<br>
 <b>Nama Use Case: </b> Memberi Rating
 
 ### 3.10.1 Identifikasi Kelas Use Case Memberi Rating
@@ -267,7 +267,7 @@ Silahkan lanjutkan untuk  *use case* berikutnya dengan content yang sama dengan 
         </p>
 </ul>
 
-### 3.1.3 Diagram Kelas
+### 3.10.3 Diagram Kelas
 
 
 <p align="center">
@@ -280,11 +280,74 @@ Silahkan lanjutkan untuk  *use case* berikutnya dengan content yang sama dengan 
 
 
 ## 3.11 Use Case 11
+<b>ID Use Case: </b> UC11<br>
+<b>Nama Use Case: </b> Memasuki akun dalam perangkat lunak
+
+### 3.11.1 Identifikasi Kelas Use Case Memasuki akun dalam perangkat lunak
+| ID Kelas | Nama Kelas | Deskripsi Kelas |
+| :--- | :--- | :--- |
+| C04 | PemberiJasa | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian |
+| C05 | PemberiJasaUI | Kelas yang mengatur penampilan halaman pemberi jasa |
+| C06 | PemberiJasaController | Kelas yang mengatur logika program untuk pemberi jasa |
+| C07 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan|
+| C08 | PelangganUI | Kelas yang mengatur penampilan halaman pelanggan | 
+| C09 | PelangganController | Kelas yang mengatur logika program pelanggan | 
+| C10 | LayananPelanggan | Bertanggung jawab dalam proses merespon tiket masalah atau laporan dari pemberi jasa dan pelanggan  | 
+| C11 | LayananPelangganUI | Kelas yang mengatur penampilan halaman pengguna  | 
+| C12 | LayananPelangganController | Kelas yang mengatur logika program untuk pengguna  | 
+
+### 3.11.2 Sequence Diagram
+<ul>
+    <li>Skenario Pelanggan 
+        <p align="center">
+        <img src="./assets/diagram/DiagramUC11SkenarioPelanggan.png" width="50%">
+        </p>
+        <p align="center">
+        <i>Gambar X. Diagram Sequence UC10 Skenario Pelanggan</i>
+        </p>
+    <li>Skenario Pemberi Jasa
+        <p align="center">
+        <img src="./assets/diagram/DiagramUC11SeknarioPemberiJasa.png" width="50%">
+        </p>
+        <p align="center">
+        <i>Gambar X. Diagram Sequence UC10 Skenario Pemberi Jasa</i>
+        </p>
+    <li> Skenario Layanan Pelanggan
+        <p align="center">
+        <img src="./assets/diagram/DiagramUC11SkenarioLayananPelanggan.png" width="50%">
+        </p>
+        <p align="center">
+        <i>Gambar X. Diagram Sequence UC10 Skenario Layanan Pelanggan</i>
+        </p>
+</ul>
+
+### 3.11.3 Diagram Kelas
+<p align="center">
+<img src="./assets/diagram/DiagramClassUC11.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar X. Diagram Kelas UC11</i>
+</p>
+
 
 ## 3.12 Use Case 
 
+<b>ID Use Case: </b> UC11<br>
+<b>Nama Use Case: </b> Memasuki akun dalam perangkat lunak
 
----
+### 3.11.1 Identifikasi Kelas Use Case Memasuki akun dalam perangkat lunak
+| ID Kelas | Nama Kelas | Deskripsi Kelas |
+| :--- | :--- | :--- |
+| C01 | Pengguna | Kelas abstrak yang menyimpan data-data para pengguna aplikasi, seperti pelanggan, pemberi jasa, dan layanan pelanggan |
+| C02 | PenggunaUI | Kelas yang mengatur penampilkan halaman pengguna  |
+| C03 | PenggunaController | Kelas yang mengatur logika program untuk pengguna |
+| C04 | PemberiJasa | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian | 
+| C07 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan| 
+
+
+
+
+
 
 # BAB 4: Diagram Kelas Keseluruhan
 
