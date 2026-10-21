@@ -99,11 +99,26 @@ Tuliskan sistematika pembahasan dokumen ini secara ringkas dan runut, dengan mak
 
 ## 2.1 Rancangan Lingkungan Implementasi
 
-Sebutkan *operating system*, DBMS, *development tools*, *filing system*, dan bahasa pemrograman yang digunakan.
+| Komponen | Spesifikasi |
+| :--- | :--- |
+| *Development Tools* | VS Code; Github; React native |
+| *DBMS* | Postgresql 16 |
+| *OS* | Android OS |
+| *Filing System* | :--- |
+| *Bahasa Pemrograman* | typescript |
+OS: Android OS, DBMS: Postgresql 16, development tools: vs code; github; react native, *filing system*, dan bahasa pemrograman yang digunakan.
 
 ## 2.2 Style/Pattern Arsitektur Acuan
 
-Tentukan *architectural style* atau *pattern* yang menjadi acuan aplikasi, misalnya *layered architecture*, *client-server*, *repository*, *pipe and filter*, atau MVC (*Model-View-Controller*).
+CariUang menggunakan *style*: **MVC (*Model-View-Controller*)**. Komponen P/L dibagi menjadi tiga peran:
+
+| Bagian | Peran |
+| :--- | :--- | 
+| ***View*** | Menampilkan halaman (login/registrasi, katalog jasa dan peta, kontrak pekerjaan, chat, tiket laporan, rating, notifikasi) dan meneruskan aksi pengguna ke *Controller*. *View* tidak menyimpan aturan bisnis. |
+| ***Controller*** | Menerima permintaan dari *View*, memvalidasi input, menjalankan aturan bisnis (misalnya penguncian pemberi jasa, perubahan status 'On Progress' → 'Done', pembuatan tiket otomatis), lalu memanggil *Model*. |
+| ***Model*** | Merepresentasikan data (Pengguna, KategoriJasa, KontrakPekerjaan, Komunikasi, TiketLaporan, Rating, Notifikasi), serta membaca dan menyimpan data ke basis data.|
+
+Pemilihan MVC sebagai style yang dipilih karena MVC memisahkan antara bagaimana data diroses, bagaimana navigasinya berjalan dan bagaimana tampilannya. Jika ada perubahan logika bisa langsung tanpa merusak UI yang sudah ada. Selain itu, pengerjaan dari perangkat lunak ini juga dapat dilakukan secara paralel sehingga pengerjaan UI dan bagian controller serta model dapat dilakukan secara bersamaan.
 
 
 Gunakan hasil **BAB 1 Style/Pattern Arsitektur Acuan pada dokumen APL**, termasuk alasan pemilihan dan gambar penerapannya pada P/L kelompok. Gunakan komponen aplikasi sendiri pada gambar, bukan hanya contoh pola umum.
