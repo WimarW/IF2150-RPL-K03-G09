@@ -74,6 +74,8 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
 | :--- | :--- | :--- | :--- |
 | Gemini | Menambah pemahaman terkait SQ | Contoh ketika Use Case ini dipetakan ke sebuah sequence diagram | - |
+| Gemini | Membuat logo CariUang | Analisis file skpl ini lalu buatkan logo yang bersesuaian dengan isi skpl tersebut | - |
+| Gemini | Merapihkan tulisan .md tabel keseluruhan | Rapihkan tabel class keseluruhan ini | - |
 
 
 

@@ -125,4 +125,4 @@
 | 21-10-2026 | Wimar Widiarto | UC10-12 | 3 jam  | Done | - |
 | 21-10-2026 | Vensenius Juan Setiady | UC07-UC09 | 3 jam  | Done | - |
 | 21-10-2026 | Raymond Edson Sabajan | UC04-UC06 | 3 jam  | Done | - |
-| 21-10-2026 | Yohanes Nicholas Setiawan | UC02 dan UC03 | 3 jam  | Done | - |
+| 21-10-2026 | Naufal Hasbialhaq | UC02 dan UC03 | 3 jam  | Done | - |

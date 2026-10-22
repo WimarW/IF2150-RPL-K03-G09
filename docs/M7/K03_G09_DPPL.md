@@ -311,23 +311,240 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 
 <br>
 
+## 3.4 Use Case 4
+<b>ID Use Case: </b> UC04<br>
+<b>Nama Use Case: </b> Merespon pelanggan
+
+### 3.4.1 Identifikasi Kelas Use Case Memberi Rating
+| ID Kelas | Nama Kelas | Deskripsi Kelas |
+| :--- | :--- | :--- |
+| C04 | PemberiJasa | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian |
+| C07 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan|
+| C19 | Komunikasi | Merealisasikan fitur komunikasi |
+| C20 | KomunikasiUI | Kelas yang mengatur penampilan halaman pada halaman komunikasi |
+| C21 | KomunikasiController | Kelas yang mengatur logika program komunikasi |
+| C28 | Notifikasi | Merealisasikan fitur notifikasi yang akan diberikan kepada PemberiJasa ketika jasanya dipesan | 
+| C29 | NotifikasiUI | Kelas yang mengatur penampilan halaman notifikasi | 
+| C30 | NotifikasiController | Kelas yang mengatur logika program notifikasi |  
+
+### 3.4.2 Sequence Diagram
+<ul>
+    <li>Skenario Normal <br>
+        <p align="center">
+        <img src="./assets/diagram/sequenceUC04.png" width="75%">
+        </p>
+        <p align="center">
+        <i>Gambar X. Diagram Sequence UC04</i>
+        </p>
+    
+</ul>
+
+### 3.4.3 Diagram Kelas
+
+
+<p align="center">
+<img src="./assets/diagram/classDiagramUC03.png" width="75%">
+</p>
+<p align="center">
+<i>Gambar X. Diagram Kelas UC04</i>
+</p>
+
+## 3.5 Use Case 5
+<b>ID Use Case: </b> UC05<br>
+<b>Nama Use Case: </b> Pelanggan memasukkan kesepakatan harga dan pekerjaan
+
+### 3.5.1 Identifikasi Kelas Use Case Memberi Rating
+| ID Kelas | Nama Kelas | Deskripsi Kelas |
+| :--- | :--- | :--- |
+| C07 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan| 
+| C16 | KontrakPekerjaan | Menyimpan data detail kesepakatan antara Pelanggan dan PemberiJasa, seperti harga, detail pekerjaan, status pekerjaan (On Progress/Done) | 
+| C17 | KontrakPekerjaanUI | Kelas yang mengatur penampilan halaman pada kelas kontrak pekerjaan | 
+| C18 | KontrakPekerjaanController | Kelas yang mengatur logika program kontrak pekerjaan |
+
+### 3.5.2 Sequence Diagram
+<ul>
+    <li>Skenario Normal <br>
+        <p align="center">
+        <img src="./assets/diagram/sequenceUC05.png" width="75%">
+        </p>
+        <p align="center">
+        <i>Gambar X. Diagram Sequence UC05</i>
+        </p>
+    
+</ul>
+
+### 3.5.3 Diagram Kelas
+
+
+<p align="center">
+<img src="./assets/diagram/classDiagramUC05.png" width="75%">
+</p>
+<p align="center">
+<i>Gambar X. Diagram Kelas UC05</i>
+</p>
+
+## 3.6 Use Case 6
+<b>ID Use Case: </b> UC06<br>
+<b>Nama Use Case: </b> Pemberi jasa telah selesai bekerja
+
+### 3.6.1 Identifikasi Kelas Use Case Memberi Rating
+| ID Kelas | Nama Kelas | Deskripsi Kelas |
+| :--- | :--- | :--- |
+| C07 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan| 
+| C16 | KontrakPekerjaan | Menyimpan data detail kesepakatan antara Pelanggan dan PemberiJasa, seperti harga, detail pekerjaan, status pekerjaan (On Progress/Done) | 
+| C17 | KontrakPekerjaanUI | Kelas yang mengatur penampilan halaman pada kelas kontrak pekerjaan | 
+| C18 | KontrakPekerjaanController | Kelas yang mengatur logika program kontrak pekerjaan |
+
+### 3.6.2 Sequence Diagram
+<ul>
+    <li>Skenario Normal <br>
+        <p align="center">
+        <img src="./assets/diagram/sequenceUC06.png" width="75%">
+        </p>
+        <p align="center">
+        <i>Gambar X. Diagram Sequence UC06</i>
+        </p>
+    
+</ul>
+
+### 3.6.3 Diagram Kelas
+
+
+<p align="center">
+<img src="./assets/diagram/classDiagramUC06.png" width="75%">
+</p>
+<p align="center">
+<i>Gambar X. Diagram Kelas UC06</i>
+</p>
+
+## 3.7 Use Case 7
+
+### 3.7.1 Identifikasi Kelas Use Case Pelanggan dan Pemberi Jasa Melaporkan Masalah
+| ID Kelas | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+| :--- | :--- | :--- |
+| C04 | PemberiJasa | PemberiJasa | 
+| C05 | PemberiJasaUI | PemberiJasaUI | 
+| C06 | PemberiJasaController | PemberiJasaController | 
+| C07 | Pelanggan | Pelanggan | 
+| C08 | PelangganUI | PelangganUI | 
+| C09 | PelangganController | PelangganController | 
+| C22 | TiketLaporan | TiketLaporan | 
+| C23 | TiketLaporanUI | TiketLaporanUI | 
+| C24 | TiketLaporanController | TiketLaporanController | 
+| C28 | Notifikasi | Notifikasi | 
+| C29 | NotifikasiUI | NotifikasiUI | 
+| C30 | NotifikasiController | NotifikasiController | 
+
+
+### 3.7.2 Sequence Diagram
+<ul>
+    <p align="center">
+    <img src="./assets/diagram/sequence diagram 7.png" width="35%">
+    </p>
+    <p align="center">
+    <i>Gambar 15. Diagram Sequence UC7</i>
+    </p>
+</ul>
+
+### 3.7.3 Diagram Kelas
+<p align="center">
+<img src="./assets/diagram/class diagram 7.png" width="35%">
+</p>
+<p align="center">
+<i>Gambar 16. Diagram Kelas UC7</i>
+</p>
+
+## 3.8 Use Case 8
+
+### 3.8.1 Identifikasi Kelas Use Case Pelanggan dan Pemberi Jasa Melaporkan Masalah
+| ID Kelas | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+| :--- | :--- | :--- |
+| C04 | PemberiJasa | PemberiJasa | 
+| C05 | PemberiJasaUI | PemberiJasaUI | 
+| C06 | PemberiJasaController | PemberiJasaController | 
+| C07 | Pelanggan | Pelanggan | 
+| C08 | PelangganUI | PelangganUI | 
+| C09 | PelangganController | PelangganController | 
+| C22 | TiketLaporan | TiketLaporan | 
+| C23 | TiketLaporanUI | TiketLaporanUI | 
+| C24 | TiketLaporanController | TiketLaporanController | 
+| C28 | Notifikasi | Notifikasi | 
+| C29 | NotifikasiUI | NotifikasiUI | 
+| C30 | NotifikasiController | NotifikasiController | 
+
+
+### 3.8.2 Sequence Diagram
+<ul>
+    <p align="center">
+    <img src="./assets/diagram/sequence diagram 8.png" width="35%">
+    </p>
+    <p align="center">
+    <i>Gambar 17. Diagram Sequence UC8</i>
+    </p>
+</ul>
+
+### 3.8.3 Diagram Kelas
+<p align="center">
+<img src="./assets/diagram/class diagram 8.png" width="35%">
+</p>
+<p align="center">
+<i>Gambar 18. Diagram Kelas UC8</i>
+</p>
+
+## 3.9 Use Case 9
+
+### 3.9.1 Identifikasi Kelas Use Case Layanan Pelanggan Merespon Pelanggan
+| ID Kelas | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+| :--- | :--- | :--- |
+| C10 | LayananPelanggan | LayananPelanggan | 
+| C11 | LayananPelangganUI | LayananPelangganUI | 
+| C12 | LayananPelangganController | LayananPelangganController | 
+| C19 | Komunikasi | Komunikasi | 
+| C20 | KomunikasiUI | KomunikasiUI | 
+| C21 | KomunikasiController | KomunikasiController |
+| C22 | TiketLaporan | TiketLaporan | 
+| C23 | TiketLaporanUI | TiketLaporanUI | 
+| C24 | TiketLaporanController | TiketLaporanController | 
+| C28 | Notifikasi | Notifikasi | 
+| C29 | NotifikasiUI | NotifikasiUI | 
+| C30 | NotifikasiController | NotifikasiController | 
+
+
+### 3.9.2 Sequence Diagram
+<ul>
+    <p align="center">
+    <img src="./assets/diagram/sequence diagram 9.png" width="35%">
+    </p>
+    <p align="center">
+    <i>Gambar 19. Diagram Sequence UC9</i>
+    </p>
+</ul>
+
+### 3.9.3 Diagram Kelas
+<p align="center">
+<img src="./assets/diagram/class diagram 9.png" width="35%">
+</p>
+<p align="center">
+<i>Gambar 20. Diagram Kelas UC9</i>
+
+
 ## 3.10 Use Case 10
 <b>ID Use Case: </b> UC10<br>
 <b>Nama Use Case: </b> Memberi Rating
 
 ### 3.10.1 Identifikasi Kelas Use Case Memberi Rating
-| ID Kelas | Nama Kelas | Deskripsi Kelas |
+| ID Kelas | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
 | :--- | :--- | :--- |
-| C01 | Pengguna | Kelas abstrak yang menyimpan data-data para pengguna aplikasi, seperti pelanggan, pemberi jasa, dan layanan pelanggan | 
-| C02 | PenggunaUI | Kelas yang mengatur penampilkan halaman pengguna  | 
-| C03 | PenggunaController | Kelas yang mengatur logika program untuk pengguna | 
-| C04 | PemberiJasa | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian |
-| C07 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan|
-| C16 | KontrakPekerjaan | Menyimpan data detail kesepakatan antara Pelanggan dan PemberiJasa, seperti harga, detail pekerjaan, status pekerjaan (On Progress/Done) |
-| C18 | KontrakPekerjaanController | Kelas yang mengatur logika program kontrak pekerjaan |
-| C25 | Rating | Merealisasikan fitur rating |
-| C26 | RatingUI | Kelas yang mengatur penampilan halaman rating |
-| C27 | RatingController | Kelas yang mengatur logika program rating |
+| C01 | Pengguna | Pengguna |     
+| C02 | PenggunaUI | PenggunaUI |     
+| C03 | PenggunaController | PenggunaController |     
+| C04 | PemberiJasa | PemberiJasa |    
+| C07 | Pelanggan | Pelanggan |    
+| C16 | KontrakPekerjaan | KontrakPekerjaan |    
+| C18 | KontrakPekerjaanController | KontrakPekerjaanController |    
+| C25 | Rating | Rating |    
+| C26 | RatingUI | RatingUI |    
+| C27 | RatingController | RatingController |    
 
 ### 3.10.2 Sequence Diagram
 <ul>
@@ -336,14 +553,14 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
         <img src="./assets/diagram/SequenceUC10.png" width="35%">
         </p>
         <p align="center">
-        <i>Gambar X. Diagram Sequence UC10</i>
+        <i>Gambar 21. Diagram Sequence UC10</i>
         </p>
     <li>Skenario Alternatif 1: Penyedia Jasa atau pengguna menutup popup yang telah dimunculkan atau menutup aplikasi setelah proses transaksi selesai
         <p align="center">
         <img src="./assets/diagram/SequenceUC10Alt1.png" width="75%">
         </p>
         <p align="center">
-        <i>Gambar X. Diagram Sequence UC10 Alternatif 1</i>
+        <i>Gambar 22. Diagram Sequence UC10 Alternatif 1</i>
         </p>
 </ul>
 
@@ -354,7 +571,7 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 <img src="./assets/diagram/DiagramClassUC10.png" width="35%">
 </p>
 <p align="center">
-<i>Gambar X. Diagram Kelas UC10</i>
+<i>Gambar 23. Diagram Kelas UC10</i>
 </p>
 
 
@@ -366,15 +583,15 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 ### 3.11.1 Identifikasi Kelas Use Case Memasuki akun dalam perangkat lunak
 | ID Kelas | Nama Kelas | Deskripsi Kelas |
 | :--- | :--- | :--- |
-| C04 | PemberiJasa | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian |
-| C05 | PemberiJasaUI | Kelas yang mengatur penampilan halaman pemberi jasa |
-| C06 | PemberiJasaController | Kelas yang mengatur logika program untuk pemberi jasa |
-| C07 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan|
-| C08 | PelangganUI | Kelas yang mengatur penampilan halaman pelanggan | 
-| C09 | PelangganController | Kelas yang mengatur logika program pelanggan | 
-| C10 | LayananPelanggan | Bertanggung jawab dalam proses merespon tiket masalah atau laporan dari pemberi jasa dan pelanggan  | 
-| C11 | LayananPelangganUI | Kelas yang mengatur penampilan halaman pengguna  | 
-| C12 | LayananPelangganController | Kelas yang mengatur logika program untuk pengguna  | 
+| C04 | PemberiJasa | PemberiJasa | 
+| C05 | PemberiJasaUI | PemberiJasaUI | 
+| C06 | PemberiJasaController | PemberiJasaController | 
+| C07 | Pelanggan | Pelanggan | 
+| C08 | PelangganUI | PelangganUI | 
+| C09 | PelangganController | PelangganController | 
+| C10 | LayananPelanggan | LayananPelanggan | 
+| C11 | LayananPelangganUI | LayananPelangganUI | 
+| C12 | LayananPelangganController | LayananPelangganController | 
 
 ### 3.11.2 Sequence Diagram
 <ul>
@@ -383,21 +600,21 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
         <img src="./assets/diagram/DiagramUC11SkenarioPelanggan.png" width="50%">
         </p>
         <p align="center">
-        <i>Gambar X. Diagram Sequence UC10 Skenario Pelanggan</i>
+        <i>Gambar 24. Diagram Sequence UC10 Skenario Pelanggan</i>
         </p>
     <li>Skenario Pemberi Jasa
         <p align="center">
         <img src="./assets/diagram/DiagramUC11SeknarioPemberiJasa.png" width="50%">
         </p>
         <p align="center">
-        <i>Gambar X. Diagram Sequence UC10 Skenario Pemberi Jasa</i>
+        <i>Gambar 25. Diagram Sequence UC10 Skenario Pemberi Jasa</i>
         </p>
     <li> Skenario Layanan Pelanggan
         <p align="center">
         <img src="./assets/diagram/DiagramUC11SkenarioLayananPelanggan.png" width="50%">
         </p>
         <p align="center">
-        <i>Gambar X. Diagram Sequence UC10 Skenario Layanan Pelanggan</i>
+        <i>Gambar 26. Diagram Sequence UC10 Skenario Layanan Pelanggan</i>
         </p>
 </ul>
 
@@ -406,7 +623,7 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 <img src="./assets/diagram/DiagramClassUC11.png" width="50%">
 </p>
 <p align="center">
-<i>Gambar X. Diagram Kelas UC11</i>
+<i>Gambar 27. Diagram Kelas UC11</i>
 </p>
 
 
@@ -418,11 +635,11 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 ### 3.12.1 Identifikasi Kelas Use Case Memasuki akun dalam perangkat lunak
 | ID Kelas | Nama Kelas | Deskripsi Kelas |
 | :--- | :--- | :--- |
-| C01 | Pengguna | Kelas abstrak yang menyimpan data-data para pengguna aplikasi, seperti pelanggan, pemberi jasa, dan layanan pelanggan |
-| C02 | PenggunaUI | Kelas yang mengatur penampilkan halaman pengguna  |
-| C03 | PenggunaController | Kelas yang mengatur logika program untuk pengguna |
-| C04 | PemberiJasa | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian | 
-| C07 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan| 
+| C01 | Pengguna | Pengguna | 
+| C02 | PenggunaUI | PenggunaUI | 
+| C03 | PenggunaController | PenggunaController | 
+| C04 | PemberiJasa | PemberiJasa | 
+| C07 | Pelanggan | Pelanggan | 
 
 ### 3.12.2 Sequence Diagram
 <ul>
@@ -431,13 +648,15 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
         <img src="./assets/diagram/SequenceUC12SkenarioPelanggan.png" width="50%">
         </p>
         <p align="center">
-        <i>Gambar X. Diagram Sequence UC10 Skenario Pelanggan</i>
+        <i>Gambar 28. Diagram Sequence UC10 Skenario Pelanggan</i>
         </p>
     <li>Skenario Pemberi Jasa
         <p align="center">
         <img src="./assets/diagram/SequenceUC12SkenarioPemberiJasa.png" width="50%">
         </p>
-        <p align="center">
+        <i>Gambar 29. Diagram Sequence UC10 Skenario Pelanggan</i>
+        </p>
+
 
 ### 3.12.2 Diagram Kelas
 
@@ -445,7 +664,7 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 <img src="./assets/diagram/DiagramClassUC12.png" width="50%">
 </p>
 <p align="center">
-<i>Gambar X. Diagram Kelas UC11</i>
+<i>Gambar 30. Diagram Kelas UC11</i>
 </p>
 
 
@@ -470,24 +689,24 @@ Tabel 4.1. Daftar Kelas Perancangan Keseluruhan
 | C01 | Pengguna | idPengguna<br>nomorTelpon<br>email<br>namaPengguna<br>username<br>password<br>akumulasiRating<br>riwayatRating | +getId()<br>+getNomor()<br>+getEmail()<br>+getNama()<br>+setNomor()<br>+setEmail()<br>+setNama()<br>+getAkumulasiRating()<br>+getRiwayatRating()<br>+addNewRatingRiwayat()<br>+konfirmasiPekerjaan()<br>+laporkanMasalah() |
 | C02 | PenggunaUI | - | +showDaftarPekerjaanSelesai()<br>+pressBeriRating()<br>+tampilkanHalamanRegistrasi()<br>+showInformasiPekerjaanSelesai()<br>+pressRegister()<br>+pressBantuanLayanan()<br>+showInformasiPekerjaanSelesai() |
 | C03 | PenggunaController | - | +triggerRating()<br>-verifikasiStatusPekerjaan()<br>+validasiInfoRegistrasi()<br>+requestKontrakPekerjaan()<br>+requestFormTiket() |
-| C04 | PemberiJasa | jenisJasa<br>idKategoriJasa | +getIDPemberiJasa()<br>+getIDKategoriJasa()<br>+setIDKategoriJasa()<br>+savePemberiJasa()<br>+makePemberiJasa()<br>+cekInfoLogin()<br>+laporkanMasalah()<br>+simpanKeDb()<br>+tampilkanSuksesRegistrasi() |
-| C05 | PemberiJasaUI | - | +tunjukkanHalamanLogin()<br>+pressLogin()<br>+pindahHalaman()<br>+pressPemberiJasa()<br>+pressChat()<br>+showPemberiJasaMap()<br>+pressBantuanLayanan()<br>+tampilkanError() |
-| C06 | PemberiJasaController | - | +validatePemberiJasa()<br>+validasiInput()<br>+triggerQueryLogin()<br>+showPemberiJasaFromKategori()<br>+choosePemberiJasa()<br>+requestFormTiket() |
+| C04 | PemberiJasa | jenisJasa<br>idKategoriJasa<br>-idPemberiJasa<br>-dataPemberiJasa | +getIDPemberiJasa()<br>+getIDKategoriJasa()<br>+setIDKategoriJasa()<br>+savePemberiJasa()<br>+makePemberiJasa()<br>+cekInfoLogin()<br>+laporkanMasalah()<br>+simpanKeDb()<br>+tampilkanSuksesRegistrasi()<br>+getPemberiJasaByID() |
+| C05 | PemberiJasaUI | - | +tunjukkanHalamanLogin()<br>+pressLogin()<br>+pindahHalaman()<br>+pressPemberiJasa()<br>+pressChat()<br>+showPemberiJasaMap()<br>+pressBantuanLayanan()<br>+tampilkanError()<br>+showPemberiJasaKategori() |
+| C06 | PemberiJasaController | - | +validatePemberiJasa()<br>+validasiInput()<br>+triggerQueryLogin()<br>+showPemberiJasaFromKategori()<br>+choosePemberiJasa()<br>+requestFormTiket()<br>+setInformasiPemberiJasa()<br>+fetchPemberiJasaById() |
 | C07 | Pelanggan | - | +makePelanggan()<br>+cekInfoLogin()<br>+simpanKeDb() |
 | C08 | PelangganUI | - | +tunjukkanHalamanLogin()<br>+pressLogin()<br>+pindahHalaman()<br>+tampilkanError()<br>+tampilkanSuksesRegistrasi() |
 | C09 | PelangganController | - | +validasiInput()<br>+triggerQueryLogin() |
 | C10 | LayananPelanggan | -idLayananPelanggan | +makeLayananPelanggan()<br>+cekInfoLogin()<br>+responTiket() |
 | C11 | LayananPelangganUI | - | +tunjukkanHalamanLogin()<br>+pressLogin()<br>+pindahHalaman()<br>+showDaftarTiket()<br>+pressBukaTiket()<br>+tampilkanError() |
 | C12 | LayananPelangganController | - | +validasiInput()<br>+triggerQueryLogin()<br>+requestTiketLaporan()<br>+teruskanBalasan() |
-| C13 | KategoriJasa | idKategoriJasa<br>jenisJasa<br>tarif<br>jamKerja<br>daerahKerja | +getIDKategoriJasa()<br>+getJenisJasa()<br>+getTarif()<br>+getJamKerja()<br>+getDaerahKerja()<br>+setTarif()<br>+setJamKerja()<br>+setDaerahKerja()<br>+saveKategoriJasa() |
-| C14 | KategoriJasaUI | - | +pressOpenKategoriJasa()<br>+showFormKategoriJasa()<br>+pressSubmitKategoriJasa()<br>+inputDataKategoriJasa()<br>+showKategoriJasa()<br>+pressKategoriJasa()<br>+pressMenu() |
-| C15 | KategoriJasaController | - | +validateKategoriJasa()<br>+submitFormKategoriJasa()<br>+filterKategoriJasa() |
+| C13 | KategoriJasa | idKategoriJasa<br>jenisJasa<br>tarif<br>jamKerja<br>daerahKerja<br>-dataKategoriJasa | +getIDKategoriJasa()<br>+getJenisJasa()<br>+getTarif()<br>+getJamKerja()<br>+getDaerahKerja()<br>+setTarif()<br>+setJamKerja()<br>+setDaerahKerja()<br>+saveKategoriJasa()<br>+getAllKategori()<br>+getKategoriById() |
+| C14 | KategoriJasaUI | - | +pressOpenKategoriJasa()<br>+showFormKategoriJasa()<br>+pressSubmitKategoriJasa()<br>+inputDataKategoriJasa()<br>+showKategoriJasa()<br>+pressKategoriJasa()<br>+pressMenu()<br>+bukaHalamanKategoriJasa()<br>+isiFormJasa()<br>+showPendaftaranBerhasil()<br>+tampilkanPesanSukses()<br>+showAllKategoriJasa()<br>+showKategoriById() |
+| C15 | KategoriJasaController | - | +validateKategoriJasa()<br>+submitFormKategoriJasa()<br>+filterKategoriJasa()<br>+showFormKategoriJasa()<br>+confirmDataTersimpan()<br>+updateDataPemberiJasa()<br>+showPendaftaranBerhasil()<br>+fetchAllKategoriJasa()<br>+fetchKategoriJasaById() |
 | C16 | KontrakPekerjaan | idKontrakPekerjaan<br>detailPekerjaan<br>persetujuanHarga<br>statusPekerjaan<br>hasRating | +fetchKontrakPekerjaan()<br>+saveKontrak()<br>+getDetailPekerjaan()<br>+newKontrak()<br>+makeKontrak()<br>+statusUpdate()<br>+saveKontrak()<br>+addRating() |
 | C17 | KontrakPekerjaanUI | - | +openHalamanKontrak()<br>+inputDetailPekerjaan()<br>+showKontrakForm()<br>+showDetailPekerjaan()<br>+pressPekerjaanSelesai()<br>+openDetailPekerjaan() |
 | C18 | KontrakPekerjaanController | - | -getKontrakPekerjaan()<br>-statusUpdate()<br>-showKontrakForm()<br>-kirimInput() |
-| C19 | Komunikasi | -idChat<br>-idPengguna<br>-isiPesan<br>-waktuTerkirim<br>-isChatTerbaca<br>-statusChat<br>-durasiChat | +simpanPesan()<br>+getPesan()<br>+getIDChat()<br>+getChatHistory()<br>+saveChat() |
-| C20 | KomunikasiUI | - | +showChat()<br>+pressKirimBalasan()<br>+showChatChannel()<br>+inputMessage()<br>+pressSendChat() |
-| C21 | KomunikasiController | - | +kirimPesan()<br>+getRiwayatChat()<br>+loadChat()<br>+startChat() |
+| C19 | Komunikasi | -idChat<br>-idPengguna<br>-isiPesan<br>-waktuTerkirim<br>-isChatTerbaca<br>-statusChat<br>-durasiChat<br>-dataChat | +simpanPesan()<br>+getPesan()<br>+getIDChat()<br>+getChatHistory()<br>+saveChat() |
+| C20 | KomunikasiUI | - | +showChat()<br>+pressKirimBalasan()<br>+showChatChannel()<br>+inputMessage()<br>+pressSendChat()<br>+showMessage() |
+| C21 | KomunikasiController | - | +kirimPesan()<br>+getRiwayatChat()<br>+loadChat()<br>+startChat()<br>+sendChat() |
 | C22 | TiketLaporan | -idTiket<br>-idPengguna<br>-jenisTiket<br>-keteranganTiket<br>-tanggalTiket<br>-statusTiket | +getDetailTiket()<br>+updateStatusTiket() |
 | C23 | TiketLaporanUI | - | +showDetailTiket()<br>+pressBalasTiket() |
 | C24 | TiketLaporanController | - | +getTiketLaporan()<br>+balasTiket()<br>+tutupTiket() |
