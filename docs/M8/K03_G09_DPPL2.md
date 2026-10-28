@@ -350,19 +350,18 @@ Tabel 5.2.1. Query Operasi [Nama Operasi]
 *[Ulangi pola 5.2.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
-## 5.3 Kelas [Nama Kelas 3]
+## 5.3 Kelas PemberiJasa
 
-**Nama Kelas:** *[Nama kelas]*  
-**ID Kelas:** *[ID kelas]*
+**Nama Kelas:** PemberiJasa  
+**ID Kelas:** C04
 
-Tabel 5.3.1. Operasi Kelas [Nama Kelas 3]
+Tabel 5.3.1. Operasi Kelas PemberiJasa
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
+| `cekInfoLogin(input username: String, input password: String): Boolean` | public | Menjalankan query ke database untuk melihat apakah informasi login yang digunakan sesuai dengan informasi pada tabel pengguna |
 
-Tabel 5.3.2. Atribut Kelas [Nama Kelas 3]
+Tabel 5.3.2. Atribut Kelas PemberiJasa
 
 | Nama Atribut | Visibility (private, public) | Tipe |
 | :--- | :--- | :--- |
@@ -371,29 +370,43 @@ Tabel 5.3.2. Atribut Kelas [Nama Kelas 3]
 
 ### 5.3.1 Algoritma/Query
 
-Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
-
-**Nama Kelas:** *[Nama kelas]*  
-**Nama Operasi:** *[Signature operasi]*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** PemberiJasa
+**Nama Operasi:** cekInfoLogin
+**ID Algoritma:** Alg-XXX
 
 ```text
-[Tuliskan pseudocode algoritma operasi di sini.]
+public function cekInfoLogin(input username:String, input password:String)
+KAMUS LOKAL
+correctPassword: Boolean
+userRecord: Row Table Pengguna
+
+ALGORITMA
+    if (username.strip = "" or password.strip = "") then
+        --> false
+    userRecord <- execute_query(Q-XXX, [trim(username)])
+    
+    if (userRecord = NUL) then
+        {Mensimulasikan proses check hasing}
+        verify_hash(password, "algoritma_hashing(data_dummy)")
+        return false
+    isPasswordValid <-- verify_hash(password, userRecord.passwordHash)
+    if not(isPasswordValid) then
+        --> false
+    {Insialisasi Objek lokal jika kredensial valid}
+    this.idPengguna <- userRecord.id_pengguna
+    this.username <- userRecord.username
+    this.email <- userRecord.email
+    this.namaPengguna <- userRecord.nama_pengguna
+    --> true
 ```
 
-Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
-
-Tabel 5.3.1. Query Operasi [Nama Operasi]
+Tabel 5.3.1 Query Operasi cekInfoLogin
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
-| *...* | *...* | *...* |
-
+| Q-XXX | `SELECT id_pengguna, nama_pengguna, username, password, email FROM pengguna WHERE username = $1;` | Mengambil data akun dan hash password dari tabel pengguna berdasarkan nama pengguna. |
 
 ### 5.3.2 Algoritma/Query
-
-*[Ulangi pola 5.3.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
 ## 5.4 Kelas [Nama Kelas 4]
@@ -424,17 +437,12 @@ Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Al
 **ID Algoritma:** *[Algo-001]*
 
 ```text
-[Tuliskan pseudocode algoritma operasi di sini.]
 ```
-
-Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
 
 Tabel 5.4.1. Query Operasi [Nama Operasi]
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
-| *...* | *...* | *...* |
 
 
 ### 5.4.2 Algoritma/Query
@@ -442,19 +450,18 @@ Tabel 5.4.1. Query Operasi [Nama Operasi]
 *[Ulangi pola 5.4.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
-## 5.5 Kelas [Nama Kelas 5]
+## 5.5 Kelas Pelanggan
 
-**Nama Kelas:** *[Nama kelas]*  
-**ID Kelas:** *[ID kelas]*
+**Nama Kelas:** Pelanggan <br> 
+**ID Kelas:** C07
 
-Tabel 5.5.1. Operasi Kelas [Nama Kelas 5]
+Tabel 5.5.1 Operasi Kelas Pelanggan
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
+| `cekInfoLogin(input username: String, input password: String): Boolean` | public | Menjalankan query ke database untuk melihat apakah informasi login yang digunakan sesuai dengan informasi pada tabel pengguna |
 
-Tabel 5.5.2. Atribut Kelas [Nama Kelas 5]
+Tabel 5.5.2 Atribut Kelas Pelanggan
 
 | Nama Atribut | Visibility (private, public) | Tipe |
 | :--- | :--- | :--- |
@@ -463,25 +470,41 @@ Tabel 5.5.2. Atribut Kelas [Nama Kelas 5]
 
 ### 5.5.1 Algoritma/Query
 
-Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
-
-**Nama Kelas:** *[Nama kelas]*  
-**Nama Operasi:** *[Signature operasi]*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** Pelanggan 
+**Nama Operasi:** cekInfoLogin
+**ID Algoritma:** Alg-XXX
 
 ```text
-[Tuliskan pseudocode algoritma operasi di sini.]
+public function cekInfoLogin(input username:String, input password:String)
+KAMUS LOKAL
+correctPassword: Boolean
+userRecord: Row Table Pengguna
+
+ALGORITMA
+    if (username.strip = "" or password.strip = "") then
+        --> false
+    userRecord <- execute_query(Q-XXX, [trim(username)])
+    
+    if (userRecord = NUL) then
+        {Mensimulasikan proses check hasing}
+        verify_hash(password, "algoritma_hashing(data_dummy)")
+        return false
+    isPasswordValid <-- verify_hash(password, userRecord.passwordHash)
+    if not(isPasswordValid) then
+        --> false
+    {Insialisasi Objek lokal jika kredensial valid}
+    this.idPengguna <- userRecord.id_pengguna
+    this.username <- userRecord.username
+    this.email <- userRecord.email
+    this.namaPengguna <- userRecord.nama_pengguna
+    --> true
 ```
 
-Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
-
-Tabel 5.5.1. Query Operasi [Nama Operasi]
+Tabel 5.5.3 Query Operasi cekInfoLogin
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
-| *...* | *...* | *...* |
-
+| Q-XXX | `SELECT id_pengguna, nama_pengguna, username, password, email FROM pengguna WHERE username = $1;` | Mengambil data akun dan hash password dari tabel pengguna berdasarkan nama pengguna. |
 
 ### 5.5.2 Algoritma/Query
 
@@ -534,19 +557,18 @@ Tabel 5.6.1. Query Operasi [Nama Operasi]
 *[Ulangi pola 5.6.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
-## 5.7 Kelas [Nama Kelas 7]
+## 5.7 Kelas LayananPelanggan
 
-**Nama Kelas:** *[Nama kelas]*  
-**ID Kelas:** *[ID kelas]*
+**Nama Kelas:** LayananPelanggan  
+**ID Kelas:** C10
 
-Tabel 5.7.1. Operasi Kelas [Nama Kelas 7]
+Tabel 5.7.1 Operasi Kelas LayananPelanggan
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
+| `cekInfoLogin(input username: String, input password: String): Boolean` | public | Menjalankan query ke database untuk melihat apakah informasi login yang digunakan sesuai dengan informasi pada tabel pengguna |
 
-Tabel 5.7.2. Atribut Kelas [Nama Kelas 7]
+Tabel 5.7.2 Atribut Kelas LayananPelanggan
 
 | Nama Atribut | Visibility (private, public) | Tipe |
 | :--- | :--- | :--- |
@@ -555,25 +577,40 @@ Tabel 5.7.2. Atribut Kelas [Nama Kelas 7]
 
 ### 5.7.1 Algoritma/Query
 
-Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
-
-**Nama Kelas:** *[Nama kelas]*  
-**Nama Operasi:** *[Signature operasi]*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** LayananPelanggan  
+**Nama Operasi:** cekInfoLogin
+**ID Algoritma:** Alg-XXX
 
 ```text
-[Tuliskan pseudocode algoritma operasi di sini.]
+public function cekInfoLogin(input username:String, input password:String)
+KAMUS LOKAL
+correctPassword: Boolean
+userRecord: Row Table Pengguna
+
+ALGORITMA
+    if (username.strip = "" or password.strip = "") then
+        --> false
+    userRecord <- execute_query(Q-XXX, [trim(username)])
+    
+    if (userRecord = NUL) then
+        {Mensimulasikan proses check hasing}
+        verify_hash(password, "algoritma_hashing(data_dummy)")
+        return false
+    isPasswordValid <-- verify_hash(password, userRecord.passwordHash)
+    if not(isPasswordValid) then
+        --> false
+    {Insialisasi Objek lokal jika kredensial valid}
+    this.idPengguna <- userRecord.id_pengguna
+    this.username <- userRecord.username
+    this.email <- userRecord.email
+    this.namaPengguna <- userRecord.nama_pengguna
+    --> true
 ```
-
-Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
-
-Tabel 5.7.1. Query Operasi [Nama Operasi]
+Tabel 5.7.3 Query Operasi cekInfoLogin
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
-| *...* | *...* | *...* |
-
+| Q-XXX | `SELECT id_pengguna, nama_pengguna, username, password, email FROM pengguna WHERE username = $1;` | Mengambil data akun dan hash password dari tabel pengguna berdasarkan nama pengguna. |
 
 ### 5.7.2 Algoritma/Query
 
