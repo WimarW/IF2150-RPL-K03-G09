@@ -7,42 +7,36 @@ DESKRIPSI PERANCANGAN PERANGKAT LUNAK (DPPL)
 </h1>
 <br>
 
-## *Nama Perangkat Lunak*
-### *[Logo Perangkat Lunak]*
+## Cari Uang
+### <img src="./assets/diagram/cariuang.svg" width="100" height="100">
 
-### Untuk: *[Nama Asisten]*
+### Untuk: Agatha Tatianingseto
 
 Dipersiapkan oleh:
 | Informasi | Keterangan |
 | --- | --- |
-| Kelas | *\[Kelas\]* |
-| Kelompok | *\[Nomor Kelompok\]*  |
+| Kelas | 3 |
+| Kelompok | 9  |
 
 | NIM | Nama |
 |---|---|
-| *[NIM 1]* | *[Nama Anggota 1]* |
-| *[NIM 2]* | *[Nama Anggota 2]* |
-| *[NIM 3]* | *[Nama Anggota 3]* |
-| *[NIM 4]* | *[Nama Anggota 4]* |
-| *[NIM 5]* | *[Nama Anggota 5]* |
----
+| 13525120 | Naufal Hasbialhaq |
+| 13525009 | Wimar Widiarto |
+| 13525093 | Vinsensius Juan Setiady |
+| 13525126 | Raymond Edson Sabajan |
+| 13525048 | Yohanes Nicholas Setiawan |
+
 
 ## Daftar Perubahan
 
 | Revisi | Deskripsi |
 | :--- | :--- |
-| *A* | *Deskripsikan perubahan yang dilakukan dari dokumen sebelumnya pada dokumen ini. Jika tidak terdapat perubahan, harap kosongkan tabel.* |
+| *A* | Dihapus method yang bernama `updateAkumulasiRating()` pada objek pengguna |
 | *B* |  |
 | *C* |  |
 | ... |  |
 
 ---
-
-<br>
-
-> **Petunjuk pengerjaan:** *[Silahkan hapus bagian ini setelah selesai mengerjakan]*
->
-> Dokumen ini melanjutkan **Deskripsi Perancangan Perangkat Lunak**. Gunakan nama, ID, kebutuhan, dan use case yang konsisten dengan kedua dokumen tersebut. Contoh pola ID baru di bawah dapat disesuaikan dengan kesepakatan kelompok, ID yang sudah ada tetap dipertahankan.
 
 <br>
 
@@ -253,41 +247,52 @@ Tabel 5.1. Daftar Kelas Perancangan dan Kelas Analisis Terkait
 | ... | *...* | *...* |
 
 Untuk **setiap kelas**, identifikasi operasi berdasarkan tanggung jawab kelas beserta *visibility*-nya, serta atribut beserta *visibility* dan tipenya. Buat subbab tersendiri untuk setiap kelas.
-## 5.1 Kelas [Nama Kelas 1]
+## 5.1 Kelas Pengguna
 
-**Nama Kelas:** *[Nama kelas]*  
-**ID Kelas:** *[ID kelas]*
+**Nama Kelas:** Pengguna <br>
+**ID Kelas:** C01
 
-Tabel 5.1.1. Operasi Kelas [Nama Kelas 1]
+Tabel 5.1.1. Operasi Kelas Pengguna
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
+| `getId(): String` | public | Mengembalikan id unik pengguna |
+| `getNomor(): String` | public | Mengembalikan nomor telepon pengguna |
+| `getEmail(): String` | public | Mengembalikan email pengguna |
+| `getNama(): String` | public | Mengembalikan nama pengguna |
+| `setNomor(nomorBaru: String): Void`| public | Memperbarui nomor telepon pengguna |
+| `setEmail(emailBaru: String): Void`| public | Membperbarui email pengguna | 
+| `setNama(namaBaru: String): Void` | public | Memperbarui nama pengguna | 
+| `getAkumulasiRating(): Float` | public | Mengembalikan rata-rata akumulasi rating pengguna |
 
-Tabel 5.1.2. Atribut Kelas [Nama Kelas 1]
+ 
+Tabel 5.1.2. Atribut Kelas Pengguna
 
 | Nama Atribut | Visibility (private, public) | Tipe |
 | :--- | :--- | :--- |
-| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
-| *...* | *...* | *...* |
+| idPengguna | private | String |
+| nomorTelepon | private | String |
+| email | private | String | 
+| namaPengguna | private | String |
+| akumulasiRating | private | Float |
+| riwayatRating | private | Float[] | 
+| username | private | String |
+| passwordHash | private | String |
 
 ### 5.1.1 Algoritma/Query
 
-Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
+**Nama Kelas:**  
+**Nama Operasi:** 
+**ID Algoritma:** 
 
-**Nama Kelas:** *[Nama kelas]*  
-**Nama Operasi:** *[Signature operasi]*  
-**ID Algoritma:** *[Algo-001]*
 
 ```text
-[Tuliskan pseudocode algoritma operasi di sini.]
+
 ```
 
 Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
 
-Tabel 5.1.1. Query Operasi [Nama Operasi]
-
+Tabel 5.1.1. Query Opersi [Nama Operasi]
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
 | *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
@@ -346,17 +351,22 @@ Tabel 5.2.1. Query Operasi [Nama Operasi]
 
 
 ## 5.3 Kelas PemberiJasa
+## 5.3 Kelas PemberiJasa
 
+**Nama Kelas:** PemberiJasa  
+**ID Kelas:** C04
 **Nama Kelas:** *PemberiJasa*  
 **ID Kelas:** *C04*
 
 Tabel 5.3.1. Operasi Kelas PemberiJasa
+Tabel 5.3.1. Operasi Kelas PemberiJasa
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
+| `cekInfoLogin(input username: String, input password: String): Boolean` | public | Menjalankan query ke database untuk melihat apakah informasi login yang digunakan sesuai dengan informasi pada tabel pengguna |
 | laporkanMasalah() | Public | Pemberi jasa melaporkan masalah kepada layanan pelanggan |
 
-Tabel 5.3.2. Atribut Kelas [Nama Kelas 3]
+Tabel 5.3.2. Atribut Kelas PemberiJasa
 
 | Nama Atribut | Visibility (private, public) | Tipe |
 | :--- | :--- | :--- |
@@ -365,35 +375,52 @@ Tabel 5.3.2. Atribut Kelas [Nama Kelas 3]
 
 ### 5.3.1 Algoritma/Query
 
-Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
-
-**Nama Kelas:** *[Nama kelas]*  
-**Nama Operasi:** *[Signature operasi]*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** PemberiJasa
+**Nama Operasi:** cekInfoLogin
+**ID Algoritma:** Alg-XXX
 
 ```text
-[Tuliskan pseudocode algoritma operasi di sini.]
+public function cekInfoLogin(input username:String, input password:String)
+KAMUS LOKAL
+correctPassword: Boolean
+userRecord: Row Table Pengguna
+
+ALGORITMA
+    if (username.strip = "" or password.strip = "") then
+        --> false
+    userRecord <- execute_query(Q-XXX, [trim(username)])
+    
+    if (userRecord = NUL) then
+        {Mensimulasikan proses check hasing}
+        verify_hash(password, "algoritma_hashing(data_dummy)")
+        return false
+    isPasswordValid <-- verify_hash(password, userRecord.passwordHash)
+    if not(isPasswordValid) then
+        --> false
+    {Insialisasi Objek lokal jika kredensial valid}
+    this.idPengguna <- userRecord.id_pengguna
+    this.username <- userRecord.username
+    this.email <- userRecord.email
+    this.namaPengguna <- userRecord.nama_pengguna
+    --> true
 ```
 
-Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
-
-Tabel 5.3.1. Query Operasi [Nama Operasi]
+Tabel 5.3.1 Query Operasi cekInfoLogin
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
-| *...* | *...* | *...* |
-
+| Q-XXX | `SELECT id_pengguna, nama_pengguna, username, password, email FROM pengguna WHERE username = $1;` | Mengambil data akun dan hash password dari tabel pengguna berdasarkan nama pengguna. |
 
 ### 5.3.2 Algoritma/Query
 
 *[Ulangi pola 5.3.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
-
 ## 5.4 Kelas PemberiJasaController
 
-**Nama Kelas:** *PemberiJasaController*  
-**ID Kelas:** *C06*
+## 5.4 Kelas [Nama Kelas 4]
+
+**Nama Kelas:** *[Nama kelas]*  
+**ID Kelas:** *[ID kelas]*
 
 Tabel 5.4.1. Operasi Kelas PemberiJasaController
 
@@ -419,17 +446,12 @@ Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Al
 **ID Algoritma:** *[Algo-001]*
 
 ```text
-[Tuliskan pseudocode algoritma operasi di sini.]
 ```
-
-Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
 
 Tabel 5.4.1. Query Operasi [Nama Operasi]
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
-| *...* | *...* | *...* |
 
 
 ### 5.4.2 Algoritma/Query
@@ -441,15 +463,17 @@ Tabel 5.4.1. Query Operasi [Nama Operasi]
 
 **Nama Kelas:** *Pelanggan*  
 **ID Kelas:** *C07*
+**Nama Kelas:** Pelanggan <br> 
+**ID Kelas:** C07
 
 Tabel 5.5.1. Operasi Kelas Pelanggan
+Tabel 5.5.1 Operasi Kelas Pelanggan
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| laporkanMasalah() | Public | Pelanggan melaporkan masalah ke layanan pelanggan |
+| `cekInfoLogin(input username: String, input password: String): Boolean` | public | Menjalankan query ke database untuk melihat apakah informasi login yang digunakan sesuai dengan informasi pada tabel pengguna |
 
-Tabel 5.5.2. Atribut Kelas [Nama Kelas 5]
+Tabel 5.5.2 Atribut Kelas Pelanggan
 
 | Nama Atribut | Visibility (private, public) | Tipe |
 | :--- | :--- | :--- |
@@ -463,20 +487,41 @@ Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Al
 **Nama Kelas:** *Pelanggan*  
 **Nama Operasi:** *laporkanMasalah()*  
 **ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** Pelanggan 
+**Nama Operasi:** cekInfoLogin
+**ID Algoritma:** Alg-XXX
 
 ```text
-[Tuliskan pseudocode algoritma operasi di sini.]
+public function cekInfoLogin(input username:String, input password:String)
+KAMUS LOKAL
+correctPassword: Boolean
+userRecord: Row Table Pengguna
+
+ALGORITMA
+    if (username.strip = "" or password.strip = "") then
+        --> false
+    userRecord <- execute_query(Q-XXX, [trim(username)])
+    
+    if (userRecord = NUL) then
+        {Mensimulasikan proses check hasing}
+        verify_hash(password, "algoritma_hashing(data_dummy)")
+        return false
+    isPasswordValid <-- verify_hash(password, userRecord.passwordHash)
+    if not(isPasswordValid) then
+        --> false
+    {Insialisasi Objek lokal jika kredensial valid}
+    this.idPengguna <- userRecord.id_pengguna
+    this.username <- userRecord.username
+    this.email <- userRecord.email
+    this.namaPengguna <- userRecord.nama_pengguna
+    --> true
 ```
 
-Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
-
-Tabel 5.5.1. Query Operasi [Nama Operasi]
+Tabel 5.5.3 Query Operasi cekInfoLogin
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
-| *...* | *...* | *...* |
-
+| Q-XXX | `SELECT id_pengguna, nama_pengguna, username, password, email FROM pengguna WHERE username = $1;` | Mengambil data akun dan hash password dari tabel pengguna berdasarkan nama pengguna. |
 
 ### 5.5.2 Algoritma/Query
 
@@ -529,41 +574,60 @@ Tabel 5.6.1. Query Operasi [Nama Operasi]
 *[Ulangi pola 5.6.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
-## 5.7 Kelas Pelanggan
+## 5.7 Kelas LayananPelanggan
 
-**Nama Kelas:** *Pelanggan*  
-**ID Kelas:** *C07*
+**Nama Kelas:** LayananPelanggan  
+**ID Kelas:** C10
 
-Tabel 5.7.1. Operasi Kelas Pelanggan
+Tabel 5.7.1 Operasi Kelas LayananPelanggan
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| konfirmasiPekerjaan() | Public | Mengonfirmasi pekerjaan setelah selesai dikerjakan |
+| `cekInfoLogin(input username: String, input password: String): Boolean` | public | Menjalankan query ke database untuk melihat apakah informasi login yang digunakan sesuai dengan informasi pada tabel pengguna |
 
+Tabel 5.7.2 Atribut Kelas LayananPelanggan
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
+| *...* | *...* | *...* |
 
 ### 5.7.1 Algoritma/Query
 
-Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
-
-**Nama Kelas:** *Pelanggan*  
-**Nama Operasi:** *konfirmasiPekerjaan()*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** LayananPelanggan  
+**Nama Operasi:** cekInfoLogin
+**ID Algoritma:** Alg-XXX
 
 ```text
-public konfirmasiPekerjaan(idKontrak : Integer) {
-    return KontrakPekerjaanController.konfirmasiPekerjaan(idKontrak)
-}
+public function cekInfoLogin(input username:String, input password:String)
+KAMUS LOKAL
+correctPassword: Boolean
+userRecord: Row Table Pengguna
+
+ALGORITMA
+    if (username.strip = "" or password.strip = "") then
+        --> false
+    userRecord <- execute_query(Q-XXX, [trim(username)])
+    
+    if (userRecord = NUL) then
+        {Mensimulasikan proses check hasing}
+        verify_hash(password, "algoritma_hashing(data_dummy)")
+        return false
+    isPasswordValid <-- verify_hash(password, userRecord.passwordHash)
+    if not(isPasswordValid) then
+        --> false
+    {Insialisasi Objek lokal jika kredensial valid}
+    this.idPengguna <- userRecord.id_pengguna
+    this.username <- userRecord.username
+    this.email <- userRecord.email
+    this.namaPengguna <- userRecord.nama_pengguna
+    --> true
 ```
-
-Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
-
-Tabel 5.7.1. Query Operasi [Nama Operasi]
+Tabel 5.7.3 Query Operasi cekInfoLogin
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
-| *...* | *...* | *...* |
-
+| Q-XXX | `SELECT id_pengguna, nama_pengguna, username, password, email FROM pengguna WHERE username = $1;` | Mengambil data akun dan hash password dari tabel pengguna berdasarkan nama pengguna. |
 
 ### 5.7.2 Algoritma/Query
 
@@ -1036,96 +1100,200 @@ public teruskanKeNotifikasi()
 ```
 
 
-## 5.17 Kelas [Nama Kelas 17]
+## 5.17 Kelas Rating
 
-**Nama Kelas:** *[Nama kelas]*  
-**ID Kelas:** *[ID kelas]*
+**Nama Kelas:** Rating <br>  
+**ID Kelas:** C25
 
-Tabel 5.17.1. Operasi Kelas [Nama Kelas 17]
-
+Tabel 5.17.1 Operasi Kelas Rating
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
+| `getIdRating(): String` | public | Mengembalikan id rating |
+| `getIdPemberi(): String` | public | Mengembalikan id pengguna yang memberikan rating |
+| `getIdPenerima(): String` | public | Mengembalikan id pengguna yang menerima rating |
+| `getIdKontrakPekerjaan(): String` | public | Mengembalikan id kontrak pekerjaan yang dinilai |
+| `getRatingValue(): String` | public | Mengembalikan nilai rating yang diberikan |
+| `makeRating(idRating: String, idPemberi: String, idPenerima: String, idKontrak: String, nilaiRating: Float): Rating` | public | Membuat objek Rating baru dengan atribut yang ditentukan |
+| `simpanKeDb(rating: Rating): boolean` | public | Menyimpan data transaksi penilaian ke database |
+| `updateRatingPengguna(): boolean` | public | Memperbarui riwayat dan akumulasi nilai rating pada profil pengguna penerima |
 
-Tabel 5.17.2. Atribut Kelas [Nama Kelas 17]
+
+Tabel 5.17.2 Atribut Kelas Rating
 
 | Nama Atribut | Visibility (private, public) | Tipe |
 | :--- | :--- | :--- |
-| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
-| *...* | *...* | *...* |
+| idRating | private | String |
+| idPemberi | private | String |
+| idPenerima | private | String |
+| idKontrakPekerjaan | private | String |
+| nilaiRating | private | float | 
+| tanggalRating | private | Date | 
 
 ### 5.17.1 Algoritma/Query
 
-Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
-
-**Nama Kelas:** *[Nama kelas]*  
-**Nama Operasi:** *[Signature operasi]*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** Rating <br>
+**Nama Operasi:** simpanKeDb <br>
+**ID Algoritma:** Algo-XXX
 
 ```text
-[Tuliskan pseudocode algoritma operasi di sini.]
+public function simpanKeDb() -> boolean
+KAMUS LOKAL
+isSucces : Boolean
+
+ALGORITMA
+
+validateRatingValue(this.nilaiRating)
+
+{Buat Entry Rating Baru pada database}
+execute_query(Q-XXX, [
+            this.idRating,
+            this.idPenggunaPemberi,
+            this.idPenggunaPenerima,
+            this.idKontrakPekerjaan,
+            this.nilaiRating
+        ])
+
+{Update bool hasRating di kontrakPekerjaan}
+execute_query(Q-XXX, [this.idKontrakPekerjaan])
+
 ```
-
-Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
-
-Tabel 5.17.1. Query Operasi [Nama Operasi]
+Tabel 5.17.3 Query Operasi simpanKeDb
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
-| *...* | *...* | *...* |
+| Q-XXX | `INSERT INTO rating (id_rating, id_pengguna_pemberi, id_pengguna_penerima, id_kontrak_pekerjaan, nilai_rating, tanggal_rating) VALUES ($1, $2, $3, $4, $5, NOW());` | Menambah entry rating baru pada tabel rating |
+| Q-XXX | `UPDATE kontrak_pekerjaan SET has_rating = TRUE WHERE id_kontrak_pekerjaan = $1;` | Memperbarui status kontrak kerja menjadi telah dinilai |
 
 
 ### 5.17.2 Algoritma/Query
+**Nama Kelas:** Rating <br>
+**Nama Operasi:** makeRating <br>
+**ID Algoritma:** Algo-XXX
 
-*[Ulangi pola 5.17.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
+```text
+public function makeRating(idRating: String, idPemberi: String, idPenerima: String, idKontrak: String, nilaiRating: Float) -> Rating
+KAMUS LOKAL
+rating: Rating
+
+ALGORITMA
+
+    rating.idRating <- idRating
+    rating.idPembero <- idPemberi
+    rating.idPenerima <- idPenerima
+    rating.idKontrak <- idKontrak
+    
+    if validateRatingValue(nilaiRating)
+        rating.nilaiRating <- nilaiRating
+    else 
+        rating.nilaiRating <- -1
+    --> rating
+```
+
+### 5.17.3 Algoritma/Query
+**Nama Kelas:** Rating <br>
+**Nama Operasi:** updateRatingPengguna <br>
+**ID Algoritma:** Algo-XXX
+
+```text
+public function updateRatingPengguna() -> Boolean
+KAMUS LOKAL
+
+ALGORITMA
+execute_query(Q-XXX, [
+            this.nilaiRating,
+            this.idPenggunaPenerima
+        ])
+
+```
+
+Tabel 5.17.4 Query Operasi updateRatingPengguna
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-XXX | `UPDATE pengguna SET riwayat_rating = array_append(riwayat_rating, $1), akumulasi_rating = (SELECT ROUND(AVG(val)::numeric, 2) FROM unnest(array_append(riwayat_rating, $1)) AS val) WHERE id_pengguna = $2;` | Menambahkan skor ulasan ke riwayat rating sekaligus menghitung ulang rata-rata akumulasi rating pengguna tujuan |
+
+### 5.17.4 Algoritma/Query
+**Nama Kelas:** Rating <br>
+**Nama Operasi:** getIdRating <br>
+**ID Algoritma:** Algo-XXX
+
+```text
+public function getIdRating() -> String
+ALGORITMA
+    --> this.idRating
+```
+
+### 5.17.5 Algoritma/Query
+**Nama Kelas:** Rating <br>
+**Nama Operasi:** getIdPemberi <br>
+**ID Algoritma:** Algo-XXX
+
+```text
+public function getIdPemberi() -> String
+ALGORITMA
+    --> this.idPemberi
+```
+
+### 5.17.6 Algoritma/Query
+**Nama Kelas:** Rating <br>
+**Nama Operasi:** getIdPenerima <br>
+**ID Algoritma:** Algo-XXX
+
+```text
+public function getIdPenerima() -> String
+ALGORITMA
+    --> this.idPenerima
+```
+### 5.17.7 Algoritma/Query
+**Nama Kelas:** Rating <br>
+**Nama Operasi:** getIdKontrakPekerjaan <br>
+**ID Algoritma:** Algo-XXX
+
+```text
+public function getIdKontrakPekerjaan() -> String
+ALGORITMA
+    --> this.idKontrakPekerjaan
+```
+
+### 5.17.8 Algoritma/Query
+**Nama Kelas:** Rating <br>
+**Nama Operasi:** getIdKontrakPekerjaan <br>
+**ID Algoritma:** Algo-XXX
+
+```text
+public function getRatingValue() -> String
+ALGORITMA
+    --> this.nilaiRating
+```
 
 
-## 5.18 Kelas [Nama Kelas 18]
+## 5.18 Kelas RatingController
 
-**Nama Kelas:** *[Nama kelas]*  
-**ID Kelas:** *[ID kelas]*
+**Nama Kelas:** RatingController  
+**ID Kelas:** C27
 
 Tabel 5.18.1. Operasi Kelas [Nama Kelas 18]
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
 | *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
-
-Tabel 5.18.2. Atribut Kelas [Nama Kelas 18]
-
-| Nama Atribut | Visibility (private, public) | Tipe |
-| :--- | :--- | :--- |
-| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
-| *...* | *...* | *...* |
+| `validateRatingValue(val: Integer): Boolean` | public | Memvalidasi nilai rating yang diberikan |
 
 ### 5.18.1 Algoritma/Query
 
-Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
-
-**Nama Kelas:** *[Nama kelas]*  
-**Nama Operasi:** *[Signature operasi]*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** RatingController <br>
+**Nama Operasi:** validateRatingValue <br> 
+**ID Algoritma:** Alg-XXX
 
 ```text
-[Tuliskan pseudocode algoritma operasi di sini.]
+public function validateRatingValue(input val: Integer) -> Boolean
+ALGORITMA
+if (this.nilaiRating < 1 or this.nilaiRating > 5) then
+    --> return false
+if (this.idRating = "" or this.idPenggunaPemberi = "" or this.idPenggunaPenerima = "") then
+    --> false
+--> true
 ```
-
-Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
-
-Tabel 5.18.1. Query Operasi [Nama Operasi]
-
-| No Query | Query | Keterangan |
-| :--- | :--- | :--- |
-| *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
-| *...* | *...* | *...* |
-
-
-### 5.18.2 Algoritma/Query
-
-*[Ulangi pola 5.18.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
 ## 5.19 Kelas [Nama Kelas 19]
