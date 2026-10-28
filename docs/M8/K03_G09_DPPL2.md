@@ -3030,8 +3030,6 @@ Tabel 6.Y. Rancangan Antarmuka Keseluruhan
 
 # BAB 7: Matriks Kerunutan
 
-Petakan kelas perancangan dengan use case yang terkait. Gunakan **BAB 6 Traceability pada dokumen SKPL** sebagai acuan keterkaitan kelas analisis dan use case, lalu sesuaikan dengan realisasi use case dan kelas perancangan pada BAB 3–BAB 5 DPPL.
-
 Tabel 7.1. Matriks Kerunutan Kelas terhadap Use Case
 
 | Kelas | Use Case Terkait |
