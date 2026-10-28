@@ -345,17 +345,16 @@ Tabel 5.2.1. Query Operasi [Nama Operasi]
 *[Ulangi pola 5.2.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
-## 5.3 Kelas [Nama Kelas 3]
+## 5.3 Kelas PemberiJasa
 
-**Nama Kelas:** *[Nama kelas]*  
-**ID Kelas:** *[ID kelas]*
+**Nama Kelas:** *PemberiJasa*  
+**ID Kelas:** *C04*
 
-Tabel 5.3.1. Operasi Kelas [Nama Kelas 3]
+Tabel 5.3.1. Operasi Kelas PemberiJasa
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
+| laporkanMasalah() | Public | Pemberi jasa melaporkan masalah kepada layanan pelanggan |
 
 Tabel 5.3.2. Atribut Kelas [Nama Kelas 3]
 
@@ -391,17 +390,18 @@ Tabel 5.3.1. Query Operasi [Nama Operasi]
 *[Ulangi pola 5.3.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
-## 5.4 Kelas [Nama Kelas 4]
+## 5.4 Kelas PemberiJasaController
 
-**Nama Kelas:** *[Nama kelas]*  
-**ID Kelas:** *[ID kelas]*
+**Nama Kelas:** *PemberiJasaController*  
+**ID Kelas:** *C06*
 
-Tabel 5.4.1. Operasi Kelas [Nama Kelas 4]
+Tabel 5.4.1. Operasi Kelas PemberiJasaController
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
 | *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
+| requestFormTiket() | Public | Meminta form tiket untuk diisi dan dikirimkan le layanan pelanggan |
+
 
 Tabel 5.4.2. Atribut Kelas [Nama Kelas 4]
 
@@ -437,17 +437,17 @@ Tabel 5.4.1. Query Operasi [Nama Operasi]
 *[Ulangi pola 5.4.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
-## 5.5 Kelas [Nama Kelas 5]
+## 5.5 Kelas Pelanggan
 
-**Nama Kelas:** *[Nama kelas]*  
-**ID Kelas:** *[ID kelas]*
+**Nama Kelas:** *Pelanggan*  
+**ID Kelas:** *C07*
 
-Tabel 5.5.1. Operasi Kelas [Nama Kelas 5]
+Tabel 5.5.1. Operasi Kelas Pelanggan
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
 | *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
+| laporkanMasalah() | Public | Pelanggan melaporkan masalah ke layanan pelanggan |
 
 Tabel 5.5.2. Atribut Kelas [Nama Kelas 5]
 
@@ -460,8 +460,8 @@ Tabel 5.5.2. Atribut Kelas [Nama Kelas 5]
 
 Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
 
-**Nama Kelas:** *[Nama kelas]*  
-**Nama Operasi:** *[Signature operasi]*  
+**Nama Kelas:** *Pelanggan*  
+**Nama Operasi:** *laporkanMasalah()*  
 **ID Algoritma:** *[Algo-001]*
 
 ```text
@@ -529,35 +529,30 @@ Tabel 5.6.1. Query Operasi [Nama Operasi]
 *[Ulangi pola 5.6.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
-## 5.7 Kelas [Nama Kelas 7]
+## 5.7 Kelas Pelanggan
 
-**Nama Kelas:** *[Nama kelas]*  
-**ID Kelas:** *[ID kelas]*
+**Nama Kelas:** *Pelanggan*  
+**ID Kelas:** *C07*
 
-Tabel 5.7.1. Operasi Kelas [Nama Kelas 7]
+Tabel 5.7.1. Operasi Kelas Pelanggan
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
+| konfirmasiPekerjaan() | Public | Mengonfirmasi pekerjaan setelah selesai dikerjakan |
 
-Tabel 5.7.2. Atribut Kelas [Nama Kelas 7]
-
-| Nama Atribut | Visibility (private, public) | Tipe |
-| :--- | :--- | :--- |
-| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
-| *...* | *...* | *...* |
 
 ### 5.7.1 Algoritma/Query
 
 Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
 
-**Nama Kelas:** *[Nama kelas]*  
-**Nama Operasi:** *[Signature operasi]*  
+**Nama Kelas:** *Pelanggan*  
+**Nama Operasi:** *konfirmasiPekerjaan()*  
 **ID Algoritma:** *[Algo-001]*
 
 ```text
-[Tuliskan pseudocode algoritma operasi di sini.]
+public konfirmasiPekerjaan(idKontrak : Integer) {
+    return KontrakPekerjaanController.konfirmasiPekerjaan(idKontrak)
+}
 ```
 
 Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
@@ -575,7 +570,7 @@ Tabel 5.7.1. Query Operasi [Nama Operasi]
 *[Ulangi pola 5.7.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
-## 5.8 Kelas [Nama Kelas 8]
+## 5.8 Kelas PelangganUI
 
 **Nama Kelas:** *[Nama kelas]*  
 **ID Kelas:** *[ID kelas]*
@@ -621,35 +616,28 @@ Tabel 5.8.1. Query Operasi [Nama Operasi]
 *[Ulangi pola 5.8.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
-## 5.9 Kelas [Nama Kelas 9]
+## 5.9 Kelas PelangganController
 
-**Nama Kelas:** *[Nama kelas]*  
-**ID Kelas:** *[ID kelas]*
+**Nama Kelas:** *PelangganController*  
+**ID Kelas:** *C09*
 
-Tabel 5.9.1. Operasi Kelas [Nama Kelas 9]
+Tabel 5.9.1. Operasi Kelas PelangganController
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
 | *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
 | *...* | *...* | *...* |
+| validasiInput(): Boolean | Public | Validasi input yang dikirim |
 
-Tabel 5.9.2. Atribut Kelas [Nama Kelas 9]
-
-| Nama Atribut | Visibility (private, public) | Tipe |
-| :--- | :--- | :--- |
-| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
-| *...* | *...* | *...* |
 
 ### 5.9.1 Algoritma/Query
 
-Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
-
-**Nama Kelas:** *[Nama kelas]*  
-**Nama Operasi:** *[Signature operasi]*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** *PelangganController* 
+**Nama Operasi:** *validasiInput()*  
+**ID Algoritma:** *[Algo-091]*
 
 ```text
-[Tuliskan pseudocode algoritma operasi di sini.]
+public validasiInput()
 ```
 
 Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
@@ -660,11 +648,6 @@ Tabel 5.9.1. Query Operasi [Nama Operasi]
 | :--- | :--- | :--- |
 | *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
 | *...* | *...* | *...* |
-
-
-### 5.9.2 Algoritma/Query
-
-*[Ulangi pola 5.9.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
 ## 5.10 Kelas [Nama Kelas 10]
@@ -713,17 +696,19 @@ Tabel 5.10.1. Query Operasi [Nama Operasi]
 *[Ulangi pola 5.10.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
-## 5.11 Kelas [Nama Kelas 11]
+## 5.11 Kelas KontrakPekerjaan
 
-**Nama Kelas:** *[Nama kelas]*  
-**ID Kelas:** *[ID kelas]*
+**Nama Kelas:** *KontrakPekerjaan*  
+**ID Kelas:** *C16*
 
-Tabel 5.11.1. Operasi Kelas [Nama Kelas 11]
+Tabel 5.11.1. Operasi Kelas KontrakPekerjaan
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
 | *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
+| fetchKontrakPekerjaan() : KontrakPekerjaan | Public | Mengambil data kontrak pekerjaan |
+| saveKontrak() : Boolean | Public | Menyimpan data kontrak pekerjaan |
+| statusUpdate() : Boolean
 
 Tabel 5.11.2. Atribut Kelas [Nama Kelas 11]
 
@@ -759,17 +744,18 @@ Tabel 5.11.1. Query Operasi [Nama Operasi]
 *[Ulangi pola 5.11.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
-## 5.12 Kelas [Nama Kelas 12]
+## 5.12 Kelas KontrakPekerjaanController
 
-**Nama Kelas:** *[Nama kelas]*  
-**ID Kelas:** *[ID kelas]*
+**Nama Kelas:** *KontrakPekerjaanController*  
+**ID Kelas:** *C18*
 
 Tabel 5.12.1. Operasi Kelas [Nama Kelas 12]
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
+| getKontrakPekerjaan() : KontrakPekerjaan | Public | Mengambil data kontrak pekerjaan |
+| kirimInput() | Public | Mengirim input kontrak pekerjaan |
+| konfirmasiPekerjaan(kontrak KontrakPekerjaan) : Boolean | Public | Mengonfirmasi pekerjaan yang telah selesai |
 
 Tabel 5.12.2. Atribut Kelas [Nama Kelas 12]
 
@@ -780,19 +766,49 @@ Tabel 5.12.2. Atribut Kelas [Nama Kelas 12]
 
 ### 5.12.1 Algoritma/Query
 
-Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
-
-**Nama Kelas:** *[Nama kelas]*  
-**Nama Operasi:** *[Signature operasi]*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** *KontrakPekerjaanController* 
+**Nama Operasi:** *requestKontrakPekerjaan()*  
+**ID Algoritma:** *[Algo-092]*
 
 ```text
-[Tuliskan pseudocode algoritma operasi di sini.]
+public getKontrakPekerjaan(idKontrakPekerjaan : Integer) -> KontrakPekerjaan {
+
+    KontrakPekerjaan temp = KontrakPekerjaan.fetchKontrakPekerjaan(idKontrakPekerjaan)
+
+    return temp
+}
 ```
 
 Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
 
-Tabel 5.12.1. Query Operasi [Nama Operasi]
+Tabel 5.9.1. Query Operasi [Nama Operasi]
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
+| *...* | *...* | *...* |
+
+### 5.12.2 Algoritma/Query
+
+**Nama Kelas:** *KontrakPekerjaanController* 
+**Nama Operasi:** *konfirmasiPekerjaan()*  
+**ID Algoritma:** *[Algo-093]*
+
+```text
+public konfirmasiPekerjaan(idKontrak : Integer) -> Boolean {
+    KontrakPekerjaan kontrak = getKontrakPekerjaan(idKontrak)
+    boolean isUpdated = kontrak.statusUpdate("Done")
+    if (isUpdated) {
+        return True
+    }
+    output("Gagal mengonfirmasi pekerjaan")
+    return False
+}
+```
+
+Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
+
+Tabel 5.9.1. Query Operasi [Nama Operasi]
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
@@ -800,12 +816,8 @@ Tabel 5.12.1. Query Operasi [Nama Operasi]
 | *...* | *...* | *...* |
 
 
-### 5.12.2 Algoritma/Query
 
-*[Ulangi pola 5.12.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
-
-
-## 5.13 Kelas [Nama Kelas 13]
+## 5.13 Kelas 
 
 **Nama Kelas:** *[Nama kelas]*  
 **ID Kelas:** *[ID kelas]*
@@ -943,17 +955,17 @@ Tabel 5.15.1. Query Operasi [Nama Operasi]
 *[Ulangi pola 5.15.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
-## 5.16 Kelas [Nama Kelas 16]
+## 5.16 Kelas TiketLaporanController
 
-**Nama Kelas:** *[Nama kelas]*  
-**ID Kelas:** *[ID kelas]*
+**Nama Kelas:** *TiketLaporanController*  
+**ID Kelas:** *C24*
 
-Tabel 5.16.1. Operasi Kelas [Nama Kelas 16]
+Tabel 5.16.1. Operasi Kelas TiketLaporanController
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
+| validasiFormTiket() : Boolean | Public | Memvalidasi input yang dimasukkan ke dalam form tiket |
+| buatTiket(new TiketLaporan) : Boolean | Public | Mengatur pembuatan dan pengisian data tiket laporan |
 
 Tabel 5.16.2. Atribut Kelas [Nama Kelas 16]
 
@@ -964,29 +976,64 @@ Tabel 5.16.2. Atribut Kelas [Nama Kelas 16]
 
 ### 5.16.1 Algoritma/Query
 
-Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
-
-**Nama Kelas:** *[Nama kelas]*  
-**Nama Operasi:** *[Signature operasi]*  
+**Nama Kelas:** *TiketLaporanController*  
+**Nama Operasi:** *validasiFormTiket()*  
 **ID Algoritma:** *[Algo-001]*
 
 ```text
-[Tuliskan pseudocode algoritma operasi di sini.]
+public validasiFormTiket(tiket : TiketLaporan) -> Boolean {
+    if (jenisTiket = NULL or keteranganTiket = NULL) {
+        return False
+    }
+    return True
+}
 ```
-
-Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
-
-Tabel 5.16.1. Query Operasi [Nama Operasi]
-
-| No Query | Query | Keterangan |
-| :--- | :--- | :--- |
-| *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
-| *...* | *...* | *...* |
 
 
 ### 5.16.2 Algoritma/Query
 
-*[Ulangi pola 5.16.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
+**Nama Kelas:** *TiketLaporanController*  
+**Nama Operasi:** *buatTiket()*  
+**ID Algoritma:** *[Algo-001]*
+
+```text
+public buatTiket(idPengguna : Integer, jenisTiket : String, keteranganTiket : String) -> Boolean{
+    if (not(validasiFormTiket(jenisTiket, keteranganTiket))) {
+        -> False
+    }
+
+    {Generator id untuk tiket}
+    idTiket = {Generator id untuk tiket}
+    tanggal = {ambil tanggal saat itu}
+
+    TiketLaporan new 
+    new.idTiket = idTiket
+    new.idPengguna = idPengguna
+    new.jenisTiket = jenisTiket
+    new.keteranganTiket = keteranganTiket
+    new.tanggalTiket = tanggal
+    new.statusTiket = "Submitted"
+
+    isSaved = TiketLaporan.simpanAntrian(new)
+    if (isSaved) {
+        teruskanKeNotifikasi(new)
+        output("Tiket telah tersubmit")
+        -> True
+    }
+    output("Tiket gagal disubmit")
+    -> False
+}
+```
+### 5.16.2 Algoritma/Query
+
+**Nama Kelas:** *TiketLaporanController*  
+**Nama Operasi:** *teruskanKeNotifikasi()*  
+**ID Algoritma:** *[Algo-001]*
+
+```text
+public teruskanKeNotifikasi()
+}
+```
 
 
 ## 5.17 Kelas [Nama Kelas 17]
