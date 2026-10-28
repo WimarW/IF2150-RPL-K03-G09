@@ -77,6 +77,11 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | Gemini | Membuat logo CariUang | Analisis file skpl ini lalu buatkan logo yang bersesuaian dengan isi skpl tersebut | - |
 | Gemini | Merapihkan tulisan .md tabel keseluruhan | Rapihkan tabel class keseluruhan ini | - |
 
+### Milestone 8
+| Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
+| :--- | :--- | :--- | :--- |
+| Gemini | Membuat kode sql | Buatkan kode query sql untuk method X | - |
+
 
 
 ---
