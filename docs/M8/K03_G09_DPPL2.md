@@ -198,11 +198,11 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 
 | ID Kelas | Nama Kelas | Deskripsi Kelas |
 | :--- | :--- | :--- |
-| C04 | PemberiJasa | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian | UC01, UC02, UC04, UC06, UC08, UC10, UC11, UC12 |
-| C06 | PemberiJasaController | Kelas yang mengatur logika program untuk pemberi jasa | UC01, UC02, UC04, UC06, UC08, UC10, UC11, UC12 |
-| C13 | KategoriJasa | Menyimpan data spesifik jasa yang ditawarkan oleh PemberiJasa | UC01, UC02 |
-| C14 | KategoriJasaUI | Kelas yang mengatur penampilan halaman pada kategori jasa | UC01, UC02 |
-| C15 | KategoriJasaController | Kelas yang mengatur logika program kategori jasa | UC01, UC02 |
+| C04 | PemberiJasa| PemberiJasa | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian | UC01, UC02, UC04, UC06, UC08, UC10, UC11, UC12 |
+| C06 | PemberiJasaController | PemberiJasaController | Kelas yang mengatur logika program untuk pemberi jasa | UC01, UC02, UC04, UC06, UC08, UC10, UC11, UC12 |
+| C13 | KategoriJasa| KategoriJasa | Menyimpan data spesifik jasa yang ditawarkan oleh PemberiJasa | UC01, UC02 |
+| C14 | KategoriJasaUI| KategoriJasaUI | Kelas yang mengatur penampilan halaman pada kategori jasa | UC01, UC02 |
+| C15 | KategoriJasaController | KategoriJasaController | Kelas yang mengatur logika program kategori jasa | UC01, UC02 |
 
 ### 3.1.2 Sequence Diagram
 
@@ -307,16 +307,16 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 <b>Nama Use Case: </b> Merespon pelanggan
 
 ### 3.4.1 Identifikasi Kelas Use Case Memberi Rating
-| ID Kelas | Nama Kelas | Deskripsi Kelas |
+| ID Kelas |Nama Kelas Perancangan | Nama Kelas | Deskripsi Kelas |
 | :--- | :--- | :--- |
-| C04 | PemberiJasa | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian |
-| C07 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan|
-| C19 | Komunikasi | Merealisasikan fitur komunikasi |
-| C20 | KomunikasiUI | Kelas yang mengatur penampilan halaman pada halaman komunikasi |
-| C21 | KomunikasiController | Kelas yang mengatur logika program komunikasi |
-| C28 | Notifikasi | Merealisasikan fitur notifikasi yang akan diberikan kepada PemberiJasa ketika jasanya dipesan | 
-| C29 | NotifikasiUI | Kelas yang mengatur penampilan halaman notifikasi | 
-| C30 | NotifikasiController | Kelas yang mengatur logika program notifikasi |  
+| C04 | PemberiJasa | PemberiJasa | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian |
+| C07 | Pelanggan | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan|
+| C19 | Komunikasi | Komunikasi | Merealisasikan fitur komunikasi |
+| C20 | KomunikasiUI| KomunikasiUI | Kelas yang mengatur penampilan halaman pada halaman komunikasi |
+| C21 | KomunikasiController| KomunikasiController | Kelas yang mengatur logika program komunikasi |
+| C28 | Notifikasi | Notifikasi | Merealisasikan fitur notifikasi yang akan diberikan kepada PemberiJasa ketika jasanya dipesan | 
+| C29 | NotifikasiUI | NotifikasiUI | Kelas yang mengatur penampilan halaman notifikasi | 
+| C30 | NotifikasiController | NotifikasiController | Kelas yang mengatur logika program notifikasi |  
 
 ### 3.4.2 Sequence Diagram
 <ul>
@@ -717,8 +717,26 @@ Tabel 4.1. Daftar Kelas Perancangan Keseluruhan
 Tabel 5.1. Daftar Kelas Perancangan dan Kelas Analisis Terkait
 | No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
 | :--- | :--- | :--- |
-| 1 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL atau -]* |
-| 2 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL atau -]* |
+| 1 | *Pengguna* | *Pengguna* |
+| 2 | *PenggunaController* | *PenggunaController* |
+| 3 | *PemberiJasa* | *PemberiJasa* |
+| 4 | *PemberiJasaController* | *PemberiJasaController* |
+| 5 | *Pelanggan* | *Pelanggan* |
+| 6 | *PelangganController* | *PelangganController* |
+| 7 | *LayananPelanggan* | *LayananPelanggan* |
+| 8 | *LayananPelangganController* | *LayananPelangganController* |
+| 9 | *KategoriJasa* | *KategoriJasa* |
+| 10 | *KategoriJasaController* | *KategoriJasaController* |
+| 11 | *KontrakPekerjaan* | *KontrakPekerjaan* |
+| 12 | *KontrakPekerjaanController* | *KontrakPekerjaanController* |
+| 13 | *Komunikasi* | *Komunikasi* |
+| 14 | *KomunikasiController* | *KomunikasiController* |
+| 15 | *TiketLaporan* | *TiketLaporan* |
+| 16 | *TiketLaporanController* | *TiketLaporanController* |
+| 17 | *Rating* | *Rating* |
+| 18 | *RatingController* | *RatingController* |
+| 19 | *Notifikasi* | *Notifikasi* |
+| 20 | *NotifikasiController* | *NotifikasiController* |
 | ... | *...* | *...* |
 
 
@@ -731,14 +749,18 @@ Tabel 5.1.1. Operasi Kelas Pengguna
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| `getId(): String` | public | Mengembalikan id unik pengguna |
+| `getId(): String` | public | Mengembalikan ID unik pengguna |
 | `getNomor(): String` | public | Mengembalikan nomor telepon pengguna |
-| `getEmail(): String` | public | Mengembalikan email pengguna |
-| `getNama(): String` | public | Mengembalikan nama pengguna |
-| `setNomor(nomorBaru: String): Void`| public | Memperbarui nomor telepon pengguna |
-| `setEmail(emailBaru: String): Void`| public | Membperbarui email pengguna | 
-| `setNama(namaBaru: String): Void` | public | Memperbarui nama pengguna | 
+| `getEmail(): String` | public | Mengembalikan alamat email pengguna |
+| `getNama(): String` | public | Mengembalikan nama lengkap pengguna |
+| `setNomor(nomorBaru: String): void` | public | Memperbarui nomor telepon pengguna |
+| `setEmail(emailBaru: String): void` | public | Memperbarui alamat email pengguna |
+| `setNama(namaBaru: String): void` | public | Memperbarui nama pengguna |
 | `getAkumulasiRating(): Float` | public | Mengembalikan rata-rata akumulasi rating pengguna |
+| `getRiwayatRating(): Float[]` | public | Mengembalikan daftar riwayat rating yang pernah diterima pengguna |
+| `addNewRatingRiwayat(nilaiRating: Float): void` | public | Menambahkan nilai rating baru ke dalam riwayat rating pengguna |
+| `konfirmasiPekerjaan(idKontrak: String): Boolean` | public | Mengonfirmasi bahwa pekerjaan pada kontrak terkait telah selesai |
+| `laporkanMasalah(): void` | public | Melaporkan kendala atau masalah pekerjaan kepada layanan pelanggan |rating pengguna |
 
  
 Tabel 5.1.2. Atribut Kelas Pengguna
@@ -788,7 +810,11 @@ Tabel 5.2.1. Operasi Kelas [Nama Kelas 2]
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
+| `triggerRating(idKontrak: String, nilaiRating: Float): Boolean` | public | Memicu proses pemberian dan penyimpanan rating setelah pekerjaan selesai |
+| `verifikasiStatusPekerjaan(idKontrak: String): Boolean` | private | Memverifikasi apakah status kontrak pekerjaan sudah selesai sebelum diberi rating |
+| `validasiInfoRegistrasi(dataRegistrasi: Object): Boolean` | public | Memvalidasi kelengkapan dan format data masukan saat registrasi akun pengguna |
+| `requestKontrakPekerjaan(idKontrak: String): KontrakPekerjaan` | public | Meminta data detail kontrak pekerjaan berdasarkan ID kontrak |
+| `requestFormTiket(): void` | public | Meminta tampilan formulir pelaporan masalah untuk pengguna |
 | *...* | *...* | *...* |
 
 Tabel 5.2.2. Atribut Kelas [Nama Kelas 2]
@@ -837,10 +863,17 @@ Tabel 5.3.1 Operasi Kelas PemberiJasa
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| `cekInfoLogin(input username: String, input password: String): Boolean` | public | Menjalankan query ke database untuk melihat apakah informasi login yang digunakan sesuai dengan informasi pada tabel pengguna |
-| `makePelanggan(input idPengguna: String, input namaPengguna: String, input username: String, input password: String, input email: String, input nomorTelpon: String): Pelanggan` | public | Memverifikasi bahwa informasi unik dan tidak ada di database kemudian membuat objek pelanggan dengan informasi tersebut | 
-| `simpanKeDb(): void`| public | Menyimpan objek ke database |
-| laporkanMasalah() | Public | Pemberi jasa melaporkan masalah kepada layanan pelanggan |
+| `cekInfoLogin(input username: String, input password: String): Boolean` | public | Menjalankan query ke database untuk memeriksa kecocokan informasi login dengan tabel pengguna |
+| `makePemberiJasa(input idPengguna: String, input namaPengguna: String, input username: String, input password: String, input email: String, input nomorTelpon: String, input idKategoriJasa: String, input jenisJasa: String): PemberiJasa` | public | Memverifikasi keunikan akun di database lalu membuat objek PemberiJasa baru |
+| `simpanKeDb(): void` | public | Menyimpan data objek pengguna dan pemberi jasa baru ke dalam database |
+| `getIDPemberiJasa(): String` | public | Mengembalikan ID unik pemberi jasa |
+| `getIDKategoriJasa(): String` | public | Mengembalikan ID kategori jasa yang dimiliki pemberi jasa |
+| `setIDKategoriJasa(idKategoriJasa: String): void` | public | Mengatur atau memperbarui ID kategori jasa pada pemberi jasa |
+| `savePemberiJasa(): void` | public | Memperbarui data kategori jasa dan jenis jasa pemberi jasa ke dalam database |
+| `getPemberiJasaByID(idPemberiJasa: String): Object` | public | Mengambil detail profil, lokasi/daerah kerja, rating, dan tarif pemberi jasa berdasarkan ID |
+| `getPemberiJasaByKategori(idKategoriJasa: String): List<Object>` | public | Mengambil daftar pemberi jasa yang tersedia berdasarkan ID kategori jasa |
+| `laporkanMasalah(): void` | public | Pemberi jasa melaporkan masalah kepada layanan pelanggan |
+| `tampilkanSuksesRegistrasi(): void` | public | Menampilkan konfirmasi bahwa registrasi akun pemberi jasa berhasil |
 
 Tabel 5.3.2 Atribut Kelas PemberiJasa
 
@@ -1032,8 +1065,14 @@ Tabel 5.4.1. Operasi Kelas PemberiJasaController
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| requestFormTiket() | Public | Meminta form tiket untuk diisi dan dikirimkan le layanan pelanggan |
+| `validatePemberiJasa(idPemberiJasa: String): Boolean` | public | Memvalidasi keberadaan dan keabsahan ID pemberi jasa |
+| `validasiInput(): Boolean` | public | Memvalidasi masukan data dari antarmuka pemberi jasa |
+| `triggerQueryLogin(username: String, password: String): Boolean` | public | Memicu proses autentikasi login untuk akun pemberi jasa |
+| `setInformasiKategoriJasa(idKategoriJasa: String): void` | public | Mengatur informasi ID kategori jasa pada objek pemberi jasa |
+| `fetchPemberiJasaById(idPemberiJasa: String): void` | public | Mengambil data detail pemberi jasa berdasarkan ID dan menampilkannya ke UI |
+| `showPemberiJasaFromKategori(idKategoriJasa: String): List<Object>` | public | Mengambil dan menampilkan daftar pemberi jasa berdasarkan kategori jasa tertentu |
+| `choosePemberiJasa(idPemberiJasa: String): Object` | public | Memilih pemberi jasa tertentu dan mengembalikan detail profilnya |
+| `requestFormTiket(): void` | public | Meminta form tiket untuk diisi dan dikirimkan ke layanan pelanggan |
 
 
 Tabel 5.4.2. Atribut Kelas [Nama Kelas 4]
@@ -1126,8 +1165,10 @@ Tabel 5.5.1 Operasi Kelas Pelanggan
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| `cekInfoLogin(input username: String, input password: String): Boolean` | public | Menjalankan query ke database untuk melihat apakah informasi login yang digunakan sesuai dengan informasi pada tabel pengguna |
-| `simpanKeDb(): void`| public | Menyimpan objek ke database |
+| `cekInfoLogin(input username: String, input password: String): Boolean` | public | Menjalankan query ke database untuk melihat apakah informasi login sesuai dengan data pada tabel pengguna |
+| `makePelanggan(input idPengguna: String, input namaPengguna: String, input username: String, input password: String, input email: String, input nomorTelpon: String): Pelanggan` | public | Memverifikasi bahwa informasi akun unik di database kemudian membuat objek pelanggan baru |
+| `simpanKeDb(): void` | public | Menyimpan objek pelanggan ke dalam database |
+| `laporkanMasalah(): void` | public | Pelanggan melaporkan kendala atau masalah kepada layanan pelanggan |
 
 Tabel 5.5.2 Atribut Kelas Pelanggan
 
@@ -1242,15 +1283,13 @@ Tabel 5.5.5 Query Operasi simpanKeDb
 
 
 ## 5.6 Kelas PelangganController
-
-**Nama Kelas:** *[Nama kelas]*  
-**ID Kelas:** *[ID kelas]*
-
-Tabel 5.6.1. Operasi Kelas [Nama Kelas 6]
-
+**Nama Kelas:** PelangganController <br>
+**ID Kelas:** C09
+Tabel 5.6.1 Operasi Kelas PelangganController
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
+| `validasiInput(): Boolean` | public | Memvalidasi format dan kelengkapan masukan dari pengguna pelanggan |
+| `triggerQueryLogin(username: String, password: String): Boolean` | public | Memicu proses verifikasi kredensial login untuk akun pelanggan |
 | *...* | *...* | *...* |
 
 Tabel 5.6.2. Atribut Kelas [Nama Kelas 6]
@@ -1288,15 +1327,14 @@ Tabel 5.6.1. Query Operasi [Nama Operasi]
 
 
 ## 5.7 Kelas LayananPelanggan
-
-**Nama Kelas:** LayananPelanggan  
+**Nama Kelas:** LayananPelanggan <br>
 **ID Kelas:** C10
-
 Tabel 5.7.1 Operasi Kelas LayananPelanggan
-
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| `cekInfoLogin(input username: String, input password: String): Boolean` | public | Menjalankan query ke database untuk melihat apakah informasi login yang digunakan sesuai dengan informasi pada tabel pengguna |
+| `cekInfoLogin(input username: String, input password: String): Boolean` | public | Menjalankan query ke database untuk melihat apakah informasi login sesuai dengan informasi pada tabel pengguna |
+| `makeLayananPelanggan(input idPengguna: String, input namaPengguna: String, input username: String, input password: String, input email: String, input nomorTelpon: String): LayananPelanggan` | public | Membuat objek LayananPelanggan baru setelah memvalidasi data akun |
+| `responTiket(idTiket: String, balasan: String): Boolean` | public | Memberikan respons atau tindak lanjut terhadap tiket laporan masalah yang masuk |
 
 Tabel 5.7.2 Atribut Kelas LayananPelanggan
 
@@ -1348,16 +1386,15 @@ Tabel 5.7.3 Query Operasi cekInfoLogin
 
 
 ## 5.8 Kelas LayananPelangganController
-
-**Nama Kelas:** *[Nama kelas]*  
-**ID Kelas:** *[ID kelas]*
-
-Tabel 5.8.1. Operasi Kelas [Nama Kelas 8]
-
+**Nama Kelas:** LayananPelangganController <br>
+**ID Kelas:** C12
+Tabel 5.8.1 Operasi Kelas LayananPelangganController
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
+| `validasiInput(): Boolean` | public | Memvalidasi masukan data pada antarmuka layanan pelanggan |
+| `triggerQueryLogin(username: String, password: String): Boolean` | public | Memicu proses pengecekan login bagi petugas layanan pelanggan |
+| `requestTiketLaporan(): List<TiketLaporan>` | public | Mengambil daftar tiket laporan masalah yang masuk untuk ditindaklanjuti |
+| `teruskanBalasan(idTiket: String, balasan: String): void` | public | Meneruskan balasan atau solusi dari layanan pelanggan kepada pelapor |
 
 Tabel 5.8.2. Atribut Kelas [Nama Kelas 8]
 
@@ -1394,17 +1431,22 @@ Tabel 5.8.1. Query Operasi [Nama Operasi]
 
 
 ## 5.9 Kelas KategoriJasa
-
-**Nama Kelas:** *KategoriJasa*  
-**ID Kelas:** *C09*
-
-Tabel 5.9.1. Operasi Kelas PelangganController
-
+**Nama Kelas:** KategoriJasa <br>
+**ID Kelas:** C13
+Tabel 5.9.1 Operasi Kelas KategoriJasa
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
-| validasiInput(): Boolean | Public | Validasi input yang dikirim |
+| `getIDKategoriJasa(): String` | public | Mengembalikan ID unik kategori jasa |
+| `getJenisJasa(): String` | public | Mengembalikan nama atau jenis jasa |
+| `getTarif(): Float` | public | Mengembalikan nominal tarif jasa |
+| `getJamKerja(): String` | public | Mengembalikan informasi jam operasional kerja |
+| `getDaerahKerja(): String` | public | Mengembalikan informasi cakupan daerah kerja |
+| `setTarif(tarifBaru: Float): void` | public | Memperbarui nominal tarif jasa |
+| `setJamKerja(jamKerjaBaru: String): void` | public | Memperbarui jam operasional kerja |
+| `setDaerahKerja(daerahKerjaBaru: String): void` | public | Memperbarui informasi daerah kerja |
+| `saveKategoriJasa(dataJasa: Object): void` | public | Menyimpan data kategori jasa baru beserta rinciannya ke dalam database |
+| `getAllKategori(): List<Object>` | public | Mengambil seluruh daftar kategori jasa yang tersedia dari database |
+| `getKategoriById(idKategoriJasa: String): Object` | public | Mengambil detail suatu kategori jasa berdasarkan ID kategori jasa |
 
 
 ### 5.9.1 Algoritma/Query
@@ -1565,16 +1607,20 @@ Tabel 5.9.4 Query Operasi getAllKategori
 
 
 ## 5.10 Kelas KategoriJasaController
-
-**Nama Kelas:** *[Nama kelas]*  
-**ID Kelas:** *[ID kelas]*
-
-Tabel 5.10.1. Operasi Kelas [Nama Kelas 10]
-
+**Nama Kelas:** KategoriJasaController <br>
+**ID Kelas:** C15
+Tabel 5.10.1 Operasi Kelas KategoriJasaController
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
+| `showFormKategoriJasa(): void` | public | Menyiapkan struktur data kosong dan menampilkan formulir pendaftaran kategori jasa ke UI |
+| `validateKategoriJasa(dataJasa: Object): Boolean` | public | Memvalidasi kelengkapan data kategori jasa serta memastikan tarif bernilai valid |
+| `submitFormKategoriJasa(dataJasa: Object): void` | public | Memvalidasi masukan form, menyimpan kategori jasa baru, dan memperbarui data pemberi jasa |
+| `updateDataPemberiJasa(idKategoriJasa: String): void` | public | Menghubungkan ID kategori jasa yang baru dibuat ke data pemberi jasa melalui controller |
+| `filterKategoriJasa(kriteria: String): List<Object>` | public | Menyaring daftar kategori jasa berdasarkan kriteria pencarian pelanggan |
+| `confirmDataTersimpan(): Boolean` | public | Mengonfirmasi bahwa data kategori jasa telah berhasil tersimpan di database |
+| `showPendaftaranBerhasil(detailJasa: Object): void` | public | Menampilkan pesan sukses pendaftaran jasa beserta rinciannya ke UI |
+| `fetchAllKategoriJasa(): void` | public | Mengambil seluruh daftar kategori jasa dari model dan menampilkannya ke UI |
+| `fetchKategoriJasaById(idKategoriJasa: String): void` | public | Mengambil detail kategori jasa tertentu berdasarkan ID dan menampilkannya ke UI |
 
 Tabel 5.10.2. Atribut Kelas [Nama Kelas 10]
 
@@ -1662,20 +1708,18 @@ Tabel 5.10.1. Query Operasi [Nama Operasi]
 
 
 ## 5.11 Kelas KontrakPekerjaan
-
-**Nama Kelas:** *KontrakPekerjaan*  
-**ID Kelas:** *C16*
-
-Tabel 5.11.1. Operasi Kelas KontrakPekerjaan
-
+**Nama Kelas:** KontrakPekerjaan <br>
+**ID Kelas:** C16
+Tabel 5.11.1 Operasi Kelas KontrakPekerjaan
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| fetchKontrakPekerjaan() : KontrakPekerjaan | Public | Mengambil data kontrak pekerjaan |
-| saveKontrak() : Boolean | Public | Menyimpan data kontrak pekerjaan |
-| statusUpdate() : Boolean | Public | Memperbarui status dari pekerjaan yang sedang dikontrak. |
-| makeKontrak() : Boolean | Public | Memproses pembuatan detail kontrak secara internal. |
-| newKontrak() : Boolean | Public | Menginisialisasi instansiasi objek kontrak baru. |
+| `fetchKontrakPekerjaan(idKontrakPekerjaan: String): KontrakPekerjaan` | public | Mengambil data kontrak pekerjaan dari database berdasarkan ID kontrak |
+| `saveKontrak(): Boolean` | public | Menyimpan data kontrak pekerjaan baru atau memperbarui kontrak di database |
+| `getDetailPekerjaan(): Object` | public | Mengembalikan rincian pekerjaan dan kesepakatan harga pada kontrak |
+| `newKontrak(dataKontrak: Object): void` | public | Menginisialisasi atribut objek kontrak baru dari data masukan controller |
+| `makeKontrak(): Boolean` | public | Memvalidasi detail pekerjaan dan harga lalu membangkitkan ID unik kontrak pekerjaan |
+| `statusUpdate(jenisStatus: String, nilaiStatus: String): Boolean` | public | Memperbarui status pekerjaan yang sedang dikontrak (misalnya `on progress` atau `Done`) |
+| `addRating(): Boolean` | public | Menandai bahwa kontrak pekerjaan terkait telah diberikan penilaian (rating) |
 
 
 
@@ -1845,20 +1889,16 @@ Tabel 5.11.4. Query Operasi [Nama Operasi]
 | Q-002 | SELECT detail_pekerjaan, persetujuan_harga, status_pekerjaan FROM kontrak_pekerjaan WHERE id = idKontrakPekerjaan | Mengambil detail pekerjaan, harga, dan status berdasarkan ID kontrak. |
 | *...* | *...* | *...* |
 
-## 5.12 Kelas KontrakPekerjaanController
-
-**Nama Kelas:** *KontrakPekerjaanController*  
-**ID Kelas:** *C18*
-
-Tabel 5.12.1. Operasi Kelas [Nama Kelas 12]
-
+**Nama Kelas:** KontrakPekerjaanController <br>
+**ID Kelas:** C18
+Tabel 5.12.1 Operasi Kelas KontrakPekerjaanController
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| getKontrakPekerjaan() : KontrakPekerjaan | Public | Mengambil data kontrak pekerjaan |
-| kirimInput() | Public | Mengirim input kontrak pekerjaan |
-| konfirmasiPekerjaan(kontrak KontrakPekerjaan) : Boolean | Public | Mengonfirmasi pekerjaan yang telah selesai |
-| showKontrakForm() | Public | Menampilkan form kosong ke UI untuk diisi pelanggan. |
-| kirimInput() : KontrakPekerjaan | Public | Menerima input dari UI, membuat objek kontrak dan menyimpannya |
+| `getKontrakPekerjaan(idKontrakPekerjaan: Integer): KontrakPekerjaan` | public | Mengambil objek data kontrak pekerjaan melalui model KontrakPekerjaan |
+| `konfirmasiPekerjaan(idKontrak: Integer): Boolean` | public | Mengonfirmasi penyelesaian pekerjaan dan mengubah status kontrak menjadi `Done` |
+| `showKontrakForm(): void` | public | Menampilkan formulir pembuatan kontrak kosong ke UI untuk diisi pelanggan |
+| `kirimInput(detailPekerjaan: String, persetujuanHarga: Integer): KontrakPekerjaan` | public | Menerima input kesepakatan dari UI, membuat objek kontrak baru, dan menyimpannya ke database |
+| `statusUpdate(statusBaru: String): Boolean` | private | Memperbarui status progres kontrak pekerjaan |
 
 
 Tabel 5.12.1. Atribut Kelas [Nama Kelas 12]
@@ -1954,15 +1994,17 @@ Tabel 5.12.1. Query Operasi [Nama Operasi]
 | *...* | *...* | *...* |
 
 ## 5.13 Kelas Komunikasi
-
-**Nama Kelas:** *[Nama kelas]*  
-**ID Kelas:** *[ID kelas]*
-
-Tabel 5.13.1. Operasi Kelas [Nama Kelas 13]
-
+**Nama Kelas:** Komunikasi <br>
+**ID Kelas:** C19
+Tabel 5.13.1 Operasi Kelas Komunikasi
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
+| `constructor(dataChat: Object): Komunikasi` | public | Menginisialisasi objek pesan obrolan baru beserta waktu kirim dan status awal pesan |
+| `saveChat(): void` | public | Menyimpan data pesan obrolan baru ke dalam tabel komunikasi di database |
+| `simpanPesan(dataChat: Object): void` | public | Menyimpan pesan yang dikirimkan pengguna ke dalam riwayat komunikasi |
+| `getIDChat(): String` | public | Mengembalikan ID unik pesan obrolan |
+| `getPesan(idChat: String): Object` | public | Mengambil data satu pesan obrolan dari database berdasarkan ID chat |
+| `getChatHistory(idPengguna1: String, idPengguna2: String): List<Object>` | public | Mengambil seluruh riwayat percakapan dua arah antara dua pengguna secara terurut |
 | *...* | *...* | *...* |
 
 Tabel 5.13.2. Atribut Kelas [Nama Kelas 13]
@@ -2077,16 +2119,16 @@ Tabel 5.13.5 Query Operasi getChatHistory
 
 
 ## 5.14 Kelas KomunikasiController
-
-**Nama Kelas:** *[Nama kelas]*  
-**ID Kelas:** *[ID kelas]*
-
-Tabel 5.14.1. Operasi Kelas [Nama Kelas 14]
-
+**Nama Kelas:** KomunikasiController <br>
+**ID Kelas:** C21
+Tabel 5.14.1 Operasi Kelas KomunikasiController
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
+| `sendChat(dataChat: Object): void` | public | Membuat objek pesan baru, menyimpannya ke database, dan memicu pembuatan notifikasi ke penerima |
+| `kirimPesan(dataChat: Object): void` | public | Memproses pengiriman pesan obrolan antar pengguna |
+| `getRiwayatChat(idPengguna1: String, idPengguna2: String): List<Object>` | public | Mengambil daftar riwayat percakapan antara dua pengguna dari model Komunikasi |
+| `loadChat(idPelanggan: String, idPemberiJasa: String): List<Object>` | public | Memuat riwayat percakapan antara pelanggan dan pemberi jasa saat ruang obrolan dibuka |
+| `startChat(idPelanggan: String, idPemberiJasa: String): List<Object>` | public | Menginisiasi sesi percakapan antara pelanggan dan pemberi jasa serta memuat riwayat obrolan |
 
 Tabel 5.14.2. Atribut Kelas [Nama Kelas 14]
 
@@ -2162,15 +2204,14 @@ Tabel 5.14.1. Query Operasi [Nama Operasi]
 
 
 ## 5.15 Kelas TiketLaporan
-
-**Nama Kelas:** *[Nama kelas]*  
-**ID Kelas:** *[ID kelas]*
-
-Tabel 5.15.1. Operasi Kelas [Nama Kelas 15]
-
+**Nama Kelas:** TiketLaporan <br>
+**ID Kelas:** C22
+Tabel 5.15.1 Operasi Kelas TiketLaporan
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
+| `getDetailTiket(idTiket: String): TiketLaporan` | public | Mengambil rincian data tiket laporan masalah berdasarkan ID tiket |
+| `updateStatusTiket(idTiket: String, statusBaru: String): Boolean` | public | Memperbarui status penanganan tiket laporan masalah di database |
+| `simpanAntrian(tiket: TiketLaporan): Boolean` | public | Menyimpan tiket laporan masalah yang baru diajukan ke dalam antrian database |
 | *...* | *...* | *...* |
 
 Tabel 5.15.2. Atribut Kelas [Nama Kelas 15]
@@ -2216,10 +2257,14 @@ Tabel 5.16.1. Operasi Kelas TiketLaporanController
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| validasiFormTiket() : Boolean | Public | Memvalidasi input yang dimasukkan ke dalam form tiket |
-| buatTiket(new TiketLaporan) : Boolean | Public | Mengatur pembuatan dan pengisian data tiket laporan |
+| `validasiFormTiket(tiket: TiketLaporan): Boolean` | public | Memvalidasi kelengkapan jenis tiket dan keterangan masalah pada form tiket |
+| `buatTiket(idPengguna: Integer, jenisTiket: String, keteranganTiket: String): Boolean` | public | Mengatur pembuatan objek tiket laporan baru, menyimpannya ke antrian, dan meneruskannya ke notifikasi |
+| `teruskanKeNotifikasi(tiket: TiketLaporan): void` | public | Meneruskan informasi tiket laporan baru ke sistem notifikasi |
+| `getTiketLaporan(idTiket: String): TiketLaporan` | public | Mengambil data tiket laporan tertentu untuk ditampilkan kepada layanan pelanggan |
+| `balasTiket(idTiket: String, isiBalasan: String): Boolean` | public | Mengirimkan balasan tindak lanjut atas tiket laporan yang diajukan pengguna |
+| `tutupTiket(idTiket: String): Boolean` | public | Mengubah status tiket laporan menjadi selesai/ditutup setelah masalah teratasi |
 
-Tabel 5.16.2. Atribut Kelas [Nama Kelas 16]
+Tabel 5.16.2. Atribut Kelas TiketLaporanController
 
 | Nama Atribut | Visibility (private, public) | Tipe |
 | :--- | :--- | :--- |
@@ -2296,14 +2341,14 @@ public teruskanKeNotifikasi()
 Tabel 5.17.1 Operasi Kelas Rating
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| `getIdRating(): String` | public | Mengembalikan id rating |
-| `getIdPemberi(): String` | public | Mengembalikan id pengguna yang memberikan rating |
-| `getIdPenerima(): String` | public | Mengembalikan id pengguna yang menerima rating |
-| `getIdKontrakPekerjaan(): String` | public | Mengembalikan id kontrak pekerjaan yang dinilai |
+| `getIdRating(): String` | public | Mengembalikan ID unik rating |
+| `getIdPemberi(): String` | public | Mengembalikan ID pengguna yang memberikan rating |
+| `getIdPenerima(): String` | public | Mengembalikan ID pengguna yang menerima rating |
+| `getIdKontrakPekerjaan(): String` | public | Mengembalikan ID kontrak pekerjaan yang dinilai |
 | `getRatingValue(): String` | public | Mengembalikan nilai rating yang diberikan |
-| `makeRating(idRating: String, idPemberi: String, idPenerima: String, idKontrak: String, nilaiRating: Float): Rating` | public | Membuat objek Rating baru dengan atribut yang ditentukan |
-| `simpanKeDb(rating: Rating): boolean` | public | Menyimpan data transaksi penilaian ke database |
-| `updateRatingPengguna(): boolean` | public | Memperbarui riwayat dan akumulasi nilai rating pada profil pengguna penerima |
+| `makeRating(idRating: String, idPemberi: String, idPenerima: String, idKontrak: String, nilaiRating: Float): Rating` | public | Membuat objek Rating baru dengan atribut penilaian yang ditentukan |
+| `simpanKeDb(rating: Rating): Boolean` | public | Menyimpan data transaksi penilaian ke database dan memperbarui status `has_rating` pada kontrak |
+| `updateRatingPengguna(): Boolean` | public | Memperbarui riwayat dan menghitung ulang rata-rata akumulasi nilai rating pada profil pengguna penerima |
 
 
 Tabel 5.17.2 Atribut Kelas Rating
@@ -2456,16 +2501,12 @@ ALGORITMA
 
 
 ## 5.18 Kelas RatingController
-
-**Nama Kelas:** RatingController  
+**Nama Kelas:** RatingController <br>
 **ID Kelas:** C27
-
-Tabel 5.18.1. Operasi Kelas [Nama Kelas 18]
-
+Tabel 5.18.1 Operasi Kelas RatingController
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| `validateRatingValue(val: Integer): Boolean` | public | Memvalidasi nilai rating yang diberikan |
+| `validateRatingValue(val: Integer): Boolean` | public | Memvalidasi nilai rating yang diberikan (berada pada rentang 1 hingga 5) beserta kelengkapan ID terkait |
 
 ### 5.18.1 Algoritma/Query
 
@@ -2485,15 +2526,16 @@ if (this.idRating = "" or this.idPenggunaPemberi = "" or this.idPenggunaPenerima
 
 
 ## 5.19 Kelas Notifikasi
-
-**Nama Kelas:** *[Nama kelas]*  
-**ID Kelas:** *[ID kelas]*
-
-Tabel 5.19.1. Operasi Kelas [Nama Kelas 19]
-
+**Nama Kelas:** Notifikasi <br>
+**ID Kelas:** C28
+Tabel 5.19.1 Operasi Kelas Notifikasi
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
+| `constructor(idPenerima: String, isiNotifikasi: String): Notifikasi` | public | Menginisialisasi objek notifikasi baru untuk pengguna penerima dengan status belum terbaca |
+| `simpanNotifikasi(): void` | public | Menyimpan data notifikasi baru ke dalam database |
+| `getIsiNotifikasi(): String` | public | Mengembalikan teks isi pesan notifikasi |
+| `tandaiTerbaca(): void` | public | Memperbarui status baca notifikasi menjadi telah terbaca (`TRUE`) |
+| `getLastMessage(): String` | public | Mengambil pesan notifikasi terakhir yang diterima oleh pengguna |
 | *...* | *...* | *...* |
 
 Tabel 5.19.2. Atribut Kelas [Nama Kelas 19]
@@ -2531,22 +2573,13 @@ Tabel 5.19.1. Query Operasi [Nama Operasi]
 
 
 ## 5.20 Kelas NotifikasiController
-
-**Nama Kelas:** *[Nama kelas]*  
-**ID Kelas:** *[ID kelas]*
-
-Tabel 5.20.1. Operasi Kelas [Nama Kelas 20]
-
+**Nama Kelas:** NotifikasiController <br>
+**ID Kelas:** C30
+Tabel 5.20.1 Operasi Kelas NotifikasiController
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
-
-Tabel 5.20.2. Atribut Kelas [Nama Kelas 20]
-
-| Nama Atribut | Visibility (private, public) | Tipe |
-| :--- | :--- | :--- |
-| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
+| `buatNotifikasi(idPenerima: String, isiNotifikasi: String): void` | public | Membuat objek notifikasi baru, menyimpannya ke database, dan memicu pengiriman notifikasi |
+| `kirimNotifikasi(notif: Notifikasi): void` | public | Meneruskan isi notifikasi ke antarmuka `NotifikasiUI` untuk ditampilkan kepada penerima |
 | *...* | *...* | *...* |
 
 ### 5.20.1 Algoritma/Query

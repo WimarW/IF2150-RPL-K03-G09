@@ -128,7 +128,7 @@
 | 21-10-2026 | Naufal Hasbialhaq | UC02 dan UC03 | 3 jam  | Done | - |
 
 
-### Milestone 7
+### Milestone 8
 | Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
 | :--- | :--- | :--- | :--- | :--- | :--- | 
 | 28-10-2026 | Naufal Hasbialhaq |  Finalisasi Tubes | 180 menit | Done | - |
