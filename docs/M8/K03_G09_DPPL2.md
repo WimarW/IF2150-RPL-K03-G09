@@ -32,7 +32,7 @@ Dipersiapkan oleh:
 | Revisi | Deskripsi |
 | :--- | :--- |
 | *A* | Dihapus method yang bernama `updateAkumulasiRating()` pada objek pengguna |
-| *B* |  |
+| *B* | Memperbaiki tabel UC 4-6 yang kurang tepat dan gambar yang kurang sesuai |
 | *C* |  |
 | ... |  |
 
@@ -309,20 +309,18 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 ### 3.4.1 Identifikasi Kelas Use Case Memberi Rating
 | ID Kelas | Nama Kelas | Deskripsi Kelas |
 | :--- | :--- | :--- |
-| C04 | PemberiJasa | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pekerjaan, memberi rating, memberi laporan kepada layanan pelanggan. Menyimpan titik lokasi, akumulasi rating, identitas pemberi jasa, deskripsi keahlian |
-| C07 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan|
-| C19 | Komunikasi | Merealisasikan fitur komunikasi |
-| C20 | KomunikasiUI | Kelas yang mengatur penampilan halaman pada halaman komunikasi |
-| C21 | KomunikasiController | Kelas yang mengatur logika program komunikasi |
-| C28 | Notifikasi | Merealisasikan fitur notifikasi yang akan diberikan kepada PemberiJasa ketika jasanya dipesan | 
-| C29 | NotifikasiUI | Kelas yang mengatur penampilan halaman notifikasi | 
-| C30 | NotifikasiController | Kelas yang mengatur logika program notifikasi |  
-
+| C04 | PemberiJasa | PemberiJasa | 
+| C19 | Komunikasi | Komunikasi | 
+| C20 | KomunikasiUI | KomunikasiUI | 
+| C21 | KomunikasiController | KomunikasiController | 
+| C28 | Notifikasi | Notifikasi | 
+| C29 | NotifikasiUI | NotifikasiUI | 
+| C30 | NotifikasiController | NotifikasiController |
 ### 3.4.2 Sequence Diagram
 <ul>
     <li>Skenario Normal <br>
         <p align="center">
-        <img src="../M7/assets/diagram//sequenceUC04.png" width="75%">
+        <img src=".assets/diagram/sequenceUC04.png" width="75%">
         </p>
         <p align="center">
         <i>Gambar X. Diagram Sequence UC04</i>
@@ -334,7 +332,7 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 
 
 <p align="center">
-<img src="../M7/assets/diagram//classDiagramUC03.png" width="75%">
+<img src=".assets/diagram/classUC04.png" width="75%">
 </p>
 <p align="center">
 <i>Gambar X. Diagram Kelas UC04</i>
@@ -347,10 +345,11 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 ### 3.5.1 Identifikasi Kelas Use Case Memberi Rating
 | ID Kelas | Nama Kelas | Deskripsi Kelas |
 | :--- | :--- | :--- |
-| C07 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan| 
-| C16 | KontrakPekerjaan | Menyimpan data detail kesepakatan antara Pelanggan dan PemberiJasa, seperti harga, detail pekerjaan, status pekerjaan (On Progress/Done) | 
-| C17 | KontrakPekerjaanUI | Kelas yang mengatur penampilan halaman pada kelas kontrak pekerjaan | 
-| C18 | KontrakPekerjaanController | Kelas yang mengatur logika program kontrak pekerjaan |
+| C07 | Pelanggan | Pelanggan | 
+| C16 | KontrakPekerjaan | KontrakPekerjaan | 
+| C17 | KontrakPekerjaanUI | KontrakPekerjaanUI | 
+| C18 | KontrakPekerjaanController | KontrakPekerjaanController | 
+
 
 ### 3.5.2 Sequence Diagram
 <ul>
@@ -381,10 +380,10 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 ### 3.6.1 Identifikasi Kelas Use Case Memberi Rating
 | ID Kelas | Nama Kelas | Deskripsi Kelas |
 | :--- | :--- | :--- |
-| C07 | Pelanggan | Turunan dari kelas Pengguna yang bertanggung jawab dalam proses pemesanan jasa, memasukkan input kesepakatan harga dan pekerjaan dan mengonfirmasi selesainya pekerjaan, melaporkan masalah, dan memberikan rating kepada pemberi jasa. Selain itu, menyimpan data akumulasi rating dan data Pelanggan| 
-| C16 | KontrakPekerjaan | Menyimpan data detail kesepakatan antara Pelanggan dan PemberiJasa, seperti harga, detail pekerjaan, status pekerjaan (On Progress/Done) | 
-| C17 | KontrakPekerjaanUI | Kelas yang mengatur penampilan halaman pada kelas kontrak pekerjaan | 
-| C18 | KontrakPekerjaanController | Kelas yang mengatur logika program kontrak pekerjaan |
+| C04 | Pelanggan | Pelanggan | 
+| C16 | KontrakPekerjaan | KontrakPekerjaan | 
+| C17 | KontrakPekerjaanUI | KontrakPekerjaanUI | 
+| C18 | KontrakPekerjaanController | KontrakPekerjaanController | 
 
 ### 3.6.2 Sequence Diagram
 <ul>
