@@ -1673,25 +1673,50 @@ Tabel 5.11.1. Operasi Kelas KontrakPekerjaan
 | *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
 | fetchKontrakPekerjaan() : KontrakPekerjaan | Public | Mengambil data kontrak pekerjaan |
 | saveKontrak() : Boolean | Public | Menyimpan data kontrak pekerjaan |
-| statusUpdate() : Boolean
+| statusUpdate() : Boolean | Public | Memperbarui status dari pekerjaan yang sedang dikontrak. |
+| makeKontrak() : Boolean | Public | Memproses pembuatan detail kontrak secara internal. |
+| newKontrak() : Boolean | Public | Menginisialisasi instansiasi objek kontrak baru. |
+
+
 
 Tabel 5.11.2. Atribut Kelas [Nama Kelas 11]
 
 | Nama Atribut | Visibility (private, public) | Tipe |
 | :--- | :--- | :--- |
-| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
+| idKontrakPekerjaan | private | String |
+| detailPekerjaan | private | String |
+| persetujuanHarga | private | Integer |
+| statusPekerjaan | private | String |
+
 | *...* | *...* | *...* |
 
 ### 5.11.1 Algoritma/Query
 
 Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
 
-**Nama Kelas:** *[Nama kelas]*  
-**Nama Operasi:** *[Signature operasi]*  
+**Nama Kelas:** *KontrakPekerjaan*  
+**Nama Operasi:** *statusUpdate()*  
 **ID Algoritma:** *[Algo-001]*
 
 ```text
-[Tuliskan pseudocode algoritma operasi di sini.]
+PUBLIC PROCEDURE statusUpdate(jenisStatus, nilaiStatus)
+
+    this.statusPekerjaan = nilaiStatus
+
+    IF this.idKontrakPekerjaan IS NOT NULL THEN
+
+        EXECUTE QUERY Q-004
+        
+        IF query is SUCCESS THEN
+            RETURN "Status di-update ke database"
+        ELSE
+            RETURN "Error update database"
+        END IF
+        
+    ELSE
+        RETURN "Status di-update di memori"
+    END IF
+END PROCEDURE
 ```
 
 Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
@@ -1700,14 +1725,125 @@ Tabel 5.11.1. Query Operasi [Nama Operasi]
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
+| [Q-004] | UPDATE kontrak_pekerjaan SET status_pekerjaan = this.statusPekerjaan WHERE id = this.idKontrakPekerjaan | mengubah status awal |
 | *...* | *...* | *...* |
 
 
 ### 5.11.2 Algoritma/Query
 
-*[Ulangi pola 5.11.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
+**Nama Kelas:** *KontrakPekerjaan*  
+**Nama Operasi:** *saveKontrak()*  
+**ID Algoritma:** *[Algo-001]*
 
+```text
+PUBLIC PROCEDURE saveKontrak()
+    IF this.idKontrakPekerjaan IS NULL THEN
+
+        EXECUTE QUERY Q-001
+    ELSE
+        // Artinya kontrak sudah ada (Skenario Pemberi Jasa)
+        EXECUTE QUERY UPDATE kontrak_pekerjaan SET status_pekerjaan = this.statusPekerjaan WHERE id = this.idKontrakPekerjaan
+    END IF
+    
+    
+    IF query is SUCCESS THEN
+        RETURN true
+    ELSE
+        RETURN false
+    END IF
+END PROCEDURE
+```
+
+Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
+
+Tabel 5.11.2. Query Operasi [Nama Operasi]
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-001 | INSERT INTO kontrak_pekerjaan (id, detail_pekerjaan, persetujuan_harga, status_pekerjaan) VALUES (this.idKontrakPekerjaan, this.detailPekerjaan, this.persetujuanHarga, this.statusPekerjaan) | Menyimpan record kontrak baru ke tabel database. |
+| *...* | *...* | *...* |
+
+### 5.11.3 Algoritma/Query
+
+**Nama Kelas:** *KontrakPekerjaan*  
+**Nama Operasi:** *newKontrak()*  
+**ID Algoritma:** *[Algo-001]*
+
+```text
+PROCEDURE newKontrak(dataKontrak)
+    // Menginisialisasi atribut kelas dengan data yang dikirimkan dari Controller
+    this.detailPekerjaan = dataKontrak.detailPekerjaan
+    this.persetujuanHarga = dataKontrak.persetujuanHarga
+    this.statusPekerjaan = "inisialisasi" // Nilai awal sebelum diperbarui
+END PROCEDURE
+```
+
+Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
+
+Tabel 5.11.3. Query Operasi [Nama Operasi]
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
+| *...* | *...* | *...* |
+
+### 5.11.3 Algoritma/Query
+
+**Nama Kelas:** *KontrakPekerjaan*  
+**Nama Operasi:** *makeKontrak()*  
+**ID Algoritma:** *[Algo-001]*
+
+```text
+PROCEDURE makeKontrak()
+    IF this.detailPekerjaan IS NOT NULL AND this.persetujuanHarga >= 0 THEN
+        this.idKontrakPekerjaan = generateUniqueID()
+        RETURN true
+    ELSE
+        RETURN false 
+    END IF
+END PROCEDURE
+```
+
+Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
+
+Tabel 5.11.3. Query Operasi [Nama Operasi]
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
+| *...* | *...* | *...* |
+
+### 5.11.4 Algoritma/Query
+
+**Nama Kelas:** *KontrakPekerjaan*  
+**Nama Operasi:** *fetchKontrakPekerjaan()*  
+**ID Algoritma:** *[Algo-001]*
+
+```text
+PUBLIC PROCEDURE fetchKontrakPekerjaan(idKontrakPekerjaan)
+    EXECUTE QUERY Q-002 WITH param idKontrakPekerjaan
+    
+    IF record is FOUND THEN
+        this.idKontrakPekerjaan = record.idKontrakPekerjaan
+        this.detailPekerjaan = record.detailPekerjaan
+        this.persetujuanHarga = record.persetujuanHarga
+        this.statusPekerjaan = record.statusPekerjaan
+        
+        RETURN data(detailPekerjaan, persetujuanHarga, statusPekerjaan)
+    ELSE
+        RETURN NULL
+    END IF
+END PROCEDURE
+```
+
+Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
+
+Tabel 5.11.4. Query Operasi [Nama Operasi]
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-002 | SELECT detail_pekerjaan, persetujuan_harga, status_pekerjaan FROM kontrak_pekerjaan WHERE id = idKontrakPekerjaan | Mengambil detail pekerjaan, harga, dan status berdasarkan ID kontrak. |
+| *...* | *...* | *...* |
 
 ## 5.12 Kelas KontrakPekerjaanController
 
@@ -1721,8 +1857,11 @@ Tabel 5.12.1. Operasi Kelas [Nama Kelas 12]
 | getKontrakPekerjaan() : KontrakPekerjaan | Public | Mengambil data kontrak pekerjaan |
 | kirimInput() | Public | Mengirim input kontrak pekerjaan |
 | konfirmasiPekerjaan(kontrak KontrakPekerjaan) : Boolean | Public | Mengonfirmasi pekerjaan yang telah selesai |
+| showKontrakForm() | Public | Menampilkan form kosong ke UI untuk diisi pelanggan. |
+| kirimInput() : KontrakPekerjaan | Public | Menerima input dari UI, membuat objek kontrak dan menyimpannya |
 
-Tabel 5.12.2. Atribut Kelas [Nama Kelas 12]
+
+Tabel 5.12.1. Atribut Kelas [Nama Kelas 12]
 
 | Nama Atribut | Visibility (private, public) | Tipe |
 | :--- | :--- | :--- |
@@ -1746,7 +1885,7 @@ public getKontrakPekerjaan(idKontrakPekerjaan : Integer) -> KontrakPekerjaan {
 
 Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
 
-Tabel 5.9.1. Query Operasi [Nama Operasi]
+Tabel 5.12.1. Query Operasi [Nama Operasi]
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
@@ -1773,14 +1912,46 @@ public konfirmasiPekerjaan(idKontrak : Integer) -> Boolean {
 
 Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
 
-Tabel 5.9.1. Query Operasi [Nama Operasi]
+Tabel 5.12.1. Query Operasi [Nama Operasi]
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
 | *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
 | *...* | *...* | *...* |
 
+### 5.12.3 Algoritma/Query
 
+**Nama Kelas:** *KontrakPekerjaanController* 
+**Nama Operasi:** *kirimInput()*  
+**ID Algoritma:** *[Algo-094]*
+
+```text
+PUBLIC PROCEDURE kirimInput(detailPekerjaan, persetujuanHarga)
+
+    dataKontrak = ARRAY(detailPekerjaan, persetujuanHarga)
+
+    objKontrak = CREATE kontrakPekerjaan
+    objKontrak.newKontrak(dataKontrak)
+
+    objKontrak.makeKontrak()
+    
+    objKontrak.statusUpdate("statusPekerjaan", "on progress")
+    isSaved = objKontrak.saveKontrak()
+
+    IF isSaved == true THEN
+        UI.showDetailPekerjaan(objKontrak)
+    END IF
+END PROCEDURE
+```
+
+Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
+
+Tabel 5.12.1. Query Operasi [Nama Operasi]
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
+| *...* | *...* | *...* |
 
 ## 5.13 Kelas Komunikasi
 
