@@ -101,7 +101,7 @@
 | 30-09-2026 | Naufal Hasbialhaq | Membuat Bab 2 dan Bab 1 | 60 menit | Done | - 
 | 30-09-2026 | Raymond Edson Sabajan | Memperbaiki Pemodelan Kelas UC04-UC06 | 120 menit | Done | - 
 | 30-09-2026 | Wimar Widiarto | Memperbaiki Pemodelan Kelas UC10-UC12 | 120 menit | Done | - 
-| 30-09-2026 | Vensenius Juan Setiady | Memperbaiki Pemodelan Kelas UC01-UC03 | 120 menit | Done | - 
+| 30-09-2026 | Vinsensius Juan Setiady | Memperbaiki Pemodelan Kelas UC01-UC03 | 120 menit | Done | - 
 | 30-09-2026 | Yohanes Nicholas Setiawan | Memperbaiki Pemodelan Kelas UC07-UC09  | 120 menit | Done | - 
 
 
@@ -112,7 +112,7 @@
 | 07-10-2026 | Raymond Edson Sabajan | Mengerjakan bab 3 | 120 menit | Done | - |
 | 07-10-2026 | Wimar Widiarto | Pembuatan Diagram Bab 1 dan Tabel Konten package bab 3 | 120 menit | Done | - |
 | 07-10-2026 | Yohanes Nicholas Setiawan | Pembuatan Diagram Bab 1 | 120 menit  | 120 menit | Done | - |
-| 07-10-2026 | Vensenius Juan Setiady | Membuat diagram bab 3 | 120 menit | Done | - |
+| 07-10-2026 | Vinsensius Juan Setiady | Membuat diagram bab 3 | 120 menit | Done | - |
 
 
 
@@ -123,6 +123,16 @@
 | 21-10-2026 | Naufal Hasbialhaq |  sq UC01 normal (revisi) dan sq UC01 alt1 | 120 menit | Done | - |
 | 21-10-2026 | Yohanes Nicholas Setiawan | Bab 4 dan 5 | 1 jam  | Done | - |
 | 21-10-2026 | Wimar Widiarto | UC10-12 | 3 jam  | Done | - |
-| 21-10-2026 | Vensenius Juan Setiady | UC07-UC09 | 3 jam  | Done | - |
+| 21-10-2026 | Vinsensius Juan Setiady | UC07-UC09 | 3 jam  | Done | - |
 | 21-10-2026 | Raymond Edson Sabajan | UC04-UC06 | 3 jam  | Done | - |
 | 21-10-2026 | Naufal Hasbialhaq | UC02 dan UC03 | 3 jam  | Done | - |
+
+
+### Milestone 7
+| Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
+| :--- | :--- | :--- | :--- | :--- | :--- | 
+| 28-10-2026 | Naufal Hasbialhaq |  Finalisasi Tubes | 180 menit | Done | - |
+| 28-10-2026 | Wimar Widiarto |  Finalisasi Tubes | 180 menit | Done | - |
+| 28-10-2026 | Yohanes Nicholas Setiawan |  Finalisasi Tubes | 180 menit | Done | - |
+| 28-10-2026 | Vinsensius Juan Setiady |  Finalisasi Tubes | 180 menit | Done | - |
+| 28-10-2026 | Naufal Hasbialhaq |  Finalisasi Tubes | 180 menit | Done | - |
