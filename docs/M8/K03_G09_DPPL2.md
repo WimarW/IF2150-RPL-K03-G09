@@ -320,7 +320,7 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 <ul>
     <li>Skenario Normal <br>
         <p align="center">
-        <img src=".assets/diagram/sequenceUC04.png" width="75%">
+        <img src="./assets/diagram/sequenceUC04.png" width="75%">
         </p>
         <p align="center">
         <i>Gambar X. Diagram Sequence UC04</i>
@@ -332,7 +332,7 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 
 
 <p align="center">
-<img src=".assets/diagram/classUC04.png" width="75%">
+<img src="./assets/diagram/classUC04.png" width="75%">
 </p>
 <p align="center">
 <i>Gambar X. Diagram Kelas UC04</i>
