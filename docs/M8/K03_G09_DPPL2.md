@@ -8,7 +8,7 @@ DESKRIPSI PERANCANGAN PERANGKAT LUNAK (DPPL)
 <br>
 
 ## Cari Uang
-### <img src="./assets/diagram/cariuang.svg" width="100" height="100">
+### <img src="../M7/assets/diagram//cariuang.svg" width="100" height="100">
 
 ### Untuk: Agatha Tatianingseto
 
@@ -113,7 +113,7 @@ Pemilihan MVC sebagai style yang dipilih karena MVC memisahkan antara bagaimana 
 
 
 <p align="center">
-<img alt="Contoh Arsitektur MVC" src="./assets/diagram/Diagram-MVC.png" width="40%">
+<img alt="Contoh Arsitektur MVC" src="../M7/assets/diagram//Diagram-MVC.png" width="40%">
 </p>
 <p align="center">
 <i>Gambar 2.1 Arsitektur MVC</i>
@@ -174,7 +174,7 @@ Pemilihan *Development View* didasari oleh kebutuhan untuk mendeskripsikan organ
 Penerapan *package diagram* pada pandangan ini memberikan batasan aksesantar bagian sistem melalui aturan dependensi seperti pemakaian, pengimporan publik, maupun akses privat. Kejelasan struktur ini mempermudah pembagian alokasi kerja antarpengembang agar tidak saling berbenturan, mendukung pembagian tanggung jawab fitur, serta meningkatkan potensi penggunaan ulang kode program dan kemudahan pemeliharaan sistem secara berkelanjutan.
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/Development View.drawio.png" width="50%">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="../M7/assets/diagram//Development View.drawio.png" width="50%">
 </p>
 <p align="center">
 <i>Gambar 2.4.1 Model Development View</i>
@@ -210,7 +210,7 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 - **Skenario Normal**
 
 <p align="center">
-<img alt="Sequence Diagram UC01" src="./assets/diagram/sq-UC01-Mendaftarkan jasa-normal.drawio.png" width="50%">
+<img alt="Sequence Diagram UC01" src="../M7/assets/diagram//sq-UC01-Mendaftarkan jasa-normal.drawio.png" width="50%">
 </p>
 <p align="center">
 <i>Gambar 1. Sequence Diagram UC01</i>
@@ -219,7 +219,7 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 - **Skenario Alternatif 1: Verifikasi Input Gagal**
 
 <p align="center">
-<img alt="Sequence Diagram UC01 - Skenario 1" src="./assets/diagram/sq-UC01-Mendaftarkan jasa-alt1.drawio.png" width="50%">
+<img alt="Sequence Diagram UC01 - Skenario 1" src="../M7/assets/diagram//sq-UC01-Mendaftarkan jasa-alt1.drawio.png" width="50%">
 </p>
 <p align="center">
 <i>Gambar 2. Sequence Diagram UC01 - Verifikasi Input Gagal</i>
@@ -229,7 +229,7 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 
 
 <p align="center">
-<img alt="" src="./assets/diagram/cd-UC01.drawio.png" width="35%">
+<img alt="" src="../M7/assets/diagram//cd-UC01.drawio.png" width="35%">
 </p>
 <p align="center">
 <i>Gambar 3. Diagram Kelas UC01 - Mendaftarkan Jasa</i>
@@ -244,7 +244,7 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 ## 3.2.1 Sequence Diagram
 
 <p align="center">
-<img alt="Sequence Diagram UC02" src="./assets/diagram/sq-UC02-Memilih-jasa-normal.drawio.png" width="50%">
+<img alt="Sequence Diagram UC02" src="../M7/assets/diagram//sq-UC02-Memilih-jasa-normal.drawio.png" width="50%">
 </p>
 <p align="center">
 <i>Gambar 4. Sequence Diagram UC02</i>
@@ -253,7 +253,7 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 - **Skenario Alternatif 1: Pemberi Jasa Tidak Ditemukan**
 
 <p align="center">
-<img alt="Sequence Diagram UC02 - Skenario 1" src="./assets/diagram/sq-UC02-Memilih-jasa-alt1.drawio.png" width="50%">
+<img alt="Sequence Diagram UC02 - Skenario 1" src="../M7/assets/diagram//sq-UC02-Memilih-jasa-alt1.drawio.png" width="50%">
 </p>
 <p align="center">
 <i>Gambar 5. Sequence Diagram UC02 - Pemberi Jasa Tidak Ditemukan</i>
@@ -262,7 +262,7 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 ## 3.2.2 Diagram Kelas
 
 <p align="center">
-<img alt="Sequence Diagram UC02 - Skenario 1" src="./assets/diagram/cd UC02.drawio.png" width="50%">
+<img alt="Sequence Diagram UC02 - Skenario 1" src="../M7/assets/diagram//cd UC02.drawio.png" width="50%">
 </p>
 <p align="center">
 <i>Gambar 6. Diagram Kelas UC02 </i>
@@ -276,7 +276,7 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 ## 3.3.1 Sequence Diagram
 
 <p align="center">
-<img alt="Sequence Diagram UC02" src="./assets/diagram/sq-UC03-Menghubungi-pemberi-jasa-Normal.drawio-2.png" width="50%">
+<img alt="Sequence Diagram UC02" src="../M7/assets/diagram//sq-UC03-Menghubungi-pemberi-jasa-Normal.drawio-2.png" width="50%">
 </p>
 <p align="center">
 <i>Gambar 7. Sequence Diagram UC03</i>
@@ -285,7 +285,7 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 - **Skenario Alternatif 1: Pesan tidak terkirim ke pemberi jasa**
 
 <p align="center">
-<img alt="Sequence Diagram UC03 - Skenario 1" src="./assets/diagram/sq-UC03-Menghubungi-pemberi-jasa-alt1.drawio.png" width="50%">
+<img alt="Sequence Diagram UC03 - Skenario 1" src="../M7/assets/diagram//sq-UC03-Menghubungi-pemberi-jasa-alt1.drawio.png" width="50%">
 </p>
 <p align="center">
 <i>Gambar 8. Sequence Diagram UC03 - Pesan tidak terkirim ke pemberi jasa</i>
@@ -294,7 +294,7 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 ## 3.3.2 Class Diagram
 
 <p align="center">
-<img alt="" src="./assets/diagram/CD UC03.drawio.png" width="35%">
+<img alt="" src="../M7/assets/diagram//CD UC03.drawio.png" width="35%">
 </p>
 <p align="center">
 <i>Gambar 9. Diagram Kelas UC03 - Mendaftarkan Jasa</i>
@@ -322,7 +322,7 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 <ul>
     <li>Skenario Normal <br>
         <p align="center">
-        <img src="./assets/diagram/sequenceUC04.png" width="75%">
+        <img src="../M7/assets/diagram//sequenceUC04.png" width="75%">
         </p>
         <p align="center">
         <i>Gambar X. Diagram Sequence UC04</i>
@@ -334,7 +334,7 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 
 
 <p align="center">
-<img src="./assets/diagram/classDiagramUC03.png" width="75%">
+<img src="../M7/assets/diagram//classDiagramUC03.png" width="75%">
 </p>
 <p align="center">
 <i>Gambar X. Diagram Kelas UC04</i>
@@ -356,7 +356,7 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 <ul>
     <li>Skenario Normal <br>
         <p align="center">
-        <img src="./assets/diagram/sequenceUC05.png" width="75%">
+        <img src="../M7/assets/diagram//sequenceUC05.png" width="75%">
         </p>
         <p align="center">
         <i>Gambar X. Diagram Sequence UC05</i>
@@ -368,7 +368,7 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 
 
 <p align="center">
-<img src="./assets/diagram/classDiagramUC05.png" width="75%">
+<img src="../M7/assets/diagram//classDiagramUC05.png" width="75%">
 </p>
 <p align="center">
 <i>Gambar X. Diagram Kelas UC05</i>
@@ -390,7 +390,7 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 <ul>
     <li>Skenario Normal <br>
         <p align="center">
-        <img src="./assets/diagram/sequenceUC06.png" width="75%">
+        <img src="../M7/assets/diagram//sequenceUC06.png" width="75%">
         </p>
         <p align="center">
         <i>Gambar X. Diagram Sequence UC06</i>
@@ -402,7 +402,7 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 
 
 <p align="center">
-<img src="./assets/diagram/classDiagramUC06.png" width="75%">
+<img src="../M7/assets/diagram//classDiagramUC06.png" width="75%">
 </p>
 <p align="center">
 <i>Gambar X. Diagram Kelas UC06</i>
@@ -430,7 +430,7 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 ### 3.7.2 Sequence Diagram
 <ul>
     <p align="center">
-    <img src="./assets/diagram/sequence diagram 7.png" width="35%">
+    <img src="../M7/assets/diagram//sequence diagram 7.png" width="35%">
     </p>
     <p align="center">
     <i>Gambar 15. Diagram Sequence UC7</i>
@@ -439,7 +439,7 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 
 ### 3.7.3 Diagram Kelas
 <p align="center">
-<img src="./assets/diagram/class diagram 7.png" width="35%">
+<img src="../M7/assets/diagram//class diagram 7.png" width="35%">
 </p>
 <p align="center">
 <i>Gambar 16. Diagram Kelas UC7</i>
@@ -467,7 +467,7 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 ### 3.8.2 Sequence Diagram
 <ul>
     <p align="center">
-    <img src="./assets/diagram/sequence diagram 8.png" width="35%">
+    <img src="../M7/assets/diagram//sequence diagram 8.png" width="35%">
     </p>
     <p align="center">
     <i>Gambar 17. Diagram Sequence UC8</i>
@@ -476,7 +476,7 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 
 ### 3.8.3 Diagram Kelas
 <p align="center">
-<img src="./assets/diagram/class diagram 8.png" width="35%">
+<img src="../M7/assets/diagram//class diagram 8.png" width="35%">
 </p>
 <p align="center">
 <i>Gambar 18. Diagram Kelas UC8</i>
@@ -504,7 +504,7 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 ### 3.9.2 Sequence Diagram
 <ul>
     <p align="center">
-    <img src="./assets/diagram/sequence diagram 9.png" width="35%">
+    <img src="../M7/assets/diagram//sequence diagram 9.png" width="35%">
     </p>
     <p align="center">
     <i>Gambar 19. Diagram Sequence UC9</i>
@@ -513,7 +513,7 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 
 ### 3.9.3 Diagram Kelas
 <p align="center">
-<img src="./assets/diagram/class diagram 9.png" width="35%">
+<img src="../M7/assets/diagram//class diagram 9.png" width="35%">
 </p>
 <p align="center">
 <i>Gambar 20. Diagram Kelas UC9</i>
@@ -541,14 +541,14 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 <ul>
     <li>Skenario Normal <br>
         <p align="center">
-        <img src="./assets/diagram/SequenceUC10.png" width="35%">
+        <img src="../M7/assets/diagram//SequenceUC10.png" width="35%">
         </p>
         <p align="center">
         <i>Gambar 21. Diagram Sequence UC10</i>
         </p>
     <li>Skenario Alternatif 1: Penyedia Jasa atau pengguna menutup popup yang telah dimunculkan atau menutup aplikasi setelah proses transaksi selesai
         <p align="center">
-        <img src="./assets/diagram/SequenceUC10Alt1.png" width="75%">
+        <img src="../M7/assets/diagram//SequenceUC10Alt1.png" width="75%">
         </p>
         <p align="center">
         <i>Gambar 22. Diagram Sequence UC10 Alternatif 1</i>
@@ -559,7 +559,7 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 
 
 <p align="center">
-<img src="./assets/diagram/DiagramClassUC10.png" width="35%">
+<img src="../M7/assets/diagram//DiagramClassUC10.png" width="35%">
 </p>
 <p align="center">
 <i>Gambar 23. Diagram Kelas UC10</i>
@@ -588,21 +588,21 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 <ul>
     <li>Skenario Pelanggan 
         <p align="center">
-        <img src="./assets/diagram/DiagramUC11SkenarioPelanggan.png" width="50%">
+        <img src="../M7/assets/diagram//DiagramUC11SkenarioPelanggan.png" width="50%">
         </p>
         <p align="center">
         <i>Gambar 24. Diagram Sequence UC10 Skenario Pelanggan</i>
         </p>
     <li>Skenario Pemberi Jasa
         <p align="center">
-        <img src="./assets/diagram/DiagramUC11SeknarioPemberiJasa.png" width="50%">
+        <img src="../M7/assets/diagram//DiagramUC11SeknarioPemberiJasa.png" width="50%">
         </p>
         <p align="center">
         <i>Gambar 25. Diagram Sequence UC10 Skenario Pemberi Jasa</i>
         </p>
     <li> Skenario Layanan Pelanggan
         <p align="center">
-        <img src="./assets/diagram/DiagramUC11SkenarioLayananPelanggan.png" width="50%">
+        <img src="../M7/assets/diagram//DiagramUC11SkenarioLayananPelanggan.png" width="50%">
         </p>
         <p align="center">
         <i>Gambar 26. Diagram Sequence UC10 Skenario Layanan Pelanggan</i>
@@ -611,7 +611,7 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 
 ### 3.11.3 Diagram Kelas
 <p align="center">
-<img src="./assets/diagram/DiagramClassUC11.png" width="50%">
+<img src="../M7/assets/diagram//DiagramClassUC11.png" width="50%">
 </p>
 <p align="center">
 <i>Gambar 27. Diagram Kelas UC11</i>
@@ -636,14 +636,14 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 <ul>
     <li>Skenario Pelanggan 
         <p align="center">
-        <img src="./assets/diagram/SequenceUC12SkenarioPelanggan.png" width="50%">
+        <img src="../M7/assets/diagram//SequenceUC12SkenarioPelanggan.png" width="50%">
         </p>
         <p align="center">
         <i>Gambar 28. Diagram Sequence UC10 Skenario Pelanggan</i>
         </p>
     <li>Skenario Pemberi Jasa
         <p align="center">
-        <img src="./assets/diagram/SequenceUC12SkenarioPemberiJasa.png" width="50%">
+        <img src="../M7/assets/diagram//SequenceUC12SkenarioPemberiJasa.png" width="50%">
         </p>
         <i>Gambar 29. Diagram Sequence UC10 Skenario Pelanggan</i>
         </p>
@@ -652,7 +652,7 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 ### 3.12.2 Diagram Kelas
 
 <p align="center">
-<img src="./assets/diagram/DiagramClassUC12.png" width="50%">
+<img src="../M7/assets/diagram//DiagramClassUC12.png" width="50%">
 </p>
 <p align="center">
 <i>Gambar 30. Diagram Kelas UC11</i>
@@ -667,7 +667,7 @@ Tabel 3.1. Identifikasi Kelas Use Case Mendaftarkan Jasa
 **Bagian ini diisi dengan diagram kelas keseluruhan.**
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/class-diagram.png" width="50%">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="../M7/assets/diagram//class-diagram.png" width="50%">
 </p>
 <p align="center">
 <i>Gambar 4.1. Diagram Kelas Perancangan Keseluruhan Cari Uang</i>
@@ -1881,7 +1881,7 @@ Masukkan versi awal prototipe antarmuka, dimana untuk setiap antarmuka/layar, tu
 **Nama Layar:** *[Nama layar]*
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/contoh-design.png" width="50%">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="../M7/assets/diagram//contoh-design.png" width="50%">
 </p>
 <p align="center">
 <i>Gambar 6.1. Rancangan Antarmuka [ID Layar] - [Nama Layar]</i>
@@ -1908,7 +1908,7 @@ Tabel 6.Y. Rancangan Antarmuka Keseluruhan
 
 | No | Tampilan Antarmuka |
 | :--- | :--- |
-| *[I-01]* | <img src="./assets/diagram/contoh-design.png" alt="Contoh Desain" width="400"> |
+| *[I-01]* | <img src="../M7/assets/diagram//contoh-design.png" alt="Contoh Desain" width="400"> |
 | *[I-02]* | *[Sisipkan gambar antarmuka I-02]* |
 | *[I-XX]* | *[Sisipkan gambar antarmuka berikutnya]* |
 
