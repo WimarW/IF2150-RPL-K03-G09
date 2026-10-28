@@ -1380,6 +1380,37 @@ Tabel 5.8.1. Operasi Kelas LayananPelangganController
 
 ### 5.8.1 Algoritma/Query
 
+**Nama Kelas:** *LayananPelangganController*  
+**Nama Operasi:** *requestTiketLaporan()*  
+**ID Algoritma:** *[Algo-XXX]*
+
+```text
+public requestTiketLaporan(idTiket) -> TiketLaporan{
+    tiket = TiketLaporanController.getTiketLaporan(idTiket)
+    if (tiket =/= NULL) {
+        -> tiket
+    }
+        -> NULL
+}
+```
+
+### 5.8.2 Algoritma/Query
+
+**Nama Kelas:** *LayananPelangganController*  
+**Nama Operasi:** *teruskanBalasan()*  
+**ID Algoritma:** *[Algo-XXX]*
+
+```text
+public teruskanBalasan(idTiket, idLayananPelanggan, idPengguna, isiBalasan){
+    isSuccess = TiketLaporanController.balasTiket(idTiket, isiBalasan)
+    if (isSuccess) {
+        KomunikasiController.kirimPesan(idTiket, idLayananPelanggan, isiBalasan)
+        -> True
+    }
+    -> False
+}
+```
+
 
 
 ## 5.9 Kelas KategoriJasa
@@ -2074,18 +2105,13 @@ Tabel 5.14.1. Operasi Kelas [Nama Kelas 14]
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
+| sendChat(dataChat) | Public | Mengirim pesan |
+| getRiwayatChat(idPengguna1, idPengguna2) : List<Object> | Public | Mengambil riwayat chat antara 2 aktor |
+| loadChat(idPelanggan : String, idPemberiJasa : String) | Public | Memproses chat yang dikirim antara pelanggan dan pemberi jasa |
+| startChat(idPelanggan : String, idPemberiJasa : String) | Public | Membuka chat antara pelanggan dan pemberi jasa |
 
-Tabel 5.14.2. Atribut Kelas [Nama Kelas 14]
-
-| Nama Atribut | Visibility (private, public) | Tipe |
-| :--- | :--- | :--- |
-| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
-| *...* | *...* | *...* |
 
 ### 5.14.1 Algoritma/Query
-
 
 **Nama Kelas:** *KomunikasiController*  
 **Nama Operasi:** *sendChat(dataChat : Object)*  
@@ -2208,12 +2234,6 @@ Tabel 5.16.1. Operasi Kelas TiketLaporanController
 | validasiFormTiket() : Boolean | Public | Memvalidasi input yang dimasukkan ke dalam form tiket |
 | buatTiket(new TiketLaporan) : Boolean | Public | Mengatur pembuatan dan pengisian data tiket laporan |
 
-Tabel 5.16.2. Atribut Kelas [Nama Kelas 16]
-
-| Nama Atribut | Visibility (private, public) | Tipe |
-| :--- | :--- | :--- |
-| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
-| *...* | *...* | *...* |
 
 ### 5.16.1 Algoritma/Query
 
@@ -2545,7 +2565,6 @@ Tabel 5.20.1. Operasi Kelas [Nama Kelas 20]
 ### 5.20.1 Algoritma/Query
 
 **Nama Kelas:** *NotifikasiController*  
-<<<<<<< HEAD
 **Nama Operasi:** *buatNotifikasi()*  
 **ID Algoritma:** *[Algo-001]*
 
@@ -2557,19 +2576,14 @@ public buatNotifikasi(idPenerima : String, pesan : String) {
 
     execute_query(Q-XXX, [this.idNotifikasi, this.idPenerima, this.isiNotifikasi, this.waktuNotifikasi, this.statusBaca])
 }
-=======
-**Nama Operasi:** *buatNotifikasi*  
-**ID Algoritma:** *[Algo-001]*
-
-```text
-PRIVATE notifikasiUI : NotifikasiUI
-
-PUBLIC procedure buatNotifikasi(idPenerima : String, isiNotifikasi : String) 
-    notifBaru <- NEW Notifikasi(idPenerima, isiNotifikasi)
-    notifBaru.simpanNotifikasi()
-    this.kirimNotifikasi(notifBaru)
->>>>>>> 7a3b3cef86ec1eac6eda6f17abbf12115249d254
 ```
+Tabel 5.20.1. Query Operasi buatNotifikasi()
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| *[Q-XXX]* | `INSERT INTO notifikasi (idNotifikasi, idPenerima, isiNotifikasi, waktuNotifikasi, statusBaca) VALUES ($1, $2, $3, $4, $5, NOW());` | Menambah entry notifikasi baru pada database notifikasi |
+
+
 ### 5.20.2 Algoritma/Query
 **Nama Kelas:** *NotifikasiController*  
 **Nama Operasi:** *kirimNotifikasi(notif: Notifikasi)*  
@@ -2580,15 +2594,9 @@ PUBLIC kirimNotifikasi(notif : Notifikasi) : void
 ```
 
 
-Tabel 5.20.1. Query Operasi buatNotifikasi()
-
-| No Query | Query | Keterangan |
-| :--- | :--- | :--- |
-| *[Q-XXX]* | `INSERT INTO notifikasi (idNotifikasi, idPenerima, isiNotifikasi, waktuNotifikasi, statusBaca) VALUES ($1, $2, $3, $4, $5, NOW());` | Menambah entry notifikasi baru pada database notifikasi |
 
 
-<<<<<<< HEAD
-### 5.20.2 Algoritma/Query
+### 5.20.3 Algoritma/Query
 
 **Nama Kelas:** *NotifikasiController*  
 **Nama Operasi:** *kirimNotfikasi()*  
@@ -2600,8 +2608,6 @@ public kirimNotifikasi(idPenerima : String, pesan : String) {
 }
 ```
 Tabel 5.20.2. Query Operasi kirimNotifikasi()
-=======
->>>>>>> 7a3b3cef86ec1eac6eda6f17abbf12115249d254
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
