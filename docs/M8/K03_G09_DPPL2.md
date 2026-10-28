@@ -355,13 +355,14 @@ Tabel 5.2.1. Query Operasi [Nama Operasi]
 **Nama Kelas:** PemberiJasa  
 **ID Kelas:** C04
 
-Tabel 5.3.1. Operasi Kelas PemberiJasa
+Tabel 5.3.1 Operasi Kelas PemberiJasa
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
 | `cekInfoLogin(input username: String, input password: String): Boolean` | public | Menjalankan query ke database untuk melihat apakah informasi login yang digunakan sesuai dengan informasi pada tabel pengguna |
+| `makePelanggan(input idPengguna: String, input namaPengguna: String, input username: String, input password: String, input email: String, input nomorTelpon: String): Pelanggan` | public | Memverifikasi bahwa informasi unik dan tidak ada di database kemudian membuat objek pelanggan dengan informasi tersebut | 
 
-Tabel 5.3.2. Atribut Kelas PemberiJasa
+Tabel 5.3.2 Atribut Kelas PemberiJasa
 
 | Nama Atribut | Visibility (private, public) | Tipe |
 | :--- | :--- | :--- |
@@ -370,8 +371,8 @@ Tabel 5.3.2. Atribut Kelas PemberiJasa
 
 ### 5.3.1 Algoritma/Query
 
-**Nama Kelas:** PemberiJasa
-**Nama Operasi:** cekInfoLogin
+**Nama Kelas:** PemberiJasa <br>
+**Nama Operasi:** cekInfoLogin <br>
 **ID Algoritma:** Alg-XXX
 
 ```text
@@ -400,14 +401,51 @@ ALGORITMA
     --> true
 ```
 
-Tabel 5.3.1 Query Operasi cekInfoLogin
+Tabel 5.3.3 Query Operasi cekInfoLogin
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
 | Q-XXX | `SELECT id_pengguna, nama_pengguna, username, password, email FROM pengguna WHERE username = $1;` | Mengambil data akun dan hash password dari tabel pengguna berdasarkan nama pengguna. |
 
 ### 5.3.2 Algoritma/Query
+**Nama Kelas:** PemberiJasa <br>
+**Nama Operasi:** makePemberiJasa <br>
+**ID Algoritma:** Alg-XXX
 
+```text
+public function makePelanggan(input idPengguna: String, input namaPengguna: String, input username: String, input password: String, input email: String, input nomorTelpon: String) -> PemberiJasa
+KAMUS LOKAL
+record: SQL query row result
+pemberijasa: PemberiJasa
+
+ALGORITMA
+    if (trim(username) = "" or trim(namaPengguna) = "" or trim(idPengguna) = "")
+        --> false
+    if (not(validEmail(email))) then
+        --> false
+    if (not isNumericString(nomorTelpon) or length(nomorTelpon) < 10) then
+        --> false
+
+    {Check if info is in db}
+    record <- execute_query(Q-XXX, [trim(username), trim(email)])
+    if (isExist is not null) then
+        --> false
+
+    pemberijasa.idPengguna <- idPengguna
+    pemberijasa.namaPengguna <- namaPengguna
+    pemberijasa.username <- trim(username)
+    pemberijasa.password <- password
+    pemberijasa.email <- trim(email)
+    pemberijasa.nomorTelpon <- nomorTelpon
+    pemberijasa.akumulasiRating <- 0.0
+    pemberijasa.riwayatRating <- []
+    --> pemberijasa
+```
+Tabel 5.3.4 Query Operasi [Nama Operasi]
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-XXX | `SELECT id_pengguna FROM pengguna WHERE username = $1 OR email = $2;` | Mencari sebuah entry dengan username dan pengguna |
 
 ## 5.4 Kelas [Nama Kelas 4]
 
@@ -506,10 +544,45 @@ Tabel 5.5.3 Query Operasi cekInfoLogin
 | :--- | :--- | :--- |
 | Q-XXX | `SELECT id_pengguna, nama_pengguna, username, password, email FROM pengguna WHERE username = $1;` | Mengambil data akun dan hash password dari tabel pengguna berdasarkan nama pengguna. |
 
-### 5.5.2 Algoritma/Query
+### 5.3.2 Algoritma/Query
+**Nama Kelas:** Pelanggan <br>
+**Nama Operasi:** makePelanggan <br>
+**ID Algoritma:** Alg-XXX
 
-*[Ulangi pola 5.5.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
+```text
+public function makePelanggan(input idPengguna: String, input namaPengguna: String, input username: String, input password: String, input email: String, input nomorTelpon: String) -> Pelanggan
+KAMUS LOKAL
+record: SQL query row result
+pelanggan: Pelanggan
 
+ALGORITMA
+    if (trim(username) = "" or trim(namaPengguna) = "" or trim(idPengguna) = "")
+        --> false
+    if (not(validEmail(email))) then
+        --> false
+    if (not isNumericString(nomorTelpon) or length(nomorTelpon) < 10) then
+        --> false
+
+    {Check if info is in db}
+    record <- execute_query(Q-XXX, [trim(username), trim(email)])
+    if (isExist is not null) then
+        --> false
+
+    pelanggan.idPengguna <- idPengguna
+    pelanggan.namaPengguna <- namaPengguna
+    pelanggan.username <- trim(username)
+    pelanggan.password <- password
+    pelanggan.email <- trim(email)
+    pelanggan.nomorTelpon <- nomorTelpon
+    pelanggan.akumulasiRating <- 0.0
+    pelanggan.riwayatRating <- []
+    --> pelanggan
+```
+Tabel 5.5.4 Query Operasi [Nama Operasi]
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-XXX | `SELECT id_pengguna FROM pengguna WHERE username = $1 OR email = $2;` | Mencari sebuah entry dengan username dan pengguna |
 
 ## 5.6 Kelas [Nama Kelas 6]
 
