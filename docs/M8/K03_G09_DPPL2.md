@@ -779,7 +779,7 @@ Tabel 5.1.1. Query Opersi [Nama Operasi]
 *[Ulangi pola 5.1.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
-## 5.2 Kelas [Nama Kelas 2]
+## 5.2 Kelas PenggunaController
 
 **Nama Kelas:** *[Nama kelas]*  
 **ID Kelas:** *[ID kelas]*
@@ -826,9 +826,12 @@ Tabel 5.2.1. Query Operasi [Nama Operasi]
 
 
 ## 5.3 Kelas PemberiJasa
+## 5.3 Kelas PemberiJasa
 
 **Nama Kelas:** PemberiJasa  
 **ID Kelas:** C04
+**Nama Kelas:** *PemberiJasa*  
+**ID Kelas:** *C04*
 
 Tabel 5.3.1 Operasi Kelas PemberiJasa
 
@@ -837,6 +840,7 @@ Tabel 5.3.1 Operasi Kelas PemberiJasa
 | `cekInfoLogin(input username: String, input password: String): Boolean` | public | Menjalankan query ke database untuk melihat apakah informasi login yang digunakan sesuai dengan informasi pada tabel pengguna |
 | `makePelanggan(input idPengguna: String, input namaPengguna: String, input username: String, input password: String, input email: String, input nomorTelpon: String): Pelanggan` | public | Memverifikasi bahwa informasi unik dan tidak ada di database kemudian membuat objek pelanggan dengan informasi tersebut | 
 | `simpanKeDb(): void`| public | Menyimpan objek ke database |
+| laporkanMasalah() | Public | Pemberi jasa melaporkan masalah kepada layanan pelanggan |
 
 Tabel 5.3.2 Atribut Kelas PemberiJasa
 
@@ -875,6 +879,37 @@ ALGORITMA
     this.email <- userRecord.email
     this.namaPengguna <- userRecord.nama_pengguna
     --> true
+
+```
+
+### 5.3.2 Algoritma/Query
+
+**Nama Kelas:** PemberiJasa
+**Nama Operasi:** getPemberiJasaByID()
+**ID Algoritma:** Alg-XXX
+```text
+PRIVATE dataPemberiJasa : Object
+PUBLIC function getPemberiJasaByID(idPemberiJasa : String) -> Object
+    rows : Object
+    rows <- // execute query data Pemberi Jasa berdasarkan ID
+
+    this.dataPemberiJasa <- rows
+    -> this.dataPemberiJasa
+```
+
+### 5.3.3 Algoritma/Query
+
+**Nama Kelas:** PemberiJasa
+**Nama Operasi:** getPemberiJasaByKategori()
+**ID Algoritma:** Alg-XXX
+```text
+PRIVATE idPemberiJasa : String
+PUBLIC  idKategoriJasa : String
+PUBLIC  jenisJasa : String
+PUBLIC function getPemberiJasaByKategori(idKategoriJasa : String) -> List<Object>
+    rows : List <Object>
+    rows <- // execute querydaftar Pemberi Jasa yang tersedia berdasarkan ID Kategori Jasa 
+    -> rows
 ```
 
 Tabel 5.3.3 Query Operasi cekInfoLogin
@@ -887,6 +922,7 @@ Tabel 5.3.3 Query Operasi cekInfoLogin
 **Nama Kelas:** PemberiJasa <br>
 **Nama Operasi:** makePemberiJasa <br>
 **ID Algoritma:** Alg-XXX
+
 
 ```text
 public function makePelanggan(input idPengguna: String, input namaPengguna: String, input username: String, input password: String, input email: String, input nomorTelpon: String, input idKategoriJasa: String,   input jenisJasa: String) -> PemberiJasa
@@ -950,17 +986,19 @@ Tabel 5.3.5 Query Operasi simpanKeDb
 | Q-XXX | `INSERT INTO pengguna (id_pengguna, nama_pengguna, username, password, email, nomor_telpon, akumulasi_rating, riwayat_rating) VALUES ($1, $2, $3, $4, $5, $6, 0.0, '{}'); | Menyimpan objek pelanggan dalam database | 
 | Q-XXX | `INSERT INTO pemberi_jasa (id_pengguna, id_kategori_jasa, jenis_jasa) VALUES ($1, $2, $3)` | |
 
-## 5.4 Kelas [Nama Kelas 4]
+
+## 5.4 Kelas PemberiJasaController
 
 **Nama Kelas:** *[Nama kelas]*  
 **ID Kelas:** *[ID kelas]*
 
-Tabel 5.4.1. Operasi Kelas [Nama Kelas 4]
+Tabel 5.4.1. Operasi Kelas PemberiJasaController
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
 | *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
+| requestFormTiket() | Public | Meminta form tiket untuk diisi dan dikirimkan le layanan pelanggan |
+
 
 Tabel 5.4.2. Atribut Kelas [Nama Kelas 4]
 
@@ -973,12 +1011,61 @@ Tabel 5.4.2. Atribut Kelas [Nama Kelas 4]
 
 Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
 
-**Nama Kelas:** *[Nama kelas]*  
-**Nama Operasi:** *[Signature operasi]*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** PemberiJasaController
+**Nama Operasi:** validatePemberiJasa(idPemberiJasa : String)  
+**ID Algoritma:** [Algo-001]
 
 ```text
+PUBLIC function validatePemberiJasa(idPemberiJasa : String) -> Boolean
+    IF (isEmpty(idPemberiJasa)) THEN
+        -> FALSE
+    -> TRUE
 ```
+### 5.4.2 Algoritma/Query
+**Nama Kelas:** PemberiJasaController
+**Nama Operasi:** setInformasiKategoriJasa(idKategoriJasa : String)  
+**ID Algoritma:** [Algo-001]
+
+```text
+PUBLIC procedure setInformasiKategoriJasa(idKategoriJasa : String)
+    this.pemberiJasa.idKategoriJasa <- idKategoriJasa
+```
+### 5.4.3 Algoritma/Query
+**Nama Kelas:** PemberiJasaController
+**Nama Operasi:** fetchPemberiJasaById(idPemberiJasa : String)
+**ID Algoritma:** [Algo-001]
+
+```text
+PRIVATE pemberiJasaUI : PemberiJasaUI
+PUBLIC procedure fetchPemberiJasaById(idPemberiJasa : String)
+    IF (not isEmpty(idPemberiJasa)) THEN
+        dataPemberiJasa <- this.pemberiJasa.getPemberiJasaByID(idPemberiJasa)
+        this.pemberiJasaUI.showPemberiJasaKategori(dataPemberiJasa)
+```
+### 5.4.4 Algoritma/Query
+**Nama Kelas:** PemberiJasaController
+**Nama Operasi:** showPemberiJasaFromKategori(idKategoriJasa : String)
+**ID Algoritma:** [Algo-001]
+
+```text
+PRIVATE pemberiJasa : PemberiJasa
+PUBLIC function showPemberiJasaFromKategori(idKategoriJasa : String) -> List<Object>
+    -> this.pemberiJasa.getPemberiJasaByKategori(idKategoriJasa)
+```
+### 5.4.5 Algoritma/Query
+**Nama Kelas:** PemberiJasaController
+**Nama Operasi:** choosePemberiJasa(idPemberiJasa : String)
+**ID Algoritma:** [Algo-001]
+
+```text
+PRIVATE pemberiJasa : PemberiJasa
+PUBLIC function choosePemberiJasa(idPemberiJasa : String) -> Object
+    -> this.pemberiJasa.getPemberiJasaByID(idPemberiJasa)
+```
+
+
+
+
 
 Tabel 5.4.1. Query Operasi [Nama Operasi]
 
@@ -993,9 +1080,12 @@ Tabel 5.4.1. Query Operasi [Nama Operasi]
 
 ## 5.5 Kelas Pelanggan
 
+**Nama Kelas:** *Pelanggan*  
+**ID Kelas:** *C07*
 **Nama Kelas:** Pelanggan <br> 
 **ID Kelas:** C07
 
+Tabel 5.5.1. Operasi Kelas Pelanggan
 Tabel 5.5.1 Operasi Kelas Pelanggan
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
@@ -1011,7 +1101,11 @@ Tabel 5.5.2 Atribut Kelas Pelanggan
 | *...* | *...* | *...* |
 
 ### 5.5.1 Algoritma/Query
+**Nama Kelas:** *Pelanggan*  
+**Nama Operasi:** *laporkanMasalah()*  
+**ID Algoritma:** *[Algo-001]*
 
+### 5.5.2 Algoritma/Query
 **Nama Kelas:** Pelanggan 
 **Nama Operasi:** cekInfoLogin
 **ID Algoritma:** Alg-XXX
@@ -1048,7 +1142,7 @@ Tabel 5.5.3 Query Operasi cekInfoLogin
 | :--- | :--- | :--- |
 | Q-XXX | `SELECT id_pengguna, nama_pengguna, username, password, email FROM pengguna WHERE username = $1;` | Mengambil data akun dan hash password dari tabel pengguna berdasarkan nama pengguna. |
 
-### 5.5.2 Algoritma/Query
+### 5.5.3 Algoritma/Query
 **Nama Kelas:** Pelanggan <br>
 **Nama Operasi:** makePelanggan <br>
 **ID Algoritma:** Alg-XXX
@@ -1088,7 +1182,7 @@ Tabel 5.5.4 Query Operasi makePelanggan
 | :--- | :--- | :--- |
 | Q-XXX | `SELECT id_pengguna FROM pengguna WHERE username = $1 OR email = $2;` | Mencari sebuah entry dengan username dan pengguna |
 
-### 5.5.3 Algoritma/Query
+### 5.5.4 Algoritma/Query
 **Nama Kelas:** Pelanggan <br>
 **Nama Operasi:** simpanKeDb() <br>
 **ID Algoritma:** Alg-XXX
@@ -1111,7 +1205,7 @@ Tabel 5.5.5 Query Operasi simpanKeDb
 | Q-XXX | `INSERT INTO pengguna (id_pengguna, nama_pengguna, username, password, email, nomor_telpon, akumulasi_rating, riwayat_rating) VALUES ($1, $2, $3, $4, $5, $6, 0.0, '{}'); | Menyimpan objek pelanggan dalam database | 
 
 
-## 5.6 Kelas [Nama Kelas 6]
+## 5.6 Kelas PelangganController
 
 **Nama Kelas:** *[Nama kelas]*  
 **ID Kelas:** *[ID kelas]*
@@ -1217,7 +1311,7 @@ Tabel 5.7.3 Query Operasi cekInfoLogin
 *[Ulangi pola 5.7.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
-## 5.8 Kelas [Nama Kelas 8]
+## 5.8 Kelas LayananPelangganController
 
 **Nama Kelas:** *[Nama kelas]*  
 **ID Kelas:** *[ID kelas]*
@@ -1263,35 +1357,139 @@ Tabel 5.8.1. Query Operasi [Nama Operasi]
 *[Ulangi pola 5.8.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
-## 5.9 Kelas [Nama Kelas 9]
+## 5.9 Kelas KategoriJasa
 
-**Nama Kelas:** *[Nama kelas]*  
-**ID Kelas:** *[ID kelas]*
+**Nama Kelas:** *KategoriJasa*  
+**ID Kelas:** *C09*
 
-Tabel 5.9.1. Operasi Kelas [Nama Kelas 9]
+Tabel 5.9.1. Operasi Kelas PelangganController
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
 | *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
 | *...* | *...* | *...* |
+| validasiInput(): Boolean | Public | Validasi input yang dikirim |
 
-Tabel 5.9.2. Atribut Kelas [Nama Kelas 9]
-
-| Nama Atribut | Visibility (private, public) | Tipe |
-| :--- | :--- | :--- |
-| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
-| *...* | *...* | *...* |
 
 ### 5.9.1 Algoritma/Query
 
-Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
-
-**Nama Kelas:** *[Nama kelas]*  
-**Nama Operasi:** *[Signature operasi]*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** *KategoriJasa* 
+**Nama Operasi:** *getIDKategoriJasa()*  
+**ID Algoritma:** *[Algo-091]*
 
 ```text
-[Tuliskan pseudocode algoritma operasi di sini.]
+PRIVATE  idKategoriJasa   : String
+PUBLIC funtion getIDKategoriJasa() -> String
+    -> this.idKategoriJasa
+```
+
+
+### 5.9.2 Algoritma/Query
+
+**Nama Kelas:** *KategoriJasa* 
+**Nama Operasi:** *getJenisJasa()*  
+**ID Algoritma:** *[Algo-091]*
+
+```text
+PUBLIC function getJenisJasa() -> String
+    -> this.jenisJasa
+```
+
+### 5.9.3 Algoritma/Query
+
+**Nama Kelas:** *KategoriJasa* 
+**Nama Operasi:** *getTarif()*  
+**ID Algoritma:** *[Algo-091]*
+
+```text
+PUBLIC function getTarif() -> Float
+    -> this.tarif
+```
+
+### 5.9.4 Algoritma/Query
+
+**Nama Kelas:** *KategoriJasa* 
+**Nama Operasi:** *getJamKerja()*  
+**ID Algoritma:** *[Algo-091]*
+
+```text
+PRIVATE jamKerja         : String
+PUBLIC function getJamKerja() -> String
+    -> this.jamKerja
+```
+
+### 5.9.5 Algoritma/Query
+
+**Nama Kelas:** *KategoriJasa* 
+**Nama Operasi:** *getDaerahKerja()*  
+**ID Algoritma:** *[Algo-091]*
+
+```text
+PRIVATE daerahKerja      : String
+PUBLIC function getDaerahKerja() -> String
+    RETURN this.daerahKerja
+```
+
+
+### 5.9.6 Algoritma/Query
+
+**Nama Kelas:** *KategoriJasa* 
+**Nama Operasi:** *setTarif()*  
+**ID Algoritma:** *[Algo-091]*
+
+```text
+PRIVATE tarif : Integer
+PUBLIC procedure setTarif(tarifBaru : Float)
+    this.tarif <- tarifBaru
+```
+
+### 5.9.7 Algoritma/Query
+
+**Nama Kelas:** *KategoriJasa* 
+**Nama Operasi:** *setJamKerja()*  
+**ID Algoritma:** *[Algo-091]*
+
+```text
+PRIVATE jamKerja : Integer
+PUBLIC procedure setJamKerja(jamKerjaBaru : String)
+    this.jamKerja <- jamKerjaBaru
+```
+
+### 5.9.8 Algoritma/Query
+
+**Nama Kelas:** *KategoriJasa* 
+**Nama Operasi:** *setDaerahKerja()*  
+**ID Algoritma:** *[Algo-091]*
+
+```text
+PRIVATE daerahKerja : String
+PUBLIC procedure setDaerahKerja(daerahKerjaBaru : String)
+    this.daerahKerja <- daerahKerjaBaru
+```
+
+### 5.9.9 Algoritma/Query
+
+**Nama Kelas:** *KategoriJasa* 
+**Nama Operasi:** *saveKategoriJasa(dataJasa : Object)*  
+**ID Algoritma:** *[Algo-091]*
+
+```text
+PUBLIC  idKategoriJasa   : String
+PRIVATE jenisJasa        : String
+PRIVATE deskripsiJasa    : String
+PRIVATE tarif            : Integer
+PRIVATE jamKerja         : String
+
+PUBLIC procedure saveKategoriJasa(dataJasa : Object)
+    this.idKategoriJasa   <- GenerateID()
+    this.jenisJasa        <- dataJasa.jenisJasa
+    this.deskripsiJasa    <- dataJasa.deskripsiJasa
+    this.tarif            <- dataJasa.tarif
+    this.jamKerja         <- dataJasa.jamKerja
+    this.daerahKerja      <- dataJasa.daerahKerja
+    this.dataKategoriJasa <- dataJasa
+
+    // EXECUTE SQL QUERY
 ```
 
 Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
@@ -1304,12 +1502,7 @@ Tabel 5.9.1. Query Operasi [Nama Operasi]
 | *...* | *...* | *...* |
 
 
-### 5.9.2 Algoritma/Query
-
-*[Ulangi pola 5.9.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
-
-
-## 5.10 Kelas [Nama Kelas 10]
+## 5.10 Kelas KategoriJasaController
 
 **Nama Kelas:** *[Nama kelas]*  
 **ID Kelas:** *[ID kelas]*
@@ -1330,14 +1523,65 @@ Tabel 5.10.2. Atribut Kelas [Nama Kelas 10]
 
 ### 5.10.1 Algoritma/Query
 
-Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
 
-**Nama Kelas:** *[Nama kelas]*  
-**Nama Operasi:** *[Signature operasi]*  
+**Nama Kelas:** *KategoriJasaController*  
+**Nama Operasi:** *showFormKategoriJasa()*  
 **ID Algoritma:** *[Algo-001]*
 
 ```text
-[Tuliskan pseudocode algoritma operasi di sini.]
+PRIVATE kategoriJasaUI : KategoriJasaUI
+PRIVATE kategoriJasa : KategoriJasa
+PRIVATE pemberiJasaController : PemberiJasaController
+
+PUBLIC procedure showFormKategoriJasa() :
+    dataKosong <- {
+        jenisJasa     : "",
+        deskripsiJasa : "",
+        tarif         : 0,
+        jamKerja      : "",
+        daerahKerja   : ""
+    }
+    this.kategoriJasaUI.showFormKategoriJasa(dataKosong)
+```
+### 5.10.2 Algoritma/Query
+
+
+**Nama Kelas:** *KategoriJasaController*  
+**Nama Operasi:** *validateKategoriJasa(Object: dataJasa)*  
+**ID Algoritma:** *[Algo-001]*
+```text
+PUBLIC function validateKategoriJasa(Object: dataJasa) -> Boolean
+        IF(dataJasa = NULL) THEN
+            -> False
+        ELSE IF (NOT isNumber(dataJasa.tarif) or dataJasa.tarif < 0 ) THEN
+            -> False
+        ELSE
+            -> isEmpty(dataJasa.jenisJasa) AND isEmpty(dataJasa.deskripsiJasa) AND isEmpty(dataJasa.tarif) AND isEmpty(jamKerja) AND isEmpty(daerahKerja)
+        -> TRUE
+```
+
+### 5.10.3 Algoritma/Query
+
+
+**Nama Kelas:** *KategoriJasaController*  
+**Nama Operasi:** *submifFormKategoriJasa(dataJasa: Object)*  
+**ID Algoritma:** *[Algo-001]*
+```text
+PUBLIC procedure submifFormKategoriJasa(dataJasa: Object)
+    IF(this.validateKategoriJasa(dataJasa)) THEN
+        this.kategoriJasa.saveKategoriJasa(dataJasa)
+        this.updateDataPemberiJasa(dataJasa.idKategoriJasa)
+```
+
+### 5.10.4 Algoritma/Query
+
+
+**Nama Kelas:** *KategoriJasaController*  
+**Nama Operasi:** *updateDataPemberiJasa(idKategoriJasa: String)*  
+**ID Algoritma:** *[Algo-001]*
+```text
+PUBLIC procedure updateDataPemberiJasa(idKategoriJasa: String)
+    this.pemberiJasaController.setInformasiKategoriJasa(idKategoriJasa)
 ```
 
 Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
@@ -1355,17 +1599,19 @@ Tabel 5.10.1. Query Operasi [Nama Operasi]
 *[Ulangi pola 5.10.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
-## 5.11 Kelas [Nama Kelas 11]
+## 5.11 Kelas KontrakPekerjaan
 
-**Nama Kelas:** *[Nama kelas]*  
-**ID Kelas:** *[ID kelas]*
+**Nama Kelas:** *KontrakPekerjaan*  
+**ID Kelas:** *C16*
 
-Tabel 5.11.1. Operasi Kelas [Nama Kelas 11]
+Tabel 5.11.1. Operasi Kelas KontrakPekerjaan
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
 | *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
+| fetchKontrakPekerjaan() : KontrakPekerjaan | Public | Mengambil data kontrak pekerjaan |
+| saveKontrak() : Boolean | Public | Menyimpan data kontrak pekerjaan |
+| statusUpdate() : Boolean
 
 Tabel 5.11.2. Atribut Kelas [Nama Kelas 11]
 
@@ -1401,17 +1647,18 @@ Tabel 5.11.1. Query Operasi [Nama Operasi]
 *[Ulangi pola 5.11.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
-## 5.12 Kelas [Nama Kelas 12]
+## 5.12 Kelas KontrakPekerjaanController
 
-**Nama Kelas:** *[Nama kelas]*  
-**ID Kelas:** *[ID kelas]*
+**Nama Kelas:** *KontrakPekerjaanController*  
+**ID Kelas:** *C18*
 
 Tabel 5.12.1. Operasi Kelas [Nama Kelas 12]
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
+| getKontrakPekerjaan() : KontrakPekerjaan | Public | Mengambil data kontrak pekerjaan |
+| kirimInput() | Public | Mengirim input kontrak pekerjaan |
+| konfirmasiPekerjaan(kontrak KontrakPekerjaan) : Boolean | Public | Mengonfirmasi pekerjaan yang telah selesai |
 
 Tabel 5.12.2. Atribut Kelas [Nama Kelas 12]
 
@@ -1422,19 +1669,49 @@ Tabel 5.12.2. Atribut Kelas [Nama Kelas 12]
 
 ### 5.12.1 Algoritma/Query
 
-Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
-
-**Nama Kelas:** *[Nama kelas]*  
-**Nama Operasi:** *[Signature operasi]*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** *KontrakPekerjaanController* 
+**Nama Operasi:** *requestKontrakPekerjaan()*  
+**ID Algoritma:** *[Algo-092]*
 
 ```text
-[Tuliskan pseudocode algoritma operasi di sini.]
+public getKontrakPekerjaan(idKontrakPekerjaan : Integer) -> KontrakPekerjaan {
+
+    KontrakPekerjaan temp = KontrakPekerjaan.fetchKontrakPekerjaan(idKontrakPekerjaan)
+
+    return temp
+}
 ```
 
 Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
 
-Tabel 5.12.1. Query Operasi [Nama Operasi]
+Tabel 5.9.1. Query Operasi [Nama Operasi]
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
+| *...* | *...* | *...* |
+
+### 5.12.2 Algoritma/Query
+
+**Nama Kelas:** *KontrakPekerjaanController* 
+**Nama Operasi:** *konfirmasiPekerjaan()*  
+**ID Algoritma:** *[Algo-093]*
+
+```text
+public konfirmasiPekerjaan(idKontrak : Integer) -> Boolean {
+    KontrakPekerjaan kontrak = getKontrakPekerjaan(idKontrak)
+    boolean isUpdated = kontrak.statusUpdate("Done")
+    if (isUpdated) {
+        return True
+    }
+    output("Gagal mengonfirmasi pekerjaan")
+    return False
+}
+```
+
+Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
+
+Tabel 5.9.1. Query Operasi [Nama Operasi]
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
@@ -1442,12 +1719,8 @@ Tabel 5.12.1. Query Operasi [Nama Operasi]
 | *...* | *...* | *...* |
 
 
-### 5.12.2 Algoritma/Query
 
-*[Ulangi pola 5.12.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
-
-
-## 5.13 Kelas [Nama Kelas 13]
+## 5.13 Kelas Komunikasi
 
 **Nama Kelas:** *[Nama kelas]*  
 **ID Kelas:** *[ID kelas]*
@@ -1468,15 +1741,90 @@ Tabel 5.13.2. Atribut Kelas [Nama Kelas 13]
 
 ### 5.13.1 Algoritma/Query
 
-Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
 
-**Nama Kelas:** *[Nama kelas]*  
-**Nama Operasi:** *[Signature operasi]*  
+**Nama Kelas:** *Komunikasi*  
+**Nama Operasi:** *constructor(dataChat : Object)*  
 **ID Algoritma:** *[Algo-001]*
 
 ```text
-[Tuliskan pseudocode algoritma operasi di sini.]
+PRIVATE idChat        : String
+PRIVATE idPengguna    : String
+PRIVATE idPenerima    : String
+PRIVATE isiPesan      : String
+PRIVATE waktuTerkirim : Timestamp
+PRIVATE isChatTerbaca : Boolean
+PRIVATE statusChat    : String
+PRIVATE durasiChat    : Float 
+PRIVATE dataChat      : Object
+
+PUBLIC constructor(dataChat : Object)
+    this.idChat        <- GenerateID()
+    this.idPengguna    <- dataChat.idPengirim
+    this.idPenerima    <- dataChat.idPenerima
+    this.isiPesan      <- dataChat.isiPesan
+    this.waktuTerkirim <- CURRENT_TIMESTAMP()
+    this.isChatTerbaca <- FALSE
+    this.statusChat    <- "SENT"
+    this.durasiChat    <- 0
+    this.dataChat      <- dataChat
 ```
+
+### 5.13.2 Algoritma/Query
+
+
+**Nama Kelas:** *Komunikasi*  
+**Nama Operasi:** *saveChat()*  
+**ID Algoritma:** *[Algo-001]*
+
+```text
+PUBLIC procedure saveChat()
+    result <- execute query untuk simpan chat
+```
+
+### 5.13.3 Algoritma/Query
+
+
+**Nama Kelas:** *Komunikasi*  
+**Nama Operasi:** *getIDChat()*  
+**ID Algoritma:** *[Algo-001]*
+
+```text
+PUBLIC function getIDChat() -> String
+    -> this.idChat
+```
+
+### 5.13.4 Algoritma/Query
+
+
+**Nama Kelas:** *Komunikasi*  
+**Nama Operasi:** *getPesan(idChat : String)*  
+**ID Algoritma:** *[Algo-001]*
+
+```text
+PUBLIC funtion getPesan(idChat : String) -> Object
+    rows <- // execute query untuk mengambil chat berdasarkan id
+    -> rows
+```
+
+
+
+### 5.13.5 Algoritma/Query
+
+
+**Nama Kelas:** *Komunikasi*  
+**Nama Operasi:** *getChatHistory(idPengguna1 : String, idPengguna2 : String)*  
+**ID Algoritma:** *[Algo-001]*
+
+```text
+PUBLIC function getChatHistory(idPengguna1 : String, idPengguna2 : String) -> List<Object>
+    rows <- // execute query untuk mengambil seluruh chat history
+    -> rows
+```
+
+
+
+
+
 
 Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
 
@@ -1493,7 +1841,7 @@ Tabel 5.13.1. Query Operasi [Nama Operasi]
 *[Ulangi pola 5.13.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
-## 5.14 Kelas [Nama Kelas 14]
+## 5.14 Kelas KomunikasiController
 
 **Nama Kelas:** *[Nama kelas]*  
 **ID Kelas:** *[ID kelas]*
@@ -1514,15 +1862,54 @@ Tabel 5.14.2. Atribut Kelas [Nama Kelas 14]
 
 ### 5.14.1 Algoritma/Query
 
-Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
 
-**Nama Kelas:** *[Nama kelas]*  
-**Nama Operasi:** *[Signature operasi]*  
+**Nama Kelas:** *KomunikasiController*  
+**Nama Operasi:** *sendChat(dataChat : Object)*  
 **ID Algoritma:** *[Algo-001]*
 
 ```text
-[Tuliskan pseudocode algoritma operasi di sini.]
+PUBLIC procedure sendChat(dataChat : Object)
+    pesanBaru <- NEW Komunikasi(dataChat)
+    pesanBaru.saveChat()
+    this.notifikasiController.buatNotifikasi(dataChat.idPenerima, "Pesan baru: " + dataChat.isiPesan)
 ```
+
+### 5.14.2 Algoritma/Query
+
+
+**Nama Kelas:** *KomunikasiController*  
+**Nama Operasi:** *getRiwayatChat(idPengguna1 : String, idPengguna2 : String)*  
+**ID Algoritma:** *[Algo-001]*
+
+```text
+PUBLIC function getRiwayatChat(idPengguna1 : String, idPengguna2 : String) -> List<Object>
+    -> this.komunikasi.getChatHistory(idPengguna1, idPengguna2)
+```
+
+### 5.14.3 Algoritma/Query
+
+
+**Nama Kelas:** *KomunikasiController*  
+**Nama Operasi:** *loadChat(idPelanggan : String, idPemberiJasa : String)*  
+**ID Algoritma:** *[Algo-001]*
+
+```text
+PUBLIC function loadChat(idPelanggan : String, idPemberiJasa : String) -> List<Object>
+    -> this.getRiwayatChat(idPelanggan, idPemberiJasa)
+```
+
+### 5.14.4 Algoritma/Query
+
+
+**Nama Kelas:** *KomunikasiController*  
+**Nama Operasi:** *startChat(idPelanggan : String, idPemberiJasa : String)*  
+**ID Algoritma:** *[Algo-001]*
+
+```text
+PUBLIC startChat(idPelanggan : String, idPemberiJasa : String) -> List<Object>
+    -> this.getRiwayatChat(idPelanggan, idPemberiJasa)
+```
+
 
 Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
 
@@ -1539,7 +1926,7 @@ Tabel 5.14.1. Query Operasi [Nama Operasi]
 *[Ulangi pola 5.14.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
-## 5.15 Kelas [Nama Kelas 15]
+## 5.15 Kelas TiketLaporan
 
 **Nama Kelas:** *[Nama kelas]*  
 **ID Kelas:** *[ID kelas]*
@@ -1585,17 +1972,17 @@ Tabel 5.15.1. Query Operasi [Nama Operasi]
 *[Ulangi pola 5.15.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
-## 5.16 Kelas [Nama Kelas 16]
+## 5.16 Kelas TiketLaporanController
 
-**Nama Kelas:** *[Nama kelas]*  
-**ID Kelas:** *[ID kelas]*
+**Nama Kelas:** *TiketLaporanController*  
+**ID Kelas:** *C24*
 
-Tabel 5.16.1. Operasi Kelas [Nama Kelas 16]
+Tabel 5.16.1. Operasi Kelas TiketLaporanController
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
+| validasiFormTiket() : Boolean | Public | Memvalidasi input yang dimasukkan ke dalam form tiket |
+| buatTiket(new TiketLaporan) : Boolean | Public | Mengatur pembuatan dan pengisian data tiket laporan |
 
 Tabel 5.16.2. Atribut Kelas [Nama Kelas 16]
 
@@ -1606,29 +1993,64 @@ Tabel 5.16.2. Atribut Kelas [Nama Kelas 16]
 
 ### 5.16.1 Algoritma/Query
 
-Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
-
-**Nama Kelas:** *[Nama kelas]*  
-**Nama Operasi:** *[Signature operasi]*  
+**Nama Kelas:** *TiketLaporanController*  
+**Nama Operasi:** *validasiFormTiket()*  
 **ID Algoritma:** *[Algo-001]*
 
 ```text
-[Tuliskan pseudocode algoritma operasi di sini.]
+public validasiFormTiket(tiket : TiketLaporan) -> Boolean {
+    if (jenisTiket = NULL or keteranganTiket = NULL) {
+        return False
+    }
+    return True
+}
 ```
-
-Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
-
-Tabel 5.16.1. Query Operasi [Nama Operasi]
-
-| No Query | Query | Keterangan |
-| :--- | :--- | :--- |
-| *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
-| *...* | *...* | *...* |
 
 
 ### 5.16.2 Algoritma/Query
 
-*[Ulangi pola 5.16.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
+**Nama Kelas:** *TiketLaporanController*  
+**Nama Operasi:** *buatTiket()*  
+**ID Algoritma:** *[Algo-001]*
+
+```text
+public buatTiket(idPengguna : Integer, jenisTiket : String, keteranganTiket : String) -> Boolean{
+    if (not(validasiFormTiket(jenisTiket, keteranganTiket))) {
+        -> False
+    }
+
+    {Generator id untuk tiket}
+    idTiket = {Generator id untuk tiket}
+    tanggal = {ambil tanggal saat itu}
+
+    TiketLaporan new 
+    new.idTiket = idTiket
+    new.idPengguna = idPengguna
+    new.jenisTiket = jenisTiket
+    new.keteranganTiket = keteranganTiket
+    new.tanggalTiket = tanggal
+    new.statusTiket = "Submitted"
+
+    isSaved = TiketLaporan.simpanAntrian(new)
+    if (isSaved) {
+        teruskanKeNotifikasi(new)
+        output("Tiket telah tersubmit")
+        -> True
+    }
+    output("Tiket gagal disubmit")
+    -> False
+}
+```
+### 5.16.2 Algoritma/Query
+
+**Nama Kelas:** *TiketLaporanController*  
+**Nama Operasi:** *teruskanKeNotifikasi()*  
+**ID Algoritma:** *[Algo-001]*
+
+```text
+public teruskanKeNotifikasi()
+}
+```
 
 
 ## 5.17 Kelas Rating
@@ -1827,7 +2249,7 @@ if (this.idRating = "" or this.idPenggunaPemberi = "" or this.idPenggunaPenerima
 ```
 
 
-## 5.19 Kelas [Nama Kelas 19]
+## 5.19 Kelas Notifikasi
 
 **Nama Kelas:** *[Nama kelas]*  
 **ID Kelas:** *[ID kelas]*
@@ -1873,7 +2295,7 @@ Tabel 5.19.1. Query Operasi [Nama Operasi]
 *[Ulangi pola 5.19.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
-## 5.20 Kelas [Nama Kelas 20]
+## 5.20 Kelas NotifikasiController
 
 **Nama Kelas:** *[Nama kelas]*  
 **ID Kelas:** *[ID kelas]*
@@ -1894,15 +2316,27 @@ Tabel 5.20.2. Atribut Kelas [Nama Kelas 20]
 
 ### 5.20.1 Algoritma/Query
 
-Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
-
-**Nama Kelas:** *[Nama kelas]*  
-**Nama Operasi:** *[Signature operasi]*  
+**Nama Kelas:** *NotifikasiController*  
+**Nama Operasi:** *buatNotifikasi*  
 **ID Algoritma:** *[Algo-001]*
 
 ```text
-[Tuliskan pseudocode algoritma operasi di sini.]
+PRIVATE notifikasiUI : NotifikasiUI
+
+PUBLIC procedure buatNotifikasi(idPenerima : String, isiNotifikasi : String) 
+    notifBaru <- NEW Notifikasi(idPenerima, isiNotifikasi)
+    notifBaru.simpanNotifikasi()
+    this.kirimNotifikasi(notifBaru)
 ```
+### 5.20.2 Algoritma/Query
+**Nama Kelas:** *NotifikasiController*  
+**Nama Operasi:** *kirimNotifikasi(notif: Notifikasi)*  
+**ID Algoritma:** *[Algo-001]*
+```text
+PUBLIC kirimNotifikasi(notif : Notifikasi) : void
+    this.notifikasiUI.showNotifikasi(notif.getIsiNotifikasi())
+```
+
 
 Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
 
@@ -1913,10 +2347,6 @@ Tabel 5.20.1. Query Operasi [Nama Operasi]
 | *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
 | *...* | *...* | *...* |
 
-
-### 5.20.2 Algoritma/Query
-
-*[Ulangi pola 5.20.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
 <br>
