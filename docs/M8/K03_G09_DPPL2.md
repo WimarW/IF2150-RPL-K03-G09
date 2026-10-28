@@ -882,36 +882,6 @@ ALGORITMA
 
 ```
 
-### 5.3.2 Algoritma/Query
-
-**Nama Kelas:** PemberiJasa
-**Nama Operasi:** getPemberiJasaByID()
-**ID Algoritma:** Alg-XXX
-```text
-PRIVATE dataPemberiJasa : Object
-PUBLIC function getPemberiJasaByID(idPemberiJasa : String) -> Object
-    rows : Object
-    rows <- // execute query data Pemberi Jasa berdasarkan ID
-
-    this.dataPemberiJasa <- rows
-    -> this.dataPemberiJasa
-```
-
-### 5.3.3 Algoritma/Query
-
-**Nama Kelas:** PemberiJasa
-**Nama Operasi:** getPemberiJasaByKategori()
-**ID Algoritma:** Alg-XXX
-```text
-PRIVATE idPemberiJasa : String
-PUBLIC  idKategoriJasa : String
-PUBLIC  jenisJasa : String
-PUBLIC function getPemberiJasaByKategori(idKategoriJasa : String) -> List<Object>
-    rows : List <Object>
-    rows <- // execute querydaftar Pemberi Jasa yang tersedia berdasarkan ID Kategori Jasa 
-    -> rows
-```
-
 Tabel 5.3.3 Query Operasi cekInfoLogin
 
 | No Query | Query | Keterangan |
@@ -919,6 +889,72 @@ Tabel 5.3.3 Query Operasi cekInfoLogin
 | Q-XXX | `SELECT id_pengguna, nama_pengguna, username, password, email FROM pengguna WHERE username = $1;` | Mengambil data akun dan hash password dari tabel pengguna berdasarkan nama pengguna. |
 
 ### 5.3.2 Algoritma/Query
+
+**Nama Kelas:** PemberiJasa <br>
+**Nama Operasi:** getPemberiJasaByID() <br>
+**ID Algoritma:** Alg-XXX
+
+```text
+PRIVATE dataPemberiJasa : Object
+// Mengambil detail profil, lokasi, rating, dan tarif Pemberi Jasa berdasarkan ID
+PUBLIC function getPemberiJasaByID(idPemberiJasa : String) -> Object
+    rows : Object
+    rows <- execute_query(Q-XXX, [idPemberiJasa])
+
+    this.dataPemberiJasa <- rows
+    -> this.dataPemberiJasa
+```
+
+Tabel 5.3.4 Query Operasi getPemberiJasaByID
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-XXX | `SELECT pj.id_pemberi_jasa, u.nama_pengguna, u.nomor_telpon, u.email, u.akumulasi_rating, pj.id_kategori_jasa, pj.jenis_jasa, kj.deskripsi_jasa, kj.tarif, kj.jam_kerja, kj.daerah_kerja FROM pemberi_jasa pj JOIN pengguna u ON pj.id_pemberi_jasa = u.id_pengguna LEFT JOIN kategori_jasa kj ON pj.id_kategori_jasa = kj.id_kategori_jasa WHERE pj.id_pemberi_jasa = $1;` | Mengambil detail profil, lokasi/daerah kerja, rating, dan tarif Pemberi Jasa berdasarkan ID. |
+
+### 5.3.3 Algoritma/Query
+
+**Nama Kelas:** PemberiJasa <br>
+**Nama Operasi:** getPemberiJasaByKategori() <br>
+**ID Algoritma:** Alg-XXX
+
+```text
+PRIVATE idPemberiJasa : String
+PUBLIC  idKategoriJasa : String
+PUBLIC  jenisJasa : String
+// Mengambil daftar Pemberi Jasa yang tersedia berdasarkan ID Kategori Jasa 
+PUBLIC function getPemberiJasaByKategori(idKategoriJasa : String) -> List<Object>
+    rows : List <Object>
+    rows <- execute_query(Q-XXX, [idKategoriJasa])
+    -> rows
+```
+
+Tabel 5.3.5 Query Operasi getPemberiJasaByKategori
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-XXX | `SELECT pj.id_pemberi_jasa, u.nama_pengguna, u.akumulasi_rating, pj.id_kategori_jasa, pj.jenis_jasa FROM pemberi_jasa pj JOIN pengguna u ON pj.id_pemberi_jasa = u.id_pengguna WHERE pj.id_kategori_jasa = $1;` | Mengambil daftar Pemberi Jasa yang tersedia berdasarkan ID Kategori Jasa. |
+
+### 5.3.4 Algoritma/Query
+
+**Nama Kelas:** PemberiJasa <br>
+**Nama Operasi:** savePemberiJasa() <br>
+**ID Algoritma:** Alg-XXX
+
+```text
+PRIVATE idPemberiJasa : String
+PUBLIC  idKategoriJasa : String
+PUBLIC  jenisJasa : String
+PUBLIC procedure savePemberiJasa() 
+    execute_query(Q-XXX, [this.idKategoriJasa, this.idPemberiJasa])
+```
+
+Tabel 5.3.6 Query Operasi savePemberiJasa
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-XXX | `UPDATE pemberi_jasa SET id_kategori_jasa = $1, jenis_jasa = (SELECT jenis_jasa FROM kategori_jasa WHERE id_kategori_jasa = $1) WHERE id_pemberi_jasa = $2;` | Memperbarui data kategori jasa dan jenis jasa pada tabel pemberi_jasa berdasarkan ID Pemberi Jasa. |
+
+### 5.3.5 Algoritma/Query
 **Nama Kelas:** PemberiJasa <br>
 **Nama Operasi:** makePemberiJasa <br>
 **ID Algoritma:** Alg-XXX
@@ -956,13 +992,13 @@ ALGORITMA
     pemberijasa.jenisJasa <- jenisJasa
     --> pemberijasa
 ```
-Tabel 5.3.4 Query Operasi makePemberiJasa
+Tabel 5.3.7 Query Operasi makePemberiJasa
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
 | Q-XXX | `SELECT id_pengguna FROM pengguna WHERE username = $1 OR email = $2;` | Mencari sebuah entry dengan username dan pengguna |
 
-### 5.3.3 Algoritma/Query
+### 5.3.6 Algoritma/Query
 **Nama Kelas:** PemberiJasa <br>
 **Nama Operasi:** simpanKeDb() <br>
 **ID Algoritma:** Alg-XXX
@@ -979,7 +1015,7 @@ execute_query(Q-XXX, [
         ])
 execute_query(Q-XXX, this.idPengguna, this.idKategoriJasa,this.jenisJasa)
 ```
-Tabel 5.3.5 Query Operasi simpanKeDb
+Tabel 5.3.8 Query Operasi simpanKeDb
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
@@ -1489,17 +1525,43 @@ PUBLIC procedure saveKategoriJasa(dataJasa : Object)
     this.daerahKerja      <- dataJasa.daerahKerja
     this.dataKategoriJasa <- dataJasa
 
-    // EXECUTE SQL QUERY
+    execute_query(Q-XXX, [
+        this.idKategoriJasa,
+        this.jenisJasa,
+        this.deskripsiJasa,
+        this.tarif,
+        this.jamKerja,
+        this.daerahKerja
+    ])
 ```
 
-Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
-
-Tabel 5.9.1. Query Operasi [Nama Operasi]
+Tabel 5.9.3 Query Operasi saveKategoriJasa
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
-| *...* | *...* | *...* |
+| Q-XXX | `INSERT INTO kategori_jasa (id_kategori_jasa, jenis_jasa, deskripsi_jasa, tarif, jam_kerja, daerah_kerja) VALUES ($1, $2, $3, $4, $5, $6);` | Menyimpan data kategori jasa baru ke tabel kategori_jasa. |
+
+### 5.9.10 Algoritma/Query
+
+**Nama Kelas:** *KategoriJasa* 
+**Nama Operasi:** *getAllKategori()*  
+**ID Algoritma:** *[Algo-091]*
+
+```text
+PRIVATE dataKategoriJasa : Object
+
+PUBLIC function getAllKategori() -> List<Object>
+    rows : List <Object>
+    rows <- execute_query(Q-XXX, [])
+    this.dataKategoriJasa <- rows
+    -> rows
+```
+
+Tabel 5.9.4 Query Operasi getAllKategori
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-XXX | `SELECT id_kategori_jasa, jenis_jasa, deskripsi_jasa, tarif, jam_kerja, daerah_kerja FROM kategori_jasa ORDER BY jenis_jasa ASC;` | Mengambil seluruh daftar kategori jasa dari tabel kategori_jasa. |
 
 
 ## 5.10 Kelas KategoriJasaController
@@ -1771,18 +1833,31 @@ PUBLIC constructor(dataChat : Object)
 
 ### 5.13.2 Algoritma/Query
 
-
 **Nama Kelas:** *Komunikasi*  
 **Nama Operasi:** *saveChat()*  
 **ID Algoritma:** *[Algo-001]*
 
 ```text
 PUBLIC procedure saveChat()
-    result <- execute query untuk simpan chat
+    result <- execute_query(Q-XXX, [
+        this.idChat,
+        this.idPengguna,
+        this.idPenerima,
+        this.isiPesan,
+        this.waktuTerkirim,
+        this.isChatTerbaca,
+        this.statusChat,
+        this.durasiChat
+    ])
 ```
 
-### 5.13.3 Algoritma/Query
+Tabel 5.13.3 Query Operasi saveChat
 
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-XXX | `INSERT INTO komunikasi (id_chat, id_pengguna, id_penerima, isi_pesan, waktu_terkirim, is_chat_terbaca, status_chat, durasi_chat) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);` | Menyimpan pesan obrolan baru ke tabel komunikasi. |
+
+### 5.13.3 Algoritma/Query
 
 **Nama Kelas:** *Komunikasi*  
 **Nama Operasi:** *getIDChat()*  
@@ -1795,21 +1870,23 @@ PUBLIC function getIDChat() -> String
 
 ### 5.13.4 Algoritma/Query
 
-
 **Nama Kelas:** *Komunikasi*  
 **Nama Operasi:** *getPesan(idChat : String)*  
 **ID Algoritma:** *[Algo-001]*
 
 ```text
 PUBLIC funtion getPesan(idChat : String) -> Object
-    rows <- // execute query untuk mengambil chat berdasarkan id
+    rows <- execute_query(Q-XXX, [idChat])
     -> rows
 ```
 
+Tabel 5.13.4 Query Operasi getPesan
 
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-XXX | `SELECT id_chat, id_pengguna, id_penerima, isi_pesan, waktu_terkirim, is_chat_terbaca, status_chat, durasi_chat FROM komunikasi WHERE id_chat = $1;` | Mengambil data pesan dari tabel komunikasi berdasarkan id_chat. |
 
 ### 5.13.5 Algoritma/Query
-
 
 **Nama Kelas:** *Komunikasi*  
 **Nama Operasi:** *getChatHistory(idPengguna1 : String, idPengguna2 : String)*  
@@ -1817,28 +1894,15 @@ PUBLIC funtion getPesan(idChat : String) -> Object
 
 ```text
 PUBLIC function getChatHistory(idPengguna1 : String, idPengguna2 : String) -> List<Object>
-    rows <- // execute query untuk mengambil seluruh chat history
+    rows <- execute_query(Q-XXX, [idPengguna1, idPengguna2])
     -> rows
 ```
 
-
-
-
-
-
-Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
-
-Tabel 5.13.1. Query Operasi [Nama Operasi]
+Tabel 5.13.5 Query Operasi getChatHistory
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
-| *...* | *...* | *...* |
-
-
-### 5.13.2 Algoritma/Query
-
-*[Ulangi pola 5.13.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
+| Q-XXX | `SELECT id_chat, id_pengguna, id_penerima, isi_pesan, waktu_terkirim, is_chat_terbaca, status_chat, durasi_chat FROM komunikasi WHERE (id_pengguna = $1 AND id_penerima = $2) OR (id_pengguna = $2 AND id_penerima = $1) ORDER BY waktu_terkirim ASC;` | Mengambil seluruh riwayat percakapan dua arah antara idPengguna1 dan idPengguna2 terurut berdasarkan waktu pengiriman. |
 
 
 ## 5.14 Kelas KomunikasiController
