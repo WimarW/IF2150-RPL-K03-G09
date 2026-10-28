@@ -583,13 +583,16 @@ Tabel 5.7.1 Operasi Kelas LayananPelanggan
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
 | `cekInfoLogin(input username: String, input password: String): Boolean` | public | Menjalankan query ke database untuk melihat apakah informasi login yang digunakan sesuai dengan informasi pada tabel pengguna |
+| cariLayananKosong() : String | Public | Menjalankan query untuk mencari layanan pelanggan yang dapat meng-handle tiket
 
 Tabel 5.7.2 Atribut Kelas LayananPelanggan
 
 | Nama Atribut | Visibility (private, public) | Tipe |
 | :--- | :--- | :--- |
 | *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
-| *...* | *...* | *...* |
+| idLayananPelanggan | Private | String |
+| jumlahTiketDipegang | Private | Integer |
+| statusAktif | Private | Boolean |
 
 ### 5.7.1 Algoritma/Query
 
@@ -630,53 +633,40 @@ Tabel 5.7.3 Query Operasi cekInfoLogin
 
 ### 5.7.2 Algoritma/Query
 
-*[Ulangi pola 5.7.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
+**Nama Kelas:** *LayananPelanggan*  
+**Nama Operasi:** *cariLayananKosong()*  
+**ID Algoritma:** *[Algo-001]*
+
+```text
+public cariLayananKosong() : String {
+    -> execute_query(Q-001)
+}
+```
+
+Tabel 5.8.1. Query Operasi cariLayananKosong()
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| *[Q-001]* | `SELECT idLayananPelanggan FROM LayananPelanggan WHERE status = 'Available' OR jumlahTiketDipegang < 5` | Mencari layanan pelanggan yang sedang aktif atau jumlah tiket yang dipegangnya kurang dari 5 |
+
+
 
 
 ## 5.8 Kelas LayananPelangganController
 
-**Nama Kelas:** *[Nama kelas]*  
-**ID Kelas:** *[ID kelas]*
+**Nama Kelas:** *LayananPelangganController*  
+**ID Kelas:** *C12*
 
-Tabel 5.8.1. Operasi Kelas [Nama Kelas 8]
+Tabel 5.8.1. Operasi Kelas LayananPelangganController
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
-
-Tabel 5.8.2. Atribut Kelas [Nama Kelas 8]
-
-| Nama Atribut | Visibility (private, public) | Tipe |
-| :--- | :--- | :--- |
-| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
-| *...* | *...* | *...* |
+| validasiInput() | Public | Memvalidasi input yang dikirim pada form |
+| requestTiketLaporan() | Public | Meminta tiket laporan yang sesuai |
+| teruskanBalasan() | Public | Meneruskan balasan mengenai tiket laporan |
 
 ### 5.8.1 Algoritma/Query
 
-Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
-
-**Nama Kelas:** *[Nama kelas]*  
-**Nama Operasi:** *[Signature operasi]*  
-**ID Algoritma:** *[Algo-001]*
-
-```text
-[Tuliskan pseudocode algoritma operasi di sini.]
-```
-
-Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
-
-Tabel 5.8.1. Query Operasi [Nama Operasi]
-
-| No Query | Query | Keterangan |
-| :--- | :--- | :--- |
-| *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
-| *...* | *...* | *...* |
-
-
-### 5.8.2 Algoritma/Query
-
-*[Ulangi pola 5.8.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
 ## 5.9 Kelas KategoriJasa
@@ -1094,7 +1084,10 @@ public buatTiket(idPengguna : Integer, jenisTiket : String, keteranganTiket : St
 **ID Algoritma:** *[Algo-001]*
 
 ```text
-public teruskanKeNotifikasi()
+public teruskanKeNotifikasi(tiket : TiketLaporan) -> Boolean {
+    idPenerima = LayananPelanggan.cekLayananKosong()
+    pesan = "Hey! Ada satu tiket laporan baru!"
+    -> NotifikasiController.buatNotifikasi(idPenerima, pesan)
 }
 ```
 
@@ -1297,96 +1290,109 @@ if (this.idRating = "" or this.idPenggunaPemberi = "" or this.idPenggunaPenerima
 
 ## 5.19 Kelas Notifikasi
 
-**Nama Kelas:** *[Nama kelas]*  
-**ID Kelas:** *[ID kelas]*
+**Nama Kelas:** *Notifikasi*  
+**ID Kelas:** *C28*
 
-Tabel 5.19.1. Operasi Kelas [Nama Kelas 19]
+Tabel 5.19.1. Operasi Kelas Notifikasi
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
+| getIsiNotifikasi(idNotifikasi) : String | Public | Mengambil teks isi notifikasi |
+| tandaiTerbaca(idNotifikasi) : Boolean | Public | Mengubah status notifikasi menjadi terbaca |
 
-Tabel 5.19.2. Atribut Kelas [Nama Kelas 19]
+Tabel 5.19.2. Atribut Kelas Notifikasi
 
 | Nama Atribut | Visibility (private, public) | Tipe |
 | :--- | :--- | :--- |
-| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
-| *...* | *...* | *...* |
+| idNotifikasi | Private | String |
+| idPenerima | Private | String |
+| isiNotifikasi | Private | String |
+| waktuNotifikasi | Private | Date |
+| statusBaca | Private | Boolean |
 
 ### 5.19.1 Algoritma/Query
 
-Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
-
-**Nama Kelas:** *[Nama kelas]*  
-**Nama Operasi:** *[Signature operasi]*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** *Notifikasi*  
+**Nama Operasi:** *getIsiNotifikasi*  
+**ID Algoritma:** *[Algo-XXX]*
 
 ```text
-[Tuliskan pseudocode algoritma operasi di sini.]
+public getIsiNotifikasi() -> String {
+    -> this.isiNotifikasi
+}
 ```
-
-Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
-
-Tabel 5.19.1. Query Operasi [Nama Operasi]
-
-| No Query | Query | Keterangan |
-| :--- | :--- | :--- |
-| *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
-| *...* | *...* | *...* |
-
 
 ### 5.19.2 Algoritma/Query
 
-*[Ulangi pola 5.19.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
+**Nama Kelas:** *Notifikasi*  
+**Nama Operasi:** *tandaiTerbaca()*  
+**ID Algoritma:** *[Algo-XXX]*
+
+```text
+public tandaiTerbaca() {
+    this.statusBaca = "Read"
+    execute_query(Q-XXX)
+}
+```
+Tabel 5.19.2. Query Operasi tandaiTerbaca()
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| *[Q-XXX]* | `UPDATE notifikasi SET status_baca = 'Read' WHERE id_notifikasi = this.idNotifikasi;` | Mengubah data statusBaca menjadi terbaca |
+
 
 
 ## 5.20 Kelas NotifikasiController
 
-**Nama Kelas:** *[Nama kelas]*  
-**ID Kelas:** *[ID kelas]*
+**Nama Kelas:** *NotifikasiController*  
+**ID Kelas:** *C30*
 
 Tabel 5.20.1. Operasi Kelas [Nama Kelas 20]
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
-
-Tabel 5.20.2. Atribut Kelas [Nama Kelas 20]
-
-| Nama Atribut | Visibility (private, public) | Tipe |
-| :--- | :--- | :--- |
-| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
-| *...* | *...* | *...* |
+| buatNotifikasi(idPenerima, isiNotifikasi) : Boolean | Public | Membuat sebuah data notifikasi untuk diteruskan |
+| requestChat() | Public | Meminta untuk 
 
 ### 5.20.1 Algoritma/Query
 
-Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
-
-**Nama Kelas:** *[Nama kelas]*  
-**Nama Operasi:** *[Signature operasi]*  
+**Nama Kelas:** *NotifikasiController*  
+**Nama Operasi:** *buatNotifikasi()*  
 **ID Algoritma:** *[Algo-001]*
 
 ```text
-[Tuliskan pseudocode algoritma operasi di sini.]
+public buatNotifikasi(idPenerima : String, pesan : String) {
+    
+    idNotifikasi = {generator idNotifikasi}
+    waktuNotifikasi = {algoritma untuk mengambil waktu saat itu}
+
+    execute_query(Q-XXX, [this.idNotifikasi, this.idPenerima, this.isiNotifikasi, this.waktuNotifikasi, this.statusBaca])
+}
 ```
 
-Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
-
-Tabel 5.20.1. Query Operasi [Nama Operasi]
+Tabel 5.20.1. Query Operasi buatNotifikasi()
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
-| *...* | *...* | *...* |
+| *[Q-XXX]* | `INSERT INTO notifikasi (idNotifikasi, idPenerima, isiNotifikasi, waktuNotifikasi, statusBaca) VALUES ($1, $2, $3, $4, $5, NOW());` | Menambah entry notifikasi baru pada database notifikasi |
 
 
 ### 5.20.2 Algoritma/Query
 
-*[Ulangi pola 5.20.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
+**Nama Kelas:** *NotifikasiController*  
+**Nama Operasi:** *kirimNotfikasi()*  
+**ID Algoritma:** *[Algo-XXX]*
 
+```text
+public kirimNotifikasi(idPenerima : String, pesan : String) {
+    execute_query(Q-XXX)
+}
+```
+Tabel 5.20.2. Query Operasi kirimNotifikasi()
 
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| *[Q-XXX]* | `SEND PushNotification TO Notifikasi.idPenerima WITH MESSAGE Notifikasi.isiNotifikasi;` | Mengirim notifikasi ke aktor yang memiliki idPenerima |
 <br>
 
 ---
