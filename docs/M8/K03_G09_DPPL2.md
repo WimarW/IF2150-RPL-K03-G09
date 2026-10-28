@@ -853,7 +853,7 @@ Tabel 5.3.2 Atribut Kelas PemberiJasa
 
 **Nama Kelas:** PemberiJasa <br>
 **Nama Operasi:** cekInfoLogin <br>
-**ID Algoritma:** Alg-XXX
+**ID Algoritma:** Algo-XXX
 
 ```text
 public function cekInfoLogin(input username:String, input password:String)
@@ -886,7 +886,7 @@ ALGORITMA
 
 **Nama Kelas:** PemberiJasa
 **Nama Operasi:** getPemberiJasaByID()
-**ID Algoritma:** Alg-XXX
+**ID Algoritma:** Algo-XXX
 ```text
 PRIVATE dataPemberiJasa : Object
 PUBLIC function getPemberiJasaByID(idPemberiJasa : String) -> Object
@@ -901,7 +901,7 @@ PUBLIC function getPemberiJasaByID(idPemberiJasa : String) -> Object
 
 **Nama Kelas:** PemberiJasa
 **Nama Operasi:** getPemberiJasaByKategori()
-**ID Algoritma:** Alg-XXX
+**ID Algoritma:** Algo-XXX
 ```text
 PRIVATE idPemberiJasa : String
 PUBLIC  idKategoriJasa : String
@@ -921,7 +921,7 @@ Tabel 5.3.3 Query Operasi cekInfoLogin
 ### 5.3.2 Algoritma/Query
 **Nama Kelas:** PemberiJasa <br>
 **Nama Operasi:** makePemberiJasa <br>
-**ID Algoritma:** Alg-XXX
+**ID Algoritma:** Algo-XXX
 
 
 ```text
@@ -965,7 +965,7 @@ Tabel 5.3.4 Query Operasi makePemberiJasa
 ### 5.3.3 Algoritma/Query
 **Nama Kelas:** PemberiJasa <br>
 **Nama Operasi:** simpanKeDb() <br>
-**ID Algoritma:** Alg-XXX
+**ID Algoritma:** Algo-XXX
 
 ```text
 public function simpanKeDb() -> void
@@ -989,27 +989,17 @@ Tabel 5.3.5 Query Operasi simpanKeDb
 
 ## 5.4 Kelas PemberiJasaController
 
-**Nama Kelas:** *[Nama kelas]*  
-**ID Kelas:** *[ID kelas]*
+**Nama Kelas:** PemberiJasaController
+**ID Kelas:** C06
 
 Tabel 5.4.1. Operasi Kelas PemberiJasaController
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
 | requestFormTiket() | Public | Meminta form tiket untuk diisi dan dikirimkan le layanan pelanggan |
 
 
-Tabel 5.4.2. Atribut Kelas [Nama Kelas 4]
-
-| Nama Atribut | Visibility (private, public) | Tipe |
-| :--- | :--- | :--- |
-| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
-| *...* | *...* | *...* |
-
 ### 5.4.1 Algoritma/Query
-
-Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
 
 **Nama Kelas:** PemberiJasaController
 **Nama Operasi:** validatePemberiJasa(idPemberiJasa : String)  
@@ -1063,20 +1053,27 @@ PUBLIC function choosePemberiJasa(idPemberiJasa : String) -> Object
     -> this.pemberiJasa.getPemberiJasaByID(idPemberiJasa)
 ```
 
+| validasiInfoRegistrasi(input namaPengguna: String, input username: String, input password: String, input email: String, input nomorTelpon: String): Boolean | public | Memvalidasi input yang digunakan user dalam registrasi |
 
+### 5.4.6 Algoritma/Query
+**Nama Kelas:** PemberiJasaController  
+**Nama Operasi:** validasiInfoRegistrasi
+**ID Algoritma:** Algo-XXX
 
+```text
+public function validasiInfoRegistrasi(input namaPengguna: String, input username: String, input password: String, input email: String, input nomorTelpon: String): Boolean
 
-
-Tabel 5.4.1. Query Operasi [Nama Operasi]
-
-| No Query | Query | Keterangan |
-| :--- | :--- | :--- |
-
-
-### 5.4.2 Algoritma/Query
-
-*[Ulangi pola 5.4.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
-
+ALGORITMA
+    if (trim(namaPengguna) = "" or trim(username) = "" or trim(password) = "" or trim(email) = "" or trim(nomorTelpon) = "") then
+        --> false
+    if (length(password) < 8) then
+        --> false
+    if (not isValidEmailFormat(email)) then
+        --> false
+    if (not isNumericString(nomorTelpon) or length(nomorTelpon) < 10 or length(nomorTelpon) > 15) then
+        --> false
+    --> true
+```
 
 ## 5.5 Kelas Pelanggan
 
@@ -1085,30 +1082,46 @@ Tabel 5.4.1. Query Operasi [Nama Operasi]
 **Nama Kelas:** Pelanggan <br> 
 **ID Kelas:** C07
 
-Tabel 5.5.1. Operasi Kelas Pelanggan
 Tabel 5.5.1 Operasi Kelas Pelanggan
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
 | `cekInfoLogin(input username: String, input password: String): Boolean` | public | Menjalankan query ke database untuk melihat apakah informasi login yang digunakan sesuai dengan informasi pada tabel pengguna |
 | `simpanKeDb(): void`| public | Menyimpan objek ke database |
-
-Tabel 5.5.2 Atribut Kelas Pelanggan
-
-| Nama Atribut | Visibility (private, public) | Tipe |
-| :--- | :--- | :--- |
-| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
-| *...* | *...* | *...* |
+| `laporkanMasalah(idTiket: String, jenisTiket: String, keteranganTiket: String):Boolean` | public | fungsi untuk membuat tiket masalah yang terjadi |
 
 ### 5.5.1 Algoritma/Query
 **Nama Kelas:** *Pelanggan*  
 **Nama Operasi:** *laporkanMasalah()*  
 **ID Algoritma:** *[Algo-001]*
 
+```text
+public function laporkanMasalah(input idTiket: String,input jenisTiket: String,input keteranganTiket: String)-> Boolean
+
+ALGORITMA
+    if (trim(idTiket) == "" or trim(jenisTiket) == "" or trim(keteranganTiket) == "") then
+        --> false
+    if (trim(this.idPengguna) == "") then
+        --> false
+    execute_query(Q-Tiket-001, [
+            idTiket,
+            this.idPengguna,
+            jenisTiket,
+            keteranganTiket
+        ])
+    --> true
+```
+Tabel 5.3.5 Query Operasi laporkanMasalah
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-XXX | `INSERT INTO tiket_laporan (id_tiket, id_pengguna, jenis_tiket, keterangan_tiket, tanggal_tiket, status_tiket) VALUES ($1, $2, $3, $4, NOW(), 'Open');` | Menyimpan objek tiket dalam database | 
+
+
 ### 5.5.2 Algoritma/Query
 **Nama Kelas:** Pelanggan 
 **Nama Operasi:** cekInfoLogin
-**ID Algoritma:** Alg-XXX
+**ID Algoritma:** Algo-XXX
 
 ```text
 public function cekInfoLogin(input username:String, input password:String)
@@ -1145,7 +1158,7 @@ Tabel 5.5.3 Query Operasi cekInfoLogin
 ### 5.5.3 Algoritma/Query
 **Nama Kelas:** Pelanggan <br>
 **Nama Operasi:** makePelanggan <br>
-**ID Algoritma:** Alg-XXX
+**ID Algoritma:** Algo-XXX
 
 ```text
 public function makePelanggan(input idPengguna: String, input namaPengguna: String, input username: String, input password: String, input email: String, input nomorTelpon: String) -> Pelanggan
@@ -1185,7 +1198,7 @@ Tabel 5.5.4 Query Operasi makePelanggan
 ### 5.5.4 Algoritma/Query
 **Nama Kelas:** Pelanggan <br>
 **Nama Operasi:** simpanKeDb() <br>
-**ID Algoritma:** Alg-XXX
+**ID Algoritma:** Algo-XXX
 
 ```text
 public function simpanKeDb() -> void
@@ -1207,33 +1220,33 @@ Tabel 5.5.5 Query Operasi simpanKeDb
 
 ## 5.6 Kelas PelangganController
 
-**Nama Kelas:** *[Nama kelas]*  
-**ID Kelas:** *[ID kelas]*
+**Nama Kelas:** PelangganController
+**ID Kelas:** C09
 
 Tabel 5.6.1. Operasi Kelas [Nama Kelas 6]
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
-
-Tabel 5.6.2. Atribut Kelas [Nama Kelas 6]
-
-| Nama Atribut | Visibility (private, public) | Tipe |
-| :--- | :--- | :--- |
-| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
-| *...* | *...* | *...* |
+| validasiInfoRegistrasi(input namaPengguna: String, input username: String, input password: String, input email: String, input nomorTelpon: String): Boolean | public | Memvalidasi input yang digunakan user dalam registrasi |
 
 ### 5.6.1 Algoritma/Query
-
-Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
-
-**Nama Kelas:** *[Nama kelas]*  
-**Nama Operasi:** *[Signature operasi]*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** PelangganController  
+**Nama Operasi:** validasiInfoRegistrasi
+**ID Algoritma:** Algo-XXX
 
 ```text
-[Tuliskan pseudocode algoritma operasi di sini.]
+public function validasiInfoRegistrasi(input namaPengguna: String, input username: String, input password: String, input email: String, input nomorTelpon: String): Boolean
+
+ALGORITMA
+    if (trim(namaPengguna) = "" or trim(username) = "" or trim(password) = "" or trim(email) = "" or trim(nomorTelpon) = "") then
+        --> false
+    if (length(password) < 8) then
+        --> false
+    if (not isValidEmailFormat(email)) then
+        --> false
+    if (not isNumericString(nomorTelpon) or length(nomorTelpon) < 10 or length(nomorTelpon) > 15) then
+        --> false
+    --> true
 ```
 
 Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
@@ -1273,7 +1286,7 @@ Tabel 5.7.2 Atribut Kelas LayananPelanggan
 
 **Nama Kelas:** LayananPelanggan  
 **Nama Operasi:** cekInfoLogin
-**ID Algoritma:** Alg-XXX
+**ID Algoritma:** Algo-XXX
 
 ```text
 public function cekInfoLogin(input username:String, input password:String)
@@ -2236,7 +2249,7 @@ Tabel 5.18.1. Operasi Kelas [Nama Kelas 18]
 
 **Nama Kelas:** RatingController <br>
 **Nama Operasi:** validateRatingValue <br> 
-**ID Algoritma:** Alg-XXX
+**ID Algoritma:** Algo-XXX
 
 ```text
 public function validateRatingValue(input val: Integer) -> Boolean
