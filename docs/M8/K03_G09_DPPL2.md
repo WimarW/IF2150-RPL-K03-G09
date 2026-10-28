@@ -304,7 +304,7 @@ Tabel 5.1.1. Query Opersi [Nama Operasi]
 *[Ulangi pola 5.1.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
-## 5.2 Kelas [Nama Kelas 2]
+## 5.2 Kelas PenggunaController
 
 **Nama Kelas:** *[Nama kelas]*  
 **ID Kelas:** *[ID kelas]*
@@ -415,9 +415,8 @@ Tabel 5.3.1 Query Operasi cekInfoLogin
 
 *[Ulangi pola 5.3.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
-## 5.4 Kelas PemberiJasaController
 
-## 5.4 Kelas [Nama Kelas 4]
+## 5.4 Kelas PemberiJasaController
 
 **Nama Kelas:** *[Nama kelas]*  
 **ID Kelas:** *[ID kelas]*
@@ -528,7 +527,7 @@ Tabel 5.5.3 Query Operasi cekInfoLogin
 *[Ulangi pola 5.5.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
-## 5.6 Kelas [Nama Kelas 6]
+## 5.6 Kelas PelangganController
 
 **Nama Kelas:** *[Nama kelas]*  
 **ID Kelas:** *[ID kelas]*
@@ -634,7 +633,7 @@ Tabel 5.7.3 Query Operasi cekInfoLogin
 *[Ulangi pola 5.7.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
-## 5.8 Kelas PelangganUI
+## 5.8 Kelas LayananPelangganController
 
 **Nama Kelas:** *[Nama kelas]*  
 **ID Kelas:** *[ID kelas]*
@@ -680,7 +679,7 @@ Tabel 5.8.1. Query Operasi [Nama Operasi]
 *[Ulangi pola 5.8.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
-## 5.9 Kelas PelangganController
+## 5.9 Kelas KategoriJasa
 
 **Nama Kelas:** *PelangganController*  
 **ID Kelas:** *C09*
@@ -714,7 +713,7 @@ Tabel 5.9.1. Query Operasi [Nama Operasi]
 | *...* | *...* | *...* |
 
 
-## 5.10 Kelas [Nama Kelas 10]
+## 5.10 Kelas KategoriJasaController
 
 **Nama Kelas:** *[Nama kelas]*  
 **ID Kelas:** *[ID kelas]*
@@ -881,7 +880,7 @@ Tabel 5.9.1. Query Operasi [Nama Operasi]
 
 
 
-## 5.13 Kelas 
+## 5.13 Kelas Komunikasi
 
 **Nama Kelas:** *[Nama kelas]*  
 **ID Kelas:** *[ID kelas]*
@@ -927,7 +926,7 @@ Tabel 5.13.1. Query Operasi [Nama Operasi]
 *[Ulangi pola 5.13.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
-## 5.14 Kelas [Nama Kelas 14]
+## 5.14 Kelas KomunikasiController
 
 **Nama Kelas:** *[Nama kelas]*  
 **ID Kelas:** *[ID kelas]*
@@ -973,7 +972,7 @@ Tabel 5.14.1. Query Operasi [Nama Operasi]
 *[Ulangi pola 5.14.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
-## 5.15 Kelas [Nama Kelas 15]
+## 5.15 Kelas TiketLaporan
 
 **Nama Kelas:** *[Nama kelas]*  
 **ID Kelas:** *[ID kelas]*
@@ -1296,7 +1295,7 @@ if (this.idRating = "" or this.idPenggunaPemberi = "" or this.idPenggunaPenerima
 ```
 
 
-## 5.19 Kelas [Nama Kelas 19]
+## 5.19 Kelas Notifikasi
 
 **Nama Kelas:** *[Nama kelas]*  
 **ID Kelas:** *[ID kelas]*
@@ -1342,7 +1341,7 @@ Tabel 5.19.1. Query Operasi [Nama Operasi]
 *[Ulangi pola 5.19.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
-## 5.20 Kelas [Nama Kelas 20]
+## 5.20 Kelas NotifikasiController
 
 **Nama Kelas:** *[Nama kelas]*  
 **ID Kelas:** *[ID kelas]*
