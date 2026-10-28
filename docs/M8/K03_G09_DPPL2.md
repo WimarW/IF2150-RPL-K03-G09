@@ -836,6 +836,7 @@ Tabel 5.3.1 Operasi Kelas PemberiJasa
 | :--- | :--- | :--- |
 | `cekInfoLogin(input username: String, input password: String): Boolean` | public | Menjalankan query ke database untuk melihat apakah informasi login yang digunakan sesuai dengan informasi pada tabel pengguna |
 | `makePelanggan(input idPengguna: String, input namaPengguna: String, input username: String, input password: String, input email: String, input nomorTelpon: String): Pelanggan` | public | Memverifikasi bahwa informasi unik dan tidak ada di database kemudian membuat objek pelanggan dengan informasi tersebut | 
+| `simpanKeDb(): void`| public | Menyimpan objek ke database |
 
 Tabel 5.3.2 Atribut Kelas PemberiJasa
 
@@ -888,7 +889,7 @@ Tabel 5.3.3 Query Operasi cekInfoLogin
 **ID Algoritma:** Alg-XXX
 
 ```text
-public function makePelanggan(input idPengguna: String, input namaPengguna: String, input username: String, input password: String, input email: String, input nomorTelpon: String) -> PemberiJasa
+public function makePelanggan(input idPengguna: String, input namaPengguna: String, input username: String, input password: String, input email: String, input nomorTelpon: String, input idKategoriJasa: String,   input jenisJasa: String) -> PemberiJasa
 KAMUS LOKAL
 record: SQL query row result
 pemberijasa: PemberiJasa
@@ -914,13 +915,40 @@ ALGORITMA
     pemberijasa.nomorTelpon <- nomorTelpon
     pemberijasa.akumulasiRating <- 0.0
     pemberijasa.riwayatRating <- []
+
+    pemberijasa.idKategoriJasa <- idKategoriJasa
+    pemberijasa.jenisJasa <- jenisJasa
     --> pemberijasa
 ```
-Tabel 5.3.4 Query Operasi [Nama Operasi]
+Tabel 5.3.4 Query Operasi makePemberiJasa
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
 | Q-XXX | `SELECT id_pengguna FROM pengguna WHERE username = $1 OR email = $2;` | Mencari sebuah entry dengan username dan pengguna |
+
+### 5.3.3 Algoritma/Query
+**Nama Kelas:** PemberiJasa <br>
+**Nama Operasi:** simpanKeDb() <br>
+**ID Algoritma:** Alg-XXX
+
+```text
+public function simpanKeDb() -> void
+execute_query(Q-XXX, [
+            this.idPengguna,
+            this.namaPengguna,
+            this.username,
+            this.password,
+            this.email,
+            this.nomorTelpon
+        ])
+execute_query(Q-XXX, this.idPengguna, this.idKategoriJasa,this.jenisJasa)
+```
+Tabel 5.3.5 Query Operasi simpanKeDb
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-XXX | `INSERT INTO pengguna (id_pengguna, nama_pengguna, username, password, email, nomor_telpon, akumulasi_rating, riwayat_rating) VALUES ($1, $2, $3, $4, $5, $6, 0.0, '{}'); | Menyimpan objek pelanggan dalam database | 
+| Q-XXX | `INSERT INTO pemberi_jasa (id_pengguna, id_kategori_jasa, jenis_jasa) VALUES ($1, $2, $3)` | |
 
 ## 5.4 Kelas [Nama Kelas 4]
 
@@ -973,6 +1001,7 @@ Tabel 5.5.1 Operasi Kelas Pelanggan
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
 | `cekInfoLogin(input username: String, input password: String): Boolean` | public | Menjalankan query ke database untuk melihat apakah informasi login yang digunakan sesuai dengan informasi pada tabel pengguna |
+| `simpanKeDb(): void`| public | Menyimpan objek ke database |
 
 Tabel 5.5.2 Atribut Kelas Pelanggan
 
@@ -1019,7 +1048,7 @@ Tabel 5.5.3 Query Operasi cekInfoLogin
 | :--- | :--- | :--- |
 | Q-XXX | `SELECT id_pengguna, nama_pengguna, username, password, email FROM pengguna WHERE username = $1;` | Mengambil data akun dan hash password dari tabel pengguna berdasarkan nama pengguna. |
 
-### 5.3.2 Algoritma/Query
+### 5.5.2 Algoritma/Query
 **Nama Kelas:** Pelanggan <br>
 **Nama Operasi:** makePelanggan <br>
 **ID Algoritma:** Alg-XXX
@@ -1053,11 +1082,34 @@ ALGORITMA
     pelanggan.riwayatRating <- []
     --> pelanggan
 ```
-Tabel 5.5.4 Query Operasi [Nama Operasi]
+Tabel 5.5.4 Query Operasi makePelanggan
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
 | Q-XXX | `SELECT id_pengguna FROM pengguna WHERE username = $1 OR email = $2;` | Mencari sebuah entry dengan username dan pengguna |
+
+### 5.5.3 Algoritma/Query
+**Nama Kelas:** Pelanggan <br>
+**Nama Operasi:** simpanKeDb() <br>
+**ID Algoritma:** Alg-XXX
+
+```text
+public function simpanKeDb() -> void
+execute_query(Q-Reg-001, [
+            this.idPengguna,
+            this.namaPengguna,
+            this.username,
+            this.password,
+            this.email,
+            this.nomorTelpon
+        ])
+```
+Tabel 5.5.5 Query Operasi simpanKeDb
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-XXX | `INSERT INTO pengguna (id_pengguna, nama_pengguna, username, password, email, nomor_telpon, akumulasi_rating, riwayat_rating) VALUES ($1, $2, $3, $4, $5, $6, 0.0, '{}'); | Menyimpan objek pelanggan dalam database | 
+
 
 ## 5.6 Kelas [Nama Kelas 6]
 
