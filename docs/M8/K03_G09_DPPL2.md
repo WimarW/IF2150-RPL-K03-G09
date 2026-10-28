@@ -72,8 +72,11 @@ Tabel 1.4. Aturan Penomoran
 
 | Hal/Bagian | Penomoran | Keterangan |
 | :--- | :--- | :--- |
-| *Use Case* | *UCXX* | Menyatakan ID kasus yang mungkin terjadi di perangkat lunak|
-| *Kelas* | *CXX* | Menyatakan ID kelas di perangkat lunak|
+| *Use Case* | *UCXX* | Menyatakan ID kasus yang mungkin terjadi di perangkat lunak |
+| *Kelas* | *CXX* | Menyatakan ID kelas di perangkat lunak |
+| *Algoritma* | *ALGO-XXX* | Menyatakan ID algoritma pada operasi kelas di perangkat lunak |
+| *Query* | *Q-XXX* | Menyatakan ID query basis data pada operasi kelas di perangkat lunak |
+| *Antarmuka* | *UI-XX* | Menyatakan ID layar antarmuka pengguna di perangkat lunak |
 
 ## 1.5 Referensi
 Dokumen ini merujuk pada dokumentasi-dokumentasi milestone sebelumnya, seperti dokumen Topic Brainstorming, Requirement Gathering, Use Case, Class Diagram, SKPL, APL.
@@ -738,9 +741,6 @@ Tabel 5.1. Daftar Kelas Perancangan dan Kelas Analisis Terkait
 | 18 | *RatingController* | *RatingController* |
 | 19 | *Notifikasi* | *Notifikasi* |
 | 20 | *NotifikasiController* | *NotifikasiController* |
-| ... | *...* | *...* |
-
-
 ## 5.1 Kelas Pengguna
 
 **Nama Kelas:** Pengguna <br>
@@ -761,9 +761,8 @@ Tabel 5.1.1. Operasi Kelas Pengguna
 | `getRiwayatRating(): Float[]` | public | Mengembalikan daftar riwayat rating yang pernah diterima pengguna |
 | `addNewRatingRiwayat(nilaiRating: Float): void` | public | Menambahkan nilai rating baru ke dalam riwayat rating pengguna |
 | `konfirmasiPekerjaan(idKontrak: String): Boolean` | public | Mengonfirmasi bahwa pekerjaan pada kontrak terkait telah selesai |
-| `laporkanMasalah(): void` | public | Melaporkan kendala atau masalah pekerjaan kepada layanan pelanggan |rating pengguna |
+| `laporkanMasalah(): void` | public | Melaporkan kendala atau masalah pekerjaan kepada layanan pelanggan |
 
- 
 Tabel 5.1.2. Atribut Kelas Pengguna
 
 | Nama Atribut | Visibility (private, public) | Tipe |
@@ -777,37 +776,13 @@ Tabel 5.1.2. Atribut Kelas Pengguna
 | username | private | String |
 | passwordHash | private | String |
 
-### 5.1.1 Algoritma/Query
-
-**Nama Kelas:**  
-**Nama Operasi:** 
-**ID Algoritma:** 
-
-
-```text
-
-```
-
-Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
-
-Tabel 5.1.1. Query Opersi [Nama Operasi]
-| No Query | Query | Keterangan |
-| :--- | :--- | :--- |
-| *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
-| *...* | *...* | *...* |
-
-
-### 5.1.2 Algoritma/Query
-
-*[Ulangi pola 5.1.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
-
 
 ## 5.2 Kelas PenggunaController
 
-**Nama Kelas:** *[Nama kelas]*  
-**ID Kelas:** *[ID kelas]*
+**Nama Kelas:** PenggunaController <br>
+**ID Kelas:** C03
 
-Tabel 5.2.1. Operasi Kelas [Nama Kelas 2]
+Tabel 5.2.1. Operasi Kelas PenggunaController
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
@@ -816,49 +791,12 @@ Tabel 5.2.1. Operasi Kelas [Nama Kelas 2]
 | `validasiInfoRegistrasi(dataRegistrasi: Object): Boolean` | public | Memvalidasi kelengkapan dan format data masukan saat registrasi akun pengguna |
 | `requestKontrakPekerjaan(idKontrak: String): KontrakPekerjaan` | public | Meminta data detail kontrak pekerjaan berdasarkan ID kontrak |
 | `requestFormTiket(): void` | public | Meminta tampilan formulir pelaporan masalah untuk pengguna |
-| *...* | *...* | *...* |
-
-Tabel 5.2.2. Atribut Kelas [Nama Kelas 2]
-
-| Nama Atribut | Visibility (private, public) | Tipe |
-| :--- | :--- | :--- |
-| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
-| *...* | *...* | *...* |
-
-### 5.2.1 Algoritma/Query
-
-Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
-
-**Nama Kelas:** *[Nama kelas]*  
-**Nama Operasi:** *[Signature operasi]*  
-**ID Algoritma:** *[Algo-001]*
-
-```text
-[Tuliskan pseudocode algoritma operasi di sini.]
-```
-
-Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
-
-Tabel 5.2.1. Query Operasi [Nama Operasi]
-
-| No Query | Query | Keterangan |
-| :--- | :--- | :--- |
-| *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
-| *...* | *...* | *...* |
-
-
-### 5.2.2 Algoritma/Query
-
-*[Ulangi pola 5.2.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
 ## 5.3 Kelas PemberiJasa
-## 5.3 Kelas PemberiJasa
 
-**Nama Kelas:** PemberiJasa  
+**Nama Kelas:** PemberiJasa <br>
 **ID Kelas:** C04
-**Nama Kelas:** *PemberiJasa*  
-**ID Kelas:** *C04*
 
 Tabel 5.3.1 Operasi Kelas PemberiJasa
 
@@ -887,7 +825,7 @@ Tabel 5.3.2 Atribut Kelas PemberiJasa
 
 **Nama Kelas:** PemberiJasa <br>
 **Nama Operasi:** cekInfoLogin <br>
-**ID Algoritma:** Algo-XXX
+**ID Algoritma:** ALGO-001
 
 ```text
 public function cekInfoLogin(input username:String, input password:String)
@@ -898,7 +836,7 @@ userRecord: Row Table Pengguna
 ALGORITMA
     if (username.strip = "" or password.strip = "") then
         --> false
-    userRecord <- execute_query(Q-XXX, [trim(username)])
+    userRecord <- execute_query(Q-001, [trim(username)])
     
     if (userRecord = NUL) then
         {Mensimulasikan proses check hasing}
@@ -916,54 +854,24 @@ ALGORITMA
 
 ```
 
-### 5.3.2 Algoritma/Query
-
-**Nama Kelas:** PemberiJasa
-**Nama Operasi:** getPemberiJasaByID()
-**ID Algoritma:** Algo-XXX
-```text
-PRIVATE dataPemberiJasa : Object
-PUBLIC function getPemberiJasaByID(idPemberiJasa : String) -> Object
-    rows : Object
-    rows <- // execute query data Pemberi Jasa berdasarkan ID
-
-    this.dataPemberiJasa <- rows
-    -> this.dataPemberiJasa
-```
-
-### 5.3.3 Algoritma/Query
-
-**Nama Kelas:** PemberiJasa
-**Nama Operasi:** getPemberiJasaByKategori()
-**ID Algoritma:** Algo-XXX
-```text
-PRIVATE idPemberiJasa : String
-PUBLIC  idKategoriJasa : String
-PUBLIC  jenisJasa : String
-PUBLIC function getPemberiJasaByKategori(idKategoriJasa : String) -> List<Object>
-    rows : List <Object>
-    rows <- // execute querydaftar Pemberi Jasa yang tersedia berdasarkan ID Kategori Jasa 
-    -> rows
-```
-
 Tabel 5.3.3 Query Operasi cekInfoLogin
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| Q-XXX | `SELECT id_pengguna, nama_pengguna, username, password, email FROM pengguna WHERE username = $1;` | Mengambil data akun dan hash password dari tabel pengguna berdasarkan nama pengguna. |
+| Q-001 | `SELECT id_pengguna, nama_pengguna, username, password, email FROM pengguna WHERE username = $1;` | Mengambil data akun dan hash password dari tabel pengguna berdasarkan nama pengguna. |
 
 ### 5.3.2 Algoritma/Query
 
 **Nama Kelas:** PemberiJasa <br>
 **Nama Operasi:** getPemberiJasaByID() <br>
-**ID Algoritma:** Alg-XXX
+**ID Algoritma:** ALGO-002
 
 ```text
 PRIVATE dataPemberiJasa : Object
 // Mengambil detail profil, lokasi, rating, dan tarif Pemberi Jasa berdasarkan ID
 PUBLIC function getPemberiJasaByID(idPemberiJasa : String) -> Object
     rows : Object
-    rows <- execute_query(Q-XXX, [idPemberiJasa])
+    rows <- execute_query(Q-002, [idPemberiJasa])
 
     this.dataPemberiJasa <- rows
     -> this.dataPemberiJasa
@@ -973,13 +881,13 @@ Tabel 5.3.4 Query Operasi getPemberiJasaByID
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| Q-XXX | `SELECT pj.id_pemberi_jasa, u.nama_pengguna, u.nomor_telpon, u.email, u.akumulasi_rating, pj.id_kategori_jasa, pj.jenis_jasa, kj.deskripsi_jasa, kj.tarif, kj.jam_kerja, kj.daerah_kerja FROM pemberi_jasa pj JOIN pengguna u ON pj.id_pemberi_jasa = u.id_pengguna LEFT JOIN kategori_jasa kj ON pj.id_kategori_jasa = kj.id_kategori_jasa WHERE pj.id_pemberi_jasa = $1;` | Mengambil detail profil, lokasi/daerah kerja, rating, dan tarif Pemberi Jasa berdasarkan ID. |
+| Q-002 | `SELECT pj.id_pemberi_jasa, u.nama_pengguna, u.nomor_telpon, u.email, u.akumulasi_rating, pj.id_kategori_jasa, pj.jenis_jasa, kj.deskripsi_jasa, kj.tarif, kj.jam_kerja, kj.daerah_kerja FROM pemberi_jasa pj JOIN pengguna u ON pj.id_pemberi_jasa = u.id_pengguna LEFT JOIN kategori_jasa kj ON pj.id_kategori_jasa = kj.id_kategori_jasa WHERE pj.id_pemberi_jasa = $1;` | Mengambil detail profil, lokasi/daerah kerja, rating, dan tarif Pemberi Jasa berdasarkan ID. |
 
 ### 5.3.3 Algoritma/Query
 
 **Nama Kelas:** PemberiJasa <br>
 **Nama Operasi:** getPemberiJasaByKategori() <br>
-**ID Algoritma:** Alg-XXX
+**ID Algoritma:** ALGO-003
 
 ```text
 PRIVATE idPemberiJasa : String
@@ -988,7 +896,7 @@ PUBLIC  jenisJasa : String
 // Mengambil daftar Pemberi Jasa yang tersedia berdasarkan ID Kategori Jasa 
 PUBLIC function getPemberiJasaByKategori(idKategoriJasa : String) -> List<Object>
     rows : List <Object>
-    rows <- execute_query(Q-XXX, [idKategoriJasa])
+    rows <- execute_query(Q-003, [idKategoriJasa])
     -> rows
 ```
 
@@ -996,32 +904,32 @@ Tabel 5.3.5 Query Operasi getPemberiJasaByKategori
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| Q-XXX | `SELECT pj.id_pemberi_jasa, u.nama_pengguna, u.akumulasi_rating, pj.id_kategori_jasa, pj.jenis_jasa FROM pemberi_jasa pj JOIN pengguna u ON pj.id_pemberi_jasa = u.id_pengguna WHERE pj.id_kategori_jasa = $1;` | Mengambil daftar Pemberi Jasa yang tersedia berdasarkan ID Kategori Jasa. |
+| Q-003 | `SELECT pj.id_pemberi_jasa, u.nama_pengguna, u.akumulasi_rating, pj.id_kategori_jasa, pj.jenis_jasa FROM pemberi_jasa pj JOIN pengguna u ON pj.id_pemberi_jasa = u.id_pengguna WHERE pj.id_kategori_jasa = $1;` | Mengambil daftar Pemberi Jasa yang tersedia berdasarkan ID Kategori Jasa. |
 
 ### 5.3.4 Algoritma/Query
 
 **Nama Kelas:** PemberiJasa <br>
 **Nama Operasi:** savePemberiJasa() <br>
-**ID Algoritma:** Alg-XXX
+**ID Algoritma:** ALGO-004
 
 ```text
 PRIVATE idPemberiJasa : String
 PUBLIC  idKategoriJasa : String
 PUBLIC  jenisJasa : String
 PUBLIC procedure savePemberiJasa() 
-    execute_query(Q-XXX, [this.idKategoriJasa, this.idPemberiJasa])
+    execute_query(Q-004, [this.idKategoriJasa, this.idPemberiJasa])
 ```
 
 Tabel 5.3.6 Query Operasi savePemberiJasa
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| Q-XXX | `UPDATE pemberi_jasa SET id_kategori_jasa = $1, jenis_jasa = (SELECT jenis_jasa FROM kategori_jasa WHERE id_kategori_jasa = $1) WHERE id_pemberi_jasa = $2;` | Memperbarui data kategori jasa dan jenis jasa pada tabel pemberi_jasa berdasarkan ID Pemberi Jasa. |
+| Q-004 | `UPDATE pemberi_jasa SET id_kategori_jasa = $1, jenis_jasa = (SELECT jenis_jasa FROM kategori_jasa WHERE id_kategori_jasa = $1) WHERE id_pemberi_jasa = $2;` | Memperbarui data kategori jasa dan jenis jasa pada tabel pemberi_jasa berdasarkan ID Pemberi Jasa. |
 
 ### 5.3.5 Algoritma/Query
 **Nama Kelas:** PemberiJasa <br>
 **Nama Operasi:** makePemberiJasa <br>
-**ID Algoritma:** Algo-XXX
+**ID Algoritma:** ALGO-005
 
 
 ```text
@@ -1039,7 +947,7 @@ ALGORITMA
         --> false
 
     {Check if info is in db}
-    record <- execute_query(Q-XXX, [trim(username), trim(email)])
+    record <- execute_query(Q-005, [trim(username), trim(email)])
     if (isExist is not null) then
         --> false
 
@@ -1060,16 +968,16 @@ Tabel 5.3.7 Query Operasi makePemberiJasa
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| Q-XXX | `SELECT id_pengguna FROM pengguna WHERE username = $1 OR email = $2;` | Mencari sebuah entry dengan username dan pengguna |
+| Q-005 | `SELECT id_pengguna FROM pengguna WHERE username = $1 OR email = $2;` | Mencari sebuah entry dengan username dan pengguna |
 
 ### 5.3.6 Algoritma/Query
 **Nama Kelas:** PemberiJasa <br>
 **Nama Operasi:** simpanKeDb() <br>
-**ID Algoritma:** Algo-XXX
+**ID Algoritma:** ALGO-006
 
 ```text
 public function simpanKeDb() -> void
-execute_query(Q-XXX, [
+execute_query(Q-006, [
             this.idPengguna,
             this.namaPengguna,
             this.username,
@@ -1077,26 +985,25 @@ execute_query(Q-XXX, [
             this.email,
             this.nomorTelpon
         ])
-execute_query(Q-XXX, this.idPengguna, this.idKategoriJasa,this.jenisJasa)
+execute_query(Q-007, this.idPengguna, this.idKategoriJasa,this.jenisJasa)
 ```
 Tabel 5.3.8 Query Operasi simpanKeDb
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| Q-XXX | `INSERT INTO pengguna (id_pengguna, nama_pengguna, username, password, email, nomor_telpon, akumulasi_rating, riwayat_rating) VALUES ($1, $2, $3, $4, $5, $6, 0.0, '{}'); | Menyimpan objek pelanggan dalam database | 
-| Q-XXX | `INSERT INTO pemberi_jasa (id_pengguna, id_kategori_jasa, jenis_jasa) VALUES ($1, $2, $3)` | |
+| Q-006 | `INSERT INTO pengguna (id_pengguna, nama_pengguna, username, password, email, nomor_telpon, akumulasi_rating, riwayat_rating) VALUES ($1, $2, $3, $4, $5, $6, 0.0, '{}');` | Menyimpan objek pelanggan dalam database | 
+| Q-007 | `INSERT INTO pemberi_jasa (id_pengguna, id_kategori_jasa, jenis_jasa) VALUES ($1, $2, $3);` | Menyimpan data pemberi jasa ke dalam tabel pemberi_jasa |
 
 
 ## 5.4 Kelas PemberiJasaController
 
-**Nama Kelas:** PemberiJasaController
+**Nama Kelas:** PemberiJasaController <br>
 **ID Kelas:** C06
 
 Tabel 5.4.1. Operasi Kelas PemberiJasaController
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| requestFormTiket() | Public | Meminta form tiket untuk diisi dan dikirimkan le layanan pelanggan |
 | `validatePemberiJasa(idPemberiJasa: String): Boolean` | public | Memvalidasi keberadaan dan keabsahan ID pemberi jasa |
 | `validasiInput(): Boolean` | public | Memvalidasi masukan data dari antarmuka pemberi jasa |
 | `triggerQueryLogin(username: String, password: String): Boolean` | public | Memicu proses autentikasi login untuk akun pemberi jasa |
@@ -1105,13 +1012,13 @@ Tabel 5.4.1. Operasi Kelas PemberiJasaController
 | `showPemberiJasaFromKategori(idKategoriJasa: String): List<Object>` | public | Mengambil dan menampilkan daftar pemberi jasa berdasarkan kategori jasa tertentu |
 | `choosePemberiJasa(idPemberiJasa: String): Object` | public | Memilih pemberi jasa tertentu dan mengembalikan detail profilnya |
 | `requestFormTiket(): void` | public | Meminta form tiket untuk diisi dan dikirimkan ke layanan pelanggan |
-
+| `validasiInfoRegistrasi(input namaPengguna: String, input username: String, input password: String, input email: String, input nomorTelpon: String): Boolean` | public | Memvalidasi input yang digunakan user dalam registrasi |
 
 ### 5.4.1 Algoritma/Query
 
-**Nama Kelas:** PemberiJasaController
-**Nama Operasi:** validatePemberiJasa(idPemberiJasa : String)  
-**ID Algoritma:** [Algo-001]
+**Nama Kelas:** PemberiJasaController <br>
+**Nama Operasi:** validatePemberiJasa(idPemberiJasa : String) <br>
+**ID Algoritma:** ALGO-007
 
 ```text
 PUBLIC function validatePemberiJasa(idPemberiJasa : String) -> Boolean
@@ -1120,18 +1027,18 @@ PUBLIC function validatePemberiJasa(idPemberiJasa : String) -> Boolean
     -> TRUE
 ```
 ### 5.4.2 Algoritma/Query
-**Nama Kelas:** PemberiJasaController
-**Nama Operasi:** setInformasiKategoriJasa(idKategoriJasa : String)  
-**ID Algoritma:** [Algo-001]
+**Nama Kelas:** PemberiJasaController <br>
+**Nama Operasi:** setInformasiKategoriJasa(idKategoriJasa : String) <br>
+**ID Algoritma:** ALGO-008
 
 ```text
 PUBLIC procedure setInformasiKategoriJasa(idKategoriJasa : String)
     this.pemberiJasa.idKategoriJasa <- idKategoriJasa
 ```
 ### 5.4.3 Algoritma/Query
-**Nama Kelas:** PemberiJasaController
-**Nama Operasi:** fetchPemberiJasaById(idPemberiJasa : String)
-**ID Algoritma:** [Algo-001]
+**Nama Kelas:** PemberiJasaController <br>
+**Nama Operasi:** fetchPemberiJasaById(idPemberiJasa : String) <br>
+**ID Algoritma:** ALGO-009
 
 ```text
 PRIVATE pemberiJasaUI : PemberiJasaUI
@@ -1141,9 +1048,9 @@ PUBLIC procedure fetchPemberiJasaById(idPemberiJasa : String)
         this.pemberiJasaUI.showPemberiJasaKategori(dataPemberiJasa)
 ```
 ### 5.4.4 Algoritma/Query
-**Nama Kelas:** PemberiJasaController
-**Nama Operasi:** showPemberiJasaFromKategori(idKategoriJasa : String)
-**ID Algoritma:** [Algo-001]
+**Nama Kelas:** PemberiJasaController <br>
+**Nama Operasi:** showPemberiJasaFromKategori(idKategoriJasa : String) <br>
+**ID Algoritma:** ALGO-010
 
 ```text
 PRIVATE pemberiJasa : PemberiJasa
@@ -1151,9 +1058,9 @@ PUBLIC function showPemberiJasaFromKategori(idKategoriJasa : String) -> List<Obj
     -> this.pemberiJasa.getPemberiJasaByKategori(idKategoriJasa)
 ```
 ### 5.4.5 Algoritma/Query
-**Nama Kelas:** PemberiJasaController
-**Nama Operasi:** choosePemberiJasa(idPemberiJasa : String)
-**ID Algoritma:** [Algo-001]
+**Nama Kelas:** PemberiJasaController <br>
+**Nama Operasi:** choosePemberiJasa(idPemberiJasa : String) <br>
+**ID Algoritma:** ALGO-011
 
 ```text
 PRIVATE pemberiJasa : PemberiJasa
@@ -1161,12 +1068,10 @@ PUBLIC function choosePemberiJasa(idPemberiJasa : String) -> Object
     -> this.pemberiJasa.getPemberiJasaByID(idPemberiJasa)
 ```
 
-| validasiInfoRegistrasi(input namaPengguna: String, input username: String, input password: String, input email: String, input nomorTelpon: String): Boolean | public | Memvalidasi input yang digunakan user dalam registrasi |
-
 ### 5.4.6 Algoritma/Query
-**Nama Kelas:** PemberiJasaController  
-**Nama Operasi:** validasiInfoRegistrasi
-**ID Algoritma:** Algo-XXX
+**Nama Kelas:** PemberiJasaController <br>
+**Nama Operasi:** validasiInfoRegistrasi <br>
+**ID Algoritma:** ALGO-012
 
 ```text
 public function validasiInfoRegistrasi(input namaPengguna: String, input username: String, input password: String, input email: String, input nomorTelpon: String): Boolean
@@ -1185,8 +1090,6 @@ ALGORITMA
 
 ## 5.5 Kelas Pelanggan
 
-**Nama Kelas:** *Pelanggan*  
-**ID Kelas:** *C07*
 **Nama Kelas:** Pelanggan <br> 
 **ID Kelas:** C07
 
@@ -1199,9 +1102,9 @@ Tabel 5.5.1 Operasi Kelas Pelanggan
 | `laporkanMasalah(idTiket: String, jenisTiket: String, keteranganTiket: String):Boolean` | public | fungsi untuk membuat tiket masalah yang terjadi |
 
 ### 5.5.1 Algoritma/Query
-**Nama Kelas:** *Pelanggan*  
-**Nama Operasi:** *laporkanMasalah()*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** *Pelanggan* <br>
+**Nama Operasi:** *laporkanMasalah()* <br>
+**ID Algoritma:** ALGO-013
 
 ```text
 public function laporkanMasalah(input idTiket: String,input jenisTiket: String,input keteranganTiket: String)-> Boolean
@@ -1211,7 +1114,7 @@ ALGORITMA
         --> false
     if (trim(this.idPengguna) == "") then
         --> false
-    execute_query(Q-Tiket-001, [
+    execute_query(Q-008, [
             idTiket,
             this.idPengguna,
             jenisTiket,
@@ -1219,17 +1122,17 @@ ALGORITMA
         ])
     --> true
 ```
-Tabel 5.3.5 Query Operasi laporkanMasalah
+Tabel 5.5.2 Query Operasi laporkanMasalah
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| Q-XXX | `INSERT INTO tiket_laporan (id_tiket, id_pengguna, jenis_tiket, keterangan_tiket, tanggal_tiket, status_tiket) VALUES ($1, $2, $3, $4, NOW(), 'Open');` | Menyimpan objek tiket dalam database | 
+| Q-008 | `INSERT INTO tiket_laporan (id_tiket, id_pengguna, jenis_tiket, keterangan_tiket, tanggal_tiket, status_tiket) VALUES ($1, $2, $3, $4, NOW(), 'Open');` | Menyimpan objek tiket dalam database | 
 
 
 ### 5.5.2 Algoritma/Query
-**Nama Kelas:** Pelanggan 
-**Nama Operasi:** cekInfoLogin
-**ID Algoritma:** Algo-XXX
+**Nama Kelas:** Pelanggan <br>
+**Nama Operasi:** cekInfoLogin <br>
+**ID Algoritma:** ALGO-014
 
 ```text
 public function cekInfoLogin(input username:String, input password:String)
@@ -1240,7 +1143,7 @@ userRecord: Row Table Pengguna
 ALGORITMA
     if (username.strip = "" or password.strip = "") then
         --> false
-    userRecord <- execute_query(Q-XXX, [trim(username)])
+    userRecord <- execute_query(Q-009, [trim(username)])
     
     if (userRecord = NUL) then
         {Mensimulasikan proses check hasing}
@@ -1261,12 +1164,12 @@ Tabel 5.5.3 Query Operasi cekInfoLogin
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| Q-XXX | `SELECT id_pengguna, nama_pengguna, username, password, email FROM pengguna WHERE username = $1;` | Mengambil data akun dan hash password dari tabel pengguna berdasarkan nama pengguna. |
+| Q-009 | `SELECT id_pengguna, nama_pengguna, username, password, email FROM pengguna WHERE username = $1;` | Mengambil data akun dan hash password dari tabel pengguna berdasarkan nama pengguna. |
 
 ### 5.5.3 Algoritma/Query
 **Nama Kelas:** Pelanggan <br>
 **Nama Operasi:** makePelanggan <br>
-**ID Algoritma:** Algo-XXX
+**ID Algoritma:** ALGO-015
 
 ```text
 public function makePelanggan(input idPengguna: String, input namaPengguna: String, input username: String, input password: String, input email: String, input nomorTelpon: String) -> Pelanggan
@@ -1283,7 +1186,7 @@ ALGORITMA
         --> false
 
     {Check if info is in db}
-    record <- execute_query(Q-XXX, [trim(username), trim(email)])
+    record <- execute_query(Q-010, [trim(username), trim(email)])
     if (isExist is not null) then
         --> false
 
@@ -1301,16 +1204,16 @@ Tabel 5.5.4 Query Operasi makePelanggan
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| Q-XXX | `SELECT id_pengguna FROM pengguna WHERE username = $1 OR email = $2;` | Mencari sebuah entry dengan username dan pengguna |
+| Q-010 | `SELECT id_pengguna FROM pengguna WHERE username = $1 OR email = $2;` | Mencari sebuah entry dengan username dan pengguna |
 
 ### 5.5.4 Algoritma/Query
 **Nama Kelas:** Pelanggan <br>
 **Nama Operasi:** simpanKeDb() <br>
-**ID Algoritma:** Algo-XXX
+**ID Algoritma:** ALGO-016
 
 ```text
 public function simpanKeDb() -> void
-execute_query(Q-Reg-001, [
+execute_query(Q-011, [
             this.idPengguna,
             this.namaPengguna,
             this.username,
@@ -1323,24 +1226,26 @@ Tabel 5.5.5 Query Operasi simpanKeDb
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| Q-XXX | `INSERT INTO pengguna (id_pengguna, nama_pengguna, username, password, email, nomor_telpon, akumulasi_rating, riwayat_rating) VALUES ($1, $2, $3, $4, $5, $6, 0.0, '{}'); | Menyimpan objek pelanggan dalam database | 
+| Q-011 | `INSERT INTO pengguna (id_pengguna, nama_pengguna, username, password, email, nomor_telpon, akumulasi_rating, riwayat_rating) VALUES ($1, $2, $3, $4, $5, $6, 0.0, '{}');` | Menyimpan objek pelanggan dalam database | 
 
 
 ## 5.6 Kelas PelangganController
 
-**Nama Kelas:** PelangganController
+**Nama Kelas:** PelangganController <br>
 **ID Kelas:** C09
 
-Tabel 5.6.1. Operasi Kelas [Nama Kelas 6]
+Tabel 5.6.1. Operasi Kelas PelangganController
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| validasiInfoRegistrasi(input namaPengguna: String, input username: String, input password: String, input email: String, input nomorTelpon: String): Boolean | public | Memvalidasi input yang digunakan user dalam registrasi |
+| `validasiInfoRegistrasi(input namaPengguna: String, input username: String, input password: String, input email: String, input nomorTelpon: String): Boolean` | public | Memvalidasi input yang digunakan user dalam registrasi |
+| `validasiInput(): Boolean` | public | Memvalidasi format dan kelengkapan masukan dari pengguna pelanggan |
+| `triggerQueryLogin(username: String, password: String): Boolean` | public | Memicu proses verifikasi kredensial login untuk akun pelanggan |
 
 ### 5.6.1 Algoritma/Query
-**Nama Kelas:** PelangganController  
-**Nama Operasi:** validasiInfoRegistrasi
-**ID Algoritma:** Algo-XXX
+**Nama Kelas:** PelangganController <br>
+**Nama Operasi:** validasiInfoRegistrasi <br>
+**ID Algoritma:** ALGO-017
 
 ```text
 public function validasiInfoRegistrasi(input namaPengguna: String, input username: String, input password: String, input email: String, input nomorTelpon: String): Boolean
@@ -1357,46 +1262,33 @@ ALGORITMA
     --> true
 ```
 
-Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
-
-Tabel 5.6.1. Query Operasi [Nama Operasi]
-
-| No Query | Query | Keterangan |
-| :--- | :--- | :--- |
-| *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
-| *...* | *...* | *...* |
-
-
-### 5.6.2 Algoritma/Query
-
-*[Ulangi pola 5.6.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
-
 
 ## 5.7 Kelas LayananPelanggan
 **Nama Kelas:** LayananPelanggan <br>
 **ID Kelas:** C10
+
 Tabel 5.7.1 Operasi Kelas LayananPelanggan
+
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
 | `cekInfoLogin(input username: String, input password: String): Boolean` | public | Menjalankan query ke database untuk melihat apakah informasi login sesuai dengan informasi pada tabel pengguna |
 | `makeLayananPelanggan(input idPengguna: String, input namaPengguna: String, input username: String, input password: String, input email: String, input nomorTelpon: String): LayananPelanggan` | public | Membuat objek LayananPelanggan baru setelah memvalidasi data akun |
 | `responTiket(idTiket: String, balasan: String): Boolean` | public | Memberikan respons atau tindak lanjut terhadap tiket laporan masalah yang masuk |
-| cariLayananKosong() : String | Public | Menjalankan query untuk mencari layanan pelanggan yang dapat meng-handle tiket
+| `cariLayananKosong(): String` | public | Menjalankan query untuk mencari layanan pelanggan yang dapat meng-handle tiket |
 
 Tabel 5.7.2 Atribut Kelas LayananPelanggan
 
 | Nama Atribut | Visibility (private, public) | Tipe |
 | :--- | :--- | :--- |
-| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
 | idLayananPelanggan | Private | String |
 | jumlahTiketDipegang | Private | Integer |
 | statusAktif | Private | Boolean |
 
 ### 5.7.1 Algoritma/Query
 
-**Nama Kelas:** LayananPelanggan  
-**Nama Operasi:** cekInfoLogin
-**ID Algoritma:** Algo-XXX
+**Nama Kelas:** LayananPelanggan <br>
+**Nama Operasi:** cekInfoLogin <br>
+**ID Algoritma:** ALGO-018
 
 ```text
 public function cekInfoLogin(input username:String, input password:String)
@@ -1407,7 +1299,7 @@ userRecord: Row Table Pengguna
 ALGORITMA
     if (username.strip = "" or password.strip = "") then
         --> false
-    userRecord <- execute_query(Q-XXX, [trim(username)])
+    userRecord <- execute_query(Q-012, [trim(username)])
     
     if (userRecord = NUL) then
         {Mensimulasikan proses check hasing}
@@ -1427,63 +1319,46 @@ Tabel 5.7.3 Query Operasi cekInfoLogin
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| Q-XXX | `SELECT id_pengguna, nama_pengguna, username, password, email FROM pengguna WHERE username = $1;` | Mengambil data akun dan hash password dari tabel pengguna berdasarkan nama pengguna. |
+| Q-012 | `SELECT id_pengguna, nama_pengguna, username, password, email FROM pengguna WHERE username = $1;` | Mengambil data akun dan hash password dari tabel pengguna berdasarkan nama pengguna. |
 
 ### 5.7.2 Algoritma/Query
 
-**Nama Kelas:** *LayananPelanggan*  
-**Nama Operasi:** *cariLayananKosong()*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** *LayananPelanggan* <br>
+**Nama Operasi:** *cariLayananKosong()* <br>
+**ID Algoritma:** ALGO-019
 
 ```text
 public cariLayananKosong() : String {
-    -> execute_query(Q-001)
+    -> execute_query(Q-013)
 }
 ```
 
-Tabel 5.8.1. Query Operasi cariLayananKosong()
+Tabel 5.7.4. Query Operasi cariLayananKosong()
 
 | No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-013 | `SELECT idLayananPelanggan FROM LayananPelanggan WHERE status = 'Available' OR jumlahTiketDipegang < 5;` | Mencari layanan pelanggan yang sedang aktif atau jumlah tiket yang dipegangnya kurang dari 5 |
+
+
+## 5.8 Kelas LayananPelangganController
+
+**Nama Kelas:** LayananPelangganController <br>
+**ID Kelas:** C12
+
+Tabel 5.8.1. Operasi Kelas LayananPelangganController
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
 | `validasiInput(): Boolean` | public | Memvalidasi masukan data pada antarmuka layanan pelanggan |
 | `triggerQueryLogin(username: String, password: String): Boolean` | public | Memicu proses pengecekan login bagi petugas layanan pelanggan |
 | `requestTiketLaporan(): List<TiketLaporan>` | public | Mengambil daftar tiket laporan masalah yang masuk untuk ditindaklanjuti |
 | `teruskanBalasan(idTiket: String, balasan: String): void` | public | Meneruskan balasan atau solusi dari layanan pelanggan kepada pelapor |
 
-Tabel 5.8.2. Atribut Kelas [Nama Kelas 8]
-
-| Nama Atribut | Visibility (private, public) | Tipe |
-| :--- | :--- | :--- |
-| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
-| *...* | *...* | *...* |
-
 ### 5.8.1 Algoritma/Query
 
-Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
-
-**Nama Kelas:** *[Nama kelas]*  
-**Nama Operasi:** *[Signature operasi]*  
-**ID Algoritma:** *[Algo-001]*
-
-```text
-[Tuliskan pseudocode algoritma operasi di sini.]
-```
-
-Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
-
-Tabel 5.8.1. Query Operasi [Nama Operasi]
-
-| No Query | Query | Keterangan |
-| :--- | :--- | :--- |
-| validasiInput() | Public | Memvalidasi input yang dikirim pada form |
-| requestTiketLaporan() | Public | Meminta tiket laporan yang sesuai |
-| teruskanBalasan() | Public | Meneruskan balasan mengenai tiket laporan |
-
-### 5.8.1 Algoritma/Query
-
-**Nama Kelas:** *LayananPelangganController*  
-**Nama Operasi:** *requestTiketLaporan()*  
-**ID Algoritma:** *[Algo-XXX]*
+**Nama Kelas:** *LayananPelangganController* <br>
+**Nama Operasi:** *requestTiketLaporan()* <br>
+**ID Algoritma:** ALGO-020
 
 ```text
 public requestTiketLaporan(idTiket) -> TiketLaporan{
@@ -1497,9 +1372,9 @@ public requestTiketLaporan(idTiket) -> TiketLaporan{
 
 ### 5.8.2 Algoritma/Query
 
-**Nama Kelas:** *LayananPelangganController*  
-**Nama Operasi:** *teruskanBalasan()*  
-**ID Algoritma:** *[Algo-XXX]*
+**Nama Kelas:** *LayananPelangganController* <br>
+**Nama Operasi:** *teruskanBalasan()* <br>
+**ID Algoritma:** ALGO-021
 
 ```text
 public teruskanBalasan(idTiket, idLayananPelanggan, idPengguna, isiBalasan){
@@ -1535,9 +1410,9 @@ Tabel 5.9.1 Operasi Kelas KategoriJasa
 
 ### 5.9.1 Algoritma/Query
 
-**Nama Kelas:** *KategoriJasa* 
-**Nama Operasi:** *getIDKategoriJasa()*  
-**ID Algoritma:** *[Algo-091]*
+**Nama Kelas:** *KategoriJasa* <br>
+**Nama Operasi:** *getIDKategoriJasa()* <br>
+**ID Algoritma:** ALGO-022
 
 ```text
 PRIVATE  idKategoriJasa   : String
@@ -1548,9 +1423,9 @@ PUBLIC funtion getIDKategoriJasa() -> String
 
 ### 5.9.2 Algoritma/Query
 
-**Nama Kelas:** *KategoriJasa* 
-**Nama Operasi:** *getJenisJasa()*  
-**ID Algoritma:** *[Algo-091]*
+**Nama Kelas:** *KategoriJasa* <br>
+**Nama Operasi:** *getJenisJasa()* <br>
+**ID Algoritma:** ALGO-023
 
 ```text
 PUBLIC function getJenisJasa() -> String
@@ -1559,9 +1434,9 @@ PUBLIC function getJenisJasa() -> String
 
 ### 5.9.3 Algoritma/Query
 
-**Nama Kelas:** *KategoriJasa* 
-**Nama Operasi:** *getTarif()*  
-**ID Algoritma:** *[Algo-091]*
+**Nama Kelas:** *KategoriJasa* <br>
+**Nama Operasi:** *getTarif()* <br>
+**ID Algoritma:** ALGO-024
 
 ```text
 PUBLIC function getTarif() -> Float
@@ -1570,9 +1445,9 @@ PUBLIC function getTarif() -> Float
 
 ### 5.9.4 Algoritma/Query
 
-**Nama Kelas:** *KategoriJasa* 
-**Nama Operasi:** *getJamKerja()*  
-**ID Algoritma:** *[Algo-091]*
+**Nama Kelas:** *KategoriJasa* <br>
+**Nama Operasi:** *getJamKerja()* <br>
+**ID Algoritma:** ALGO-025
 
 ```text
 PRIVATE jamKerja         : String
@@ -1582,9 +1457,9 @@ PUBLIC function getJamKerja() -> String
 
 ### 5.9.5 Algoritma/Query
 
-**Nama Kelas:** *KategoriJasa* 
-**Nama Operasi:** *getDaerahKerja()*  
-**ID Algoritma:** *[Algo-091]*
+**Nama Kelas:** *KategoriJasa* <br>
+**Nama Operasi:** *getDaerahKerja()* <br>
+**ID Algoritma:** ALGO-026
 
 ```text
 PRIVATE daerahKerja      : String
@@ -1595,9 +1470,9 @@ PUBLIC function getDaerahKerja() -> String
 
 ### 5.9.6 Algoritma/Query
 
-**Nama Kelas:** *KategoriJasa* 
-**Nama Operasi:** *setTarif()*  
-**ID Algoritma:** *[Algo-091]*
+**Nama Kelas:** *KategoriJasa* <br>
+**Nama Operasi:** *setTarif()* <br>
+**ID Algoritma:** ALGO-027
 
 ```text
 PRIVATE tarif : Integer
@@ -1607,9 +1482,9 @@ PUBLIC procedure setTarif(tarifBaru : Float)
 
 ### 5.9.7 Algoritma/Query
 
-**Nama Kelas:** *KategoriJasa* 
-**Nama Operasi:** *setJamKerja()*  
-**ID Algoritma:** *[Algo-091]*
+**Nama Kelas:** *KategoriJasa* <br>
+**Nama Operasi:** *setJamKerja()* <br>
+**ID Algoritma:** ALGO-028
 
 ```text
 PRIVATE jamKerja : Integer
@@ -1619,9 +1494,9 @@ PUBLIC procedure setJamKerja(jamKerjaBaru : String)
 
 ### 5.9.8 Algoritma/Query
 
-**Nama Kelas:** *KategoriJasa* 
-**Nama Operasi:** *setDaerahKerja()*  
-**ID Algoritma:** *[Algo-091]*
+**Nama Kelas:** *KategoriJasa* <br>
+**Nama Operasi:** *setDaerahKerja()* <br>
+**ID Algoritma:** ALGO-029
 
 ```text
 PRIVATE daerahKerja : String
@@ -1631,9 +1506,9 @@ PUBLIC procedure setDaerahKerja(daerahKerjaBaru : String)
 
 ### 5.9.9 Algoritma/Query
 
-**Nama Kelas:** *KategoriJasa* 
-**Nama Operasi:** *saveKategoriJasa(dataJasa : Object)*  
-**ID Algoritma:** *[Algo-091]*
+**Nama Kelas:** *KategoriJasa* <br>
+**Nama Operasi:** *saveKategoriJasa(dataJasa : Object)* <br>
+**ID Algoritma:** ALGO-030
 
 ```text
 PUBLIC  idKategoriJasa   : String
@@ -1651,7 +1526,7 @@ PUBLIC procedure saveKategoriJasa(dataJasa : Object)
     this.daerahKerja      <- dataJasa.daerahKerja
     this.dataKategoriJasa <- dataJasa
 
-    execute_query(Q-XXX, [
+    execute_query(Q-014, [
         this.idKategoriJasa,
         this.jenisJasa,
         this.deskripsiJasa,
@@ -1665,20 +1540,20 @@ Tabel 5.9.3 Query Operasi saveKategoriJasa
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| Q-XXX | `INSERT INTO kategori_jasa (id_kategori_jasa, jenis_jasa, deskripsi_jasa, tarif, jam_kerja, daerah_kerja) VALUES ($1, $2, $3, $4, $5, $6);` | Menyimpan data kategori jasa baru ke tabel kategori_jasa. |
+| Q-014 | `INSERT INTO kategori_jasa (id_kategori_jasa, jenis_jasa, deskripsi_jasa, tarif, jam_kerja, daerah_kerja) VALUES ($1, $2, $3, $4, $5, $6);` | Menyimpan data kategori jasa baru ke tabel kategori_jasa. |
 
 ### 5.9.10 Algoritma/Query
 
-**Nama Kelas:** *KategoriJasa* 
-**Nama Operasi:** *getAllKategori()*  
-**ID Algoritma:** *[Algo-091]*
+**Nama Kelas:** *KategoriJasa* <br>
+**Nama Operasi:** *getAllKategori()* <br>
+**ID Algoritma:** ALGO-031
 
 ```text
 PRIVATE dataKategoriJasa : Object
 
 PUBLIC function getAllKategori() -> List<Object>
     rows : List <Object>
-    rows <- execute_query(Q-XXX, [])
+    rows <- execute_query(Q-015, [])
     this.dataKategoriJasa <- rows
     -> rows
 ```
@@ -1687,7 +1562,7 @@ Tabel 5.9.4 Query Operasi getAllKategori
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| Q-XXX | `SELECT id_kategori_jasa, jenis_jasa, deskripsi_jasa, tarif, jam_kerja, daerah_kerja FROM kategori_jasa ORDER BY jenis_jasa ASC;` | Mengambil seluruh daftar kategori jasa dari tabel kategori_jasa. |
+| Q-015 | `SELECT id_kategori_jasa, jenis_jasa, deskripsi_jasa, tarif, jam_kerja, daerah_kerja FROM kategori_jasa ORDER BY jenis_jasa ASC;` | Mengambil seluruh daftar kategori jasa dari tabel kategori_jasa. |
 
 
 ## 5.10 Kelas KategoriJasaController
@@ -1706,19 +1581,11 @@ Tabel 5.10.1 Operasi Kelas KategoriJasaController
 | `fetchAllKategoriJasa(): void` | public | Mengambil seluruh daftar kategori jasa dari model dan menampilkannya ke UI |
 | `fetchKategoriJasaById(idKategoriJasa: String): void` | public | Mengambil detail kategori jasa tertentu berdasarkan ID dan menampilkannya ke UI |
 
-Tabel 5.10.2. Atribut Kelas [Nama Kelas 10]
-
-| Nama Atribut | Visibility (private, public) | Tipe |
-| :--- | :--- | :--- |
-| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
-| *...* | *...* | *...* |
-
 ### 5.10.1 Algoritma/Query
 
-
-**Nama Kelas:** *KategoriJasaController*  
-**Nama Operasi:** *showFormKategoriJasa()*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** *KategoriJasaController* <br>
+**Nama Operasi:** *showFormKategoriJasa()* <br>
+**ID Algoritma:** ALGO-032
 
 ```text
 PRIVATE kategoriJasaUI : KategoriJasaUI
@@ -1737,10 +1604,9 @@ PUBLIC procedure showFormKategoriJasa() :
 ```
 ### 5.10.2 Algoritma/Query
 
-
-**Nama Kelas:** *KategoriJasaController*  
-**Nama Operasi:** *validateKategoriJasa(Object: dataJasa)*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** *KategoriJasaController* <br>
+**Nama Operasi:** *validateKategoriJasa(Object: dataJasa)* <br>
+**ID Algoritma:** ALGO-033
 ```text
 PUBLIC function validateKategoriJasa(Object: dataJasa) -> Boolean
         IF(dataJasa = NULL) THEN
@@ -1754,10 +1620,9 @@ PUBLIC function validateKategoriJasa(Object: dataJasa) -> Boolean
 
 ### 5.10.3 Algoritma/Query
 
-
-**Nama Kelas:** *KategoriJasaController*  
-**Nama Operasi:** *submifFormKategoriJasa(dataJasa: Object)*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** *KategoriJasaController* <br>
+**Nama Operasi:** *submifFormKategoriJasa(dataJasa: Object)* <br>
+**ID Algoritma:** ALGO-034
 ```text
 PUBLIC procedure submifFormKategoriJasa(dataJasa: Object)
     IF(this.validateKategoriJasa(dataJasa)) THEN
@@ -1767,28 +1632,13 @@ PUBLIC procedure submifFormKategoriJasa(dataJasa: Object)
 
 ### 5.10.4 Algoritma/Query
 
-
-**Nama Kelas:** *KategoriJasaController*  
-**Nama Operasi:** *updateDataPemberiJasa(idKategoriJasa: String)*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** *KategoriJasaController* <br>
+**Nama Operasi:** *updateDataPemberiJasa(idKategoriJasa: String)* <br>
+**ID Algoritma:** ALGO-035
 ```text
 PUBLIC procedure updateDataPemberiJasa(idKategoriJasa: String)
     this.pemberiJasaController.setInformasiKategoriJasa(idKategoriJasa)
 ```
-
-Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
-
-Tabel 5.10.1. Query Operasi [Nama Operasi]
-
-| No Query | Query | Keterangan |
-| :--- | :--- | :--- |
-| *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
-| *...* | *...* | *...* |
-
-
-### 5.10.2 Algoritma/Query
-
-*[Ulangi pola 5.10.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
 ## 5.11 Kelas KontrakPekerjaan
@@ -1805,9 +1655,7 @@ Tabel 5.11.1 Operasi Kelas KontrakPekerjaan
 | `statusUpdate(jenisStatus: String, nilaiStatus: String): Boolean` | public | Memperbarui status pekerjaan yang sedang dikontrak (misalnya `on progress` atau `Done`) |
 | `addRating(): Boolean` | public | Menandai bahwa kontrak pekerjaan terkait telah diberikan penilaian (rating) |
 
-
-
-Tabel 5.11.2. Atribut Kelas [Nama Kelas 11]
+Tabel 5.11.2. Atribut Kelas KontrakPekerjaan
 
 | Nama Atribut | Visibility (private, public) | Tipe |
 | :--- | :--- | :--- |
@@ -1816,15 +1664,11 @@ Tabel 5.11.2. Atribut Kelas [Nama Kelas 11]
 | persetujuanHarga | private | Integer |
 | statusPekerjaan | private | String |
 
-| *...* | *...* | *...* |
-
 ### 5.11.1 Algoritma/Query
 
-Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
-
-**Nama Kelas:** *KontrakPekerjaan*  
-**Nama Operasi:** *statusUpdate()*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** *KontrakPekerjaan* <br>
+**Nama Operasi:** *statusUpdate()* <br>
+**ID Algoritma:** ALGO-036
 
 ```text
 PUBLIC PROCEDURE statusUpdate(jenisStatus, nilaiStatus)
@@ -1833,7 +1677,7 @@ PUBLIC PROCEDURE statusUpdate(jenisStatus, nilaiStatus)
 
     IF this.idKontrakPekerjaan IS NOT NULL THEN
 
-        EXECUTE QUERY Q-004
+        EXECUTE QUERY Q-016
         
         IF query is SUCCESS THEN
             RETURN "Status di-update ke database"
@@ -1847,30 +1691,27 @@ PUBLIC PROCEDURE statusUpdate(jenisStatus, nilaiStatus)
 END PROCEDURE
 ```
 
-Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
-
-Tabel 5.11.1. Query Operasi [Nama Operasi]
+Tabel 5.11.3. Query Operasi statusUpdate
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| [Q-004] | UPDATE kontrak_pekerjaan SET status_pekerjaan = this.statusPekerjaan WHERE id = this.idKontrakPekerjaan | mengubah status awal |
-| *...* | *...* | *...* |
+| Q-016 | `UPDATE kontrak_pekerjaan SET status_pekerjaan = this.statusPekerjaan WHERE id = this.idKontrakPekerjaan;` | Mengubah status pekerjaan pada kontrak |
 
 
 ### 5.11.2 Algoritma/Query
 
-**Nama Kelas:** *KontrakPekerjaan*  
-**Nama Operasi:** *saveKontrak()*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** *KontrakPekerjaan* <br>
+**Nama Operasi:** *saveKontrak()* <br>
+**ID Algoritma:** ALGO-037
 
 ```text
 PUBLIC PROCEDURE saveKontrak()
     IF this.idKontrakPekerjaan IS NULL THEN
 
-        EXECUTE QUERY Q-001
+        EXECUTE QUERY Q-017
     ELSE
         // Artinya kontrak sudah ada (Skenario Pemberi Jasa)
-        EXECUTE QUERY UPDATE kontrak_pekerjaan SET status_pekerjaan = this.statusPekerjaan WHERE id = this.idKontrakPekerjaan
+        EXECUTE QUERY Q-018
     END IF
     
     
@@ -1882,20 +1723,18 @@ PUBLIC PROCEDURE saveKontrak()
 END PROCEDURE
 ```
 
-Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
-
-Tabel 5.11.2. Query Operasi [Nama Operasi]
+Tabel 5.11.4. Query Operasi saveKontrak
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| Q-001 | INSERT INTO kontrak_pekerjaan (id, detail_pekerjaan, persetujuan_harga, status_pekerjaan) VALUES (this.idKontrakPekerjaan, this.detailPekerjaan, this.persetujuanHarga, this.statusPekerjaan) | Menyimpan record kontrak baru ke tabel database. |
-| *...* | *...* | *...* |
+| Q-017 | `INSERT INTO kontrak_pekerjaan (id, detail_pekerjaan, persetujuan_harga, status_pekerjaan) VALUES (this.idKontrakPekerjaan, this.detailPekerjaan, this.persetujuanHarga, this.statusPekerjaan);` | Menyimpan record kontrak baru ke tabel database. |
+| Q-018 | `UPDATE kontrak_pekerjaan SET status_pekerjaan = this.statusPekerjaan WHERE id = this.idKontrakPekerjaan;` | Memperbarui status kontrak pekerjaan yang sudah ada di database. |
 
 ### 5.11.3 Algoritma/Query
 
-**Nama Kelas:** *KontrakPekerjaan*  
-**Nama Operasi:** *newKontrak()*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** *KontrakPekerjaan* <br>
+**Nama Operasi:** *newKontrak()* <br>
+**ID Algoritma:** ALGO-038
 
 ```text
 PROCEDURE newKontrak(dataKontrak)
@@ -1906,22 +1745,11 @@ PROCEDURE newKontrak(dataKontrak)
 END PROCEDURE
 ```
 
-Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
+### 5.11.4 Algoritma/Query
 
-Tabel 5.11.3. Query Operasi [Nama Operasi]
-
-| No Query | Query | Keterangan |
-| :--- | :--- | :--- |
-| No Query | Query | Keterangan |
-| :--- | :--- | :--- |
-| *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
-| *...* | *...* | *...* |
-
-### 5.11.3 Algoritma/Query
-
-**Nama Kelas:** *KontrakPekerjaan*  
-**Nama Operasi:** *makeKontrak()*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** *KontrakPekerjaan* <br>
+**Nama Operasi:** *makeKontrak()* <br>
+**ID Algoritma:** ALGO-039
 
 ```text
 PROCEDURE makeKontrak()
@@ -1934,23 +1762,15 @@ PROCEDURE makeKontrak()
 END PROCEDURE
 ```
 
-Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
+### 5.11.5 Algoritma/Query
 
-Tabel 5.11.3. Query Operasi [Nama Operasi]
-| No Query | Query | Keterangan |
-| :--- | :--- | :--- |
-| *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
-| *...* | *...* | *...* |
-
-### 5.11.4 Algoritma/Query
-
-**Nama Kelas:** *KontrakPekerjaan*  
-**Nama Operasi:** *fetchKontrakPekerjaan()*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** *KontrakPekerjaan* <br>
+**Nama Operasi:** *fetchKontrakPekerjaan()* <br>
+**ID Algoritma:** ALGO-040
 
 ```text
 PUBLIC PROCEDURE fetchKontrakPekerjaan(idKontrakPekerjaan)
-    EXECUTE QUERY Q-002 WITH param idKontrakPekerjaan
+    EXECUTE QUERY Q-019 WITH param idKontrakPekerjaan
     
     IF record is FOUND THEN
         this.idKontrakPekerjaan = record.idKontrakPekerjaan
@@ -1965,13 +1785,12 @@ PUBLIC PROCEDURE fetchKontrakPekerjaan(idKontrakPekerjaan)
 END PROCEDURE
 ```
 
-Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
-
-Tabel 5.11.4. Query Operasi [Nama Operasi]
+Tabel 5.11.5. Query Operasi fetchKontrakPekerjaan
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| Q-002 | SELECT detail_pekerjaan, persetujuan_harga, status_pekerjaan FROM kontrak_pekerjaan WHERE id = idKontrakPekerjaan | Mengambil detail pekerjaan, harga, dan status berdasarkan ID kontrak. |
-| *...* | *...* | *...* |
+| Q-019 | `SELECT detail_pekerjaan, persetujuan_harga, status_pekerjaan FROM kontrak_pekerjaan WHERE id = idKontrakPekerjaan;` | Mengambil detail pekerjaan, harga, dan status berdasarkan ID kontrak. |
+
+## 5.12 Kelas KontrakPekerjaanController
 
 **Nama Kelas:** KontrakPekerjaanController <br>
 **ID Kelas:** C18
@@ -1984,19 +1803,11 @@ Tabel 5.12.1 Operasi Kelas KontrakPekerjaanController
 | `kirimInput(detailPekerjaan: String, persetujuanHarga: Integer): KontrakPekerjaan` | public | Menerima input kesepakatan dari UI, membuat objek kontrak baru, dan menyimpannya ke database |
 | `statusUpdate(statusBaru: String): Boolean` | private | Memperbarui status progres kontrak pekerjaan |
 
-
-Tabel 5.12.1. Atribut Kelas [Nama Kelas 12]
-
-| Nama Atribut | Visibility (private, public) | Tipe |
-| :--- | :--- | :--- |
-| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
-| *...* | *...* | *...* |
-
 ### 5.12.1 Algoritma/Query
 
-**Nama Kelas:** *KontrakPekerjaanController* 
-**Nama Operasi:** *requestKontrakPekerjaan()*  
-**ID Algoritma:** *[Algo-092]*
+**Nama Kelas:** *KontrakPekerjaanController* <br>
+**Nama Operasi:** *requestKontrakPekerjaan()* <br>
+**ID Algoritma:** ALGO-041
 
 ```text
 public getKontrakPekerjaan(idKontrakPekerjaan : Integer) -> KontrakPekerjaan {
@@ -2007,20 +1818,11 @@ public getKontrakPekerjaan(idKontrakPekerjaan : Integer) -> KontrakPekerjaan {
 }
 ```
 
-Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
-
-Tabel 5.12.1. Query Operasi [Nama Operasi]
-
-| No Query | Query | Keterangan |
-| :--- | :--- | :--- |
-| *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
-| *...* | *...* | *...* |
-
 ### 5.12.2 Algoritma/Query
 
-**Nama Kelas:** *KontrakPekerjaanController* 
-**Nama Operasi:** *konfirmasiPekerjaan()*  
-**ID Algoritma:** *[Algo-093]*
+**Nama Kelas:** *KontrakPekerjaanController* <br>
+**Nama Operasi:** *konfirmasiPekerjaan()* <br>
+**ID Algoritma:** ALGO-042
 
 ```text
 public konfirmasiPekerjaan(idKontrak : Integer) -> Boolean {
@@ -2034,20 +1836,11 @@ public konfirmasiPekerjaan(idKontrak : Integer) -> Boolean {
 }
 ```
 
-Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
-
-Tabel 5.12.1. Query Operasi [Nama Operasi]
-
-| No Query | Query | Keterangan |
-| :--- | :--- | :--- |
-| *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
-| *...* | *...* | *...* |
-
 ### 5.12.3 Algoritma/Query
 
-**Nama Kelas:** *KontrakPekerjaanController* 
-**Nama Operasi:** *kirimInput()*  
-**ID Algoritma:** *[Algo-094]*
+**Nama Kelas:** *KontrakPekerjaanController* <br>
+**Nama Operasi:** *kirimInput()* <br>
+**ID Algoritma:** ALGO-043
 
 ```text
 PUBLIC PROCEDURE kirimInput(detailPekerjaan, persetujuanHarga)
@@ -2068,15 +1861,6 @@ PUBLIC PROCEDURE kirimInput(detailPekerjaan, persetujuanHarga)
 END PROCEDURE
 ```
 
-Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
-
-Tabel 5.12.1. Query Operasi [Nama Operasi]
-
-| No Query | Query | Keterangan |
-| :--- | :--- | :--- |
-| *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
-| *...* | *...* | *...* |
-
 ## 5.13 Kelas Komunikasi
 **Nama Kelas:** Komunikasi <br>
 **ID Kelas:** C19
@@ -2089,21 +1873,12 @@ Tabel 5.13.1 Operasi Kelas Komunikasi
 | `getIDChat(): String` | public | Mengembalikan ID unik pesan obrolan |
 | `getPesan(idChat: String): Object` | public | Mengambil data satu pesan obrolan dari database berdasarkan ID chat |
 | `getChatHistory(idPengguna1: String, idPengguna2: String): List<Object>` | public | Mengambil seluruh riwayat percakapan dua arah antara dua pengguna secara terurut |
-| *...* | *...* | *...* |
-
-Tabel 5.13.2. Atribut Kelas [Nama Kelas 13]
-
-| Nama Atribut | Visibility (private, public) | Tipe |
-| :--- | :--- | :--- |
-| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
-| *...* | *...* | *...* |
 
 ### 5.13.1 Algoritma/Query
 
-
-**Nama Kelas:** *Komunikasi*  
-**Nama Operasi:** *constructor(dataChat : Object)*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** *Komunikasi* <br>
+**Nama Operasi:** *constructor(dataChat : Object)* <br>
+**ID Algoritma:** ALGO-044
 
 ```text
 PRIVATE idChat        : String
@@ -2130,13 +1905,13 @@ PUBLIC constructor(dataChat : Object)
 
 ### 5.13.2 Algoritma/Query
 
-**Nama Kelas:** *Komunikasi*  
-**Nama Operasi:** *saveChat()*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** *Komunikasi* <br>
+**Nama Operasi:** *saveChat()* <br>
+**ID Algoritma:** ALGO-045
 
 ```text
 PUBLIC procedure saveChat()
-    result <- execute_query(Q-XXX, [
+    result <- execute_query(Q-020, [
         this.idChat,
         this.idPengguna,
         this.idPenerima,
@@ -2152,13 +1927,13 @@ Tabel 5.13.3 Query Operasi saveChat
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| Q-XXX | `INSERT INTO komunikasi (id_chat, id_pengguna, id_penerima, isi_pesan, waktu_terkirim, is_chat_terbaca, status_chat, durasi_chat) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);` | Menyimpan pesan obrolan baru ke tabel komunikasi. |
+| Q-020 | `INSERT INTO komunikasi (id_chat, id_pengguna, id_penerima, isi_pesan, waktu_terkirim, is_chat_terbaca, status_chat, durasi_chat) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);` | Menyimpan pesan obrolan baru ke tabel komunikasi. |
 
 ### 5.13.3 Algoritma/Query
 
-**Nama Kelas:** *Komunikasi*  
-**Nama Operasi:** *getIDChat()*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** *Komunikasi* <br>
+**Nama Operasi:** *getIDChat()* <br>
+**ID Algoritma:** ALGO-046
 
 ```text
 PUBLIC function getIDChat() -> String
@@ -2167,13 +1942,13 @@ PUBLIC function getIDChat() -> String
 
 ### 5.13.4 Algoritma/Query
 
-**Nama Kelas:** *Komunikasi*  
-**Nama Operasi:** *getPesan(idChat : String)*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** *Komunikasi* <br>
+**Nama Operasi:** *getPesan(idChat : String)* <br>
+**ID Algoritma:** ALGO-047
 
 ```text
 PUBLIC funtion getPesan(idChat : String) -> Object
-    rows <- execute_query(Q-XXX, [idChat])
+    rows <- execute_query(Q-021, [idChat])
     -> rows
 ```
 
@@ -2181,17 +1956,17 @@ Tabel 5.13.4 Query Operasi getPesan
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| Q-XXX | `SELECT id_chat, id_pengguna, id_penerima, isi_pesan, waktu_terkirim, is_chat_terbaca, status_chat, durasi_chat FROM komunikasi WHERE id_chat = $1;` | Mengambil data pesan dari tabel komunikasi berdasarkan id_chat. |
+| Q-021 | `SELECT id_chat, id_pengguna, id_penerima, isi_pesan, waktu_terkirim, is_chat_terbaca, status_chat, durasi_chat FROM komunikasi WHERE id_chat = $1;` | Mengambil data pesan dari tabel komunikasi berdasarkan id_chat. |
 
 ### 5.13.5 Algoritma/Query
 
-**Nama Kelas:** *Komunikasi*  
-**Nama Operasi:** *getChatHistory(idPengguna1 : String, idPengguna2 : String)*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** *Komunikasi* <br>
+**Nama Operasi:** *getChatHistory(idPengguna1 : String, idPengguna2 : String)* <br>
+**ID Algoritma:** ALGO-048
 
 ```text
 PUBLIC function getChatHistory(idPengguna1 : String, idPengguna2 : String) -> List<Object>
-    rows <- execute_query(Q-XXX, [idPengguna1, idPengguna2])
+    rows <- execute_query(Q-022, [idPengguna1, idPengguna2])
     -> rows
 ```
 
@@ -2199,7 +1974,7 @@ Tabel 5.13.5 Query Operasi getChatHistory
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| Q-XXX | `SELECT id_chat, id_pengguna, id_penerima, isi_pesan, waktu_terkirim, is_chat_terbaca, status_chat, durasi_chat FROM komunikasi WHERE (id_pengguna = $1 AND id_penerima = $2) OR (id_pengguna = $2 AND id_penerima = $1) ORDER BY waktu_terkirim ASC;` | Mengambil seluruh riwayat percakapan dua arah antara idPengguna1 dan idPengguna2 terurut berdasarkan waktu pengiriman. |
+| Q-022 | `SELECT id_chat, id_pengguna, id_penerima, isi_pesan, waktu_terkirim, is_chat_terbaca, status_chat, durasi_chat FROM komunikasi WHERE (id_pengguna = $1 AND id_penerima = $2) OR (id_pengguna = $2 AND id_penerima = $1) ORDER BY waktu_terkirim ASC;` | Mengambil seluruh riwayat percakapan dua arah antara idPengguna1 dan idPengguna2 terurut berdasarkan waktu pengiriman. |
 
 
 ## 5.14 Kelas KomunikasiController
@@ -2217,9 +1992,9 @@ Tabel 5.14.1 Operasi Kelas KomunikasiController
 
 ### 5.14.1 Algoritma/Query
 
-**Nama Kelas:** *KomunikasiController*  
-**Nama Operasi:** *sendChat(dataChat : Object)*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** *KomunikasiController* <br>
+**Nama Operasi:** *sendChat(dataChat : Object)* <br>
+**ID Algoritma:** ALGO-049
 
 ```text
 PUBLIC procedure sendChat(dataChat : Object)
@@ -2230,10 +2005,9 @@ PUBLIC procedure sendChat(dataChat : Object)
 
 ### 5.14.2 Algoritma/Query
 
-
-**Nama Kelas:** *KomunikasiController*  
-**Nama Operasi:** *getRiwayatChat(idPengguna1 : String, idPengguna2 : String)*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** *KomunikasiController* <br>
+**Nama Operasi:** *getRiwayatChat(idPengguna1 : String, idPengguna2 : String)* <br>
+**ID Algoritma:** ALGO-050
 
 ```text
 PUBLIC function getRiwayatChat(idPengguna1 : String, idPengguna2 : String) -> List<Object>
@@ -2242,10 +2016,9 @@ PUBLIC function getRiwayatChat(idPengguna1 : String, idPengguna2 : String) -> Li
 
 ### 5.14.3 Algoritma/Query
 
-
-**Nama Kelas:** *KomunikasiController*  
-**Nama Operasi:** *loadChat(idPelanggan : String, idPemberiJasa : String)*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** *KomunikasiController* <br>
+**Nama Operasi:** *loadChat(idPelanggan : String, idPemberiJasa : String)* <br>
+**ID Algoritma:** ALGO-051
 
 ```text
 PUBLIC function loadChat(idPelanggan : String, idPemberiJasa : String) -> List<Object>
@@ -2254,30 +2027,14 @@ PUBLIC function loadChat(idPelanggan : String, idPemberiJasa : String) -> List<O
 
 ### 5.14.4 Algoritma/Query
 
-
-**Nama Kelas:** *KomunikasiController*  
-**Nama Operasi:** *startChat(idPelanggan : String, idPemberiJasa : String)*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** *KomunikasiController* <br>
+**Nama Operasi:** *startChat(idPelanggan : String, idPemberiJasa : String)* <br>
+**ID Algoritma:** ALGO-052
 
 ```text
 PUBLIC startChat(idPelanggan : String, idPemberiJasa : String) -> List<Object>
     -> this.getRiwayatChat(idPelanggan, idPemberiJasa)
 ```
-
-
-Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
-
-Tabel 5.14.1. Query Operasi [Nama Operasi]
-
-| No Query | Query | Keterangan |
-| :--- | :--- | :--- |
-| *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
-| *...* | *...* | *...* |
-
-
-### 5.14.2 Algoritma/Query
-
-*[Ulangi pola 5.14.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
 ## 5.15 Kelas TiketLaporan
@@ -2289,45 +2046,11 @@ Tabel 5.15.1 Operasi Kelas TiketLaporan
 | `getDetailTiket(idTiket: String): TiketLaporan` | public | Mengambil rincian data tiket laporan masalah berdasarkan ID tiket |
 | `updateStatusTiket(idTiket: String, statusBaru: String): Boolean` | public | Memperbarui status penanganan tiket laporan masalah di database |
 | `simpanAntrian(tiket: TiketLaporan): Boolean` | public | Menyimpan tiket laporan masalah yang baru diajukan ke dalam antrian database |
-| *...* | *...* | *...* |
-
-Tabel 5.15.2. Atribut Kelas [Nama Kelas 15]
-
-| Nama Atribut | Visibility (private, public) | Tipe |
-| :--- | :--- | :--- |
-| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
-| *...* | *...* | *...* |
-
-### 5.15.1 Algoritma/Query
-
-Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
-
-**Nama Kelas:** *[Nama kelas]*  
-**Nama Operasi:** *[Signature operasi]*  
-**ID Algoritma:** *[Algo-001]*
-
-```text
-[Tuliskan pseudocode algoritma operasi di sini.]
-```
-
-Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
-
-Tabel 5.15.1. Query Operasi [Nama Operasi]
-
-| No Query | Query | Keterangan |
-| :--- | :--- | :--- |
-| *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
-| *...* | *...* | *...* |
-
-
-### 5.15.2 Algoritma/Query
-
-*[Ulangi pola 5.15.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
 
 ## 5.16 Kelas TiketLaporanController
 
-**Nama Kelas:** *TiketLaporanController*  
+**Nama Kelas:** *TiketLaporanController* <br>
 **ID Kelas:** *C24*
 
 Tabel 5.16.1. Operasi Kelas TiketLaporanController
@@ -2344,9 +2067,9 @@ Tabel 5.16.1. Operasi Kelas TiketLaporanController
 
 ### 5.16.1 Algoritma/Query
 
-**Nama Kelas:** *TiketLaporanController*  
-**Nama Operasi:** *validasiFormTiket()*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** *TiketLaporanController* <br>
+**Nama Operasi:** *validasiFormTiket()* <br>
+**ID Algoritma:** ALGO-053
 
 ```text
 public validasiFormTiket(tiket : TiketLaporan) -> Boolean {
@@ -2360,9 +2083,9 @@ public validasiFormTiket(tiket : TiketLaporan) -> Boolean {
 
 ### 5.16.2 Algoritma/Query
 
-**Nama Kelas:** *TiketLaporanController*  
-**Nama Operasi:** *buatTiket()*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** *TiketLaporanController* <br>
+**Nama Operasi:** *buatTiket()* <br>
+**ID Algoritma:** ALGO-054
 
 ```text
 public buatTiket(idPengguna : Integer, jenisTiket : String, keteranganTiket : String) -> Boolean{
@@ -2392,11 +2115,11 @@ public buatTiket(idPengguna : Integer, jenisTiket : String, keteranganTiket : St
     -> False
 }
 ```
-### 5.16.2 Algoritma/Query
+### 5.16.3 Algoritma/Query
 
-**Nama Kelas:** *TiketLaporanController*  
-**Nama Operasi:** *teruskanKeNotifikasi()*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** *TiketLaporanController* <br>
+**Nama Operasi:** *teruskanKeNotifikasi()* <br>
+**ID Algoritma:** ALGO-055
 
 ```text
 public teruskanKeNotifikasi(tiket : TiketLaporan) -> Boolean {
@@ -2440,7 +2163,7 @@ Tabel 5.17.2 Atribut Kelas Rating
 
 **Nama Kelas:** Rating <br>
 **Nama Operasi:** simpanKeDb <br>
-**ID Algoritma:** Algo-XXX
+**ID Algoritma:** ALGO-056
 
 ```text
 public function simpanKeDb() -> boolean
@@ -2452,7 +2175,7 @@ ALGORITMA
 validateRatingValue(this.nilaiRating)
 
 {Buat Entry Rating Baru pada database}
-execute_query(Q-XXX, [
+execute_query(Q-023, [
             this.idRating,
             this.idPenggunaPemberi,
             this.idPenggunaPenerima,
@@ -2461,21 +2184,21 @@ execute_query(Q-XXX, [
         ])
 
 {Update bool hasRating di kontrakPekerjaan}
-execute_query(Q-XXX, [this.idKontrakPekerjaan])
+execute_query(Q-024, [this.idKontrakPekerjaan])
 
 ```
 Tabel 5.17.3 Query Operasi simpanKeDb
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| Q-XXX | `INSERT INTO rating (id_rating, id_pengguna_pemberi, id_pengguna_penerima, id_kontrak_pekerjaan, nilai_rating, tanggal_rating) VALUES ($1, $2, $3, $4, $5, NOW());` | Menambah entry rating baru pada tabel rating |
-| Q-XXX | `UPDATE kontrak_pekerjaan SET has_rating = TRUE WHERE id_kontrak_pekerjaan = $1;` | Memperbarui status kontrak kerja menjadi telah dinilai |
+| Q-023 | `INSERT INTO rating (id_rating, id_pengguna_pemberi, id_pengguna_penerima, id_kontrak_pekerjaan, nilai_rating, tanggal_rating) VALUES ($1, $2, $3, $4, $5, NOW());` | Menambah entry rating baru pada tabel rating |
+| Q-024 | `UPDATE kontrak_pekerjaan SET has_rating = TRUE WHERE id_kontrak_pekerjaan = $1;` | Memperbarui status kontrak kerja menjadi telah dinilai |
 
 
 ### 5.17.2 Algoritma/Query
 **Nama Kelas:** Rating <br>
 **Nama Operasi:** makeRating <br>
-**ID Algoritma:** Algo-XXX
+**ID Algoritma:** ALGO-057
 
 ```text
 public function makeRating(idRating: String, idPemberi: String, idPenerima: String, idKontrak: String, nilaiRating: Float) -> Rating
@@ -2499,14 +2222,14 @@ ALGORITMA
 ### 5.17.3 Algoritma/Query
 **Nama Kelas:** Rating <br>
 **Nama Operasi:** updateRatingPengguna <br>
-**ID Algoritma:** Algo-XXX
+**ID Algoritma:** ALGO-058
 
 ```text
 public function updateRatingPengguna() -> Boolean
 KAMUS LOKAL
 
 ALGORITMA
-execute_query(Q-XXX, [
+execute_query(Q-025, [
             this.nilaiRating,
             this.idPenggunaPenerima
         ])
@@ -2517,12 +2240,12 @@ Tabel 5.17.4 Query Operasi updateRatingPengguna
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| Q-XXX | `UPDATE pengguna SET riwayat_rating = array_append(riwayat_rating, $1), akumulasi_rating = (SELECT ROUND(AVG(val)::numeric, 2) FROM unnest(array_append(riwayat_rating, $1)) AS val) WHERE id_pengguna = $2;` | Menambahkan skor ulasan ke riwayat rating sekaligus menghitung ulang rata-rata akumulasi rating pengguna tujuan |
+| Q-025 | `UPDATE pengguna SET riwayat_rating = array_append(riwayat_rating, $1), akumulasi_rating = (SELECT ROUND(AVG(val)::numeric, 2) FROM unnest(array_append(riwayat_rating, $1)) AS val) WHERE id_pengguna = $2;` | Menambahkan skor ulasan ke riwayat rating sekaligus menghitung ulang rata-rata akumulasi rating pengguna tujuan |
 
 ### 5.17.4 Algoritma/Query
 **Nama Kelas:** Rating <br>
 **Nama Operasi:** getIdRating <br>
-**ID Algoritma:** Algo-XXX
+**ID Algoritma:** ALGO-059
 
 ```text
 public function getIdRating() -> String
@@ -2533,7 +2256,7 @@ ALGORITMA
 ### 5.17.5 Algoritma/Query
 **Nama Kelas:** Rating <br>
 **Nama Operasi:** getIdPemberi <br>
-**ID Algoritma:** Algo-XXX
+**ID Algoritma:** ALGO-060
 
 ```text
 public function getIdPemberi() -> String
@@ -2544,7 +2267,7 @@ ALGORITMA
 ### 5.17.6 Algoritma/Query
 **Nama Kelas:** Rating <br>
 **Nama Operasi:** getIdPenerima <br>
-**ID Algoritma:** Algo-XXX
+**ID Algoritma:** ALGO-061
 
 ```text
 public function getIdPenerima() -> String
@@ -2554,7 +2277,7 @@ ALGORITMA
 ### 5.17.7 Algoritma/Query
 **Nama Kelas:** Rating <br>
 **Nama Operasi:** getIdKontrakPekerjaan <br>
-**ID Algoritma:** Algo-XXX
+**ID Algoritma:** ALGO-062
 
 ```text
 public function getIdKontrakPekerjaan() -> String
@@ -2564,8 +2287,8 @@ ALGORITMA
 
 ### 5.17.8 Algoritma/Query
 **Nama Kelas:** Rating <br>
-**Nama Operasi:** getIdKontrakPekerjaan <br>
-**ID Algoritma:** Algo-XXX
+**Nama Operasi:** getRatingValue <br>
+**ID Algoritma:** ALGO-063
 
 ```text
 public function getRatingValue() -> String
@@ -2586,7 +2309,7 @@ Tabel 5.18.1 Operasi Kelas RatingController
 
 **Nama Kelas:** RatingController <br>
 **Nama Operasi:** validateRatingValue <br> 
-**ID Algoritma:** Algo-XXX
+**ID Algoritma:** ALGO-064
 
 ```text
 public function validateRatingValue(input val: Integer) -> Boolean
@@ -2601,24 +2324,18 @@ if (this.idRating = "" or this.idPenggunaPemberi = "" or this.idPenggunaPenerima
 
 ## 5.19 Kelas Notifikasi
 
-**Nama Kelas:** *Notifikasi*  
-**ID Kelas:** *C28*
-
-Tabel 5.19.1. Operasi Kelas Notifikasi
-
 **Nama Kelas:** Notifikasi <br>
 **ID Kelas:** C28
+
 Tabel 5.19.1 Operasi Kelas Notifikasi
+
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| getIsiNotifikasi(idNotifikasi) : String | Public | Mengambil teks isi notifikasi |
-| tandaiTerbaca(idNotifikasi) : Boolean | Public | Mengubah status notifikasi menjadi terbaca |
 | `constructor(idPenerima: String, isiNotifikasi: String): Notifikasi` | public | Menginisialisasi objek notifikasi baru untuk pengguna penerima dengan status belum terbaca |
 | `simpanNotifikasi(): void` | public | Menyimpan data notifikasi baru ke dalam database |
 | `getIsiNotifikasi(): String` | public | Mengembalikan teks isi pesan notifikasi |
 | `tandaiTerbaca(): void` | public | Memperbarui status baca notifikasi menjadi telah terbaca (`TRUE`) |
 | `getLastMessage(): String` | public | Mengambil pesan notifikasi terakhir yang diterima oleh pengguna |
-| *...* | *...* | *...* |
 
 Tabel 5.19.2. Atribut Kelas Notifikasi
 
@@ -2632,9 +2349,9 @@ Tabel 5.19.2. Atribut Kelas Notifikasi
 
 ### 5.19.1 Algoritma/Query
 
-**Nama Kelas:** *Notifikasi*  
-**Nama Operasi:** *getIsiNotifikasi*  
-**ID Algoritma:** *[Algo-XXX]*
+**Nama Kelas:** *Notifikasi* <br>
+**Nama Operasi:** *getIsiNotifikasi* <br>
+**ID Algoritma:** ALGO-065
 
 ```text
 public getIsiNotifikasi() -> String {
@@ -2644,41 +2361,40 @@ public getIsiNotifikasi() -> String {
 
 ### 5.19.2 Algoritma/Query
 
-**Nama Kelas:** *Notifikasi*  
-**Nama Operasi:** *tandaiTerbaca()*  
-**ID Algoritma:** *[Algo-XXX]*
+**Nama Kelas:** *Notifikasi* <br>
+**Nama Operasi:** *tandaiTerbaca()* <br>
+**ID Algoritma:** ALGO-066
 
 ```text
 public tandaiTerbaca() {
     this.statusBaca = "Read"
-    execute_query(Q-XXX)
+    execute_query(Q-026)
 }
 ```
-Tabel 5.19.2. Query Operasi tandaiTerbaca()
+Tabel 5.19.3. Query Operasi tandaiTerbaca()
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| *[Q-XXX]* | `UPDATE notifikasi SET status_baca = 'Read' WHERE id_notifikasi = this.idNotifikasi;` | Mengubah data statusBaca menjadi terbaca |
-
+| Q-026 | `UPDATE notifikasi SET status_baca = 'Read' WHERE id_notifikasi = this.idNotifikasi;` | Mengubah data statusBaca menjadi terbaca |
 
 
 ## 5.20 Kelas NotifikasiController
 
-**Nama Kelas:** *NotifikasiController*  
+**Nama Kelas:** *NotifikasiController* <br>
 **ID Kelas:** *C30*
 
-Tabel 5.20.1. Operasi Kelas [Nama Kelas 20]
+Tabel 5.20.1. Operasi Kelas NotifikasiController
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| buatNotifikasi(idPenerima, isiNotifikasi) : Boolean | Public | Membuat sebuah data notifikasi untuk diteruskan |
-| requestChat() | Public | Meminta untuk 
+| `buatNotifikasi(idPenerima: String, isiNotifikasi: String): void` | public | Membuat objek notifikasi baru, menyimpannya ke database, dan memicu pengiriman notifikasi |
+| `kirimNotifikasi(notif: Notifikasi): void` | public | Meneruskan isi notifikasi ke antarmuka `NotifikasiUI` untuk ditampilkan kepada penerima |
 
 ### 5.20.1 Algoritma/Query
 
-**Nama Kelas:** *NotifikasiController*  
-**Nama Operasi:** *buatNotifikasi()*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** *NotifikasiController* <br>
+**Nama Operasi:** *buatNotifikasi()* <br>
+**ID Algoritma:** ALGO-067
 
 ```text
 public buatNotifikasi(idPenerima : String, pesan : String) {
@@ -2686,55 +2402,41 @@ public buatNotifikasi(idPenerima : String, pesan : String) {
     idNotifikasi = {generator idNotifikasi}
     waktuNotifikasi = {algoritma untuk mengambil waktu saat itu}
 
-    execute_query(Q-XXX, [this.idNotifikasi, this.idPenerima, this.isiNotifikasi, this.waktuNotifikasi, this.statusBaca])
+    execute_query(Q-027, [this.idNotifikasi, this.idPenerima, this.isiNotifikasi, this.waktuNotifikasi, this.statusBaca])
 }
 ```
-<<<<<<< HEAD
 
-=======
->>>>>>> 6d38891b0c504de5e0040145ae0f80147af19b2b
-Tabel 5.20.1. Query Operasi buatNotifikasi()
+Tabel 5.20.2. Query Operasi buatNotifikasi()
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| *[Q-XXX]* | `INSERT INTO notifikasi (idNotifikasi, idPenerima, isiNotifikasi, waktuNotifikasi, statusBaca) VALUES ($1, $2, $3, $4, $5, NOW());` | Menambah entry notifikasi baru pada database notifikasi |
+| Q-027 | `INSERT INTO notifikasi (idNotifikasi, idPenerima, isiNotifikasi, waktuNotifikasi, statusBaca) VALUES ($1, $2, $3, $4, $5, NOW());` | Menambah entry notifikasi baru pada database notifikasi |
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 6d38891b0c504de5e0040145ae0f80147af19b2b
 ### 5.20.2 Algoritma/Query
-**Nama Kelas:** *NotifikasiController*  
-**Nama Operasi:** *kirimNotifikasi(notif: Notifikasi)*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** *NotifikasiController* <br>
+**Nama Operasi:** *kirimNotifikasi(notif: Notifikasi)* <br>
+**ID Algoritma:** ALGO-068
 ```text
 PUBLIC kirimNotifikasi(notif : Notifikasi) : void
     this.notifikasiUI.showNotifikasi(notif.getIsiNotifikasi())
 ```
 
-
-
-
-<<<<<<< HEAD
-### 5.20.2 Algoritma/Query
-=======
 ### 5.20.3 Algoritma/Query
->>>>>>> 6d38891b0c504de5e0040145ae0f80147af19b2b
 
-**Nama Kelas:** *NotifikasiController*  
-**Nama Operasi:** *kirimNotfikasi()*  
-**ID Algoritma:** *[Algo-XXX]*
+**Nama Kelas:** *NotifikasiController* <br>
+**Nama Operasi:** *kirimNotifikasi()* <br>
+**ID Algoritma:** ALGO-069
 
 ```text
 public kirimNotifikasi(idPenerima : String, pesan : String) {
-    execute_query(Q-XXX)
+    execute_query(Q-028)
 }
 ```
-Tabel 5.20.2. Query Operasi kirimNotifikasi()
+Tabel 5.20.3. Query Operasi kirimNotifikasi()
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| *[Q-XXX]* | `SEND PushNotification TO Notifikasi.idPenerima WITH MESSAGE Notifikasi.isiNotifikasi;` | Mengirim notifikasi ke aktor yang memiliki idPenerima |
+| Q-028 | `SEND PushNotification TO Notifikasi.idPenerima WITH MESSAGE Notifikasi.isiNotifikasi;` | Mengirim notifikasi ke aktor yang memiliki idPenerima |
 <br>
 
 ---
