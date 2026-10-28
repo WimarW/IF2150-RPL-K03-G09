@@ -3048,21 +3048,136 @@ Tabel 6.14. Spesifikasi Objek Antarmuka UI-14
 | UI-14-08 | Icon Button | Ikon mata | Menampilkan atau menyembunyikan password. |
 | UI-14-09 | Button | "Keluar Akun" | Menampilkan dialog konfirmasi. Jika disetujui, sesi diakhiri dan sistem menuju Login (UI-01). |
 
-## 6.X Rancangan Antarmuka [ID Layar X]
+---
 
-*[Ulangi pola 6.1 untuk layar berikutnya sampai semua layar teridentifikasi]*
+**Antarmuka:** UI-15
+**Nama Layar:** Buat Tiket Laporan
 
-## 6.Y Rancangan Antarmuka Keseluruhan
+<p align="center">
+<img alt="Rancangan Antarmuka UI-15 - Buat Tiket Laporan" src="../M8/assets/diagram/Page-BuatTiket.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar 6.15. Rancangan Antarmuka UI-15 - Buat Tiket Laporan</i>
+</p>
 
-Tuliskan daftar gambar seluruh antarmuka. Berikan ID unik untuk setiap tampilan dan gunakan ID yang sama pada subbab perancangan antarmuka masing-masing.
+Tabel 6.15. Spesifikasi Objek Antarmuka UI-15
 
-Tabel 6.Y. Rancangan Antarmuka Keseluruhan
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| UI-15-01 | Button | "‹ Kembali" | Kembali ke Daftar Pesan (UI-07). Jika ada isian yang belum dikirim, tampil dialog konfirmasi keluar. |
+| UI-15-02 | Label | "Buat Tiket Laporan" dan "Laporkan kendala yang kamu alami ke CS" | Judul dan subjudul layar. |
+| UI-15-03 | Label | "Jenis Permasalahan" | Label kolom pilihan jenis masalah. |
+| UI-15-04 | Dropdown | Placeholder "Pilih jenis permasalahan" dengan ikon peringatan | Menampilkan daftar jenis masalah (Laporan Pembayaran, Kendala Aplikasi, Perilaku Pengguna, dan lainnya). Wajib dipilih. |
+| UI-15-05 | Label | "Penjelasan" | Label kolom penjelasan masalah. |
+| UI-15-06 | Text Area | Placeholder "Jelaskan detail permasalahan yang kamu alami secara kronologis..." | Input penjelasan masalah, wajib diisi. |
+| UI-15-07 | Label | "Unggah Foto / Bukti" | Label area unggah bukti. |
+| UI-15-08 | Upload Area | Ikon kamera, "Ketuk untuk mengunggah foto", "Maksimal 5MB (JPG, PNG)" | Membuka pilihan kamera atau galeri. Sistem memvalidasi format (JPG/PNG) dan ukuran (maks. 5MB); jika tidak sesuai tampil pesan kesalahan, jika sesuai tampil pratinjau foto. Bersifat opsional. |
+| UI-15-09 | Label | "Data laporanmu akan dijaga kerahasiaannya." | Informasi privasi, tidak dapat diklik. |
+| UI-15-10 | Button | "Kirim Laporan" | Aktif jika UI-15-04 dan UI-15-06 sudah terisi. Sistem membuat tiket dengan nomor unik (contoh #A-2041) berstatus Tiket Baru, mengirimkannya ke CS, lalu menampilkan percakapan tiket di Daftar Pesan (UI-07). |
+
+---
+
+**Antarmuka:** UI-16
+**Nama Layar:** Daftar Penyedia Jasa
+
+<p align="center">
+<img alt="Rancangan Antarmuka UI-16 - Daftar Penyedia Jasa" src="../M8/assets/diagram/Page-FormPenyediaJasa.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar 6.16. Rancangan Antarmuka UI-16 - Daftar Penyedia Jasa</i>
+</p>
+
+Tabel 6.16. Spesifikasi Objek Antarmuka UI-16
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| UI-16-01 | Button | "‹ Kembali" | Kembali ke layar sebelumnya. |
+| UI-16-02 | Label | "Daftar Penyedia Jasa" dan "Lengkapi data untuk mulai menerima pesanan" | Judul dan subjudul layar. |
+| UI-16-03 | Label | "Nama Toko / Penyedia Jasa" | Label kolom nama usaha. |
+| UI-16-04 | Text Field | Ikon toko, placeholder "Masukkan nama toko atau usahamu" | Input nama toko atau usaha, wajib diisi. |
+| UI-16-05 | Label | "Jenis Jasa" | Label kolom jenis jasa. |
+| UI-16-06 | Dropdown | Placeholder "Pilih jenis jasa yang ditawarkan" | Menampilkan daftar kategori jasa (Servis, Kebersihan, Jahit, Renovasi, Desain, Lainnya). Wajib dipilih. |
+| UI-16-07 | Button | "Ajukan Pendaftaran" | Aktif jika UI-16-04 dan UI-16-06 sudah terisi. Sistem menyimpan data penyedia jasa, mengubah peran akun menjadi penyedia jasa, lalu menuju Riwayat Pekerjaan (UI-12). |
+
+---
+
+**Antarmuka:** UI-17
+**Nama Layar:** Beranda CS
+
+<p align="center">
+<img alt="Rancangan Antarmuka UI-17 - Beranda CS" src="../M8/assets/diagram/Page-BerandaCS.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar 6.17. Rancangan Antarmuka UI-17 - Beranda CS</i>
+</p>
+
+Tabel 6.17. Spesifikasi Objek Antarmuka UI-17
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| UI-17-01 | Label | "Beranda CS" dan "Pusat Bantuan & Laporan" | Judul dan subjudul layar. |
+| UI-17-02 | Avatar | Inisial "CS" | Menampilkan profil akun CS. |
+| UI-17-03 | Card Statistik | "Tiket Baru" dengan jumlah (contoh 12) dan titik oranye | Jumlah tiket yang belum ditangani. Jika diklik menampilkan daftar tiket berstatus Tiket Baru. |
+| UI-17-04 | Card Statistik | "Diproses" dengan jumlah (contoh 5) dan titik hijau | Jumlah tiket yang sedang ditangani. Jika diklik menampilkan daftar tiket berstatus Diproses. |
+| UI-17-05 | Card Statistik | "Selesai" dengan jumlah (contoh 28) dan titik biru tua | Jumlah tiket yang sudah selesai. Jika diklik menampilkan daftar tiket berstatus Selesai. |
+| UI-17-06 | Label + Link | "Tiket Terbaru" dan "Lihat semua" | "Lihat semua" menampilkan seluruh daftar tiket. |
+| UI-17-07 | Card (list) | Avatar inisial pelapor, judul masalah, cuplikan laporan, waktu, nomor tiket | Menampilkan tiket terbaru (contoh Laporan Pembayaran #A-2041, Kendala Aplikasi #A-2040, Perilaku Pengguna #A-2039). Jika diklik membuka Detail Tiket (UI-18). |
+| UI-17-08 | Badge | "Tiket Baru" (oranye), "Diproses" (abu-biru) | Menunjukkan status tiket. |
+| UI-17-09 | Bottom Navigation | Tab "Beranda" | Menu navigasi CS; tab Beranda aktif ditandai warna hijau. |
+
+---
+
+**Antarmuka:** UI-18
+**Nama Layar:** Detail Tiket (Ruang Obrolan CS)
+
+<p align="center">
+<img alt="Rancangan Antarmuka UI-18 - Detail Tiket" src="../M8/assets/diagram/Page-TiketCS.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar 6.18. Rancangan Antarmuka UI-18 - Detail Tiket (Ruang Obrolan CS)</i>
+</p>
+
+Tabel 6.18. Spesifikasi Objek Antarmuka UI-18
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| UI-18-01 | Icon Button | Ikon panah "<" | Kembali ke Beranda CS (UI-17). |
+| UI-18-02 | Header | Avatar inisial pelapor, "Tiket #A-2041", jenis masalah (Laporan Pembayaran) | Menampilkan identitas tiket dan jenis permasalahan. |
+| UI-18-03 | Card | Nama pelapor (Naufal Hasbialhaq), "Pelanggan · 12 Mei 2026, 14.20", isi laporan, thumbnail bukti | Menampilkan laporan awal dari pelapor. Thumbnail bukti jika diklik tampil dalam ukuran penuh. |
+| UI-18-04 | Chat Bubble (kiri) | Pesan dari pelapor dan waktu kirim | Pesan masuk dari pelapor, berwarna putih. |
+| UI-18-05 | Chat Bubble (kanan) | Balasan CS dan waktu kirim | Pesan keluar dari CS, berwarna hijau. Pada balasan pertama, status tiket berubah dari Tiket Baru menjadi Diproses. |
+| UI-18-06 | Icon Button | Ikon klip kertas | Melampirkan file atau gambar pada balasan. |
+| UI-18-07 | Text Field | Placeholder "Ketik balasan..." | Input balasan CS. |
+| UI-18-08 | Icon Button | Ikon kirim | Mengirim balasan; pesan muncul sebagai bubble kanan dan pelapor menerima notifikasi. |
+
+---
+
+## 6.2 Rancangan Antarmuka Keseluruhan
+
+Berikut daftar gambar seluruh antarmuka aplikasi CariUang. ID setiap tampilan sama dengan ID pada subbab perancangan antarmuka masing-masing.
+
+Tabel 6.19. Rancangan Antarmuka Keseluruhan
 
 | No | Tampilan Antarmuka |
 | :--- | :--- |
-| *[I-01]* | <img src="../M7/assets/diagram//contoh-design.png" alt="Contoh Desain" width="400"> |
-| *[I-02]* | *[Sisipkan gambar antarmuka I-02]* |
-| *[I-XX]* | *[Sisipkan gambar antarmuka berikutnya]* |
+| UI-01 | <img src="../M8/assets/diagram/Page-Login.png" alt="UI-01 Login" width="400"><br><i>Login</i> |
+| UI-02 | <img src="../M8/assets/diagram/Page-DaftarPengguna.png" alt="UI-02 Buat Akun Pengguna" width="400"><br><i>Buat Akun Pengguna</i> |
+| UI-03 | <img src="../M8/assets/diagram/Page-DaftarPenyediaJasa.png" alt="UI-03 Buat Akun Jasa" width="400"><br><i>Buat Akun Jasa</i> |
+| UI-04 | <img src="../M8/assets/diagram/Page-Home.png" alt="UI-04 Beranda" width="400"><br><i>Beranda</i> |
+| UI-05 | <img src="../M8/assets/diagram/Page-Search.png" alt="UI-05 Rekomendasi Pencarian" width="400"><br><i>Rekomendasi Pencarian</i> |
+| UI-06 | <img src="../M8/assets/diagram/Page-Hasilsearch.png" alt="UI-06 Hasil Pencarian" width="400"><br><i>Hasil Pencarian</i> |
+| UI-07 | <img src="../M8/assets/diagram/Page-Pesan.png" alt="UI-07 Daftar Pesan" width="400"><br><i>Daftar Pesan</i> |
+| UI-08 | <img src="../M8/assets/diagram/Page-ChatPengguna.png" alt="UI-08 Ruang Obrolan Pelanggan" width="400"><br><i>Ruang Obrolan (Pelanggan)</i> |
+| UI-09 | <img src="../M8/assets/diagram/Page-ChatPenyediaJasa.png" alt="UI-09 Ruang Obrolan Penyedia Jasa" width="400"><br><i>Ruang Obrolan (Penyedia Jasa)</i> |
+| UI-10 | <img src="../M8/assets/diagram/Page-Riwayat.png" alt="UI-10 Riwayat Pelanggan" width="400"><br><i>Riwayat (Pelanggan)</i> |
+| UI-11 | <img src="../M8/assets/diagram/Page-Rating.png" alt="UI-11 Beri Penilaian" width="400"><br><i>Beri Penilaian</i> |
+| UI-12 | <img src="../M8/assets/diagram/Page-RiwayatPekerjaan.png" alt="UI-12 Riwayat Pekerjaan" width="400"><br><i>Riwayat Pekerjaan (Penyedia Jasa)</i> |
+| UI-13 | <img src="../M8/assets/diagram/Page-Notifikasi.png" alt="UI-13 Notifikasi" width="400"><br><i>Notifikasi</i> |
+| UI-14 | <img src="../M8/assets/diagram/Page-Profile.png" alt="UI-14 Profil Saya" width="400"><br><i>Profil Saya</i> |
+| UI-15 | <img src="../M8/assets/diagram/Page-BuatTiket.png" alt="UI-15 Buat Tiket Laporan" width="400"><br><i>Buat Tiket Laporan</i> |
+| UI-16 | <img src="../M8/assets/diagram/Page-FormPenyediaJasa.png" alt="UI-16 Daftar Penyedia Jasa" width="400"><br><i>Daftar Penyedia Jasa</i> |
+| UI-17 | <img src="../M8/assets/diagram/Page-BerandaCS.png" alt="UI-17 Beranda CS" width="400"><br><i>Beranda CS</i> |
+| UI-18 | <img src="../M8/assets/diagram/Page-TiketCS.png" alt="UI-18 Detail Tiket" width="400"><br><i>Detail Tiket (Ruang Obrolan CS)</i> |
 
 <br>
 
