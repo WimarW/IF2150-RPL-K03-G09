@@ -3054,7 +3054,7 @@ Tabel 6.14. Spesifikasi Objek Antarmuka UI-14
 **Nama Layar:** Buat Tiket Laporan
 
 <p align="center">
-<img alt="Rancangan Antarmuka UI-15 - Buat Tiket Laporan" src="../M8/assets/diagram/Page-BuatTiket.png" width="50%">
+<img alt="Rancangan Antarmuka UI-15 - Buat Tiket Laporan" src="../M8/assets/diagram/Page-TiketLaporan.png" width="50%">
 </p>
 <p align="center">
 <i>Gambar 6.15. Rancangan Antarmuka UI-15 - Buat Tiket Laporan</i>
@@ -3081,7 +3081,7 @@ Tabel 6.15. Spesifikasi Objek Antarmuka UI-15
 **Nama Layar:** Daftar Penyedia Jasa
 
 <p align="center">
-<img alt="Rancangan Antarmuka UI-16 - Daftar Penyedia Jasa" src="../M8/assets/diagram/Page-FormPenyediaJasa.png" width="50%">
+<img alt="Rancangan Antarmuka UI-16 - Daftar Penyedia Jasa" src="../M8/assets/diagram/Page-DaftarLayananJasa.png" width="50%">
 </p>
 <p align="center">
 <i>Gambar 6.16. Rancangan Antarmuka UI-16 - Daftar Penyedia Jasa</i>
@@ -3131,7 +3131,7 @@ Tabel 6.17. Spesifikasi Objek Antarmuka UI-17
 **Nama Layar:** Detail Tiket (Ruang Obrolan CS)
 
 <p align="center">
-<img alt="Rancangan Antarmuka UI-18 - Detail Tiket" src="../M8/assets/diagram/Page-TiketCS.png" width="50%">
+<img alt="Rancangan Antarmuka UI-18 - Detail Tiket" src="../M8/assets/diagram/Page-ChatCS.png" width="50%">
 </p>
 <p align="center">
 <i>Gambar 6.18. Rancangan Antarmuka UI-18 - Detail Tiket (Ruang Obrolan CS)</i>
@@ -3174,10 +3174,10 @@ Tabel 6.19. Rancangan Antarmuka Keseluruhan
 | UI-12 | <img src="../M8/assets/diagram/Page-RiwayatPekerjaan.png" alt="UI-12 Riwayat Pekerjaan" width="400"><br><i>Riwayat Pekerjaan (Penyedia Jasa)</i> |
 | UI-13 | <img src="../M8/assets/diagram/Page-Notifikasi.png" alt="UI-13 Notifikasi" width="400"><br><i>Notifikasi</i> |
 | UI-14 | <img src="../M8/assets/diagram/Page-Profile.png" alt="UI-14 Profil Saya" width="400"><br><i>Profil Saya</i> |
-| UI-15 | <img src="../M8/assets/diagram/Page-BuatTiket.png" alt="UI-15 Buat Tiket Laporan" width="400"><br><i>Buat Tiket Laporan</i> |
-| UI-16 | <img src="../M8/assets/diagram/Page-FormPenyediaJasa.png" alt="UI-16 Daftar Penyedia Jasa" width="400"><br><i>Daftar Penyedia Jasa</i> |
+| UI-15 | <img src="../M8/assets/diagram/Page-TiketLaporan.png" alt="UI-15 Buat Tiket Laporan" width="400"><br><i>Buat Tiket Laporan</i> |
+| UI-16 | <img src="../M8/assets/diagram/Page-DaftarLayananJasa.png" alt="UI-16 Daftar Penyedia Jasa" width="400"><br><i>Daftar Penyedia Jasa</i> |
 | UI-17 | <img src="../M8/assets/diagram/Page-BerandaCS.png" alt="UI-17 Beranda CS" width="400"><br><i>Beranda CS</i> |
-| UI-18 | <img src="../M8/assets/diagram/Page-TiketCS.png" alt="UI-18 Detail Tiket" width="400"><br><i>Detail Tiket (Ruang Obrolan CS)</i> |
+| UI-18 | <img src="../M8/assets/diagram/Page-ChatCS.png" alt="UI-18 Detail Tiket" width="400"><br><i>Detail Tiket (Ruang Obrolan CS)</i> |
 
 <br>
 
