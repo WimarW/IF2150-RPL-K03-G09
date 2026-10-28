@@ -1481,6 +1481,37 @@ Tabel 5.8.1. Query Operasi [Nama Operasi]
 
 ### 5.8.1 Algoritma/Query
 
+**Nama Kelas:** *LayananPelangganController*  
+**Nama Operasi:** *requestTiketLaporan()*  
+**ID Algoritma:** *[Algo-XXX]*
+
+```text
+public requestTiketLaporan(idTiket) -> TiketLaporan{
+    tiket = TiketLaporanController.getTiketLaporan(idTiket)
+    if (tiket =/= NULL) {
+        -> tiket
+    }
+        -> NULL
+}
+```
+
+### 5.8.2 Algoritma/Query
+
+**Nama Kelas:** *LayananPelangganController*  
+**Nama Operasi:** *teruskanBalasan()*  
+**ID Algoritma:** *[Algo-XXX]*
+
+```text
+public teruskanBalasan(idTiket, idLayananPelanggan, idPengguna, isiBalasan){
+    isSuccess = TiketLaporanController.balasTiket(idTiket, isiBalasan)
+    if (isSuccess) {
+        KomunikasiController.kirimPesan(idTiket, idLayananPelanggan, isiBalasan)
+        -> True
+    }
+    -> False
+}
+```
+
 
 
 ## 5.9 Kelas KategoriJasa
@@ -2183,15 +2214,8 @@ Tabel 5.14.1 Operasi Kelas KomunikasiController
 | `loadChat(idPelanggan: String, idPemberiJasa: String): List<Object>` | public | Memuat riwayat percakapan antara pelanggan dan pemberi jasa saat ruang obrolan dibuka |
 | `startChat(idPelanggan: String, idPemberiJasa: String): List<Object>` | public | Menginisiasi sesi percakapan antara pelanggan dan pemberi jasa serta memuat riwayat obrolan |
 
-Tabel 5.14.2. Atribut Kelas [Nama Kelas 14]
-
-| Nama Atribut | Visibility (private, public) | Tipe |
-| :--- | :--- | :--- |
-| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
-| *...* | *...* | *...* |
 
 ### 5.14.1 Algoritma/Query
-
 
 **Nama Kelas:** *KomunikasiController*  
 **Nama Operasi:** *sendChat(dataChat : Object)*  
@@ -2317,12 +2341,6 @@ Tabel 5.16.1. Operasi Kelas TiketLaporanController
 | `balasTiket(idTiket: String, isiBalasan: String): Boolean` | public | Mengirimkan balasan tindak lanjut atas tiket laporan yang diajukan pengguna |
 | `tutupTiket(idTiket: String): Boolean` | public | Mengubah status tiket laporan menjadi selesai/ditutup setelah masalah teratasi |
 
-Tabel 5.16.2. Atribut Kelas TiketLaporanController
-
-| Nama Atribut | Visibility (private, public) | Tipe |
-| :--- | :--- | :--- |
-| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
-| *...* | *...* | *...* |
 
 ### 5.16.1 Algoritma/Query
 
@@ -2671,13 +2689,20 @@ public buatNotifikasi(idPenerima : String, pesan : String) {
     execute_query(Q-XXX, [this.idNotifikasi, this.idPenerima, this.isiNotifikasi, this.waktuNotifikasi, this.statusBaca])
 }
 ```
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6d38891b0c504de5e0040145ae0f80147af19b2b
 Tabel 5.20.1. Query Operasi buatNotifikasi()
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
 | *[Q-XXX]* | `INSERT INTO notifikasi (idNotifikasi, idPenerima, isiNotifikasi, waktuNotifikasi, statusBaca) VALUES ($1, $2, $3, $4, $5, NOW());` | Menambah entry notifikasi baru pada database notifikasi |
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6d38891b0c504de5e0040145ae0f80147af19b2b
 ### 5.20.2 Algoritma/Query
 **Nama Kelas:** *NotifikasiController*  
 **Nama Operasi:** *kirimNotifikasi(notif: Notifikasi)*  
@@ -2690,7 +2715,11 @@ PUBLIC kirimNotifikasi(notif : Notifikasi) : void
 
 
 
+<<<<<<< HEAD
 ### 5.20.2 Algoritma/Query
+=======
+### 5.20.3 Algoritma/Query
+>>>>>>> 6d38891b0c504de5e0040145ae0f80147af19b2b
 
 **Nama Kelas:** *NotifikasiController*  
 **Nama Operasi:** *kirimNotfikasi()*  
