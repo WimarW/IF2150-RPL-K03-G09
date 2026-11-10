@@ -8,7 +8,7 @@
  * Antarmuka UI-04 (Beranda), UI-05 (Rekomendasi Pencarian), UI-06 (Hasil Pencarian)
  */
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import * as Location from 'expo-location';
 import {
   ApiError,
@@ -19,11 +19,15 @@ import {
 import {
   JENIS_JASA_OPTIONS,
   JenisJasa,
+  KategoriJasaRecord,
   PemberiJasaDetail,
   RegisterPenyediaJasaPayload,
   RegisterPenyediaJasaResult,
   SortKey,
+  fetchServiceCategories,
+  fetchServiceProviderById,
   registerServiceProvider,
+  searchServiceProviders,
 } from '../services/serviceCatalogService';
 
 export interface PendaftaranJasaForm {
@@ -811,6 +815,722 @@ export function useCatalogController(): UseCatalogControllerResult {
     submitRegistration,
     dismissServerError,
     dismissSuccessModal,
+  };
+}
+
+// ============================================================================
+// A. Rekomendasi Pencarian (C15 filterKategoriJasa, UI-05-05)
+// ============================================================================
+
+export interface SearchSuggestion {
+  id: string;
+  label: string;
+  keyword: string;
+  source: 'populer' | 'kategori';
+}
+
+export const SUGGESTION_KEYWORDS: readonly string[] = [
+  'Jasa Cuci Mobil',
+  'Jasa Cuci Motor',
+  'Jasa Cuci AC',
+  'Jasa Cuci Sofa',
+  'Cuci Baju (Laundry)',
+  'Jasa Cuci Karpet',
+  'Servis AC',
+  'Servis Elektronik',
+  'Bersih Rumah',
+  'Jasa Kebersihan',
+  'Tukang Ledeng',
+  'Perbaikan Pipa',
+  'Jahit Baju',
+  'Permak Celana',
+  'Renovasi Rumah',
+  'Tukang Cat',
+  'Desain Grafis',
+  'Desain Logo',
+];
+
+/**
+ * Menormalisasi teks menjadi huruf kecil, tanpa spasi di ujung, dan spasi ganda diringkas menjadi tunggal
+ */
+export function normalizeText(s: string): string {
+  return s.toLowerCase().trim().replace(/\s+/g, ' ');
+}
+
+/**
+ * C15 KategoriJasaController.filterKategoriJasa:
+ * Menyaring dan mengurutkan daftar rekomendasi pencarian berdasarkan kata kunci pelanggan (UI-05-05)
+ */
+export function filterKategoriJasa(
+  kriteria: string,
+  kategori: KategoriJasaRecord[],
+  limit = 8
+): SearchSuggestion[] {
+  const maxItems = Math.max(0, limit);
+  if (maxItems === 0) {
+    return [];
+  }
+
+  const normalizedQuery = normalizeText(kriteria);
+  const seen = new Set<string>();
+  const addSuggestion = (
+    target: SearchSuggestion[],
+    rawLabel: string,
+    source: 'populer' | 'kategori'
+  ) => {
+    const label = rawLabel.trim();
+    if (!label) {
+      return;
+    }
+    const norm = normalizeText(label);
+    if (!norm || seen.has(norm)) {
+      return;
+    }
+    seen.add(norm);
+    target.push({
+      id: `${source}-${norm}`,
+      label,
+      keyword: label,
+      source,
+    });
+  };
+
+  // Jika kriteria kosong, kembalikan label JENIS_JASA_OPTIONS (kecuali 'Lainnya') + jenisJasa unik backend
+  if (normalizedQuery.length === 0) {
+    const defaultList: SearchSuggestion[] = [];
+    for (const option of JENIS_JASA_OPTIONS.slice(0, 6)) {
+      if (option.label !== 'Lainnya') {
+        addSuggestion(defaultList, option.label, 'populer');
+      }
+    }
+    for (const item of kategori) {
+      addSuggestion(defaultList, item.jenisJasa, 'kategori');
+    }
+    return defaultList.slice(0, maxItems);
+  }
+
+  const candidates: SearchSuggestion[] = [];
+  for (const kw of SUGGESTION_KEYWORDS) {
+    addSuggestion(candidates, kw, 'populer');
+  }
+  for (const option of JENIS_JASA_OPTIONS) {
+    if (option.label !== 'Lainnya') {
+      addSuggestion(candidates, option.label, 'populer');
+    }
+  }
+  for (const item of kategori) {
+    addSuggestion(candidates, item.jenisJasa, 'kategori');
+  }
+
+  const tokens = normalizedQuery.split(' ').filter(Boolean);
+
+  const matched = candidates.filter((candidate) => {
+    const normLabel = normalizeText(candidate.label);
+    return tokens.every((token) => normLabel.includes(token));
+  });
+
+  const getRank = (label: string): number => {
+    const normLabel = normalizeText(label);
+    if (normLabel.startsWith(normalizedQuery)) {
+      return 1;
+    }
+    const words = normLabel.split(/[\s()/,-]+/).filter(Boolean);
+    if (words.some((w) => w.startsWith(normalizedQuery))) {
+      return 2;
+    }
+    return 3;
+  };
+
+  matched.sort((a, b) => {
+    const rankA = getRank(a.label);
+    const rankB = getRank(b.label);
+    if (rankA !== rankB) {
+      return rankA - rankB;
+    }
+    return a.label.localeCompare(b.label, 'id');
+  });
+
+  return matched.slice(0, maxItems);
+}
+
+// B. Tipe Pesanan Aktif & Pemformat Tanggal (UI-04-13)
+
+export interface OnProgressOrderSummary {
+  idKontrakPekerjaan: string;
+  judulPekerjaan: string;
+  namaPemberiJasa: string;
+  createdAt: string; // ISO
+  statusPekerjaan: 'On Progress';
+}
+
+const BULAN_INDONESIA = [
+  'Januari',
+  'Februari',
+  'Maret',
+  'April',
+  'Mei',
+  'Juni',
+  'Juli',
+  'Agustus',
+  'September',
+  'Oktober',
+  'November',
+  'Desember',
+] as const;
+
+/**
+ * Memformat string tanggal ISO menjadi format Bahasa Indonesia "12 Mei 2026 · 14.20" (UI-04-13)
+ */
+export function formatTanggalPesanan(iso: string): string {
+  if (!iso || typeof iso !== 'string') {
+    return '';
+  }
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) {
+    return '';
+  }
+  const tanggal = date.getDate();
+  const bulan = BULAN_INDONESIA[date.getMonth()];
+  const tahun = date.getFullYear();
+  const jam = String(date.getHours()).padStart(2, '0');
+  const menit = String(date.getMinutes()).padStart(2, '0');
+  return `${tanggal} ${bulan} ${tahun} · ${jam}.${menit}`;
+}
+
+// C. Hook Controller Beranda Pelanggan (UI-04, C14 -> C15 fetchAllKategoriJasa)
+
+export interface UseHomeCatalogControllerResult {
+  user: SessionUser;
+  greetingName: string;
+  isPenyediaJasa: boolean;
+  popularCategories: typeof JENIS_JASA_OPTIONS;
+  recommendations: PemberiJasaDetail[];
+  activeOrder: OnProgressOrderSummary | null;
+  isLoadingRecommendations: boolean;
+  isRefreshing: boolean;
+  recommendationError: string | null;
+  coordinates: Coordinates | null;
+  locationStatus: LocationStatus;
+  refresh: () => Promise<void>;
+}
+
+/**
+ * Custom Hook Controller untuk layar Beranda Pelanggan (UI-04, KF01)
+ */
+export function useHomeCatalogController(): UseHomeCatalogControllerResult {
+  const { user, isPenyediaJasa } = useSessionUser();
+  const greetingName = getFirstName(user.namaPengguna);
+  const {
+    coordinates,
+    locationStatus,
+    isLocationResolved,
+    requestLocation,
+  } = useUserLocation();
+
+  const [recommendations, setRecommendations] = useState<PemberiJasaDetail[]>(
+    []
+  );
+
+  const [activeOrder] = useState<OnProgressOrderSummary | null>(null);
+  const [isLoadingRecommendations, setIsLoadingRecommendations] =
+    useState<boolean>(true);
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+  const [recommendationError, setRecommendationError] = useState<string | null>(
+    null
+  );
+
+  const requestIdRef = useRef<number>(0);
+  const isMountedRef = useRef<boolean>(true);
+
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
+
+  const loadRecommendations = useCallback(
+    async (coords: Coordinates | null, isRefreshCall = false) => {
+      const currentRequestId = ++requestIdRef.current;
+      if (!isRefreshCall && isMountedRef.current) {
+        setIsLoadingRecommendations(true);
+      }
+      if (isMountedRef.current) {
+        setRecommendationError(null);
+      }
+
+      try {
+        const data = await searchServiceProviders({
+          lat: coords?.latitude,
+          long: coords?.longitude,
+          sortBy: 'rating_terbaik',
+        });
+
+        if (
+          !isMountedRef.current ||
+          currentRequestId !== requestIdRef.current
+        ) {
+          return;
+        }
+
+        const available = filterAvailableProviders(data).slice(0, 6);
+        setRecommendations(available);
+      } catch (err: unknown) {
+        if (
+          !isMountedRef.current ||
+          currentRequestId !== requestIdRef.current
+        ) {
+          return;
+        }
+
+        if (err instanceof ApiError && err.status === 0) {
+          setRecommendationError(err.message);
+        } else {
+          setRecommendationError('Gagal memuat rekomendasi jasa.');
+        }
+      } finally {
+        if (
+          isMountedRef.current &&
+          currentRequestId === requestIdRef.current
+        ) {
+          setIsLoadingRecommendations(false);
+        }
+      }
+    },
+    []
+  );
+
+  useEffect(() => {
+    if (!isLocationResolved) {
+      return;
+    }
+    void loadRecommendations(coordinates, false);
+  }, [coordinates, isLocationResolved, loadRecommendations]);
+
+  const refresh = useCallback(async () => {
+    if (isMountedRef.current) {
+      setIsRefreshing(true);
+    }
+    try {
+      const freshCoords = await requestLocation();
+      await loadRecommendations(freshCoords, true);
+    } finally {
+      if (isMountedRef.current) {
+        setIsRefreshing(false);
+      }
+    }
+  }, [loadRecommendations, requestLocation]);
+
+  return {
+    user,
+    greetingName,
+    isPenyediaJasa,
+    popularCategories: JENIS_JASA_OPTIONS,
+    recommendations,
+    activeOrder,
+    isLoadingRecommendations,
+    isRefreshing,
+    recommendationError,
+    coordinates,
+    locationStatus,
+    refresh,
+  };
+}
+
+// ============================================================================
+// D. Hook Controller Rekomendasi Pencarian (UI-05)
+// ============================================================================
+
+export interface UseSearchRecommendationControllerResult {
+  query: string;
+  setQuery: (text: string) => void;
+  clearQuery: () => void;
+  suggestions: SearchSuggestion[];
+  isLoadingCategories: boolean;
+  trimmedQuery: string;
+}
+
+/**
+ * Custom Hook Controller untuk layar Rekomendasi Pencarian (UI-05)
+ */
+export function useSearchRecommendationController(
+  initialQuery = ''
+): UseSearchRecommendationControllerResult {
+  const [query, setQuery] = useState<string>(initialQuery);
+  const [debouncedQuery, setDebouncedQuery] = useState<string>(initialQuery);
+  const [categories, setCategories] = useState<KategoriJasaRecord[]>([]);
+  const [isLoadingCategories, setIsLoadingCategories] =
+    useState<boolean>(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    setIsLoadingCategories(true);
+
+    fetchServiceCategories()
+      .then((records) => {
+        if (isMounted && Array.isArray(records)) {
+          setCategories(records);
+        }
+      })
+      .catch(() => {
+        if (isMounted) {
+          setCategories([]);
+        }
+      })
+      .finally(() => {
+        if (isMounted) {
+          setIsLoadingCategories(false);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    const timerId = setTimeout(() => {
+      setDebouncedQuery(query);
+    }, 200);
+
+    return () => {
+      clearTimeout(timerId);
+    };
+  }, [query]);
+
+  const clearQuery = useCallback(() => {
+    setQuery('');
+    setDebouncedQuery('');
+  }, []);
+
+  const suggestions = useMemo(
+    () => filterKategoriJasa(debouncedQuery, categories),
+    [debouncedQuery, categories]
+  );
+
+  return {
+    query,
+    setQuery,
+    clearQuery,
+    suggestions,
+    isLoadingCategories,
+    trimmedQuery: query.trim(),
+  };
+}
+
+// ============================================================================
+// E. Hook Controller Hasil Pencarian & Peta (UI-06, C05 & C06)
+// ============================================================================
+
+export interface UseSearchResultControllerParams {
+  keyword: string;
+  initialSort?: SortKey;
+  focusProviderId?: string;
+}
+
+export interface UseSearchResultControllerResult {
+  keyword: string;
+  setKeyword: (text: string) => void;
+  clearKeyword: () => void;
+  submitKeyword: () => void;
+  activeKeyword: string;
+  sortBy: SortKey;
+  setSortBy: (sort: SortKey) => void;
+  sortOptions: typeof SORT_OPTIONS;
+  providers: PemberiJasaDetail[];
+  isLoading: boolean;
+  isRefreshing: boolean;
+  error: string | null;
+  isEmpty: boolean;
+  hasFetched: boolean;
+  refresh: () => Promise<void>;
+  retry: () => Promise<void>;
+  coordinates: Coordinates | null;
+  locationStatus: LocationStatus;
+  isLocationResolved: boolean;
+  selectedProviderId: string | null;
+  selectedProvider: PemberiJasaDetail | null;
+  isDetailLoading: boolean;
+  detailError: string | null;
+  choosePemberiJasa: (idPemberiJasa: string) => Promise<void>;
+  dismissPemberiJasa: () => void;
+}
+
+/**
+ * Custom Hook Controller untuk layar Hasil Pencarian & Peta (UI-06, UC02, KF03, KF08)
+ */
+export function useSearchResultController(
+  params: UseSearchResultControllerParams
+): UseSearchResultControllerResult {
+  const [keyword, setKeyword] = useState<string>(params.keyword);
+  const [activeKeyword, setActiveKeyword] = useState<string>(
+    params.keyword.trim()
+  );
+  const [sortBy, setSortBy] = useState<SortKey>(
+    params.initialSort ?? 'terdekat'
+  );
+
+  const [providers, setProviders] = useState<PemberiJasaDetail[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [hasFetched, setHasFetched] = useState<boolean>(false);
+
+  const [selectedProviderId, setSelectedProviderId] = useState<string | null>(
+    null
+  );
+  const [selectedProvider, setSelectedProvider] =
+    useState<PemberiJasaDetail | null>(null);
+  const [isDetailLoading, setIsDetailLoading] = useState<boolean>(false);
+  const [detailError, setDetailError] = useState<string | null>(null);
+
+  const {
+    coordinates,
+    locationStatus,
+    isLocationResolved,
+    requestLocation,
+  } = useUserLocation();
+
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const listRequestIdRef = useRef<number>(0);
+  const detailRequestIdRef = useRef<number>(0);
+  const hasAutoFocusedRef = useRef<boolean>(false);
+  const isMountedRef = useRef<boolean>(true);
+  const providersRef = useRef<PemberiJasaDetail[]>(providers);
+  providersRef.current = providers;
+
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+      if (debounceTimerRef.current !== null) {
+        clearTimeout(debounceTimerRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (debounceTimerRef.current !== null) {
+      clearTimeout(debounceTimerRef.current);
+    }
+    debounceTimerRef.current = setTimeout(() => {
+      setActiveKeyword(keyword.trim());
+    }, 400);
+
+    return () => {
+      if (debounceTimerRef.current !== null) {
+        clearTimeout(debounceTimerRef.current);
+      }
+    };
+  }, [keyword]);
+
+  const submitKeyword = useCallback(() => {
+    if (debounceTimerRef.current !== null) {
+      clearTimeout(debounceTimerRef.current);
+      debounceTimerRef.current = null;
+    }
+    setActiveKeyword(keyword.trim());
+  }, [keyword]);
+
+  const clearKeyword = useCallback(() => {
+    if (debounceTimerRef.current !== null) {
+      clearTimeout(debounceTimerRef.current);
+      debounceTimerRef.current = null;
+    }
+    setKeyword('');
+    setActiveKeyword('');
+  }, []);
+
+  const choosePemberiJasa = useCallback(
+    async (
+      idPemberiJasa: string,
+      currentProviders?: PemberiJasaDetail[]
+    ): Promise<void> => {
+      const trimmedId = idPemberiJasa.trim();
+      if (!trimmedId) {
+        return;
+      }
+
+      const sourceList = currentProviders ?? providersRef.current;
+      const listItem =
+        sourceList.find((item) => item.idPemberiJasa === trimmedId) ?? null;
+
+      setSelectedProviderId(trimmedId);
+      setSelectedProvider(listItem);
+      setIsDetailLoading(true);
+      setDetailError(null);
+
+      const currentDetailRequestId = ++detailRequestIdRef.current;
+
+      try {
+        const detail = await fetchServiceProviderById(trimmedId);
+        if (
+          !isMountedRef.current ||
+          currentDetailRequestId !== detailRequestIdRef.current
+        ) {
+          return;
+        }
+        setSelectedProvider({
+          ...detail,
+          jarakKm: detail.jarakKm ?? listItem?.jarakKm ?? null,
+        });
+      } catch {
+        if (
+          !isMountedRef.current ||
+          currentDetailRequestId !== detailRequestIdRef.current
+        ) {
+          return;
+        }
+        setDetailError('Gagal memuat detail penyedia.');
+      } finally {
+        if (
+          isMountedRef.current &&
+          currentDetailRequestId === detailRequestIdRef.current
+        ) {
+          setIsDetailLoading(false);
+        }
+      }
+    },
+    []
+  );
+
+  const dismissPemberiJasa = useCallback(() => {
+    detailRequestIdRef.current += 1;
+    setSelectedProviderId(null);
+    setSelectedProvider(null);
+    setIsDetailLoading(false);
+    setDetailError(null);
+  }, []);
+
+  const fetchProviders = useCallback(
+    async (
+      queryKeyword: string,
+      sortOption: SortKey,
+      coords: Coordinates | null,
+      isRefreshCall = false
+    ) => {
+      const currentListRequestId = ++listRequestIdRef.current;
+      if (!isRefreshCall && isMountedRef.current) {
+        setIsLoading(true);
+      }
+      if (isMountedRef.current) {
+        setError(null);
+      }
+
+      try {
+        const data = await searchServiceProviders({
+          keyword: queryKeyword,
+          lat: coords?.latitude,
+          long: coords?.longitude,
+          sortBy: sortOption,
+        });
+
+        if (
+          !isMountedRef.current ||
+          currentListRequestId !== listRequestIdRef.current
+        ) {
+          return;
+        }
+
+        const available = filterAvailableProviders(data);
+        setProviders(available);
+        setHasFetched(true);
+
+        if (
+          !hasAutoFocusedRef.current &&
+          params.focusProviderId &&
+          available.some((p) => p.idPemberiJasa === params.focusProviderId)
+        ) {
+          hasAutoFocusedRef.current = true;
+          void choosePemberiJasa(params.focusProviderId, available);
+        }
+      } catch (err: unknown) {
+        if (
+          !isMountedRef.current ||
+          currentListRequestId !== listRequestIdRef.current
+        ) {
+          return;
+        }
+
+        if (err instanceof ApiError && err.status === 0) {
+          setError(err.message);
+        } else {
+          setError('Gagal memuat hasil pencarian jasa.');
+        }
+        setHasFetched(true);
+      } finally {
+        if (
+          isMountedRef.current &&
+          currentListRequestId === listRequestIdRef.current
+        ) {
+          setIsLoading(false);
+        }
+      }
+    },
+    [choosePemberiJasa, params.focusProviderId]
+  );
+
+  useEffect(() => {
+    if (!isLocationResolved) {
+      return;
+    }
+    void fetchProviders(activeKeyword, sortBy, coordinates, false);
+  }, [activeKeyword, coordinates, fetchProviders, isLocationResolved, sortBy]);
+
+  const refresh = useCallback(async () => {
+    if (isMountedRef.current) {
+      setIsRefreshing(true);
+    }
+    try {
+      const freshCoords = await requestLocation();
+      await fetchProviders(activeKeyword, sortBy, freshCoords, true);
+    } finally {
+      if (isMountedRef.current) {
+        setIsRefreshing(false);
+      }
+    }
+  }, [activeKeyword, fetchProviders, requestLocation, sortBy]);
+
+  const retry = useCallback(async () => {
+    await fetchProviders(activeKeyword, sortBy, coordinates, false);
+  }, [activeKeyword, coordinates, fetchProviders, sortBy]);
+
+  const publicChoosePemberiJasa = useCallback(
+    async (idPemberiJasa: string): Promise<void> => {
+      await choosePemberiJasa(idPemberiJasa);
+    },
+    [choosePemberiJasa]
+  );
+
+  const isEmpty =
+    hasFetched && !isLoading && error === null && providers.length === 0;
+
+  return {
+    keyword,
+    setKeyword,
+    clearKeyword,
+    submitKeyword,
+    activeKeyword,
+    sortBy,
+    setSortBy,
+    sortOptions: SORT_OPTIONS,
+    providers,
+    isLoading,
+    isRefreshing,
+    error,
+    isEmpty,
+    hasFetched,
+    refresh,
+    retry,
+    coordinates,
+    locationStatus,
+    isLocationResolved,
+    selectedProviderId,
+    selectedProvider,
+    isDetailLoading,
+    detailError,
+    choosePemberiJasa: publicChoosePemberiJasa,
+    dismissPemberiJasa,
   };
 }
 
