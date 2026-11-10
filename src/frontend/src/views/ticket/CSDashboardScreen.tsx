@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, RefreshControl, ActivityIndicator } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { api, avatarColor, waktuRelatif } from '../api';
+import { api, avatarColor, waktuRelatif } from '../../services/ticketService';
 
 type Filter = 'Semua' | 'Tiket Baru' | 'Diproses' | 'Selesai';
 
@@ -16,8 +16,8 @@ export default function CSDashboardScreen({ navigation }: any) {
   const load = useCallback(async (f: Filter) => {
     try {
       const [s, t] = await Promise.all([
-        api('/api/cs/statistik'),
-        api(`/api/cs/tiket${f === 'Semua' ? '' : `?status=${encodeURIComponent(f)}`}`),
+        api('/cs/stats'),
+        api(`/cs/tickets${f === 'Semua' ? '' : `?status=${encodeURIComponent(f)}`}`),
       ]);
       setStats(s); setTickets(t); setError('');
     } catch (e: any) {

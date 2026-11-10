@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image, ScrollView, Modal, ActivityIndicator } from 'react-native';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-import { api } from '../api';
+import { api } from '../../services/ticketService';
 
 const MAX_BYTES = 5 * 1024 * 1024;
 const issueOptions = ['Laporan Pembayaran', 'Kendala Aplikasi', 'Perilaku Pengguna', 'Lainnya'];
@@ -59,7 +59,7 @@ export default function CreateTicketScreen({ navigation }: any) {
       form.append('jenisTiket', issueType);
       form.append('keteranganTiket', description.trim());
       if (image) form.append('bukti', { uri: image.uri, name: image.type === 'image/png' ? 'bukti.png' : 'bukti.jpg', type: image.type } as any);
-      const { tiket } = await api('/api/tiket', { method: 'POST', form });
+      const { tiket } = await api('/tickets', { method: 'POST', form });
       Alert.alert('Sukses', 'Tiket berhasil dikirim! Mengalihkan ke ruang obrolan tiket...', [
         { text: 'OK', onPress: () => navigation.replace('TicketDetail', { ticketId: tiket.id }) },
       ]);

@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, RefreshControl, ActivityIndicator } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
-import { api, waktuRelatif } from '../api';
+import { api, waktuRelatif } from '../../services/ticketService';
 
 // Daftar tiket milik pelanggan / pemberi jasa (dibuka dari Daftar Pesan, UI-07)
 export default function MyTicketsScreen({ navigation }: any) {
@@ -12,7 +12,7 @@ export default function MyTicketsScreen({ navigation }: any) {
   const [error, setError] = useState('');
 
   const load = useCallback(async () => {
-    try { setTickets(await api('/api/tiket/saya')); setError(''); }
+    try { setTickets(await api('/tickets/mine')); setError(''); }
     catch (e: any) { setError(e.message); }
     finally { setLoading(false); setRefreshing(false); }
   }, []);

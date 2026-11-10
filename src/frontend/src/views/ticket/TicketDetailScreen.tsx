@@ -5,14 +5,14 @@ import {
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-import { api, avatarColor, formatTanggal, formatWaktu, getRole, imageUrl } from '../api';
+import { api, avatarColor, formatTanggal, formatWaktu, isCS as cekIsCS, imageUrl } from '../../services/ticketService';
 
 const MAX_BYTES = 5 * 1024 * 1024;
 
 // Dipakai CS (UI-18) dan pelapor (ruang obrolan tiket). Param: { ticketId }
 export default function TicketDetailScreen({ route, navigation }: any) {
   const { ticketId } = route.params;
-  const isCS = getRole() === 'cs';
+  const isCS = cekIsCS();
   const myRole: 'cs' | 'user' = isCS ? 'cs' : 'user';
 
   const [ticket, setTicket] = useState<any>(null);
@@ -26,7 +26,7 @@ export default function TicketDetailScreen({ route, navigation }: any) {
 
   const load = useCallback(async () => {
     try {
-      const d = await api(`/api/tiket/${ticketId}`);
+      const d = await api(`/tickets/${ticketId}`);
       setTicket(d.tiket); setMessages(d.pesan); setError('');
     } catch (e: any) { setError(e.message); }
   }, [ticketId]);
@@ -39,8 +39,8 @@ export default function TicketDetailScreen({ route, navigation }: any) {
   }, [load]);
 
   const closed = ticket?.status === 'Selesai';
-  const report = messages[0];
-  const chat = messages.slice(1);
+  // Laporan awal diambil dari data tiket; `messages` berisi seluruh percakapan mediasi
+  const chat = messages;
 
   const pickAttachment = async () => {
     const perm = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -62,7 +62,7 @@ export default function TicketDetailScreen({ route, navigation }: any) {
       const form = new FormData();
       form.append('text', text);
       if (attach) form.append('lampiran', { uri: attach.uri, name: attach.type === 'image/png' ? 'l.png' : 'l.jpg', type: attach.type } as any);
-      await api(isCS ? `/api/cs/tiket/${ticketId}/balas` : `/api/tiket/${ticketId}/pesan`, { method: 'POST', form });
+      await api(isCS ? `/cs/tickets/${ticketId}/reply` : `/tickets/${ticketId}/messages`, { method: 'POST', form });
       setReply(''); setAttach(null);
       await load();
       setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 100);
@@ -76,7 +76,7 @@ export default function TicketDetailScreen({ route, navigation }: any) {
       { text: 'Batal', style: 'cancel' },
       {
         text: 'Ya, Tutup', onPress: async () => {
-          try { await api(`/api/cs/tiket/${ticketId}/tutup`, { method: 'POST' }); navigation.goBack(); }
+          try { await api(`/cs/tickets/${ticketId}/close`, { method: 'POST' }); navigation.goBack(); }
           catch (e: any) { Alert.alert('Gagal menutup tiket', e.message); }
         },
       },
@@ -93,7 +93,7 @@ export default function TicketDetailScreen({ route, navigation }: any) {
   }
 
   const color = avatarColor(ticket.name);
-  const reportImg = imageUrl(report?.image);
+  const reportImg = imageUrl(ticket.image);
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
@@ -120,7 +120,7 @@ export default function TicketDetailScreen({ route, navigation }: any) {
             <View style={{ marginLeft: 10 }}>
               <Text style={styles.reportName}>{ticket.name}</Text>
               <Text style={styles.reportMeta}>
-                {ticket.reporterRole === 'pemberi_jasa' ? 'Pemberi Jasa' : 'Pelanggan'} • {formatTanggal(ticket.createdAt)}
+                {ticket.reporterRole === 'PEMBERI_JASA' ? 'Pemberi Jasa' : 'Pelanggan'} • {formatTanggal(ticket.createdAt)}
               </Text>
             </View>
           </View>
@@ -146,6 +146,9 @@ export default function TicketDetailScreen({ route, navigation }: any) {
           );
         })}
 
+        {!closed && !isCS && !ticket.assignedTo && (
+          <Text style={styles.closedText}>Tiket sedang menunggu petugas CS.</Text>
+        )}
         {closed && <Text style={styles.closedText}>Tiket telah ditutup. Ruang obrolan tidak dapat digunakan lagi.</Text>}
       </ScrollView>
 
