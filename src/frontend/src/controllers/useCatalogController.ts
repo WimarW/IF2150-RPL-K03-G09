@@ -3,9 +3,12 @@
  * Traceability: UC01 (Skenario Normal & Skenario Alternatif 1), UC02, KF04, KF05,
  * Kelas DPPL C15 KategoriJasaController (ALGO-032 s.d. ALGO-034) & C06 PemberiJasaController,
  * Antarmuka UI-16 (Daftar Penyedia Jasa)
+ * Traceability Tambahan: UC02 (Skenario Normal & Alternatif 1), KF01, KF03, KF08,
+ * Kelas DPPL C06 PemberiJasaController (ALGO-009 s.d. ALGO-011),
+ * Antarmuka UI-04 (Beranda), UI-05 (Rekomendasi Pencarian), UI-06 (Hasil Pencarian)
  */
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import * as Location from 'expo-location';
 import {
   ApiError,
@@ -16,8 +19,10 @@ import {
 import {
   JENIS_JASA_OPTIONS,
   JenisJasa,
+  PemberiJasaDetail,
   RegisterPenyediaJasaPayload,
   RegisterPenyediaJasaResult,
+  SortKey,
   registerServiceProvider,
 } from '../services/serviceCatalogService';
 
@@ -273,6 +278,269 @@ export type LocationStatus =
   | 'denied'
   | 'error';
 
+export type LocationResult = {
+  coordinates: Coordinates | null;
+  status: LocationStatus;
+};
+
+/**
+ * Pilihan chip filter pengurutan hasil pencarian (UI-06-05)
+ */
+export const SORT_OPTIONS: ReadonlyArray<{ key: SortKey; label: string }> = [
+  { key: 'terdekat', label: 'Terdekat' },
+  { key: 'rating_terbaik', label: 'Rating Terbaik' },
+  { key: 'termurah', label: 'Termurah' },
+];
+
+/**
+ * Pesan kosong apabila tidak ada penyedia jasa yang bersedia (UC02 Skenario Alternatif 1)
+ */
+export const EMPTY_PROVIDER_MESSAGE =
+  'Tidak ada yang sedang bersedia untuk memberi jasa ini';
+
+/**
+ * Koordinat default peta di sekitar ITB Bandung (konsisten dengan data seed)
+ */
+export const DEFAULT_MAP_REGION = {
+  latitude: -6.8915,
+  longitude: 107.6107,
+  latitudeDelta: 0.05,
+  longitudeDelta: 0.05,
+};
+
+/**
+ * Batas waktu permintaan lokasi GPS dalam milidetik
+ */
+export const LOCATION_TIMEOUT_MS = 8000;
+
+/**
+ * Mengambil maksimal 2 huruf inisial kapital dari nama pengguna atau nama toko
+ */
+export function getInitials(name: string): string {
+  const trimmed = name.trim();
+  if (trimmed.length === 0) {
+    return '?';
+  }
+  const words = trimmed.split(/\s+/).filter(Boolean);
+  if (words.length >= 2) {
+    return `${words[0][0]}${words[1][0]}`.toUpperCase();
+  }
+  return words[0].slice(0, 2).toUpperCase();
+}
+
+/**
+ * Mengambil nama depan dari nama lengkap pengguna dengan fallback 'User' (UI-04-03)
+ */
+export function getFirstName(fullName: string): string {
+  const trimmed = fullName.trim();
+  if (trimmed.length === 0) {
+    return 'User';
+  }
+  return trimmed.split(/\s+/)[0] || 'User';
+}
+
+/**
+ * Mengembalikan nama tampilan utama penyedia jasa (prioritas namaToko lalu namaPengguna)
+ */
+export function getProviderDisplayName(p: PemberiJasaDetail): string {
+  const toko = p.namaToko.trim();
+  if (toko.length > 0) {
+    return toko;
+  }
+  const nama = p.namaPengguna.trim();
+  if (nama.length > 0) {
+    return nama;
+  }
+  return 'Penyedia Jasa';
+}
+
+/**
+ * Memformat jarak dalam kilometer menjadi string tampilan (contoh: '0.8 km', '12 km', atau '–')
+ */
+export function formatJarak(km: number | null | undefined): string {
+  if (typeof km !== 'number' || !Number.isFinite(km) || km < 0) {
+    return '–';
+  }
+  if (km < 10) {
+    return `${km.toFixed(1)} km`;
+  }
+  return `${Math.round(km)} km`;
+}
+
+/**
+ * Memformat nilai akumulasi rating menjadi 1 desimal atau 'Baru' bila belum ada penilaian
+ */
+export function formatRating(r: number | null | undefined): string {
+  if (typeof r === 'number' && Number.isFinite(r) && r > 0) {
+    return r.toFixed(1);
+  }
+  return 'Baru';
+}
+
+/**
+ * Memformat nominal tarif penyedia jasa ke dalam format mata uang Rupiah
+ */
+export function formatTarifRupiah(tarif: number | null | undefined): string {
+  if (typeof tarif !== 'number' || !Number.isFinite(tarif)) {
+    return 'Tarif belum diatur';
+  }
+  const rounded = Math.round(tarif);
+  if (rounded <= 0) {
+    return 'Rp0';
+  }
+  return `Rp${formatRupiah(String(rounded))}`;
+}
+
+/**
+ * UC02 Alt 1 — hanya penyedia yang bersedia yang boleh ditampilkan; backend belum memfilter
+ */
+export function isProviderAvailable(p: PemberiJasaDetail): boolean {
+  return p.statusKetersediaan.trim().toLowerCase() === 'available';
+}
+
+/**
+ * Menyaring daftar penyedia jasa agar hanya menyertakan penyedia dengan status Available (UC02 Alt 1)
+ */
+export function filterAvailableProviders(
+  list: PemberiJasaDetail[]
+): PemberiJasaDetail[] {
+  return list.filter(isProviderAvailable);
+}
+
+/**
+ * Memeriksa apakah objek memiliki pasangan koordinat latitude & longitude yang valid
+ */
+export function hasValidCoordinates<
+  T extends { latitude: number | null; longitude: number | null },
+>(p: T): p is T & { latitude: number; longitude: number } {
+  return (
+    typeof p.latitude === 'number' &&
+    Number.isFinite(p.latitude) &&
+    p.latitude >= -90 &&
+    p.latitude <= 90 &&
+    typeof p.longitude === 'number' &&
+    Number.isFinite(p.longitude) &&
+    p.longitude >= -180 &&
+    p.longitude <= 180
+  );
+}
+
+/**
+ * Mengambil koordinat GPS pengguna saat ini dengan batas waktu LOCATION_TIMEOUT_MS
+ * dan fallback ke posisi terakhir yang diketahui apabila pengambilan GPS gagal/timeout
+ */
+export async function getCurrentCoordinates(): Promise<LocationResult> {
+  try {
+    const { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== 'granted') {
+      return { coordinates: null, status: 'denied' };
+    }
+
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
+    try {
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        timeoutId = setTimeout(() => {
+          reject(new Error('Location request timed out'));
+        }, LOCATION_TIMEOUT_MS);
+      });
+
+      const position = await Promise.race([
+        Location.getCurrentPositionAsync({
+          accuracy: Location.Accuracy.Balanced,
+        }),
+        timeoutPromise,
+      ]);
+
+      return {
+        coordinates: {
+          latitude: Number(position.coords.latitude.toFixed(6)),
+          longitude: Number(position.coords.longitude.toFixed(6)),
+        },
+        status: 'granted',
+      };
+    } finally {
+      if (timeoutId !== undefined) {
+        clearTimeout(timeoutId);
+      }
+    }
+  } catch {
+    try {
+      const lastKnown = await Location.getLastKnownPositionAsync();
+      if (lastKnown) {
+        return {
+          coordinates: {
+            latitude: Number(lastKnown.coords.latitude.toFixed(6)),
+            longitude: Number(lastKnown.coords.longitude.toFixed(6)),
+          },
+          status: 'granted',
+        };
+      }
+    } catch {
+      // Abaikan jika fallback gagal
+    }
+    return { coordinates: null, status: 'error' };
+  }
+}
+
+export interface UseUserLocationResult {
+  coordinates: Coordinates | null;
+  locationStatus: LocationStatus;
+  isLocationResolved: boolean;
+  requestLocation: () => Promise<Coordinates | null>;
+}
+
+/**
+ * Custom hook untuk mengelola deteksi koordinat GPS pelanggan (KF03)
+ */
+export function useUserLocation(options?: {
+  autoRequest?: boolean;
+}): UseUserLocationResult {
+  const autoRequest = options?.autoRequest ?? true;
+  const [coordinates, setCoordinates] = useState<Coordinates | null>(null);
+  const [locationStatus, setLocationStatus] =
+    useState<LocationStatus>('idle');
+  const isMountedRef = useRef(true);
+
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
+
+  const requestLocation = useCallback(async (): Promise<Coordinates | null> => {
+    if (isMountedRef.current) {
+      setLocationStatus('loading');
+    }
+    const result = await getCurrentCoordinates();
+    if (isMountedRef.current) {
+      if (result.coordinates) {
+        setCoordinates(result.coordinates);
+      }
+      setLocationStatus(result.status);
+    }
+    return result.coordinates;
+  }, []);
+
+  useEffect(() => {
+    if (autoRequest) {
+      void requestLocation();
+    }
+  }, [autoRequest, requestLocation]);
+
+  const isLocationResolved =
+    locationStatus === 'granted' ||
+    locationStatus === 'denied' ||
+    locationStatus === 'error';
+
+  return {
+    coordinates,
+    locationStatus,
+    isLocationResolved,
+    requestLocation,
+  };
+}
+
 /**
  * Mengonversi state formulir UI-16 menjadi payload request POST /api/services/register
  */
@@ -362,42 +630,12 @@ export function useCatalogController(): UseCatalogControllerResult {
 
   const detectCoordinates = useCallback(async (): Promise<Coordinates | null> => {
     setLocationStatus('loading');
-    try {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        setLocationStatus('denied');
-        return null;
-      }
-
-      const position = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.Balanced,
-      });
-
-      const coords: Coordinates = {
-        latitude: Number(position.coords.latitude.toFixed(6)),
-        longitude: Number(position.coords.longitude.toFixed(6)),
-      };
-      setCoordinates(coords);
-      setLocationStatus('granted');
-      return coords;
-    } catch {
-      try {
-        const lastKnown = await Location.getLastKnownPositionAsync();
-        if (lastKnown) {
-          const coords: Coordinates = {
-            latitude: Number(lastKnown.coords.latitude.toFixed(6)),
-            longitude: Number(lastKnown.coords.longitude.toFixed(6)),
-          };
-          setCoordinates(coords);
-          setLocationStatus('granted');
-          return coords;
-        }
-      } catch {
-        // Abaikan jika fallback gagal
-      }
-      setLocationStatus('error');
-      return null;
+    const result = await getCurrentCoordinates();
+    if (result.coordinates) {
+      setCoordinates(result.coordinates);
     }
+    setLocationStatus(result.status);
+    return result.coordinates;
   }, []);
 
   const setFieldValue = useCallback(
