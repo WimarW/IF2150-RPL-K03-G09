@@ -11,6 +11,7 @@ export type RootTabParamList = {
 export type RootStackParamList = {
   Main: NavigatorScreenParams<RootTabParamList> | undefined;
   ServiceRegistration: undefined;
+  SearchRecommendation: { initialQuery?: string } | undefined;
   SearchResult: {
     keyword: string;
     kategori?: string;
