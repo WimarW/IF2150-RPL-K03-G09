@@ -23,6 +23,9 @@ export type RootStackParamList = {
     namaPemberiJasa: string;
     isOnline?: boolean;
   };
+  // Didaftarkan oleh branch UI-13 / UI-14
+  Notification: undefined; // UI-13 (Vinsensius)
+  Profile: undefined; // UI-14 (Wimar)
 };
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> =
