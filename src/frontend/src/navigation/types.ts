@@ -22,6 +22,15 @@ export type RootStackParamList = {
     idPemberiJasa: string;
     namaPemberiJasa: string;
     isOnline?: boolean;
+    partnerId?: string;
+    partnerName?: string;
+    isCS?: boolean;
+  };
+  ProviderChat: {
+    partnerId: string;
+    partnerName: string;
+    isCS?: boolean;
+    isOnline?: boolean;
   };
   // Didaftarkan oleh branch UI-13 / UI-14
   Notification: undefined; // UI-13 (Vinsensius)
