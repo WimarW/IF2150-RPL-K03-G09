@@ -10,6 +10,12 @@ export type RootTabParamList = {
 
 export type RootStackParamList = {
   Main: NavigatorScreenParams<RootTabParamList> | undefined;
+  // Tiket laporan & Layanan Pelanggan (UC08, UC09)
+  CreateTicket: undefined;
+  MyTickets: undefined;
+  TicketDetail: { ticketId: string };
+  CSDashboard: undefined;
+  // Katalog, Pencarian, Chat & Notifikasi
   ServiceRegistration: undefined;
   SearchRecommendation: { initialQuery?: string } | undefined;
   SearchResult: {
