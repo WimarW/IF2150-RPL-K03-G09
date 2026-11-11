@@ -11,6 +11,7 @@ import {
   Modal,
   Pressable,
   RefreshControl,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -187,133 +188,139 @@ const ProviderSummarySheet: React.FC<ProviderSummarySheetProps> = ({
             </View>
           ) : null}
 
-          {/* Header Ringkasan Profil Penyedia */}
-          <View style={styles.sheetHeader}>
-            <View style={styles.sheetAvatar}>
-              <Text style={styles.sheetAvatarText}>{initials}</Text>
+          {/* Header Ringkasan Profil Penyedia & Detail (Scrollable di layar kecil) */}
+          <ScrollView
+            style={styles.sheetScroll}
+            showsVerticalScrollIndicator={false}
+            bounces={false}
+          >
+            <View style={styles.sheetHeader}>
+              <View style={styles.sheetAvatar}>
+                <Text style={styles.sheetAvatarText}>{initials}</Text>
+                <View
+                  style={[
+                    styles.onlineDot,
+                    provider.isOnline
+                      ? styles.onlineDotActive
+                      : styles.onlineDotIdle,
+                  ]}
+                />
+              </View>
+
+              <View style={styles.sheetHeaderInfo}>
+                <Text style={styles.sheetTitle} numberOfLines={1}>
+                  {displayName}
+                </Text>
+                <Text style={styles.sheetOwnerName} numberOfLines={1}>
+                  {provider.namaPengguna}
+                </Text>
+              </View>
+
               <View
                 style={[
-                  styles.onlineDot,
+                  styles.statusBadge,
                   provider.isOnline
-                    ? styles.onlineDotActive
-                    : styles.onlineDotIdle,
-                ]}
-              />
-            </View>
-
-            <View style={styles.sheetHeaderInfo}>
-              <Text style={styles.sheetTitle} numberOfLines={1}>
-                {displayName}
-              </Text>
-              <Text style={styles.sheetOwnerName} numberOfLines={1}>
-                {provider.namaPengguna}
-              </Text>
-            </View>
-
-            <View
-              style={[
-                styles.statusBadge,
-                provider.isOnline
-                  ? styles.statusBadgeOnline
-                  : styles.statusBadgeOffline,
-              ]}
-            >
-              <Text
-                style={[
-                  styles.statusBadgeText,
-                  provider.isOnline
-                    ? styles.statusBadgeTextOnline
-                    : styles.statusBadgeTextOffline,
+                    ? styles.statusBadgeOnline
+                    : styles.statusBadgeOffline,
                 ]}
               >
-                {provider.isOnline ? 'Online' : 'Offline'}
-              </Text>
+                <Text
+                  style={[
+                    styles.statusBadgeText,
+                    provider.isOnline
+                      ? styles.statusBadgeTextOnline
+                      : styles.statusBadgeTextOffline,
+                  ]}
+                >
+                  {provider.isOnline ? 'Online' : 'Offline'}
+                </Text>
+              </View>
             </View>
-          </View>
 
-          {/* Baris Statistik: Rating | Jarak | Tarif */}
-          <View style={styles.statsBar}>
-            <View style={styles.statItem}>
-              <View style={styles.statValueRow}>
-                <Ionicons name="star" size={15} color={STAR_COLOR} />
+            {/* Baris Statistik: Rating | Jarak | Tarif */}
+            <View style={styles.statsBar}>
+              <View style={styles.statItem}>
+                <View style={styles.statValueRow}>
+                  <Ionicons name="star" size={15} color={STAR_COLOR} />
+                  <Text style={styles.statValue}>
+                    {formatRating(provider.akumulasiRating)}
+                  </Text>
+                </View>
+                <Text style={styles.statLabel}>Rating</Text>
+              </View>
+
+              <View style={styles.statDivider} />
+
+              <View style={styles.statItem}>
                 <Text style={styles.statValue}>
-                  {formatRating(provider.akumulasiRating)}
+                  {formatJarak(provider.jarakKm)}
                 </Text>
+                <Text style={styles.statLabel}>Jarak</Text>
               </View>
-              <Text style={styles.statLabel}>Rating</Text>
-            </View>
 
-            <View style={styles.statDivider} />
+              <View style={styles.statDivider} />
 
-            <View style={styles.statItem}>
-              <Text style={styles.statValue}>
-                {formatJarak(provider.jarakKm)}
-              </Text>
-              <Text style={styles.statLabel}>Jarak</Text>
-            </View>
-
-            <View style={styles.statDivider} />
-
-            <View style={styles.statItem}>
-              <Text style={styles.statValue} numberOfLines={1}>
-                {formatTarifRupiah(provider.tarif)}
-              </Text>
-              <Text style={styles.statLabel}>Estimasi Tarif</Text>
-            </View>
-          </View>
-
-          {/* Detail Informasi Jasa & Lokasi (KF08) */}
-          <View style={styles.detailList}>
-            <View style={styles.detailRow}>
-              <Ionicons
-                name="briefcase-outline"
-                size={18}
-                color={UI_THEME.primary}
-              />
-              <View style={styles.detailTextWrap}>
-                <Text style={styles.detailLabel}>Jenis Jasa</Text>
-                <Text style={styles.detailValue}>{jenisJasaVal}</Text>
-              </View>
-            </View>
-
-            <View style={styles.detailRow}>
-              <Ionicons
-                name="document-text-outline"
-                size={18}
-                color={UI_THEME.primary}
-              />
-              <View style={styles.detailTextWrap}>
-                <Text style={styles.detailLabel}>Deskripsi Layanan</Text>
-                <Text style={styles.detailValue} numberOfLines={4}>
-                  {deskripsiVal}
+              <View style={styles.statItem}>
+                <Text style={styles.statValue} numberOfLines={1}>
+                  {formatTarifRupiah(provider.tarif)}
                 </Text>
+                <Text style={styles.statLabel}>Estimasi Tarif</Text>
               </View>
             </View>
 
-            <View style={styles.detailRow}>
-              <Ionicons
-                name="time-outline"
-                size={18}
-                color={UI_THEME.primary}
-              />
-              <View style={styles.detailTextWrap}>
-                <Text style={styles.detailLabel}>Jam Operasional</Text>
-                <Text style={styles.detailValue}>{jamKerjaVal}</Text>
+            {/* Detail Informasi Jasa & Lokasi (KF08) */}
+            <View style={styles.detailList}>
+              <View style={styles.detailRow}>
+                <Ionicons
+                  name="briefcase-outline"
+                  size={18}
+                  color={UI_THEME.primary}
+                />
+                <View style={styles.detailTextWrap}>
+                  <Text style={styles.detailLabel}>Jenis Jasa</Text>
+                  <Text style={styles.detailValue}>{jenisJasaVal}</Text>
+                </View>
               </View>
-            </View>
 
-            <View style={styles.detailRow}>
-              <Ionicons
-                name="map-outline"
-                size={18}
-                color={UI_THEME.primary}
-              />
-              <View style={styles.detailTextWrap}>
-                <Text style={styles.detailLabel}>Daerah Kerja</Text>
-                <Text style={styles.detailValue}>{daerahKerjaVal}</Text>
+              <View style={styles.detailRow}>
+                <Ionicons
+                  name="document-text-outline"
+                  size={18}
+                  color={UI_THEME.primary}
+                />
+                <View style={styles.detailTextWrap}>
+                  <Text style={styles.detailLabel}>Deskripsi Layanan</Text>
+                  <Text style={styles.detailValue} numberOfLines={4}>
+                    {deskripsiVal}
+                  </Text>
+                </View>
+              </View>
+
+              <View style={styles.detailRow}>
+                <Ionicons
+                  name="time-outline"
+                  size={18}
+                  color={UI_THEME.primary}
+                />
+                <View style={styles.detailTextWrap}>
+                  <Text style={styles.detailLabel}>Jam Operasional</Text>
+                  <Text style={styles.detailValue}>{jamKerjaVal}</Text>
+                </View>
+              </View>
+
+              <View style={styles.detailRow}>
+                <Ionicons
+                  name="map-outline"
+                  size={18}
+                  color={UI_THEME.primary}
+                />
+                <View style={styles.detailTextWrap}>
+                  <Text style={styles.detailLabel}>Daerah Kerja</Text>
+                  <Text style={styles.detailValue}>{daerahKerjaVal}</Text>
+                </View>
               </View>
             </View>
-          </View>
+          </ScrollView>
 
           {detailError ? (
             <Text style={styles.detailErrorText}>{detailError}</Text>
@@ -392,7 +399,7 @@ export const SearchResultView: React.FC<
 
   // KF03 & C05 PemberiJasaUI.showPemberiJasaMap
   const showPemberiJasaMap = () => {
-    if (providers.length === 0) {
+    if (error || providers.length === 0) {
       return null;
     }
     return (
@@ -515,7 +522,7 @@ export const SearchResultView: React.FC<
     </View>
   );
 
-  const renderEmptyComponent = () => {
+  const emptyComponent = (() => {
     if (isLoading && !isRefreshing) {
       return (
         <View style={styles.skeletonWrap} testID="ui06-loading-skeleton">
@@ -578,13 +585,13 @@ export const SearchResultView: React.FC<
       );
     }
 
-    return null;
-  };
+    return undefined;
+  })();
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
       <FlatList
-        data={providers}
+        data={error ? [] : providers}
         keyExtractor={(item) => item.idPemberiJasa}
         renderItem={({ item, index }) => (
           <ProviderCard
@@ -596,7 +603,7 @@ export const SearchResultView: React.FC<
           />
         )}
         ListHeaderComponent={listHeader}
-        ListEmptyComponent={renderEmptyComponent}
+        ListEmptyComponent={emptyComponent}
         contentContainerStyle={styles.listContent}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
@@ -848,6 +855,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 12,
     paddingBottom: 28,
+    maxHeight: '88%',
+  },
+  sheetScroll: {
+    flexShrink: 1,
   },
   sheetHandle: {
     width: 40,
@@ -856,6 +867,7 @@ const styles = StyleSheet.create({
     backgroundColor: UI_THEME.border,
     alignSelf: 'center',
     marginBottom: 16,
+    flexShrink: 0,
   },
   sheetLoadingIndicator: {
     position: 'absolute',

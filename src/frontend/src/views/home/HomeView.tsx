@@ -330,10 +330,13 @@ export const HomeView: React.FC = () => {
    */
   const navigateIfRegistered = useCallback(
     (routeName: 'Notification' | 'Profile', label: string) => {
-      const state =
-        navigation.getParent()?.getState() ?? navigation.getState();
-      const routeNames = state?.routeNames ?? [];
-      if (routeNames.includes(routeName)) {
+      const parentRouteNames =
+        navigation.getParent()?.getState()?.routeNames ?? [];
+      const currentRouteNames = navigation.getState()?.routeNames ?? [];
+      if (
+        parentRouteNames.includes(routeName) ||
+        currentRouteNames.includes(routeName)
+      ) {
         navigation.navigate(routeName);
       } else {
         Alert.alert(

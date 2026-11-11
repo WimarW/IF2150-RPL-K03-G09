@@ -93,10 +93,27 @@ const MapViewCardComponent: React.FC<MapViewCardProps> = ({
     }
 
     if (coordinatesToFit.length >= 2) {
-      mapRef.current.fitToCoordinates(coordinatesToFit, {
-        edgePadding: EDGE_PADDING,
-        animated: true,
-      });
+      const lats = coordinatesToFit.map((c) => c.latitude);
+      const lngs = coordinatesToFit.map((c) => c.longitude);
+      const latSpan = Math.max(...lats) - Math.min(...lats);
+      const lngSpan = Math.max(...lngs) - Math.min(...lngs);
+
+      if (latSpan < 0.0005 && lngSpan < 0.0005) {
+        mapRef.current.animateToRegion(
+          {
+            latitude: coordinatesToFit[0].latitude,
+            longitude: coordinatesToFit[0].longitude,
+            latitudeDelta: SINGLE_PIN_DELTA,
+            longitudeDelta: SINGLE_PIN_DELTA,
+          },
+          350
+        );
+      } else {
+        mapRef.current.fitToCoordinates(coordinatesToFit, {
+          edgePadding: EDGE_PADDING,
+          animated: true,
+        });
+      }
     } else if (coordinatesToFit.length === 1) {
       mapRef.current.animateToRegion(
         {

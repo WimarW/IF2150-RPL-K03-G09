@@ -37,7 +37,13 @@ function getSuggestionIcon(label: string): keyof typeof Ionicons.glyphMap {
   const lower = label.toLowerCase();
   if (lower.includes('mobil')) return 'car-outline';
   if (lower.includes('motor')) return 'bicycle-outline';
-  if (lower.includes('ac')) return 'snow-outline';
+  if (
+    /\bac\b/.test(lower) ||
+    lower.includes('cuci ac') ||
+    lower.includes('servis ac')
+  ) {
+    return 'snow-outline';
+  }
   if (lower.includes('sofa')) return 'bed-outline';
   if (
     lower.includes('baju') ||

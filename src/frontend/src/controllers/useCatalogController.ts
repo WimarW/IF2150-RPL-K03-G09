@@ -503,6 +503,7 @@ export function useUserLocation(options?: {
   const [coordinates, setCoordinates] = useState<Coordinates | null>(null);
   const [locationStatus, setLocationStatus] =
     useState<LocationStatus>('idle');
+  const [isLocationResolved, setIsLocationResolved] = useState<boolean>(false);
   const isMountedRef = useRef(true);
 
   useEffect(() => {
@@ -519,9 +520,18 @@ export function useUserLocation(options?: {
     const result = await getCurrentCoordinates();
     if (isMountedRef.current) {
       if (result.coordinates) {
-        setCoordinates(result.coordinates);
+        setCoordinates((prev) =>
+          prev &&
+          prev.latitude === result.coordinates!.latitude &&
+          prev.longitude === result.coordinates!.longitude
+            ? prev
+            : result.coordinates
+        );
+      } else if (result.status === 'denied') {
+        setCoordinates(null);
       }
       setLocationStatus(result.status);
+      setIsLocationResolved(true);
     }
     return result.coordinates;
   }, []);
@@ -531,11 +541,6 @@ export function useUserLocation(options?: {
       void requestLocation();
     }
   }, [autoRequest, requestLocation]);
-
-  const isLocationResolved =
-    locationStatus === 'granted' ||
-    locationStatus === 'denied' ||
-    locationStatus === 'error';
 
   return {
     coordinates,
@@ -878,6 +883,9 @@ export function filterKategoriJasa(
     rawLabel: string,
     source: 'populer' | 'kategori'
   ) => {
+    if (typeof rawLabel !== 'string') {
+      return;
+    }
     const label = rawLabel.trim();
     if (!label) {
       return;
@@ -1040,6 +1048,7 @@ export function useHomeCatalogController(): UseHomeCatalogControllerResult {
   );
 
   const requestIdRef = useRef<number>(0);
+  const lastFetchedCoordsKeyRef = useRef<string | undefined>(undefined);
   const isMountedRef = useRef<boolean>(true);
 
   useEffect(() => {
@@ -1052,6 +1061,9 @@ export function useHomeCatalogController(): UseHomeCatalogControllerResult {
   const loadRecommendations = useCallback(
     async (coords: Coordinates | null, isRefreshCall = false) => {
       const currentRequestId = ++requestIdRef.current;
+      lastFetchedCoordsKeyRef.current = coords
+        ? `${coords.latitude},${coords.longitude}`
+        : 'null';
       if (!isRefreshCall && isMountedRef.current) {
         setIsLoadingRecommendations(true);
       }
@@ -1102,6 +1114,12 @@ export function useHomeCatalogController(): UseHomeCatalogControllerResult {
 
   useEffect(() => {
     if (!isLocationResolved) {
+      return;
+    }
+    const coordsKey = coordinates
+      ? `${coordinates.latitude},${coordinates.longitude}`
+      : 'null';
+    if (lastFetchedCoordsKeyRef.current === coordsKey) {
       return;
     }
     void loadRecommendations(coordinates, false);
@@ -1293,6 +1311,7 @@ export function useSearchResultController(
 
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const listRequestIdRef = useRef<number>(0);
+  const lastSearchKeyRef = useRef<string | undefined>(undefined);
   const detailRequestIdRef = useRef<number>(0);
   const hasAutoFocusedRef = useRef<boolean>(false);
   const isMountedRef = useRef<boolean>(true);
@@ -1410,6 +1429,9 @@ export function useSearchResultController(
       isRefreshCall = false
     ) => {
       const currentListRequestId = ++listRequestIdRef.current;
+      lastSearchKeyRef.current = `${queryKeyword}::${sortOption}::${
+        coords ? `${coords.latitude},${coords.longitude}` : 'null'
+      }`;
       if (!isRefreshCall && isMountedRef.current) {
         setIsLoading(true);
       }
@@ -1452,6 +1474,7 @@ export function useSearchResultController(
           return;
         }
 
+        setProviders([]);
         if (err instanceof ApiError && err.status === 0) {
           setError(err.message);
         } else {
@@ -1472,6 +1495,12 @@ export function useSearchResultController(
 
   useEffect(() => {
     if (!isLocationResolved) {
+      return;
+    }
+    const nextSearchKey = `${activeKeyword}::${sortBy}::${
+      coordinates ? `${coordinates.latitude},${coordinates.longitude}` : 'null'
+    }`;
+    if (lastSearchKeyRef.current === nextSearchKey) {
       return;
     }
     void fetchProviders(activeKeyword, sortBy, coordinates, false);
