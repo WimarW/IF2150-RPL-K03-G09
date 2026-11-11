@@ -5,17 +5,16 @@ import {
   FlatList,
   TouchableOpacity,
   StyleSheet,
+  SafeAreaView,
   ActivityIndicator,
   RefreshControl,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useNotificationController } from '../../../controllers/useNotificationController';
 import { NotificationCard } from '../../../components/notifications/NotificationCard';
 import { Snackbar } from '../../../components/common/Snackbar';
 import { colors } from '../../../theme/colors';
-import { AppNotification } from '../../../types/chat';
 
 export const NotificationView: React.FC = () => {
   const navigation = useNavigation<any>();
@@ -38,9 +37,9 @@ export const NotificationView: React.FC = () => {
     }, [loadNotifications])
   );
 
-  const hasUnread = notifications.some((n: AppNotification) => !n.statusBaca);
+  const hasUnread = notifications.some((n) => !n.statusBaca);
 
-  const onItemPress = (item: AppNotification) => {
+  const onItemPress = (item: any) => {
     const navResult = handleNotificationPress(item);
     if (navResult) {
       navigation.navigate(navResult.targetScreen, navResult.params);
@@ -48,7 +47,7 @@ export const NotificationView: React.FC = () => {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
+    <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <TouchableOpacity
           style={styles.backButton}
