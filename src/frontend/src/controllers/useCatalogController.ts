@@ -376,7 +376,7 @@ export function formatJarak(km: number | null | undefined): string {
  */
 export function formatRating(r: number | null | undefined): string {
   if (typeof r === 'number' && Number.isFinite(r) && r > 0) {
-    return r.toFixed(1);
+    return (Math.round(r * 10) / 10).toFixed(1);
   }
   return 'Baru';
 }
