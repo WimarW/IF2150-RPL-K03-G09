@@ -92,15 +92,16 @@ export const ContractCard: React.FC<ContractCardProps> = React.memo(({
 const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.slate100,
-    borderRadius: 16,
-    padding: 14,
-    marginVertical: 8,
+    borderRadius: 14,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    marginVertical: 6,
   },
   headerRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 6,
   },
   titleWithIcon: {
     flexDirection: 'row',
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
   divider: {
     height: 1,
     backgroundColor: colors.border,
-    marginVertical: 8,
+    marginVertical: 6,
   },
   priceRow: {
     flexDirection: 'row',
@@ -154,7 +155,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   priceValue: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '700',
     color: colors.primary,
   },
@@ -162,9 +163,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.navy,
     borderRadius: 20,
-    paddingVertical: 8,
+    paddingVertical: 6,
+    paddingHorizontal: 20,
+    alignSelf: 'center',
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: 8,
     backgroundColor: colors.white,
   },
   outlineButtonText: {

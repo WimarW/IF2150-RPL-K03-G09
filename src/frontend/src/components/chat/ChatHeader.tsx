@@ -47,7 +47,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = React.memo(({
           </TouchableOpacity>
         )}
 
-        <Avatar name={partnerName} isCS={isCS} isOnline={isOnline} size={42} />
+        <Avatar name={partnerName} isCS={isCS} isOnline={isOnline} size={38} />
 
         <View style={styles.titleArea}>
           <Text style={styles.name} numberOfLines={1}>
@@ -75,10 +75,9 @@ export const ChatHeader: React.FC<ChatHeaderProps> = React.memo(({
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: colors.bg,
-    paddingHorizontal: 16,
-    paddingTop: 8,
-    paddingBottom: 12,
+    backgroundColor: colors.white,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
   },

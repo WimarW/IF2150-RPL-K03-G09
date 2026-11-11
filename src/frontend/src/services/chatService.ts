@@ -104,6 +104,72 @@ const MOCK_MESSAGES_STORE: Record<string, ChatMessage[]> = {
       statusChat: 'SENT',
     },
   ],
+  'user-cs-support': [
+    {
+      idChat: 'msg-cs-1',
+      clientId: 'c-cs-1',
+      idPengguna: getCurrentUser().idPengguna,
+      idPenerima: 'user-cs-support',
+      isiPesan: 'Halo CS, saya ingin menanyakan status laporan saya.',
+      waktuTerkirim: new Date(Date.now() - 1000 * 60 * 110).toISOString(),
+      isChatTerbaca: true,
+      statusChat: 'SENT',
+    },
+    {
+      idChat: 'msg-cs-2',
+      clientId: 'c-cs-2',
+      idPengguna: 'user-cs-support',
+      idPenerima: getCurrentUser().idPengguna,
+      isiPesan: 'Tiket #A-2041 kamu sedang ditinjau.',
+      waktuTerkirim: new Date(Date.now() - 1000 * 60 * 102).toISOString(),
+      isChatTerbaca: false,
+      statusChat: 'SENT',
+    },
+  ],
+  'user-siti-rahayu': [
+    {
+      idChat: 'msg-siti-1',
+      clientId: 'c-siti-1',
+      idPengguna: getCurrentUser().idPengguna,
+      idPenerima: 'user-siti-rahayu',
+      isiPesan: 'Kak Siti, pembayarannya sudah saya selesaikan ya.',
+      waktuTerkirim: new Date(Date.now() - 1000 * 60 * 60 * 24 - 1000 * 60 * 10).toISOString(),
+      isChatTerbaca: true,
+      statusChat: 'SENT',
+    },
+    {
+      idChat: 'msg-siti-2',
+      clientId: 'c-siti-2',
+      idPengguna: 'user-siti-rahayu',
+      idPenerima: getCurrentUser().idPengguna,
+      isiPesan: 'Terima kasih ya kak, sudah dibayar 😊',
+      waktuTerkirim: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
+      isChatTerbaca: true,
+      statusChat: 'SENT',
+    },
+  ],
+  'user-agus-pratama': [
+    {
+      idChat: 'msg-agus-1',
+      clientId: 'c-agus-1',
+      idPengguna: getCurrentUser().idPengguna,
+      idPenerima: 'user-agus-pratama',
+      isiPesan: 'Pak Agus, kalau benerin keran bocor kira-kira berapa ya?',
+      waktuTerkirim: new Date(Date.now() - 1000 * 60 * 60 * 48 - 1000 * 60 * 15).toISOString(),
+      isChatTerbaca: true,
+      statusChat: 'SENT',
+    },
+    {
+      idChat: 'msg-agus-2',
+      clientId: 'c-agus-2',
+      idPengguna: 'user-agus-pratama',
+      idPenerima: getCurrentUser().idPengguna,
+      isiPesan: 'Untuk keran bocor, ongkosnya 80k',
+      waktuTerkirim: new Date(Date.now() - 1000 * 60 * 60 * 48).toISOString(),
+      isChatTerbaca: true,
+      statusChat: 'SENT',
+    },
+  ],
 };
 
 export const chatService = {
@@ -123,7 +189,14 @@ export const chatService = {
     return apiGet<ChatMessage[]>(`/chats/${partnerId}`);
   },
 
-  async sendChat(idPenerima: string, isiPesan: string, clientId: string): Promise<ChatMessage> {
+  async sendChat(
+    idPenerima: string,
+    isiPesan: string,
+    clientId: string,
+    partnerName?: string,
+    isCS = false,
+    isOnline = true
+  ): Promise<ChatMessage> {
     if (CHAT_CONFIG.USE_MOCK) {
       await new Promise((resolve) => setTimeout(resolve, 500));
       if (MOCK_FAIL_NEXT_SEND) {
@@ -147,11 +220,25 @@ export const chatService = {
       }
       MOCK_MESSAGES_STORE[idPenerima].push(newMsg);
 
-      // Update conversation last message summary
-      const conv = MOCK_CONVERSATIONS.find((c) => c.partnerId === idPenerima);
-      if (conv) {
-        conv.lastMessage = isiPesan;
-        conv.lastMessageAt = newMsg.waktuTerkirim;
+      // Update conversation last message summary or add new conversation at top
+      const convIndex = MOCK_CONVERSATIONS.findIndex((c) => c.partnerId === idPenerima);
+      if (convIndex !== -1) {
+        const existing = MOCK_CONVERSATIONS[convIndex];
+        existing.lastMessage = isiPesan;
+        existing.lastMessageAt = newMsg.waktuTerkirim;
+        if (partnerName) existing.partnerName = partnerName;
+        MOCK_CONVERSATIONS.splice(convIndex, 1);
+        MOCK_CONVERSATIONS.unshift(existing);
+      } else {
+        MOCK_CONVERSATIONS.unshift({
+          partnerId: idPenerima,
+          partnerName: partnerName || 'Mitra Jasa',
+          isCS,
+          isOnline,
+          lastMessage: isiPesan,
+          lastMessageAt: newMsg.waktuTerkirim,
+          unreadCount: 0,
+        });
       }
 
       return newMsg;

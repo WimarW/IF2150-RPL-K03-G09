@@ -5,10 +5,13 @@ import { RootTabParamList } from './types';
 import { HomeView } from '../views/home/HomeView';
 import { RiwayatScreen } from '../views/RiwayatScreen';
 import { ChatScreen } from '../views/ChatScreen';
+import { useUnreadCounts } from '../context/UnreadContext';
 
 const Tab = createBottomTabNavigator<RootTabParamList>();
 
 export const BottomTabNavigator: React.FC = () => {
+  const { unreadMessages } = useUnreadCounts();
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -43,7 +46,14 @@ export const BottomTabNavigator: React.FC = () => {
           tabBarLabel: 'Riwayat',
         }}
       />
-      <Tab.Screen name="Chat" component={ChatScreen} />
+      <Tab.Screen
+        name="Chat"
+        component={ChatScreen}
+        options={{
+          headerShown: false,
+          tabBarBadge: unreadMessages > 0 ? unreadMessages : undefined,
+        }}
+      />
     </Tab.Navigator>
   );
 };

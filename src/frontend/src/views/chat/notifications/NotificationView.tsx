@@ -15,7 +15,6 @@ import { useNotificationController } from '../../../controllers/useNotificationC
 import { NotificationCard } from '../../../components/notifications/NotificationCard';
 import { Snackbar } from '../../../components/common/Snackbar';
 import { colors } from '../../../theme/colors';
-import { AppNotification } from '../../../types/chat';
 
 export const NotificationView: React.FC = () => {
   const navigation = useNavigation<any>();
@@ -38,9 +37,9 @@ export const NotificationView: React.FC = () => {
     }, [loadNotifications])
   );
 
-  const hasUnread = notifications.some((n: AppNotification) => !n.statusBaca);
+  const hasUnread = notifications.some((n) => !n.statusBaca);
 
-  const onItemPress = (item: AppNotification) => {
+  const onItemPress = (item: any) => {
     const navResult = handleNotificationPress(item);
     if (navResult) {
       navigation.navigate(navResult.targetScreen, navResult.params);

@@ -6,7 +6,12 @@ import { CHAT_CONFIG } from '../config/chatConfig';
 import { mergeMessages } from '../utils/chatUtils';
 import { useUnreadCounts } from '../context/UnreadContext';
 
-export function useChatController(partnerId?: string) {
+export function useChatController(
+  partnerId?: string,
+  partnerName?: string,
+  isCS = false,
+  isOnline = true
+) {
   const [conversations, setConversations] = useState<ConversationSummary[]>([]);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -93,7 +98,14 @@ export function useChatController(partnerId?: string) {
       setMessages((prev) => [...prev, optimisticMsg]);
 
       try {
-        const result = await chatService.sendChat(partnerId, trimmed, clientId);
+        const result = await chatService.sendChat(
+          partnerId,
+          trimmed,
+          clientId,
+          partnerName,
+          isCS,
+          isOnline
+        );
         // 3. Sukses
         setMessages((prev) =>
           prev.map((m) => (m.clientId === clientId ? { ...result, statusChat: 'SENT' } : m))
@@ -106,7 +118,7 @@ export function useChatController(partnerId?: string) {
         setSnackbarMessage('Pesan tidak terkirim. Periksa koneksimu lalu coba lagi.');
       }
     },
-    [partnerId]
+    [partnerId, partnerName, isCS, isOnline]
   );
 
   const retrySend = useCallback(
@@ -121,7 +133,14 @@ export function useChatController(partnerId?: string) {
       );
 
       try {
-        const result = await chatService.sendChat(partnerId, targetMsg.isiPesan, clientId);
+        const result = await chatService.sendChat(
+          partnerId,
+          targetMsg.isiPesan,
+          clientId,
+          partnerName,
+          isCS,
+          isOnline
+        );
         setMessages((prev) =>
           prev.map((m) => (m.clientId === clientId ? { ...result, statusChat: 'SENT' } : m))
         );
@@ -132,7 +151,7 @@ export function useChatController(partnerId?: string) {
         setSnackbarMessage('Pesan tidak terkirim. Periksa koneksimu lalu coba lagi.');
       }
     },
-    [partnerId, messages]
+    [partnerId, partnerName, isCS, isOnline, messages]
   );
 
   // Polling AppState management

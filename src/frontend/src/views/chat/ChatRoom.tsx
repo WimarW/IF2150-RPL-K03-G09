@@ -3,13 +3,12 @@ import {
   View,
   FlatList,
   StyleSheet,
-  SafeAreaView,
   KeyboardAvoidingView,
   Platform,
   ActivityIndicator,
   Text,
-  TouchableOpacity,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { ChatHeader } from '../../components/chat/ChatHeader';
 import { ChatBubble } from '../../components/chat/ChatBubble';
 import { DateSeparator } from '../../components/chat/DateSeparator';
@@ -91,7 +90,7 @@ export const ChatRoom: React.FC<ChatRoomProps> = ({
   }, [messages, isCS, variant]);
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
       <ChatHeader
         partnerName={partnerName}
         isOnline={isOnline}
@@ -105,13 +104,6 @@ export const ChatRoom: React.FC<ChatRoomProps> = ({
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
-        {/* Slot Kontrak Atas untuk UI-08 Customer */}
-        {variant === 'customer' && !isCS && (
-          <View style={styles.topSlot}>
-            <ContractCard variant="create" />
-          </View>
-        )}
-
         {isLoading ? (
           <View style={styles.centerContainer}>
             <ActivityIndicator size="large" color={colors.primary} />
@@ -125,6 +117,13 @@ export const ChatRoom: React.FC<ChatRoomProps> = ({
             data={timelineData}
             keyExtractor={(item) => item.key}
             contentContainerStyle={styles.listContent}
+            ListHeaderComponent={
+              variant === 'customer' && !isCS ? (
+                <View style={styles.topSlot}>
+                  <ContractCard variant="create" />
+                </View>
+              ) : undefined
+            }
             renderItem={({ item }) => {
               if (item.kind === 'date') {
                 return <DateSeparator label={item.label} />;
@@ -161,11 +160,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   topSlot: {
-    paddingHorizontal: 16,
-    paddingTop: 8,
+    paddingTop: 4,
+    paddingBottom: 2,
   },
   listContent: {
-    paddingHorizontal: 16,
+    paddingHorizontal: 14,
     paddingBottom: 12,
   },
   centerContainer: {

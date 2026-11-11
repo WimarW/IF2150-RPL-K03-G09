@@ -22,7 +22,7 @@ export default function TicketDetailScreen({ route, navigation }: any) {
   const [sending, setSending] = useState(false);
   const [error, setError] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
-  const scrollRef = useRef<ScrollView>(null);
+  const scrollRef = useRef<any>(null);
 
   const load = useCallback(async () => {
     try {

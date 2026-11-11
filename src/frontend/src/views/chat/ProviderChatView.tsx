@@ -21,7 +21,7 @@ export const ProviderChatView: React.FC = () => {
     sendChat,
     retrySend,
     markConversationRead,
-  } = useChatController(partnerId);
+  } = useChatController(partnerId, partnerName, isCS);
 
   useFocusEffect(
     React.useCallback(() => {
