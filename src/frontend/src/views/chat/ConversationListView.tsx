@@ -5,10 +5,10 @@ import {
   FlatList,
   TouchableOpacity,
   StyleSheet,
-  SafeAreaView,
   ActivityIndicator,
   RefreshControl,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useChatController } from '../../controllers/useChatController';
@@ -47,20 +47,35 @@ export const ConversationListView: React.FC = () => {
     );
   }, [conversations, searchQuery]);
 
-  const handlePressCard = (partnerId: string, partnerName: string, isCS?: boolean) => {
-    const targetScreen = isPenyediaJasa ? 'ProviderChat' : 'CustomerChat';
-    navigation.navigate(targetScreen, { partnerId, partnerName, isCS });
+  const handlePressCard = (
+    partnerId: string,
+    partnerName: string,
+    isCS?: boolean,
+    isOnline?: boolean
+  ) => {
+    if (isPenyediaJasa) {
+      navigation.navigate('ProviderChat', { partnerId, partnerName, isCS, isOnline });
+      return;
+    }
+    navigation.navigate('CustomerChat', {
+      idPemberiJasa: partnerId,
+      namaPemberiJasa: partnerName,
+      partnerId,
+      partnerName,
+      isCS,
+      isOnline,
+    });
   };
 
   const handlePencilClick = () => {
     if (!isPenyediaJasa) {
       // Pelanggan -> UI-05 / Rekomendasi Pencarian
-      navigation.navigate('ServiceRegistration'); 
+      navigation.navigate('SearchRecommendation');
     }
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} edges={['top']}>
       <View style={styles.container}>
         <View style={styles.headerRow}>
           <View>
@@ -110,7 +125,14 @@ export const ConversationListView: React.FC = () => {
             renderItem={({ item }) => (
               <ConversationCard
                 conversation={item}
-                onPress={() => handlePressCard(item.partnerId, item.partnerName, item.isCS)}
+                onPress={() =>
+                  handlePressCard(
+                    item.partnerId,
+                    item.partnerName,
+                    item.isCS,
+                    item.isOnline
+                  )
+                }
               />
             )}
           />
