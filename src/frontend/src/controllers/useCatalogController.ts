@@ -347,11 +347,11 @@ export function getFirstName(fullName: string): string {
  * Mengembalikan nama tampilan utama penyedia jasa (prioritas namaToko lalu namaPengguna)
  */
 export function getProviderDisplayName(p: PemberiJasaDetail): string {
-  const toko = p.namaToko.trim();
+  const toko = (p.namaToko ?? '').trim();
   if (toko.length > 0) {
     return toko;
   }
-  const nama = p.namaPengguna.trim();
+  const nama = (p.namaPengguna ?? '').trim();
   if (nama.length > 0) {
     return nama;
   }
@@ -399,7 +399,7 @@ export function formatTarifRupiah(tarif: number | null | undefined): string {
  * UC02 Alt 1 — hanya penyedia yang bersedia yang boleh ditampilkan; backend belum memfilter
  */
 export function isProviderAvailable(p: PemberiJasaDetail): boolean {
-  return p.statusKetersediaan.trim().toLowerCase() === 'available';
+  return (p.statusKetersediaan ?? '').trim().toLowerCase() === 'available';
 }
 
 /**

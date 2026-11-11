@@ -1,5 +1,8 @@
 /**
  * [Naufal Hasbialhaq] UI-04 Beranda Pelanggan
+ * Traceability: UC02 (Skenario Normal N1), KF01, KF02,
+ * Kelas DPPL C08 PelangganUI, C14 KategoriJasaUI (pressMenu, pressKategoriJasa),
+ * Antarmuka UI-04 (UI-04-01 s.d. UI-04-14)
  */
 
 import React, { useCallback } from 'react';
@@ -374,7 +377,7 @@ export const HomeView: React.FC = () => {
     (provider: PemberiJasaDetail) => {
       const displayName = getProviderDisplayName(provider);
       navigation.navigate('SearchResult', {
-        keyword: provider.jenisJasa ?? displayName,
+        keyword: provider.jenisJasa?.trim() || displayName,
         focusProviderId: provider.idPemberiJasa,
       });
     },
@@ -513,12 +516,13 @@ export const HomeView: React.FC = () => {
           {/* UI-04-06 */}
           <Pressable
             testID="ui04-search-button"
-            onPress={() =>
+            onPress={(e) => {
+              e.stopPropagation();
               navigation.navigate('SearchResult', {
                 keyword: '',
                 initialSort: 'terdekat',
-              })
-            }
+              });
+            }}
             accessibilityRole="button"
             accessibilityLabel="Cari penyedia terdekat"
             style={({ pressed }) => [

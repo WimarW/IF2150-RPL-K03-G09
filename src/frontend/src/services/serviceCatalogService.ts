@@ -1,7 +1,15 @@
+/**
+ * [Naufal Hasbialhaq] Service Katalog & Pendaftaran Layanan Penyedia Jasa
+ * Traceability: UC01 (Mendaftarkan Jasa), UC02 (Memilih Jasa), KF01, KF02, KF03, KF04, KF05, KF08,
+ * Kelas DPPL C13 KategoriJasa, C14 KategoriJasaUI, C04 PemberiJasa, C05 PemberiJasaUI,
+ * Antarmuka UI-04 (Beranda), UI-05 (Rekomendasi Pencarian), UI-06 (Hasil Pencarian), UI-16 (Daftar Penyedia Jasa)
+ */
 
 import { apiGet, apiPost, Role } from './api';
 
-
+/**
+ * Daftar pilihan kategori / jenis jasa sesuai spesifikasi DPPL UI-04-08 & UI-16-06
+ */
 export const JENIS_JASA_OPTIONS = [
   { label: 'Servis', value: 'Servis' },
   { label: 'Kebersihan', value: 'Kebersihan' },

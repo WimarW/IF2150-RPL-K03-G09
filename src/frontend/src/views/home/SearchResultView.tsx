@@ -120,7 +120,10 @@ const ProviderCardComponent: React.FC<ProviderCardProps> = ({
           styles.chatButton,
           pressed && styles.chatButtonPressed,
         ]}
-        onPress={() => onPressChat(provider)}
+        onPress={(e) => {
+          e.stopPropagation();
+          onPressChat(provider);
+        }}
         accessibilityRole="button"
         accessibilityLabel={`Chat dengan ${displayName}`}
         testID={`ui06-chat-button-${provider.idPemberiJasa}`}
@@ -513,7 +516,7 @@ export const SearchResultView: React.FC<
   );
 
   const renderEmptyComponent = () => {
-    if (isLoading && !hasFetched) {
+    if (isLoading && !isRefreshing) {
       return (
         <View style={styles.skeletonWrap} testID="ui06-loading-skeleton">
           {[0, 1, 2].map((item) => (
