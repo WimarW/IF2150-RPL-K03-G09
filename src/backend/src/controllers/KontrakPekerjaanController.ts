@@ -5,24 +5,96 @@ import {
   KontrakError,
   KontrakNotifikasiSender,
   KontrakPekerjaan,
+  KontrakPekerjaanDetail,
   STATUS_PEKERJAAN,
 } from '../models/KontrakPekerjaan';
+import { KomunikasiRecord } from '../models/Komunikasi';
 import { Pengguna } from '../models/Pengguna';
 import { cancelExpiredContracts } from '../workers/autoCancelKontrakWorker';
+import { KomunikasiController } from './KomunikasiController';
+import {
+  NotifikasiController,
+  RealtimeEmitter,
+} from './NotifikasiController';
 
 /**
  * Kelas DPPL C18 - KontrakPekerjaanController
  * Mengatur logika bisnis kontrak kerja, penguncian penyedia jasa (Optimistic Locking),
- * validasi state transition, serta pengiriman notifikasi
+ * validasi state transition, serta pengiriman notifikasi & sinkronisasi ruang chat
  * (UC05, UC06, UC07 | KF02, KF07, KF10, KF11, KF12, KF13 | KNF04, KNF11, KNF18, KNF19, KNF20, KNF21, KNF22).
  */
 export class KontrakPekerjaanController {
   private notifikasiSender: KontrakNotifikasiSender;
+  private komunikasiController: KomunikasiController;
+  private realtimeEmitter?: RealtimeEmitter;
 
   constructor(
-    notifSender: KontrakNotifikasiSender = defaultKontrakNotifikasiSender
+    notifSender: KontrakNotifikasiSender = defaultKontrakNotifikasiSender,
+    komunikasiController?: KomunikasiController,
+    realtimeEmitter?: RealtimeEmitter
   ) {
     this.notifikasiSender = notifSender;
+    this.realtimeEmitter = realtimeEmitter;
+
+    if (realtimeEmitter && this.notifikasiSender.setRealtimeEmitter) {
+      this.notifikasiSender.setRealtimeEmitter(realtimeEmitter);
+    }
+
+    const notifCtrlInstance =
+      notifSender instanceof NotifikasiController ? notifSender : undefined;
+
+    this.komunikasiController =
+      komunikasiController ??
+      new KomunikasiController(undefined, notifCtrlInstance, realtimeEmitter);
+  }
+
+  public setRealtimeEmitter(emitter: RealtimeEmitter): void {
+    this.realtimeEmitter = emitter;
+    if (this.notifikasiSender.setRealtimeEmitter) {
+      this.notifikasiSender.setRealtimeEmitter(emitter);
+    }
+    this.komunikasiController.setRealtimeEmitter(emitter);
+  }
+
+  public getKomunikasiController(): KomunikasiController {
+    return this.komunikasiController;
+  }
+
+  private emitKontrakRealtime(
+    event: 'kontrak:new' | 'kontrak:updated',
+    detail: KontrakPekerjaanDetail
+  ): void {
+    if (!this.realtimeEmitter) {
+      return;
+    }
+    if (detail.idPelanggan) {
+      this.realtimeEmitter.emitToUser(detail.idPelanggan, event, detail);
+    }
+    if (detail.idPemberiJasa) {
+      this.realtimeEmitter.emitToUser(detail.idPemberiJasa, event, detail);
+    }
+  }
+
+  /**
+   * Mengirim pesan ringkasan/pembaruan kontrak ke dalam ruang obrolan (KomunikasiController - C21)
+   */
+  public async kirimPesanKontrakKeChat(
+    idPengirim: string,
+    idPenerima: string,
+    isiPesan: string
+  ): Promise<KomunikasiRecord | null> {
+    if (!idPengirim || !idPenerima || !isiPesan) {
+      return null;
+    }
+    try {
+      return await this.komunikasiController.sendChat({
+        idPengirim,
+        idPenerima,
+        isiPesan,
+      });
+    } catch {
+      return null;
+    }
   }
 
   public showKontrakForm(): {
@@ -126,13 +198,15 @@ export class KontrakPekerjaanController {
     // ALGO-037 (Q-017) + KNF04 & KNF19: Simpan kontrak & kunci penyedia jasa dengan Optimistic Locking
     await objKontrak.saveNewKontrakWithOptimisticLock(expectedVersion);
 
-    // KF06 & KNF12: Kirim notifikasi pesanan masuk ke penyedia jasa
+    // KF06 & KNF12: Kirim notifikasi pesanan masuk ke penyedia jasa via NotifikasiController (ALGO-067)
     await this.notifikasiSender.buatNotifikasi(
       idPemberiJasa,
       `Pesanan baru masuk: "${validation.sanitizedDetail}" dengan kesepakatan harga Rp ${validation.harga.toLocaleString(
         'id-ID'
       )}. Harap konfirmasi dalam 30 menit.`
     );
+
+    this.emitKontrakRealtime('kontrak:new', objKontrak.getDetailPekerjaan());
 
     return objKontrak;
   }
@@ -173,7 +247,11 @@ export class KontrakPekerjaanController {
 
     const expiresAt = kontrak.getExpiresAt();
     if (expiresAt && expiresAt.getTime() <= Date.now()) {
-      await cancelExpiredContracts(new Date(), this.notifikasiSender);
+      await cancelExpiredContracts(
+        new Date(),
+        this.notifikasiSender,
+        this.realtimeEmitter
+      );
       throw new KontrakError(
         'Kontrak telah melewati batas waktu 30 menit dan dibatalkan secara otomatis',
         410,
@@ -192,6 +270,11 @@ export class KontrakPekerjaanController {
         `Penyedia jasa telah menyetujui kontrak "${detail.detailPekerjaan}". Status pekerjaan kini On Progress.`
       );
 
+      this.emitKontrakRealtime(
+        'kontrak:updated',
+        acceptedKontrak.getDetailPekerjaan()
+      );
+
       return acceptedKontrak;
     } else {
       const rejectedKontrak = await kontrak.rejectKontrakAndUnlock();
@@ -199,6 +282,11 @@ export class KontrakPekerjaanController {
       await this.notifikasiSender.buatNotifikasi(
         detail.idPelanggan,
         `Penyedia jasa menolak kontrak "${detail.detailPekerjaan}". Silakan pilih penyedia jasa lainnya.`
+      );
+
+      this.emitKontrakRealtime(
+        'kontrak:updated',
+        rejectedKontrak.getDetailPekerjaan()
       );
 
       return rejectedKontrak;
@@ -266,6 +354,8 @@ export class KontrakPekerjaanController {
       )}.`
     );
 
+    this.emitKontrakRealtime('kontrak:updated', detail);
+
     return kontrak;
   }
 
@@ -317,7 +407,51 @@ export class KontrakPekerjaanController {
       )}. Status pekerjaan kini Done.`
     );
 
+    this.emitKontrakRealtime('kontrak:updated', {
+      ...detail,
+      statusPekerjaan: STATUS_PEKERJAAN.DONE,
+    });
+
     return true;
+  }
+
+  /**
+   * Mengambil kontrak pekerjaan beserta riwayat chat antara pengguna dan lawan bicara
+   * untuk integrasi ruang obrolan (UC03, UC04, UC05 - KomunikasiController & KontrakPekerjaanController)
+   */
+  public async getKontrakByChatPartner(
+    idPenggunaLogin: string,
+    idLawanBicara: string
+  ) {
+    const [daftarKontrak, riwayatChat] = await Promise.all([
+      prisma.kontrakPekerjaan.findMany({
+        where: {
+          OR: [
+            { idPelanggan: idPenggunaLogin, idPemberiJasa: idLawanBicara },
+            { idPelanggan: idLawanBicara, idPemberiJasa: idPenggunaLogin },
+          ],
+        },
+        orderBy: { createdAt: 'desc' },
+      }),
+      this.komunikasiController.loadChat(idPenggunaLogin, idLawanBicara),
+    ]);
+
+    const kontrakAktif =
+      daftarKontrak.find((k) =>
+        [
+          STATUS_PEKERJAAN.MENUNGGU,
+          STATUS_PEKERJAAN.ON_PROGRESS,
+          STATUS_PEKERJAAN.MENUNGGU_KONFIRMASI_PELANGGAN,
+        ].includes(k.statusPekerjaan as any)
+      ) ??
+      daftarKontrak[0] ??
+      null;
+
+    return {
+      kontrakAktif,
+      daftarKontrak,
+      riwayatChat,
+    };
   }
 
   public handleShowKontrakForm = (_req: Request, res: Response): void => {
@@ -370,11 +504,23 @@ export class KontrakPekerjaanController {
         parsedExpectedVersion
       );
 
+      const detail = kontrak.getDetailPekerjaan();
+
+      if (req.body?.kirimKeChat === true) {
+        await this.kirimPesanKontrakKeChat(
+          idPelanggan,
+          idPemberiJasa,
+          `[Kontrak Pekerjaan] "${detail.detailPekerjaan}" - Harga kesepakatan: Rp ${detail.persetujuanHarga.toLocaleString(
+            'id-ID'
+          )} (Status: ${detail.statusPekerjaan})`
+        );
+      }
+
       res.status(201).json({
         success: true,
         message:
           'Kontrak pekerjaan berhasil dibuat dengan status Menunggu konfirmasi penyedia jasa',
-        data: kontrak.getDetailPekerjaan(),
+        data: detail,
       });
     } catch (error) {
       this.handleErrorResponse(res, error);
@@ -486,6 +632,40 @@ export class KontrakPekerjaanController {
     }
   };
 
+  public handleGetKontrakByChatPartner = async (
+    req: Request,
+    res: Response
+  ): Promise<void> => {
+    try {
+      const userId = req.user?.idPengguna;
+      if (!userId) {
+        res.status(401).json({
+          success: false,
+          message: 'Pengguna belum terautentikasi',
+        });
+        return;
+      }
+
+      const idLawanBicara = String(req.params.idLawanBicara || '').trim();
+      if (!idLawanBicara) {
+        res.status(400).json({
+          success: false,
+          code: 'INVALID_PARTNER_ID',
+          message: 'Parameter idLawanBicara tidak valid',
+        });
+        return;
+      }
+
+      const data = await this.getKontrakByChatPartner(userId, idLawanBicara);
+      res.status(200).json({
+        success: true,
+        data,
+      });
+    } catch (error) {
+      this.handleErrorResponse(res, error);
+    }
+  };
+
   public handleKonfirmasiPersetujuan = async (
     req: Request,
     res: Response
@@ -550,12 +730,24 @@ export class KontrakPekerjaanController {
         parsedExpectedVersion
       );
 
+      const detail = updatedKontrak.getDetailPekerjaan();
+
+      if (req.body?.kirimKeChat === true) {
+        await this.kirimPesanKontrakKeChat(
+          idPemberiJasa,
+          detail.idPelanggan,
+          isApproved
+            ? `[Kontrak Disetujui] Pekerjaan "${detail.detailPekerjaan}" kini berstatus On Progress.`
+            : `[Kontrak Ditolak] Pekerjaan "${detail.detailPekerjaan}" ditolak oleh penyedia jasa.`
+        );
+      }
+
       res.status(200).json({
         success: true,
         message: isApproved
           ? 'Kontrak disetujui. Status pekerjaan berubah menjadi On Progress.'
           : 'Kontrak ditolak dan kunci ketersediaan penyedia jasa telah dilepaskan.',
-        data: updatedKontrak.getDetailPekerjaan(),
+        data: detail,
       });
     } catch (error) {
       this.handleErrorResponse(res, error);
@@ -587,12 +779,21 @@ export class KontrakPekerjaanController {
       const idPemberiJasa = req.user?.idPengguna || req.body.idPemberiJasa;
 
       const updatedKontrak = await this.selesaikanPekerjaan(id, idPemberiJasa);
+      const detail = updatedKontrak.getDetailPekerjaan();
+
+      if (req.body?.kirimKeChat === true) {
+        await this.kirimPesanKontrakKeChat(
+          idPemberiJasa,
+          detail.idPelanggan,
+          `[Pekerjaan Selesai] Pekerjaan "${detail.detailPekerjaan}" telah selesai dikerjakan. Mohon konfirmasi penyelesaian & pembayaran.`
+        );
+      }
 
       res.status(200).json({
         success: true,
         message:
           'Pekerjaan ditandai selesai. Status berubah menjadi Menunggu Konfirmasi Pelanggan dan notifikasi telah dikirim.',
-        data: updatedKontrak.getDetailPekerjaan(),
+        data: detail,
       });
     } catch (error) {
       this.handleErrorResponse(res, error);
@@ -652,12 +853,23 @@ export class KontrakPekerjaanController {
       }
 
       const updated = await this.getKontrakPekerjaan(id);
+      const detail = updated?.getDetailPekerjaan();
+
+      if (req.body?.kirimKeChat === true && detail) {
+        await this.kirimPesanKontrakKeChat(
+          idPelanggan,
+          detail.idPemberiJasa,
+          `[Konfirmasi Selesai] Pekerjaan "${detail.detailPekerjaan}" dan pembayaran Rp ${detail.persetujuanHarga.toLocaleString(
+            'id-ID'
+          )} telah dikonfirmasi selesai (Done).`
+        );
+      }
 
       res.status(200).json({
         success: true,
         message:
           'Penyelesaian pekerjaan dan pembayaran berhasil dikonfirmasi. Status pekerjaan kini Done dan penyedia jasa kembali Available.',
-        data: updated?.getDetailPekerjaan(),
+        data: detail,
       });
     } catch (error) {
       this.handleErrorResponse(res, error);

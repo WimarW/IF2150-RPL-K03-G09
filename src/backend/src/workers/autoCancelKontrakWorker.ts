@@ -1,4 +1,5 @@
 import prisma from '../database/prisma';
+import { RealtimeEmitter } from '../controllers/NotifikasiController';
 import {
   AUTO_CANCEL_TIMEOUT_MS,
   defaultKontrakNotifikasiSender,
@@ -20,7 +21,8 @@ let workerTimer: NodeJS.Timeout | null = null;
  */
 export async function cancelExpiredContracts(
   referenceTime: Date = new Date(),
-  notifSender: KontrakNotifikasiSender = defaultKontrakNotifikasiSender
+  notifSender: KontrakNotifikasiSender = defaultKontrakNotifikasiSender,
+  realtimeEmitter?: RealtimeEmitter
 ): Promise<AutoCancelResult> {
   const fallbackCutoff = new Date(
     referenceTime.getTime() - AUTO_CANCEL_TIMEOUT_MS
@@ -95,6 +97,24 @@ export async function cancelExpiredContracts(
       if (wasCancelled) {
         cancelledIds.push(contract.idKontrakPekerjaan);
 
+        const cancelledPayload = {
+          ...contract,
+          statusPekerjaan: STATUS_PEKERJAAN.DIBATALKAN,
+        };
+
+        if (realtimeEmitter) {
+          realtimeEmitter.emitToUser(
+            contract.idPelanggan,
+            'kontrak:updated',
+            cancelledPayload
+          );
+          realtimeEmitter.emitToUser(
+            contract.idPemberiJasa,
+            'kontrak:updated',
+            cancelledPayload
+          );
+        }
+
         await Promise.allSettled([
           notifSender.buatNotifikasi(
             contract.idPelanggan,
@@ -127,7 +147,9 @@ export async function cancelExpiredContracts(
  * Default interval: 60 detik (1 menit).
  */
 export function startAutoCancelWorker(
-  intervalMs = 60 * 1000
+  intervalMs = 60 * 1000,
+  notifSender: KontrakNotifikasiSender = defaultKontrakNotifikasiSender,
+  realtimeEmitter?: RealtimeEmitter
 ): NodeJS.Timeout {
   if (workerTimer) {
     return workerTimer;
@@ -135,7 +157,11 @@ export function startAutoCancelWorker(
 
   workerTimer = setInterval(async () => {
     try {
-      const result = await cancelExpiredContracts();
+      const result = await cancelExpiredContracts(
+        new Date(),
+        notifSender,
+        realtimeEmitter
+      );
       if (result.cancelledCount > 0 && process.env.NODE_ENV !== 'test') {
         console.log(
           `[AutoCancelWorker]: ${result.cancelledCount} kontrak kedaluwarsa (>30 menit) dibatalkan otomatis.`

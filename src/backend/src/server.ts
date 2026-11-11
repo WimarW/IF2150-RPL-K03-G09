@@ -12,8 +12,9 @@ import { createNotificationsRouter } from './routes/notifications.routes';
 
 import { KategoriJasaController } from './controllers/KategoriJasaController';
 import { KomunikasiController } from './controllers/KomunikasiController';
+import { KontrakPekerjaanController } from './controllers/KontrakPekerjaanController';
 import { NotifikasiController, RealtimeEmitter } from './controllers/NotifikasiController';
-import kontrakRoutes from './routes/kontrakRoutes';
+import { createKontrakRouter } from './routes/kontrakRoutes';
 import { startAutoCancelWorker } from './workers/autoCancelKontrakWorker';
 
 dotenv.config();
@@ -32,6 +33,7 @@ export function createApp(): {
   io: SocketIOServer;
   komunikasiController: KomunikasiController;
   notifikasiController: NotifikasiController;
+  kontrakPekerjaanController: KontrakPekerjaanController;
 } {
   const app = express();
 
@@ -80,6 +82,11 @@ export function createApp(): {
     notifikasiController,
     realtimeEmitter
   );
+  const kontrakPekerjaanController = new KontrakPekerjaanController(
+    notifikasiController,
+    komunikasiController,
+    realtimeEmitter
+  );
 
   // ---------- Routes ----------
   app.use('/api/auth', authRouter);
@@ -101,24 +108,31 @@ export function createApp(): {
   app.use('/api/chats', createChatsRouter(komunikasiController));
   app.use('/api/notifications', createNotificationsRouter(notifikasiController));
 
+  // Mount Route Kontrak Pekerjaan (UC05, UC06, UC07) terhubung dengan Notifikasi & Chat
+  const kontrakRouter = createKontrakRouter(kontrakPekerjaanController);
+  app.use('/api/kontrak', kontrakRouter);
+  app.use('/kontrak', kontrakRouter);
+
   return {
     app,
     httpServer,
     io,
     komunikasiController,
     notifikasiController,
+    kontrakPekerjaanController,
   };
 }
 
-const { app, httpServer, io } = createApp();
+const { app, httpServer, io, notifikasiController } = createApp();
 
 const port = Number(process.env.PORT) || 5000;
 
-// Mount Route Kontrak Pekerjaan (UC05, UC06, UC07)
-app.use('/api/kontrak', kontrakRoutes);
-app.use('/kontrak', kontrakRoutes);
-
 if (process.env.NODE_ENV !== 'test') {
+  startAutoCancelWorker(
+    60 * 1000,
+    notifikasiController,
+    new SocketIORealtimeEmitter(io)
+  );
   // Wajib pakai httpServer.listen (bukan app.listen) supaya Socket.IO ikut jalan
   httpServer.listen(port, '0.0.0.0', () => {
     console.log(`[server]: Backend + Socket.IO running at http://localhost:${port}`);

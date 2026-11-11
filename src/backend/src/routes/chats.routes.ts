@@ -2,9 +2,11 @@ import crypto from 'crypto';
 import { NextFunction, Request, Response, Router } from 'express';
 import { KomunikasiController } from '../controllers/KomunikasiController';
 
-export interface AuthenticatedRequest extends Request {
+export interface AuthenticatedRequest extends Omit<Request, 'user'> {
   user?: {
     idPengguna: string;
+    username?: string;
+    role?: string;
     peran?: string;
   };
 }

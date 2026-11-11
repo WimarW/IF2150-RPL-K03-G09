@@ -1,5 +1,9 @@
 import { randomUUID } from 'crypto';
 import prisma from '../database/prisma';
+import {
+  NotifikasiController,
+  RealtimeEmitter,
+} from '../controllers/NotifikasiController';
 
 export const STATUS_PEKERJAAN = {
   MENUNGGU: 'Menunggu',
@@ -46,27 +50,25 @@ export interface KontrakPekerjaanDetail {
 }
 
 /**
- * Antarmuka pengirim notifikasi yang kompatibel dengan NotifikasiController (C30)
- * pada branch feat/notification (`buatNotifikasi(idPenerima, isiNotifikasi)`).
+ * Antarmuka pengirim notifikasi yang terhubung dengan NotifikasiController (C30)
+ * (`buatNotifikasi(idPenerima, isiNotifikasi)` - ALGO-067, Q-027, ALGO-068, ALGO-069).
  */
 export interface KontrakNotifikasiSender {
   buatNotifikasi(idPenerima: string, isiNotifikasi: string): Promise<unknown>;
+  setRealtimeEmitter?(emitter: RealtimeEmitter): void;
 }
+
+const sharedNotifikasiController = new NotifikasiController();
 
 export const defaultKontrakNotifikasiSender: KontrakNotifikasiSender = {
   async buatNotifikasi(idPenerima: string, isiNotifikasi: string) {
     if (!idPenerima || !isiNotifikasi) {
       return null;
     }
-    return prisma.notifikasi.create({
-      data: {
-        idNotifikasi: randomUUID(),
-        idPenerima,
-        isiNotifikasi,
-        waktuNotifikasi: new Date(),
-        statusBaca: 'Unread',
-      },
-    });
+    return sharedNotifikasiController.buatNotifikasi(idPenerima, isiNotifikasi);
+  },
+  setRealtimeEmitter(emitter: RealtimeEmitter) {
+    sharedNotifikasiController.setRealtimeEmitter(emitter);
   },
 };
 

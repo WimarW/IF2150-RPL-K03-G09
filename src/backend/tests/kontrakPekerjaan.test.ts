@@ -11,6 +11,11 @@ import {
 } from '../src/models/KontrakPekerjaan';
 import { Pengguna } from '../src/models/Pengguna';
 import { KontrakPekerjaanController } from '../src/controllers/KontrakPekerjaanController';
+import { KomunikasiController } from '../src/controllers/KomunikasiController';
+import {
+  NotifikasiController,
+  RealtimeEmitter,
+} from '../src/controllers/NotifikasiController';
 import { cancelExpiredContracts } from '../src/workers/autoCancelKontrakWorker';
 import {
   authenticateJWT,
@@ -41,19 +46,32 @@ interface MockNotifikasiRow {
   idPenerima: string;
   isiNotifikasi: string;
   waktuNotifikasi: Date;
-  statusBaca: string;
+  statusBaca: boolean;
+}
+
+interface MockKomunikasiRow {
+  idChat: string;
+  idPengguna: string;
+  idPenerima: string;
+  isiPesan: string;
+  waktuTerkirim: Date;
+  isChatTerbaca: boolean;
+  statusChat: string;
+  durasiChat: number;
 }
 
 const mockDb = {
   pemberiJasa: new Map<string, MockPemberiJasaRow>(),
   kontrakPekerjaan: new Map<string, MockKontrakRow>(),
   notifikasi: [] as MockNotifikasiRow[],
+  komunikasi: [] as MockKomunikasiRow[],
 };
 
 function setupMockPrisma(): void {
   mockDb.pemberiJasa.clear();
   mockDb.kontrakPekerjaan.clear();
   mockDb.notifikasi = [];
+  mockDb.komunikasi = [];
 
   mockDb.pemberiJasa.set('provider-1', {
     idPemberiJasa: 'provider-1',
@@ -229,10 +247,38 @@ function setupMockPrisma(): void {
           idPenerima: data.idPenerima,
           isiNotifikasi: data.isiNotifikasi,
           waktuNotifikasi: data.waktuNotifikasi ?? new Date(),
-          statusBaca: data.statusBaca ?? 'Unread',
+          statusBaca: Boolean(data.statusBaca ?? false),
         };
         mockDb.notifikasi.push(notif);
         return notif;
+      },
+    },
+    komunikasi: {
+      create: async ({ data }: any) => {
+        const chat: MockKomunikasiRow = {
+          idChat: data.idChat,
+          idPengguna: data.idPengguna,
+          idPenerima: data.idPenerima,
+          isiPesan: data.isiPesan,
+          waktuTerkirim: data.waktuTerkirim ?? new Date(),
+          isChatTerbaca: Boolean(data.isChatTerbaca ?? false),
+          statusChat: data.statusChat ?? 'SENT',
+          durasiChat: data.durasiChat ?? 0,
+        };
+        mockDb.komunikasi.push(chat);
+        return chat;
+      },
+      findMany: async ({ where }: any) => {
+        return mockDb.komunikasi.filter((msg) => {
+          if (where?.OR) {
+            return where.OR.some(
+              (cond: any) =>
+                msg.idPengguna === cond.idPengguna &&
+                msg.idPenerima === cond.idPenerima
+            );
+          }
+          return true;
+        });
       },
     },
     $transaction: async (fn: any) => {
@@ -567,5 +613,96 @@ describe('KontrakPekerjaan & KontrakPekerjaanController (UC05, UC06, UC07)', () 
     expect(confirmCall.res.getJson().data.statusPekerjaan).toBe(
       STATUS_PEKERJAAN.DONE
     );
+  });
+
+  it('Integrasi dengan NotifikasiController (C30), KomunikasiController (C21), dan Socket.IO RealtimeEmitter', async () => {
+    const emittedEvents: Array<{
+      idPengguna: string;
+      event: string;
+      payload: any;
+    }> = [];
+
+    const mockEmitter: RealtimeEmitter = {
+      emitToUser(idPengguna: string, event: string, payload: unknown) {
+        emittedEvents.push({ idPengguna, event, payload });
+      },
+    };
+
+    const notifikasiController = new NotifikasiController(
+      undefined,
+      undefined,
+      mockEmitter
+    );
+    const komunikasiController = new KomunikasiController(
+      undefined,
+      notifikasiController,
+      mockEmitter
+    );
+    const integratedController = new KontrakPekerjaanController(
+      notifikasiController,
+      komunikasiController,
+      mockEmitter
+    );
+
+    const pelangganToken = jwt.sign(
+      {
+        idPengguna: 'cust-1',
+        username: 'pelanggan1',
+        role: Role.PELANGGAN,
+      },
+      JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+
+    // Buat kontrak dari ruang chat dengan kirimKeChat = true
+    const createCall = createMockReqRes({
+      headers: { authorization: `Bearer ${pelangganToken}` },
+      body: {
+        idPemberiJasa: 'provider-1',
+        detailPekerjaan: 'Pasang bracket TV 50 inch',
+        persetujuanHarga: 150000,
+        expectedVersion: 1,
+        kirimKeChat: true,
+      },
+    });
+    authenticateJWT(createCall.req, createCall.res, () => {});
+    await integratedController.handleKirimInput(createCall.req, createCall.res);
+
+    expect(createCall.res.getStatus()).toBe(201);
+
+    // Notifikasi dibuat melalui NotifikasiController dengan statusBaca boolean (false) dan prefix NOTIF-
+    expect(mockDb.notifikasi.length).toBeGreaterThanOrEqual(1);
+    expect(mockDb.notifikasi[0].idNotifikasi).toMatch(/^NOTIF-/);
+    expect(mockDb.notifikasi[0].statusBaca).toBe(false);
+
+    // Pesan kontrak juga tercatat di Komunikasi (sistem chat)
+    expect(mockDb.komunikasi).toHaveLength(1);
+    expect(mockDb.komunikasi[0].idChat).toMatch(/^CHAT-/);
+    expect(mockDb.komunikasi[0].isiPesan).toContain('Pasang bracket TV 50 inch');
+
+    // Socket.IO RealtimeEmitter memancarkan notification:new, kontrak:new, dan chat:new
+    const eventNames = emittedEvents.map((e) => e.event);
+    expect(eventNames).toContain('notification:new');
+    expect(eventNames).toContain('kontrak:new');
+    expect(eventNames).toContain('chat:new');
+
+    // Endpoint GET /api/kontrak/chat/:idLawanBicara mengembalikan kontrakAktif + riwayatChat
+    const chatRoomCall = createMockReqRes({
+      headers: { authorization: `Bearer ${pelangganToken}` },
+      params: { idLawanBicara: 'provider-1' },
+    });
+    authenticateJWT(chatRoomCall.req, chatRoomCall.res, () => {});
+    await integratedController.handleGetKontrakByChatPartner(
+      chatRoomCall.req,
+      chatRoomCall.res
+    );
+
+    expect(chatRoomCall.res.getStatus()).toBe(200);
+    const roomData = chatRoomCall.res.getJson().data;
+    expect(roomData.kontrakAktif).toBeTruthy();
+    expect(roomData.kontrakAktif.detailPekerjaan).toBe(
+      'Pasang bracket TV 50 inch'
+    );
+    expect(roomData.riwayatChat).toHaveLength(1);
   });
 });
