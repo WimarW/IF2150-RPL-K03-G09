@@ -2,7 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { RootTabParamList } from './types';
-import { BerandaScreen } from '../views/BerandaScreen';
+import { HomeView } from '../views/home/HomeView';
 import { RiwayatScreen } from '../views/RiwayatScreen';
 import { ChatScreen } from '../views/ChatScreen';
 
@@ -30,7 +30,11 @@ export const BottomTabNavigator: React.FC = () => {
         },
       })}
     >
-      <Tab.Screen name="Beranda" component={BerandaScreen} />
+      <Tab.Screen
+        name="Beranda"
+        component={HomeView}
+        options={{ headerShown: false }}
+      />
       <Tab.Screen
         name="Riwayat"
         component={RiwayatScreen}
