@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, KeyboardAvoidingView, Platform,
+  View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Keyboard, Platform,
   Image, Modal, Alert, ActivityIndicator,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
@@ -25,6 +25,21 @@ export default function TicketDetailScreen({ route, navigation }: any) {
   const [error, setError] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const scrollRef = useRef<any>(null);
+  const [kbHeight, setKbHeight] = useState(0);
+
+  // Android (edge-to-edge) tidak me-resize layar saat keyboard muncul, jadi beri jarak manual.
+  // Catatan: di Android tinggi yang dilaporkan RN sudah dikurangi tinggi bar navigasi.
+  useEffect(() => {
+    const ios = Platform.OS === 'ios';
+    const show = Keyboard.addListener(ios ? 'keyboardWillShow' : 'keyboardDidShow', (e) => {
+      setKbHeight(e.endCoordinates.height);
+      setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 100);
+    });
+    const hide = Keyboard.addListener(ios ? 'keyboardWillHide' : 'keyboardDidHide', () => setKbHeight(0));
+    return () => { show.remove(); hide.remove(); };
+  }, []);
+  // iOS: tinggi keyboard sudah mencakup area home indicator, jadi inset bawah tidak perlu ditambah lagi
+  const inputBottom = Platform.OS === 'ios' && kbHeight > 0 ? 10 : 10 + insets.bottom;
 
   const load = useCallback(async () => {
     try {
@@ -98,7 +113,7 @@ export default function TicketDetailScreen({ route, navigation }: any) {
   const reportImg = imageUrl(ticket.image);
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+    <View style={[styles.container, { paddingBottom: kbHeight }]}>
       <View style={[styles.header, { paddingTop: insets.top + 12 }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.headerLeft}>
           <Feather name="chevron-left" size={24} color="#1A237E" />
@@ -162,7 +177,7 @@ export default function TicketDetailScreen({ route, navigation }: any) {
               <TouchableOpacity onPress={() => setAttach(null)}><Feather name="x" size={18} color="#78909C" /></TouchableOpacity>
             </View>
           )}
-          <View style={[styles.inputContainer, { paddingBottom: 10 + insets.bottom }]}>
+          <View style={[styles.inputContainer, { paddingBottom: inputBottom }]}>
             <TouchableOpacity style={styles.attachButton} onPress={pickAttachment}>
               <Feather name="paperclip" size={24} color="#78909C" />
             </TouchableOpacity>
@@ -182,7 +197,7 @@ export default function TicketDetailScreen({ route, navigation }: any) {
           {reportImg && <Image source={{ uri: reportImg }} style={styles.fullImage} resizeMode="contain" />}
         </View>
       </Modal>
-    </KeyboardAvoidingView>
+    </View>
   );
 }
 
