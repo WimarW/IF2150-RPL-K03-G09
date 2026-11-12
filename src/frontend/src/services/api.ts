@@ -1,15 +1,44 @@
 import { useEffect, useState } from 'react';
-import { Platform } from 'react-native';
+import { NativeModules, Platform } from 'react-native';
 
-const DEFAULT_PORT = 4000;
+const DEFAULT_PORT = 5000;
+
+function extractExpoHostIp(): string | null {
+  try {
+    const scriptURL: string | undefined =
+      NativeModules?.SourceCode?.scriptURL;
+    if (!scriptURL) return null;
+    const match = scriptURL.match(/^https?:\/\/([^/:]+)(?::\d+)?\//i);
+    if (!match?.[1]) return null;
+    const host = match[1];
+    // Abaikan domain tunnel ngrok/expo.dev karena tunnel hanya meneruskan port Metro (8081), bukan port 5000
+    if (
+      host.includes('ngrok') ||
+      host.includes('exp.direct') ||
+      host.includes('expo.dev') ||
+      host === 'localhost' ||
+      host === '127.0.0.1'
+    ) {
+      return null;
+    }
+    return host;
+  } catch {
+    return null;
+  }
+}
 
 function resolveDefaultBaseUrl(): string {
   const envUrl = process.env.EXPO_PUBLIC_API_URL;
   if (envUrl && envUrl.trim().length > 0) {
-    return envUrl.replace(/\/+$/, '');
+    return envUrl.trim().replace(/\/+$/, '');
   }
 
-  // Android Emulator membutuhkan 10.0.2.2 untuk mengakses host localhost
+  const detectedLanHost = extractExpoHostIp();
+  if (detectedLanHost) {
+    return `http://${detectedLanHost}:${DEFAULT_PORT}/api`;
+  }
+
+  // Android Emulator membutuhkan 10.0.2.2 untuk mengakses host localhost:5000
   if (Platform.OS === 'android') {
     return `http://10.0.2.2:${DEFAULT_PORT}/api`;
   }
@@ -18,7 +47,42 @@ function resolveDefaultBaseUrl(): string {
 }
 
 export const API_BASE_URL = resolveDefaultBaseUrl();
-export const REQUEST_TIMEOUT_MS = 10000;
+export const REQUEST_TIMEOUT_MS = 3500;
+export const AUTH_TIMEOUT_MS = 2000;
+
+/**
+ * Daftar kandidat Base URL yang akan dicoba secara berurutan apabila URL utama tidak dapat dijangkau
+ * (mis. perbedaan antara Android Emulator 10.0.2.2, iOS/Web/adb-reverse localhost, atau port 5000/3000).
+ */
+export function getCandidateApiBaseUrls(): string[] {
+  const candidates: string[] = [];
+  const addCandidate = (url: string) => {
+    const clean = url.trim().replace(/\/+$/, '');
+    if (clean && !candidates.includes(clean)) {
+      candidates.push(clean);
+    }
+  };
+
+  const envUrl = process.env.EXPO_PUBLIC_API_URL;
+  if (envUrl && envUrl.trim().length > 0) {
+    addCandidate(envUrl);
+  }
+
+  const detectedLanHost = extractExpoHostIp();
+  if (detectedLanHost) {
+    addCandidate(`http://${detectedLanHost}:5000/api`);
+  }
+
+  if (Platform.OS === 'android') {
+    addCandidate('http://10.0.2.2:5000/api');
+    addCandidate('http://localhost:5000/api');
+  } else {
+    addCandidate('http://localhost:5000/api');
+    addCandidate('http://10.0.2.2:5000/api');
+  }
+
+  return candidates;
+}
 
 let authToken: string | null = null;
 
@@ -190,6 +254,40 @@ function isApiEnvelope<T>(payload: unknown): payload is ApiResponse<T> {
   );
 }
 
+let lastWorkingBaseUrl: string | null = null;
+const unreachableBaseUrls = new Set<string>();
+
+async function fetchWithTimeout(
+  url: string,
+  init: RequestInit,
+  timeoutMs: number,
+  externalSignal?: AbortSignal
+): Promise<Response> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+  const onExternalAbort = () => controller.abort();
+  if (externalSignal) {
+    if (externalSignal.aborted) {
+      controller.abort();
+    } else {
+      externalSignal.addEventListener('abort', onExternalAbort);
+    }
+  }
+
+  try {
+    return await fetch(url, {
+      ...init,
+      signal: controller.signal,
+    });
+  } finally {
+    clearTimeout(timeoutId);
+    if (externalSignal) {
+      externalSignal.removeEventListener('abort', onExternalAbort);
+    }
+  }
+}
+
 export async function apiRequest<T>(
   path: string,
   options: ApiRequestOptions = {}
@@ -203,39 +301,34 @@ export async function apiRequest<T>(
   } = options;
 
   const normalizedPath = path.startsWith('/') ? path : `/${path}`;
-  const url = `${API_BASE_URL}${normalizedPath}`;
-
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-
-  const onExternalAbort = () => controller.abort();
-  if (signal) {
-    if (signal.aborted) {
-      controller.abort();
-    } else {
-      signal.addEventListener('abort', onExternalAbort);
-    }
-  }
+  const baseUrl = lastWorkingBaseUrl ?? API_BASE_URL;
+  const url = `${baseUrl}${normalizedPath}`;
 
   try {
-    const response = await fetch(url, {
-      method,
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        'X-User-Id': currentSessionUser.idPengguna,
-        'X-User-Role': currentSessionUser.role,
-        ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
-        ...headers,
+    const response = await fetchWithTimeout(
+      url,
+      {
+        method,
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'X-User-Id': currentSessionUser.idPengguna,
+          'X-User-Role': currentSessionUser.role,
+          ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+          ...headers,
+        },
+        body:
+          body !== undefined
+            ? typeof body === 'string'
+              ? body
+              : JSON.stringify(body)
+            : undefined,
       },
-      body:
-        body !== undefined
-          ? typeof body === 'string'
-            ? body
-            : JSON.stringify(body)
-          : undefined,
-      signal: controller.signal,
-    });
+      timeoutMs,
+      signal
+    );
+
+    lastWorkingBaseUrl = baseUrl;
 
     const rawText = await response.text();
     let parsed: unknown = null;
@@ -285,22 +378,20 @@ export async function apiRequest<T>(
       error,
       true
     );
-  } finally {
-    clearTimeout(timeoutId);
-    if (signal) {
-      signal.removeEventListener('abort', onExternalAbort);
-    }
   }
 }
 
 /**
  * Helper khusus endpoint autentikasi & profil yang mengembalikan amplop `{ ok, status, message, data }`.
+ * Dilengkapi timeout cepat (3.5 detik) dan percobaan multi-host (localhost:5000 / 10.0.2.2:5000)
+ * agar tidak pernah stuck loading ketika perangkat menggunakan tunnel atau emulator.
  */
 export async function apiAuthRequest<T = unknown>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<ApiAuthEnvelope<T>> {
   const headers: Record<string, string> = {
+    Accept: 'application/json',
     'Content-Type': 'application/json',
     'X-User-Id': currentSessionUser.idPengguna,
     'X-User-Role': currentSessionUser.role,
@@ -312,19 +403,48 @@ export async function apiAuthRequest<T = unknown>(
   }
 
   const normalizedPath = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
-  const response = await fetch(`${API_BASE_URL}${normalizedPath}`, {
-    ...options,
-    headers,
-  });
+  const allCandidates = lastWorkingBaseUrl
+    ? [
+        lastWorkingBaseUrl,
+        ...getCandidateApiBaseUrls().filter((u) => u !== lastWorkingBaseUrl),
+      ]
+    : getCandidateApiBaseUrls();
 
-  const json = await response.json().catch(() => ({}));
+  const candidates = allCandidates.filter((u) => !unreachableBaseUrls.has(u));
+  if (candidates.length === 0) {
+    throw new Error('Backend tidak dapat dijangkau dari jaringan perangkat ini.');
+  }
 
-  return {
-    ok: response.ok,
-    status: response.status,
-    message: json.message,
-    data: json.data as T | undefined,
-  };
+  let lastError: unknown = null;
+
+  for (const baseUrl of candidates) {
+    try {
+      const response = await fetchWithTimeout(
+        `${baseUrl}${normalizedPath}`,
+        {
+          ...options,
+          headers,
+        },
+        AUTH_TIMEOUT_MS
+      );
+
+      lastWorkingBaseUrl = baseUrl;
+      unreachableBaseUrls.delete(baseUrl);
+      const json = await response.json().catch(() => ({}));
+
+      return {
+        ok: response.ok,
+        status: response.status,
+        message: json.message,
+        data: json.data as T | undefined,
+      };
+    } catch (err) {
+      unreachableBaseUrls.add(baseUrl);
+      lastError = err;
+    }
+  }
+
+  throw lastError ?? new Error('Network request failed');
 }
 
 export function apiGet<T>(
