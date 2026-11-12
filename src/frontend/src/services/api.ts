@@ -89,6 +89,7 @@ export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 export interface ApiRequestOptions {
   method?: HttpMethod;
   body?: unknown;
+  headers?: Record<string, string>;
 }
 
 export interface ApiResponse<T> {
@@ -130,9 +131,14 @@ export async function apiRequest<T>(
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
+        ...(options?.headers ?? {}),
       },
       body:
-        options?.body !== undefined ? JSON.stringify(options.body) : undefined,
+        options?.body !== undefined
+          ? typeof options.body === 'string'
+            ? options.body
+            : JSON.stringify(options.body)
+          : undefined,
       signal: controller.signal,
     });
   } catch {
