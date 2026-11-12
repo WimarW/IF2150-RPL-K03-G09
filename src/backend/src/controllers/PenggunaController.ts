@@ -482,8 +482,7 @@ export class PenggunaController {
                 return;
             }
 
-            const isDone = await PenggunaController.verifikasiStatusPekerjaan(cleanIdKontrak);
-            if (!isDone) {
+            if (kontrak.statusPekerjaan !== 'Done') {
                 res.status(400).json({
                 success: false,
                 message: 'Pekerjaan belum berstatus Done',
@@ -491,10 +490,17 @@ export class PenggunaController {
                 return;
             }
 
-            if (kontrak.hasRating) {
+            const existingRating = await prisma.rating.findFirst({
+                where: {
+                    idKontrakPekerjaan: cleanIdKontrak,
+                    idPenggunaPemberi: idPenggunaLogin,
+                },
+            });
+
+            if (existingRating) {
                 res.status(400).json({
                 success: false,
-                message: 'Kontrak pekerjaan sudah dinilai',
+                message: 'Anda sudah memberikan rating untuk kontrak pekerjaan ini.',
                 });
                 return;
             }
