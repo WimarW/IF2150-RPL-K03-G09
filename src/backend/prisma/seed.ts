@@ -176,10 +176,11 @@ async function main() {
 }
 
 main()
-  .catch((e) => {
-    console.error('❌ Gagal melakukan seeding:', e);
-    process.exit(1);
-  })
-  .finally(async () => {
+  .then(async () => {
     await prisma.$disconnect();
+  })
+  .catch(async (e) => {
+    console.error('❌ Gagal melakukan seeding:', e);
+    await prisma.$disconnect();
+    throw e;
   });
