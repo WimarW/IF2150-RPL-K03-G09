@@ -83,6 +83,14 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | Gemini | Membuat kode sql | Buatkan kode query sql untuk method X | - |
 
 
+### Milestone 9
+| Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
+| :--- | :--- | :--- | :--- |
+| Gemini | Brainstorming arsitektur ID Objek | Apa positif dan negatif dari penggunaan Id dengan format XXXYYYY degan penggunaan UUID | Menggunakan hasil jawaban sebagai bahan pertimbangan implementasi |
+| Gemini | Membantu penulisan kode | Jika saya ingin mengimplmentasikan X dengan Typescript and Express bagaiaman snippet kode contohnya | Memvalidasi kode hasil output dan memahami apa yang sedang dilakukan dalamnya |
+| Gemini | Debugging Kode Typescript| Mengapa fungsi X menjalankan pembuatan user, namun tidak mengembalikan response HTTP  | Melihat apakah bug yang ditemukan valid dan mengkonfirmasi perbaikannya dengan testing |
+| Gemini | Perbaikan DockerFile dan DockerCompose | Mengapa file docker-compose.yml ini dan DockerFile untuk backend ini tidak dapat berjalan dengan error X | Melihat apakah masalah yang ditemukan valid dan mengkonfirmasi perbaikannya dengan testing |
+
 
 ---
 ### Pernyataan Integritas dan Persetujuan

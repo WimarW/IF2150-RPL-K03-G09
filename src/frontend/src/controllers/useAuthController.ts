@@ -403,9 +403,10 @@ export const AuthControllerProvider: React.FC<{ children: React.ReactNode }> = (
     return 'Login';
   }, []);
 
-  return (
-    <AuthControllerContext.Provider
-      value={{
+  return React.createElement(
+    AuthControllerContext.Provider,
+    {
+      value: {
         user,
         token,
         isLoading,
@@ -422,10 +423,9 @@ export const AuthControllerProvider: React.FC<{ children: React.ReactNode }> = (
         updateUserProfile,
         logoutSession,
         getRoleTargetScreen,
-      }}
-    >
-      {children}
-    </AuthControllerContext.Provider>
+      },
+    },
+    children
   );
 };
 

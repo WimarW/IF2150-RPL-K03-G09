@@ -17,21 +17,21 @@ services:
       timeout: 5s
       retries: 5
 
-  # backend:
-  #   build:
-  #     context: ./backend
-  #     dockerfile: Dockerfile
-  #   container_name: cariuang-backend
-  #   restart: always
-  #   environment:
-  #     PORT: 5000
-  #     DATABASE_URL: "postgresql://cariuang_user:cariuang_password@db:5432/cariuang_db?schema=public"
-  #     JWT_SECRET: "kunci_rahasia_cariuang_2026"
-  #   ports:
-  #     - "5000:5000"
-  #   depends_on:
-  #     db:
-  #       condition: service_healthy
+  backend:
+    build:
+      context: ./backend
+      dockerfile: DockerFile
+    container_name: cariuang-backend
+    restart: always
+    environment:
+      PORT: 5000
+      DATABASE_URL: "postgresql://cariuang_user:cariuang_password@db:5432/cariuang_db?schema=public"
+      JWT_SECRET: "kunci_rahasia_cariuang_2026"
+    ports:
+      - "5000:5000"
+    depends_on:
+      db:
+        condition: service_healthy
 
 volumes:
   pgdata:

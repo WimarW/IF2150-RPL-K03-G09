@@ -1,203 +1,185 @@
 import React from 'react';
 import {
-  TouchableOpacity,
+  ActivityIndicator,
+  Pressable,
+  StyleProp,
+  StyleSheet,
   Text,
   View,
-  ActivityIndicator,
-  StyleSheet,
   ViewStyle,
 } from 'react-native';
+import { UI_THEME } from './Header';
+
+export type ButtonVariant =
+  | 'primary'
+  | 'secondary'
+  | 'dangerOutline'
+  | 'secondaryOutline';
 
 export interface ButtonProps {
   title: string;
   onPress: () => void;
-  variant?: 'primary' | 'dangerOutline' | 'secondaryOutline';
-  showArrow?: boolean;
-  showLogoutIcon?: boolean;
+  variant?: ButtonVariant;
   disabled?: boolean;
   loading?: boolean;
-  style?: ViewStyle;
+  showArrow?: boolean;
+  showLogoutIcon?: boolean;
+  style?: StyleProp<ViewStyle>;
   testID?: string;
 }
 
+/**
+ * Komponen Button global CariUang
+ * Mendukung varian primary, secondary, dangerOutline (Keluar Akun UI-14-09), dan secondaryOutline.
+ */
 export const Button: React.FC<ButtonProps> = ({
   title,
   onPress,
   variant = 'primary',
-  showArrow = false,
-  showLogoutIcon = false,
   disabled = false,
   loading = false,
+  showArrow = false,
+  showLogoutIcon = false,
   style,
   testID,
 }) => {
-  const isInactive = disabled || loading;
+  const isInteractive = !disabled && !loading;
+  const isPrimary = variant === 'primary';
+  const isDangerOutline = variant === 'dangerOutline';
+  const isSecondaryOutline =
+    variant === 'secondary' || variant === 'secondaryOutline';
 
-  if (variant === 'dangerOutline') {
-    return (
-      <TouchableOpacity
-        testID={testID}
-        style={[
-          styles.dangerOutlineBtn,
-          isInactive && styles.disabledBtn,
-          style,
-        ]}
-        onPress={onPress}
-        disabled={isInactive}
-        activeOpacity={0.75}
-        accessibilityRole="button"
-      >
-        {loading ? (
-          <ActivityIndicator color="#B9382C" />
-        ) : (
-          <View style={styles.dangerInnerRow}>
-            {showLogoutIcon && (
-              <View style={styles.logoutIconBox}>
-                <Text style={styles.logoutIconSymbol}>⇥</Text>
-              </View>
-            )}
-            <Text style={styles.dangerOutlineText}>{title}</Text>
-          </View>
-        )}
-      </TouchableOpacity>
-    );
-  }
-
-  if (variant === 'secondaryOutline') {
-    return (
-      <TouchableOpacity
-        testID={testID}
-        style={[
-          styles.secondaryOutlineBtn,
-          isInactive && styles.disabledBtn,
-          style,
-        ]}
-        onPress={onPress}
-        disabled={isInactive}
-        activeOpacity={0.75}
-        accessibilityRole="button"
-      >
-        <Text style={styles.secondaryOutlineText}>{title}</Text>
-      </TouchableOpacity>
-    );
-  }
+  const spinnerColor = isPrimary
+    ? '#FFFFFF'
+    : isDangerOutline
+    ? '#C24136'
+    : UI_THEME.primary;
 
   return (
-    <TouchableOpacity
-      testID={testID}
-      style={[
-        styles.primaryBtn,
-        isInactive && styles.primaryBtnDisabled,
+    <Pressable
+      onPress={isInteractive ? onPress : undefined}
+      disabled={!isInteractive}
+      style={({ pressed }) => [
+        styles.base,
+        isPrimary && styles.primary,
+        isSecondaryOutline && styles.secondary,
+        isDangerOutline && styles.dangerOutline,
+        !isInteractive && isPrimary && styles.disabledPrimary,
+        !isInteractive && !isPrimary && styles.disabledOutline,
+        isInteractive && pressed && styles.pressed,
         style,
       ]}
-      onPress={onPress}
-      disabled={isInactive}
-      activeOpacity={0.85}
       accessibilityRole="button"
+      accessibilityState={{ disabled: !isInteractive, busy: loading }}
+      testID={testID}
     >
       {loading ? (
-        <ActivityIndicator color="#FFFFFF" />
+        <ActivityIndicator color={spinnerColor} size="small" />
       ) : (
-        <View style={styles.primaryInnerRow}>
-          <Text style={styles.primaryBtnText}>{title}</Text>
-          {showArrow && <Text style={styles.arrowSymbol}>→</Text>}
+        <View style={styles.contentRow}>
+          {showLogoutIcon && (
+            <View style={styles.logoutIconBox}>
+              <Text style={styles.logoutIconSymbol}>↪</Text>
+            </View>
+          )}
+          <Text
+            style={[
+              styles.labelBase,
+              isPrimary && styles.primaryLabel,
+              isSecondaryOutline && styles.secondaryLabel,
+              isDangerOutline && styles.dangerOutlineLabel,
+            ]}
+          >
+            {title}
+          </Text>
+          {showArrow && (
+            <Text
+              style={[
+                styles.arrowSymbol,
+                isPrimary && styles.primaryLabel,
+                isSecondaryOutline && styles.secondaryLabel,
+              ]}
+            >
+              →
+            </Text>
+          )}
         </View>
       )}
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 
 const styles = StyleSheet.create({
-  primaryBtn: {
-    backgroundColor: '#0F8A75',
-    borderRadius: 16,
-    paddingVertical: 16,
-    paddingHorizontal: 24,
+  base: {
+    width: '100%',
+    minHeight: 54,
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+    borderRadius: 14,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 56,
+  },
+  primary: {
+    backgroundColor: UI_THEME.primary,
     shadowColor: '#0F8A75',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 8,
     elevation: 3,
   },
-  primaryBtnDisabled: {
-    backgroundColor: '#94C9BF',
+  secondary: {
+    backgroundColor: UI_THEME.surface,
+    borderWidth: 1.5,
+    borderColor: UI_THEME.primary,
+  },
+  dangerOutline: {
+    backgroundColor: '#FFF5F5',
+    borderWidth: 1.5,
+    borderColor: '#C24136',
+  },
+  disabledPrimary: {
+    backgroundColor: '#98CBC3',
     shadowOpacity: 0,
     elevation: 0,
   },
-  primaryInnerRow: {
+  disabledOutline: {
+    opacity: 0.5,
+  },
+  pressed: {
+    opacity: 0.88,
+  },
+  contentRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  primaryBtnText: {
-    color: '#FFFFFF',
-    fontSize: 17,
+  labelBase: {
+    fontSize: 16,
     fontWeight: '700',
     letterSpacing: 0.2,
   },
-  arrowSymbol: {
+  primaryLabel: {
     color: '#FFFFFF',
-    fontSize: 20,
+  },
+  secondaryLabel: {
+    color: UI_THEME.primary,
+  },
+  dangerOutlineLabel: {
+    color: '#C24136',
+  },
+  arrowSymbol: {
+    fontSize: 19,
     fontWeight: '700',
-    marginLeft: 14,
-  },
-  dangerOutlineBtn: {
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1.5,
-    borderColor: '#C24136',
-    borderRadius: 16,
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    minHeight: 56,
-    justifyContent: 'center',
-  },
-  dangerInnerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'relative',
+    marginLeft: 10,
   },
   logoutIconBox: {
-    position: 'absolute',
-    left: 2,
-    width: 24,
-    height: 24,
-    borderRadius: 6,
-    borderWidth: 1.8,
-    borderColor: '#B9382C',
-    alignItems: 'center',
-    justifyContent: 'center',
+    marginRight: 8,
   },
   logoutIconSymbol: {
-    color: '#B9382C',
-    fontSize: 13,
+    fontSize: 17,
     fontWeight: '800',
-  },
-  dangerOutlineText: {
-    color: '#B9382C',
-    fontSize: 16,
-    fontWeight: '700',
-  },
-  secondaryOutlineBtn: {
-    backgroundColor: '#F8FAFC',
-    borderWidth: 1,
-    borderColor: '#CBD5E1',
-    borderRadius: 12,
-    paddingVertical: 12,
-    paddingHorizontal: 18,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  secondaryOutlineText: {
-    color: '#334155',
-    fontSize: 15,
-    fontWeight: '600',
-  },
-  disabledBtn: {
-    opacity: 0.55,
+    color: '#C24136',
   },
 });
 

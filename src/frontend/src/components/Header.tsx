@@ -1,216 +1,261 @@
 import React from 'react';
 import {
-  View,
+  Pressable,
+  StyleSheet,
   Text,
   TouchableOpacity,
-  StyleSheet,
+  View,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+
+export const UI_THEME = {
+  background: '#F4F8F7',
+  surface: '#FFFFFF',
+  primary: '#1E8E7E',
+  textTitle: '#1C2E36',
+  textBody: '#2D414A',
+  textMuted: '#687E87',
+  border: '#D6E2E0',
+  error: '#E04F5F',
+  errorBg: '#FDECEE',
+} as const;
 
 export interface HeaderProps {
   variant?: 'brand' | 'back';
   title?: string;
   subtitle?: string;
   onBackPress?: () => void;
+  backLabel?: string;
   showWelcomeAvatar?: boolean;
+  testID?: string;
 }
 
+/**
+ * Komponen Header global aplikasi CariUang.
+ * - variant="brand": Menampilkan logo CariUang + tagline "CARI PELUANG, DAPAT UANG." beserta judul & subjudul layar (UI-01, UI-02, UI-03).
+ * - variant="back" (default): Menampilkan tombol "‹ Kembali" beserta judul & subjudul layar (UI-14, UI-15, UI-16, dll.).
+ */
 export const Header: React.FC<HeaderProps> = ({
-  variant = 'brand',
+  variant = 'back',
   title,
   subtitle,
   onBackPress,
+  backLabel = 'Kembali',
   showWelcomeAvatar = false,
+  testID,
 }) => {
-  if (variant === 'back') {
+  if (variant === 'brand') {
     return (
-      <View style={styles.backHeaderContainer}>
-        {onBackPress && (
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={onBackPress}
-            activeOpacity={0.7}
-            accessibilityRole="button"
-            accessibilityLabel="Kembali"
-          >
-            <Text style={styles.backChevron}>‹</Text>
-            <Text style={styles.backText}>Kembali</Text>
-          </TouchableOpacity>
+      <View style={styles.brandContainer} testID={testID}>
+        {/* Brand Logo & Tagline */}
+        <View style={styles.brandRow}>
+          <View style={styles.logoIconBox}>
+            <View style={styles.coinOuter}>
+              <Text style={styles.coinSymbol}>$</Text>
+            </View>
+            <View style={styles.magnifierHandle} />
+          </View>
+          <View style={styles.brandTextWrap}>
+            <Text style={styles.brandTitle}>
+              Cari<Text style={styles.brandTitleAccent}>Uang</Text>
+            </Text>
+            <Text style={styles.brandTagline}>CARI PELUANG, DAPAT UANG.</Text>
+          </View>
+        </View>
+
+        {/* Page Title & Subtitle */}
+        {(title || subtitle) && (
+          <View style={styles.welcomeRow}>
+            <View style={styles.welcomeTextCol}>
+              {title ? <Text style={styles.pageTitle}>{title}</Text> : null}
+              {subtitle ? (
+                <Text style={styles.pageSubtitle}>{subtitle}</Text>
+              ) : null}
+            </View>
+
+            {showWelcomeAvatar && (
+              <View style={styles.welcomeIllustration}>
+                <View style={styles.avatarHead} />
+                <View style={styles.avatarShoulders} />
+              </View>
+            )}
+          </View>
         )}
-        {title ? <Text style={styles.screenTitle}>{title}</Text> : null}
-        {subtitle ? <Text style={styles.screenSubtitle}>{subtitle}</Text> : null}
       </View>
     );
   }
 
   return (
-    <View style={styles.brandWrapper}>
-      {/* UI-01-01 / UI-02-01 / UI-03-01: Logo CariUang & Tagline */}
-      <View style={styles.brandRow}>
-        <View style={styles.logoBadge}>
-          <View style={styles.logoLens}>
-            <Text style={styles.logoSparkle}>✦</Text>
-          </View>
-          <View style={styles.logoHandle} />
-        </View>
-        <View>
-          <Text style={styles.brandNamePrimary}>
-            Cari<Text style={styles.brandNameAccent}>Uang</Text>
-          </Text>
-          <Text style={styles.brandTagline}>PLATFORM JASA & KERJA INFORMAL</Text>
-        </View>
-      </View>
+    <View style={styles.container} testID={testID}>
+      {onBackPress ? (
+        <Pressable
+          onPress={onBackPress}
+          style={({ pressed }) => [
+            styles.backButton,
+            pressed && styles.backButtonPressed,
+          ]}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          accessibilityRole="button"
+          accessibilityLabel={backLabel}
+          testID={testID ? `${testID}-back-button` : 'header-back-button'}
+        >
+          <Ionicons name="chevron-back" size={20} color={UI_THEME.textTitle} />
+          <Text style={styles.backLabel}>{backLabel}</Text>
+        </Pressable>
+      ) : null}
 
-      {showWelcomeAvatar && (
-        <View style={styles.welcomeAvatarRow}>
-          <View style={styles.welcomeAvatarCircle}>
-            <View style={styles.avatarHead} />
-            <View style={styles.avatarBody} />
-          </View>
-        </View>
-      )}
-
-      {title ? <Text style={styles.authTitle}>{title}</Text> : null}
-      {subtitle ? <Text style={styles.authSubtitle}>{subtitle}</Text> : null}
+      {title ? <Text style={styles.title}>{title}</Text> : null}
+      {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  brandWrapper: {
-    marginBottom: 20,
-  },
-  brandRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  logoBadge: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    borderWidth: 2,
-    borderColor: '#13334C',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 10,
-    backgroundColor: '#FFFFFF',
-    position: 'relative',
-  },
-  logoLens: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    borderWidth: 2.5,
-    borderColor: '#F59E0B',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  logoSparkle: {
-    fontSize: 10,
-    color: '#F59E0B',
-    fontWeight: '700',
-  },
-  logoHandle: {
-    position: 'absolute',
-    bottom: -4,
-    right: -4,
-    width: 12,
-    height: 5,
-    borderRadius: 3,
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1.5,
-    borderColor: '#13334C',
-    transform: [{ rotate: '40deg' }],
-  },
-  brandNamePrimary: {
-    fontSize: 24,
-    fontWeight: '800',
-    color: '#13334C',
-    letterSpacing: 0.2,
-  },
-  brandNameAccent: {
-    color: '#14967F',
-  },
-  brandTagline: {
-    fontSize: 9,
-    fontWeight: '800',
-    color: '#13334C',
-    letterSpacing: 0.5,
-    marginTop: 1,
-  },
-  welcomeAvatarRow: {
-    alignItems: 'flex-end',
-    marginTop: -12,
-    marginBottom: -8,
-  },
-  welcomeAvatarCircle: {
-    width: 68,
-    height: 68,
-    borderRadius: 34,
-    backgroundColor: '#D8F1EC',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    overflow: 'hidden',
-    paddingBottom: 6,
-  },
-  avatarHead: {
-    width: 22,
-    height: 22,
-    borderRadius: 11,
-    backgroundColor: '#F2B880',
-    borderTopWidth: 7,
-    borderTopColor: '#13334C',
-    marginBottom: 3,
-  },
-  avatarBody: {
-    width: 42,
-    height: 24,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    backgroundColor: '#14967F',
-  },
-  authTitle: {
-    fontSize: 30,
-    fontWeight: '800',
-    color: '#13334C',
-    marginBottom: 6,
-  },
-  authSubtitle: {
-    fontSize: 15,
-    color: '#64748B',
-    lineHeight: 21,
-  },
-  backHeaderContainer: {
-    marginBottom: 20,
+  // Variant: back (default)
+  container: {
+    width: '100%',
+    paddingTop: 8,
+    paddingBottom: 16,
   },
   backButton: {
     flexDirection: 'row',
     alignItems: 'center',
     alignSelf: 'flex-start',
-    paddingVertical: 6,
-    marginBottom: 8,
+    marginBottom: 14,
+    marginLeft: -4,
   },
-  backChevron: {
-    fontSize: 28,
-    lineHeight: 28,
-    color: '#13334C',
+  backButtonPressed: {
+    opacity: 0.65,
+  },
+  backLabel: {
+    fontSize: 15,
     fontWeight: '600',
-    marginRight: 6,
+    color: UI_THEME.textTitle,
+    marginLeft: 2,
   },
-  backText: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#13334C',
-  },
-  screenTitle: {
+  title: {
     fontSize: 28,
+    fontWeight: '700',
+    color: UI_THEME.textTitle,
+    letterSpacing: -0.3,
+  },
+  subtitle: {
+    marginTop: 4,
+    fontSize: 14,
+    color: UI_THEME.textMuted,
+    lineHeight: 20,
+  },
+
+  // Variant: brand
+  brandContainer: {
+    width: '100%',
+    marginBottom: 20,
+  },
+  brandRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 22,
+  },
+  logoIconBox: {
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    backgroundColor: '#E1F5F0',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 10,
+    position: 'relative',
+  },
+  coinOuter: {
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    backgroundColor: '#F59E0B',
+    borderWidth: 2,
+    borderColor: '#13334C',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  coinSymbol: {
+    fontSize: 13,
     fontWeight: '800',
     color: '#13334C',
   },
-  screenSubtitle: {
-    fontSize: 14,
+  magnifierHandle: {
+    position: 'absolute',
+    bottom: 6,
+    right: 6,
+    width: 9,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: '#14967F',
+    transform: [{ rotate: '40deg' }],
+  },
+  brandTextWrap: {
+    flexDirection: 'column',
+  },
+  brandTitle: {
+    fontSize: 26,
+    fontWeight: '800',
+    color: '#13334C',
+    letterSpacing: -0.4,
+    lineHeight: 30,
+  },
+  brandTitleAccent: {
+    color: '#14967F',
+  },
+  brandTagline: {
+    fontSize: 9,
+    fontWeight: '800',
+    color: '#1E293B',
+    letterSpacing: 0.6,
+    marginTop: 1,
+  },
+  welcomeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  welcomeTextCol: {
+    flex: 1,
+    paddingRight: 12,
+  },
+  pageTitle: {
+    fontSize: 30,
+    fontWeight: '800',
+    color: '#13334C',
+    letterSpacing: -0.5,
+    marginBottom: 4,
+  },
+  pageSubtitle: {
+    fontSize: 14.5,
     color: '#64748B',
-    marginTop: 4,
+    lineHeight: 20,
+  },
+  welcomeIllustration: {
+    width: 68,
+    height: 68,
+    borderRadius: 34,
+    backgroundColor: '#DDF3EE',
+    borderWidth: 2,
+    borderColor: '#B8E5DA',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    overflow: 'hidden',
+  },
+  avatarHead: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: '#13334C',
+    marginBottom: 4,
+  },
+  avatarShoulders: {
+    width: 44,
+    height: 20,
+    borderTopLeftRadius: 22,
+    borderTopRightRadius: 22,
+    backgroundColor: '#14967F',
   },
 });
 

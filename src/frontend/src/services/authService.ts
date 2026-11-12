@@ -1,4 +1,9 @@
-import { apiRequest, setApiAuthToken } from './api';
+import {
+  apiAuthRequest,
+  DEV_USER,
+  setApiAuthToken,
+  setCurrentSessionUser,
+} from './api';
 import { UserProfile, UserRole } from '../navigation/types';
 
 export interface LoginPayload {
@@ -91,6 +96,19 @@ const localUsersStore: Array<UserProfile & { passwordPlain: string }> = [
   },
 ];
 
+function syncSessionUser(user: UserProfile): void {
+  setCurrentSessionUser({
+    idPengguna: user.idPengguna,
+    namaPengguna: user.namaPengguna,
+    email: user.email,
+    role: user.role,
+    idPemberiJasa:
+      user.role === 'PEMBERI_JASA'
+        ? user.pemberiJasa?.idPemberiJasa || user.idPengguna
+        : undefined,
+  });
+}
+
 function buildDerivedUsername(email: string, explicitUsername?: string): string {
   if (explicitUsername && explicitUsername.trim().length > 0) {
     return explicitUsername.trim();
@@ -124,7 +142,7 @@ export const authService = {
     const rawPassword = payload.password;
 
     try {
-      const response = await apiRequest<AuthSessionData>('/auth/login', {
+      const response = await apiAuthRequest<AuthSessionData>('/auth/login', {
         method: 'POST',
         body: JSON.stringify({
           username: cleanId,
@@ -135,6 +153,7 @@ export const authService = {
 
       if (response.ok && response.data?.token && response.data?.user) {
         setApiAuthToken(response.data.token);
+        syncSessionUser(response.data.user);
         return {
           success: true,
           message: response.message || 'Login berhasil.',
@@ -164,6 +183,7 @@ export const authService = {
       const { passwordPlain: _, ...safeUser } = matched;
       const mockToken = `local-jwt-${safeUser.idPengguna}-${Date.now()}`;
       setApiAuthToken(mockToken);
+      syncSessionUser(safeUser);
 
       return {
         success: true,
@@ -190,17 +210,20 @@ export const authService = {
     const namaPengguna = payload.namaPengguna.trim();
 
     try {
-      const response = await apiRequest<UserProfile>('/auth/register/pelanggan', {
-        method: 'POST',
-        body: JSON.stringify({
-          namaPengguna,
-          username,
-          email,
-          password: payload.password,
-          nomorTelpon,
-          nomorTelepon: nomorTelpon,
-        }),
-      });
+      const response = await apiAuthRequest<UserProfile>(
+        '/auth/register/pelanggan',
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            namaPengguna,
+            username,
+            email,
+            password: payload.password,
+            nomorTelpon,
+            nomorTelepon: nomorTelpon,
+          }),
+        }
+      );
 
       if (!response.ok || !response.data) {
         return {
@@ -225,6 +248,7 @@ export const authService = {
 
       const fallbackToken = `jwt-${response.data.idPengguna}`;
       setApiAuthToken(fallbackToken);
+      syncSessionUser(response.data);
       return {
         success: true,
         message: 'Registrasi pelanggan berhasil.',
@@ -235,7 +259,9 @@ export const authService = {
       };
     } catch {
       const exists = localUsersStore.some(
-        (u) => u.email.toLowerCase() === email || u.username.toLowerCase() === username.toLowerCase()
+        (u) =>
+          u.email.toLowerCase() === email ||
+          u.username.toLowerCase() === username.toLowerCase()
       );
       if (exists) {
         return {
@@ -264,6 +290,7 @@ export const authService = {
 
       const token = `local-jwt-${newUser.idPengguna}`;
       setApiAuthToken(token);
+      syncSessionUser(newUser);
       return {
         success: true,
         message: 'Registrasi pelanggan berhasil.',
@@ -294,22 +321,25 @@ export const authService = {
       `kat-${jenisJasa.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
 
     try {
-      const response = await apiRequest<UserProfile>('/auth/register/pemberi-jasa', {
-        method: 'POST',
-        body: JSON.stringify({
-          namaPengguna,
-          username,
-          email,
-          password: payload.password,
-          nomorTelpon,
-          nomorTelepon: nomorTelpon,
-          namaToko,
-          idKategoriJasa,
-          jenisJasa,
-          latitude: payload.latitude ?? -6.8915,
-          longitude: payload.longitude ?? 107.6107,
-        }),
-      });
+      const response = await apiAuthRequest<UserProfile>(
+        '/auth/register/pemberi-jasa',
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            namaPengguna,
+            username,
+            email,
+            password: payload.password,
+            nomorTelpon,
+            nomorTelepon: nomorTelpon,
+            namaToko,
+            idKategoriJasa,
+            jenisJasa,
+            latitude: payload.latitude ?? -6.8915,
+            longitude: payload.longitude ?? 107.6107,
+          }),
+        }
+      );
 
       if (!response.ok || !response.data) {
         return {
@@ -332,21 +362,25 @@ export const authService = {
       }
 
       const fallbackToken = `jwt-${response.data.idPengguna}`;
+      const providerUser: UserProfile = {
+        ...response.data,
+        role: 'PEMBERI_JASA',
+      };
       setApiAuthToken(fallbackToken);
+      syncSessionUser(providerUser);
       return {
         success: true,
         message: 'Registrasi pemberi jasa berhasil.',
         data: {
           token: fallbackToken,
-          user: {
-            ...response.data,
-            role: 'PEMBERI_JASA',
-          },
+          user: providerUser,
         },
       };
     } catch {
       const exists = localUsersStore.some(
-        (u) => u.email.toLowerCase() === email || u.username.toLowerCase() === username.toLowerCase()
+        (u) =>
+          u.email.toLowerCase() === email ||
+          u.username.toLowerCase() === username.toLowerCase()
       );
       if (exists) {
         return {
@@ -384,6 +418,7 @@ export const authService = {
 
       const token = `local-jwt-${newProvider.idPengguna}`;
       setApiAuthToken(token);
+      syncSessionUser(newProvider);
       return {
         success: true,
         message: 'Registrasi pemberi jasa berhasil.',
@@ -404,10 +439,11 @@ export const authService = {
     message?: string;
   }> {
     try {
-      const response = await apiRequest<UserProfile>('/users/profile', {
+      const response = await apiAuthRequest<UserProfile>('/users/profile', {
         method: 'GET',
       });
       if (response.ok && response.data) {
+        syncSessionUser(response.data);
         return { success: true, data: response.data };
       }
       return {
@@ -440,7 +476,7 @@ export const authService = {
     const email = payload.email.trim().toLowerCase();
 
     try {
-      const response = await apiRequest<UserProfile>('/users/profile', {
+      const response = await apiAuthRequest<UserProfile>('/users/profile', {
         method: 'PUT',
         body: JSON.stringify({
           namaPengguna,
@@ -452,6 +488,7 @@ export const authService = {
       });
 
       if (response.ok && response.data) {
+        syncSessionUser(response.data);
         return {
           success: true,
           message: response.message || 'Profil berhasil diperbarui.',
@@ -483,7 +520,9 @@ export const authService = {
         nomorTelpon,
         nomorTelepon: nomorTelpon,
         avatarUrl:
-          payload.avatarUrl !== undefined ? payload.avatarUrl : currentUser.avatarUrl,
+          payload.avatarUrl !== undefined
+            ? payload.avatarUrl
+            : currentUser.avatarUrl,
       };
 
       const idx = localUsersStore.findIndex(
@@ -499,6 +538,7 @@ export const authService = {
         };
       }
 
+      syncSessionUser(updatedUser);
       return {
         success: true,
         message: 'Profil berhasil diperbarui.',
@@ -509,5 +549,6 @@ export const authService = {
 
   logout(): void {
     setApiAuthToken(null);
+    setCurrentSessionUser({ ...DEV_USER });
   },
 };
