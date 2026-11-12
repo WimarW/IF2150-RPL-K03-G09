@@ -35,7 +35,16 @@ export const DEV_USER: SessionUser = {
 type SessionListener = (user: SessionUser) => void;
 
 let currentSessionUser: SessionUser = { ...DEV_USER };
+let currentAuthToken: string | null = null;
 const sessionListeners = new Set<SessionListener>();
+
+export function setAuthToken(token: string | null): void {
+  currentAuthToken = token;
+}
+
+export function getAuthToken(): string | null {
+  return currentAuthToken;
+}
 
 export function getCurrentUser(): SessionUser {
   return currentSessionUser;
@@ -130,6 +139,7 @@ export async function apiRequest<T>(
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
+        ...(currentAuthToken ? { Authorization: `Bearer ${currentAuthToken}` } : {}),
       },
       body:
         options?.body !== undefined ? JSON.stringify(options.body) : undefined,
@@ -172,4 +182,8 @@ export async function apiGet<T>(path: string): Promise<T> {
 
 export async function apiPost<T>(path: string, body: unknown): Promise<T> {
   return apiRequest<T>(path, { method: 'POST', body });
+}
+
+export async function apiPatch<T>(path: string, body?: unknown): Promise<T> {
+  return apiRequest<T>(path, { method: 'PATCH', body });
 }

@@ -1,6 +1,18 @@
+/**
+ * UI-09 Ruang Obrolan Penyedia Jasa
+ * Traceability: UC04, UC05, KF09, KF11,
+ * Kelas DPPL C17 KontrakPekerjaanUI, C18 KontrakPekerjaanController, C20 KomunikasiUI,
+ * Antarmuka UI-09 (UI-09-01 s.d. UI-09-12)
+ */
+
 import React from 'react';
-import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import { useChatController } from '../../controllers/useChatController';
+import { useContractController } from '../../controllers/useContractController';
 import { ChatRoom } from './ChatRoom';
 import { CHAT_CONFIG } from '../../config/chatConfig';
 
@@ -23,11 +35,24 @@ export const ProviderChatView: React.FC = () => {
     markConversationRead,
   } = useChatController(partnerId, partnerName, isCS);
 
+  const {
+    contract,
+    isSubmitting,
+    loadContract,
+    acceptContract,
+    rejectContract,
+  } = useContractController(isCS ? undefined : partnerId, {
+    onShowSnackbar: setSnackbarMessage,
+  });
+
   useFocusEffect(
     React.useCallback(() => {
       loadChatHistory(partnerId);
       markConversationRead(partnerId);
-    }, [partnerId, loadChatHistory, markConversationRead])
+      if (!isCS) {
+        void loadContract(true);
+      }
+    }, [partnerId, isCS, loadChatHistory, markConversationRead, loadContract])
   );
 
   const handleMorePress = () => {
@@ -56,6 +81,16 @@ export const ProviderChatView: React.FC = () => {
       onBack={() => navigation.goBack()}
       onMorePress={handleMorePress}
       onPressAttach={handlePressAttach}
+      contract={contract}
+      isContractSubmitting={isSubmitting}
+      onAcceptContract={() => {
+        void acceptContract();
+      }}
+      onRejectContract={() => {
+        void rejectContract();
+      }}
     />
   );
 };
+
+export default ProviderChatView;

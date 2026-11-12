@@ -29,6 +29,10 @@ import {
   registerServiceProvider,
   searchServiceProviders,
 } from '../services/serviceCatalogService';
+import {
+  getAllCachedContracts,
+  subscribeContracts,
+} from '../services/contractService';
 
 export interface PendaftaranJasaForm {
   namaToko: string;
@@ -1039,7 +1043,43 @@ export function useHomeCatalogController(): UseHomeCatalogControllerResult {
     []
   );
 
-  const [activeOrder] = useState<OnProgressOrderSummary | null>(null);
+  const [activeOrder, setActiveOrder] =
+    useState<OnProgressOrderSummary | null>(() => {
+      const onProg = getAllCachedContracts().find(
+        (c) => c.statusPekerjaan === 'On Progress' || c.status === 'DITERIMA'
+      );
+      if (!onProg) return null;
+      return {
+        idKontrakPekerjaan: onProg.idKontrakPekerjaan || onProg.idKontrak,
+        judulPekerjaan: `${onProg.jasa} - ${onProg.deskripsi}`,
+        namaPemberiJasa: 'Budi Wijaya',
+        createdAt: onProg.createdAt || new Date().toISOString(),
+        statusPekerjaan: 'On Progress',
+      };
+    });
+
+  useEffect(() => {
+    const syncActiveOrder = () => {
+      const onProg = getAllCachedContracts().find(
+        (c) => c.statusPekerjaan === 'On Progress' || c.status === 'DITERIMA'
+      );
+      if (!onProg) {
+        setActiveOrder(null);
+        return;
+      }
+      setActiveOrder({
+        idKontrakPekerjaan: onProg.idKontrakPekerjaan || onProg.idKontrak,
+        judulPekerjaan: `${onProg.jasa} - ${onProg.deskripsi}`,
+        namaPemberiJasa: 'Budi Wijaya',
+        createdAt: onProg.createdAt || new Date().toISOString(),
+        statusPekerjaan: 'On Progress',
+      });
+    };
+    syncActiveOrder();
+    return subscribeContracts(() => {
+      syncActiveOrder();
+    });
+  }, []);
   const [isLoadingRecommendations, setIsLoadingRecommendations] =
     useState<boolean>(true);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
