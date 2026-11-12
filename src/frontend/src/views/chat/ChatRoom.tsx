@@ -17,9 +17,14 @@ import { ContractCard } from '../../components/chat/ContractCard';
 import { Snackbar } from '../../components/common/Snackbar';
 import { colors } from '../../theme/colors';
 import { formatDateSeparatorLabel } from '../../utils/chatUtils';
-import { ChatMessage, DummyContract } from '../../types/chat';
+import {
+  ChatMessage,
+  ContractFormErrors,
+  ContractFormValues,
+  DummyContract,
+} from '../../types/chat';
 
-interface ChatRoomProps {
+export interface ChatRoomProps {
   partnerName: string;
   partnerId: string;
   isOnline?: boolean;
@@ -35,6 +40,18 @@ interface ChatRoomProps {
   onBack: () => void;
   onMorePress?: () => void;
   onPressAttach?: () => void;
+  // Props integrasi Kontrak Pekerjaan (UI-08 & UI-09)
+  contract?: DummyContract | null;
+  contractFormValues?: ContractFormValues;
+  contractFormErrors?: ContractFormErrors;
+  isContractSubmitting?: boolean;
+  onContractFieldChange?: (
+    field: keyof ContractFormValues,
+    value: string
+  ) => void;
+  onCreateContract?: () => void;
+  onAcceptContract?: () => void;
+  onRejectContract?: () => void;
 }
 
 export const ChatRoom: React.FC<ChatRoomProps> = ({
@@ -53,11 +70,24 @@ export const ChatRoom: React.FC<ChatRoomProps> = ({
   onBack,
   onMorePress,
   onPressAttach,
+  contract,
+  contractFormValues,
+  contractFormErrors,
+  isContractSubmitting = false,
+  onContractFieldChange,
+  onCreateContract,
+  onAcceptContract,
+  onRejectContract,
 }) => {
-  // Render slot kontrak milik Raymond di posisi yang ditentukan
+  // Render kartu kontrak di dalam aliran chat (UI-08-09 & UI-09-06..09)
   const timelineData = useMemo(() => {
     const list: any[] = [];
     let lastDateLabel = '';
+    let contractInserted = false;
+
+    const shouldRenderContractInStream = !isCS && contract !== null;
+    const targetContractIndex =
+      messages.length >= 3 ? 2 : Math.max(0, messages.length - 1);
 
     messages.forEach((msg, idx) => {
       const dateLabel = formatDateSeparatorLabel(msg.waktuTerkirim);
@@ -66,28 +96,39 @@ export const ChatRoom: React.FC<ChatRoomProps> = ({
         lastDateLabel = dateLabel;
       }
 
-      list.push({ kind: 'message', data: msg, key: msg.clientId || msg.idChat });
+      list.push({
+        kind: 'message',
+        data: msg,
+        key: msg.clientId || msg.idChat,
+      });
 
-      // Demokrasi Slot Kontrak Timeline untuk UI-08 dan UI-09
-      if (!isCS && idx === 2) {
-        if (variant === 'customer') {
-          list.push({
-            kind: 'contract',
-            variant: 'detail',
-            key: 'contract-detail-slot',
-          });
-        } else if (variant === 'provider') {
-          list.push({
-            kind: 'contract',
-            variant: 'decision',
-            key: 'contract-decision-slot',
-          });
-        }
+      if (shouldRenderContractInStream && idx === targetContractIndex) {
+        list.push({
+          kind: 'contract',
+          variant: variant === 'customer' ? 'detail' : 'decision',
+          key:
+            variant === 'customer'
+              ? `contract-detail-${contract?.idKontrak ?? 'slot'}`
+              : `contract-decision-${contract?.idKontrak ?? 'slot'}`,
+        });
+        contractInserted = true;
       }
     });
 
+    // Apabila belum ada pesan chat sama sekali namun kontrak sudah ada/dibuat, tetap tampilkan di aliran chat
+    if (shouldRenderContractInStream && !contractInserted) {
+      list.push({
+        kind: 'contract',
+        variant: variant === 'customer' ? 'detail' : 'decision',
+        key:
+          variant === 'customer'
+            ? `contract-detail-${contract?.idKontrak ?? 'slot'}`
+            : `contract-decision-${contract?.idKontrak ?? 'slot'}`,
+      });
+    }
+
     return list;
-  }, [messages, isCS, variant]);
+  }, [messages, isCS, variant, contract]);
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
@@ -117,10 +158,19 @@ export const ChatRoom: React.FC<ChatRoomProps> = ({
             data={timelineData}
             keyExtractor={(item) => item.key}
             contentContainerStyle={styles.listContent}
+            keyboardShouldPersistTaps="handled"
             ListHeaderComponent={
               variant === 'customer' && !isCS ? (
                 <View style={styles.topSlot}>
-                  <ContractCard variant="create" />
+                  <ContractCard
+                    variant="create"
+                    contract={contract ?? undefined}
+                    formValues={contractFormValues}
+                    formErrors={contractFormErrors}
+                    isSubmitting={isContractSubmitting}
+                    onChangeField={onContractFieldChange}
+                    onCreate={onCreateContract}
+                  />
                 </View>
               ) : undefined
             }
@@ -129,7 +179,15 @@ export const ChatRoom: React.FC<ChatRoomProps> = ({
                 return <DateSeparator label={item.label} />;
               }
               if (item.kind === 'contract') {
-                return <ContractCard variant={item.variant} />;
+                return (
+                  <ContractCard
+                    variant={item.variant}
+                    contract={contract ?? undefined}
+                    isSubmitting={isContractSubmitting}
+                    onAccept={onAcceptContract}
+                    onReject={onRejectContract}
+                  />
+                );
               }
               const isOutgoing = item.data.idPengguna !== partnerId;
               return (

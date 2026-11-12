@@ -32,13 +32,46 @@ export interface AppNotification {
   statusBaca: boolean;
 }
 
+export type ContractCardStatus = 'MENUNGGU' | 'DITERIMA' | 'DITOLAK';
+
+export type StatusPekerjaan =
+  | 'Menunggu'
+  | 'On Progress'
+  | 'Menunggu Konfirmasi Pelanggan'
+  | 'Done'
+  | 'Ditolak'
+  | 'Dibatalkan';
+
 export interface DummyContract {
   idKontrak: string;
+  idKontrakPekerjaan?: string;
+  idPelanggan?: string;
+  idPemberiJasa?: string;
   jasa: string;
   deskripsi: string;
+  detailPekerjaan?: string;
   totalHarga: number;
-  status: 'MENUNGGU' | 'DITERIMA' | 'DITOLAK';
+  persetujuanHarga?: number;
+  status: ContractCardStatus;
+  statusPekerjaan?: StatusPekerjaan;
+  hasRating?: boolean;
   waktu: string;
+  createdAt?: string;
+  expiresAt?: string | null;
+}
+
+export type ContractRecord = DummyContract;
+
+export interface ContractFormValues {
+  jasa: string;
+  deskripsi: string;
+  totalHarga: string;
+}
+
+export interface ContractFormErrors {
+  jasa?: string;
+  deskripsi?: string;
+  totalHarga?: string;
 }
 
 export type ChatTimelineItem =
