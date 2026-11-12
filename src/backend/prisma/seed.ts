@@ -1,8 +1,11 @@
+import bcrypt from 'bcrypt';
 import prisma from '../src/database/prisma';
 import { Role } from '@prisma/client';
 
 async function main() {
   console.log('🌱 Memulai proses seeding database CariUang dengan format UUID...');
+
+  const defaultPasswordHash = await bcrypt.hash('PasswordAman123', 10);
 
   // 1. Seed Kategori Jasa (UUID)
   const kategoriList = [
@@ -40,17 +43,20 @@ async function main() {
     });
   }
 
-  // 2. Seed Pengguna: Pelanggan (UUID)
+  // 2. Seed Pengguna: Pelanggan (UUID) - budi@pelanggan.com & budi@example.com
   const idPelanggan = '111e8400-e29b-41d4-a716-446655440001';
   await prisma.pengguna.upsert({
     where: { username: 'budi_pelanggan' },
-    update: {},
+    update: {
+      email: 'budi@pelanggan.com',
+      password: defaultPasswordHash,
+    },
     create: {
       idPengguna: idPelanggan,
       namaPengguna: 'Budi Santoso',
       username: 'budi_pelanggan',
-      password: 'hashed_password_123',
-      email: 'budi@example.com',
+      password: defaultPasswordHash,
+      email: 'budi@pelanggan.com',
       nomorTelpon: '081234567890',
       role: Role.PELANGGAN,
       akumulasiRating: 4.8,
@@ -108,6 +114,7 @@ async function main() {
     await prisma.pengguna.upsert({
       where: { username: prov.username },
       update: {
+        password: defaultPasswordHash,
         akumulasiRating: prov.akumulasiRating,
         riwayatRating: prov.riwayatRating,
       },
@@ -115,7 +122,7 @@ async function main() {
         idPengguna: prov.idPemberiJasa,
         namaPengguna: prov.namaPengguna,
         username: prov.username,
-        password: 'hashed_password_123',
+        password: defaultPasswordHash,
         email: prov.email,
         nomorTelpon: prov.nomorTelpon,
         role: Role.PEMBERI_JASA,
@@ -150,12 +157,14 @@ async function main() {
   const idLayananPelanggan = '444e8400-e29b-41d4-a716-446655440001';
   await prisma.pengguna.upsert({
     where: { username: 'cs_cariuang' },
-    update: {},
+    update: {
+      password: defaultPasswordHash,
+    },
     create: {
       idPengguna: idLayananPelanggan,
       namaPengguna: 'Rina Customer Care',
       username: 'cs_cariuang',
-      password: 'hashed_password_123',
+      password: defaultPasswordHash,
       email: 'cs@cariuang.id',
       nomorTelpon: '081100001111',
       role: Role.LAYANAN_PELANGGAN,
@@ -172,7 +181,7 @@ async function main() {
     },
   });
 
-  console.log('✅ Seeding database CariUang selesai!');
+  console.log('✅ Seeding database CariUang selesai! (Password default: PasswordAman123)');
 }
 
 main()
