@@ -5,6 +5,7 @@ import {
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { api, avatarColor, formatTanggal, formatWaktu, isCS as cekIsCS, imageUrl } from '../../services/ticketService';
 
 const MAX_BYTES = 5 * 1024 * 1024;
@@ -14,6 +15,7 @@ export default function TicketDetailScreen({ route, navigation }: any) {
   const { ticketId } = route.params;
   const isCS = cekIsCS();
   const myRole: 'cs' | 'user' = isCS ? 'cs' : 'user';
+  const insets = useSafeAreaInsets();
 
   const [ticket, setTicket] = useState<any>(null);
   const [messages, setMessages] = useState<any[]>([]);
@@ -97,7 +99,7 @@ export default function TicketDetailScreen({ route, navigation }: any) {
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingTop: insets.top + 12 }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.headerLeft}>
           <Feather name="chevron-left" size={24} color="#1A237E" />
           <View style={[styles.avatar, { backgroundColor: color }]}><Text style={styles.avatarText}>{ticket.initials}</Text></View>
@@ -113,7 +115,7 @@ export default function TicketDetailScreen({ route, navigation }: any) {
         )}
       </View>
 
-      <ScrollView ref={scrollRef} style={styles.chatContainer} contentContainerStyle={{ paddingBottom: 20 }}>
+      <ScrollView ref={scrollRef} style={styles.chatContainer} contentContainerStyle={{ paddingBottom: closed ? 20 + insets.bottom : 20 }}>
         <View style={styles.reportCard}>
           <View style={styles.reportHeader}>
             <View style={[styles.avatar, { backgroundColor: color }]}><Text style={styles.avatarText}>{ticket.initials}</Text></View>
@@ -160,7 +162,7 @@ export default function TicketDetailScreen({ route, navigation }: any) {
               <TouchableOpacity onPress={() => setAttach(null)}><Feather name="x" size={18} color="#78909C" /></TouchableOpacity>
             </View>
           )}
-          <View style={styles.inputContainer}>
+          <View style={[styles.inputContainer, { paddingBottom: 10 + insets.bottom }]}>
             <TouchableOpacity style={styles.attachButton} onPress={pickAttachment}>
               <Feather name="paperclip" size={24} color="#78909C" />
             </TouchableOpacity>
@@ -174,7 +176,7 @@ export default function TicketDetailScreen({ route, navigation }: any) {
 
       <Modal visible={modalVisible} transparent animationType="fade" onRequestClose={() => setModalVisible(false)}>
         <View style={styles.modalContainer}>
-          <TouchableOpacity style={styles.closeModalBtn} onPress={() => setModalVisible(false)}>
+          <TouchableOpacity style={[styles.closeModalBtn, { top: insets.top + 15 }]} onPress={() => setModalVisible(false)}>
             <Feather name="x" size={30} color="white" />
           </TouchableOpacity>
           {reportImg && <Image source={{ uri: reportImg }} style={styles.fullImage} resizeMode="contain" />}
@@ -186,7 +188,7 @@ export default function TicketDetailScreen({ route, navigation }: any) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#F5F6FA' },
-  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 15, paddingTop: 50, backgroundColor: 'white', borderBottomWidth: 1, borderColor: '#E0E0E0' },
+  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 15, backgroundColor: 'white', borderBottomWidth: 1, borderColor: '#E0E0E0' },
   headerLeft: { flexDirection: 'row', alignItems: 'center', flexShrink: 1 },
   headerTitle: { fontSize: 16, fontWeight: 'bold', color: '#1A237E', marginLeft: 10 },
   headerSubtitle: { fontSize: 12, color: '#F39C12', marginLeft: 10, fontWeight: '600' },
@@ -219,6 +221,6 @@ const styles = StyleSheet.create({
   input: { flex: 1, backgroundColor: '#F5F6FA', borderRadius: 20, paddingHorizontal: 15, paddingVertical: 10, maxHeight: 100 },
   sendButton: { backgroundColor: '#1ABC9C', width: 40, height: 40, borderRadius: 20, justifyContent: 'center', alignItems: 'center', marginLeft: 10 },
   modalContainer: { flex: 1, backgroundColor: 'rgba(0,0,0,0.9)', justifyContent: 'center', alignItems: 'center' },
-  closeModalBtn: { position: 'absolute', top: 50, right: 20, zIndex: 1 },
+  closeModalBtn: { position: 'absolute', right: 20, zIndex: 1 },
   fullImage: { width: '100%', height: '80%' },
 });
