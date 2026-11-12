@@ -42,6 +42,7 @@ export const BottomTabNavigator: React.FC = () => {
         name="Riwayat"
         component={RiwayatScreen}
         options={{
+          headerShown: false,
           title: 'Riwayat Pekerjaan',
           tabBarLabel: 'Riwayat',
         }}
