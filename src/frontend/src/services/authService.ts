@@ -4,6 +4,7 @@ import {
   setApiAuthToken,
   setCurrentSessionUser,
 } from './api';
+import { setTicketSession } from './ticketService';
 import { UserProfile, UserRole } from '../navigation/types';
 
 export interface LoginPayload {
@@ -40,63 +41,145 @@ export interface AuthSessionData {
   user: UserProfile;
 }
 
-// Penyimpanan lokal in-memory untuk fallback ketika backend lokal belum dinyalakan saat pengembangan UI
-const localUsersStore: Array<UserProfile & { passwordPlain: string }> = [
-  {
-    idPengguna: 'usr-pelanggan-001',
-    namaPengguna: 'Naufal Hasbialhaq',
-    username: 'naufal',
-    email: 'naufal.h@example.com',
-    nomorTelpon: '081234567890',
-    nomorTelepon: '081234567890',
-    role: 'PELANGGAN',
-    avatarUrl: null,
-    akumulasiRating: 4.9,
-    riwayatRating: [5, 4.8],
-    passwordPlain: 'password123',
-  },
-  {
-    idPengguna: 'usr-provider-001',
-    namaPengguna: 'Budi Wijaya',
-    username: 'budi_jasa',
-    email: 'budi.wijaya@example.com',
-    nomorTelpon: '081298765432',
-    nomorTelepon: '081298765432',
-    role: 'PEMBERI_JASA',
-    avatarUrl: null,
-    akumulasiRating: 5.0,
-    riwayatRating: [5, 5],
-    pemberiJasa: {
-      idPemberiJasa: 'usr-provider-001',
-      namaToko: 'Servis & Renovasi Budi',
-      idKategoriJasa: 'kat-servis',
-      jenisJasa: 'Servis',
-      statusKetersediaan: 'Available',
-      isOnline: true,
-    },
-    passwordPlain: 'password123',
-  },
-  {
-    idPengguna: 'usr-cs-001',
-    namaPengguna: 'Petugas Layanan Pelanggan',
-    username: 'cs_cariuang',
-    email: 'cs@cariuang.id',
-    nomorTelpon: '081100001111',
-    nomorTelepon: '081100001111',
-    role: 'LAYANAN_PELANGGAN',
-    avatarUrl: null,
-    akumulasiRating: 0,
-    riwayatRating: [],
-    layananPelanggan: {
-      idLayananPelanggan: 'usr-cs-001',
-      status: 'Available',
-      jumlahTiketDipegang: 2,
-    },
-    passwordPlain: 'password123',
-  },
-];
+interface LocalUserRecord extends UserProfile {
+  passwordPlain: string;
+  acceptedPasswords?: string[];
+}
 
-function syncSessionUser(user: UserProfile): void {
+// Penyimpanan lokal in-memory untuk fallback development ketika perangkat menggunakan Expo Tunnel (--tunnel)
+// sehingga localhost:5000 pada PC tidak dapat dijangkau langsung oleh jaringan seluler/Wi-Fi HP.
+const localUsersStore: LocalUserRecord[] = __DEV__
+  ? [
+      {
+        idPengguna: '111e8400-e29b-41d4-a716-446655440001',
+      namaPengguna: 'Budi Santoso',
+      username: 'budi_pelanggan',
+      email: 'budi@pelanggan.com',
+      nomorTelpon: '081234567890',
+      nomorTelepon: '081234567890',
+      role: 'PELANGGAN',
+      avatarUrl: null,
+      akumulasiRating: 4.8,
+      riwayatRating: [5.0, 4.6],
+      passwordPlain: 'PasswordAman123',
+      acceptedPasswords: ['PasswordAman123', 'password123'],
+    },
+    {
+      idPengguna: '111e8400-e29b-41d4-a716-446655440002',
+      namaPengguna: 'Budi Santoso',
+      username: 'budi_example',
+      email: 'budi@example.com',
+      nomorTelpon: '081234567890',
+      nomorTelepon: '081234567890',
+      role: 'PELANGGAN',
+      avatarUrl: null,
+      akumulasiRating: 4.8,
+      riwayatRating: [5.0, 4.6],
+      passwordPlain: 'PasswordAman123',
+      acceptedPasswords: ['PasswordAman123', 'password123', 'hashed_password_123'],
+    },
+    {
+      idPengguna: 'usr-pelanggan-001',
+      namaPengguna: 'Naufal Hasbialhaq',
+      username: 'naufal',
+      email: 'naufal.h@example.com',
+      nomorTelpon: '081234567890',
+      nomorTelepon: '081234567890',
+      role: 'PELANGGAN',
+      avatarUrl: null,
+      akumulasiRating: 4.9,
+      riwayatRating: [5, 4.8],
+      passwordPlain: 'password123',
+      acceptedPasswords: ['password123', 'PasswordAman123'],
+    },
+    {
+      idPengguna: '222e8400-e29b-41d4-a716-446655440001',
+      namaPengguna: 'Ahmad Teknik',
+      username: 'ahmad_teknik',
+      email: 'ahmad@cariuang.id',
+      nomorTelpon: '081298765431',
+      nomorTelepon: '081298765431',
+      role: 'PEMBERI_JASA',
+      avatarUrl: null,
+      akumulasiRating: 4.9,
+      riwayatRating: [5.0, 4.8, 4.9],
+      pemberiJasa: {
+        idPemberiJasa: '222e8400-e29b-41d4-a716-446655440001',
+        namaToko: 'Ahmad Jaya AC & Elektronik',
+        idKategoriJasa: '550e8400-e29b-41d4-a716-446655440002',
+        jenisJasa: 'Perbaikan Elektronik & AC',
+        statusKetersediaan: 'Available',
+        isOnline: true,
+      },
+      passwordPlain: 'PasswordAman123',
+      acceptedPasswords: ['PasswordAman123', 'password123', 'hashed_password_123'],
+    },
+    {
+      idPengguna: '222e8400-e29b-41d4-a716-446655440002',
+      namaPengguna: 'Siti Bersih',
+      username: 'siti_clean',
+      email: 'siti@cariuang.id',
+      nomorTelpon: '081298765432',
+      nomorTelepon: '081298765432',
+      role: 'PEMBERI_JASA',
+      avatarUrl: null,
+      akumulasiRating: 4.7,
+      riwayatRating: [4.7],
+      pemberiJasa: {
+        idPemberiJasa: '222e8400-e29b-41d4-a716-446655440002',
+        namaToko: 'Kinclong Home Cleaning',
+        idKategoriJasa: '550e8400-e29b-41d4-a716-446655440001',
+        jenisJasa: 'Jasa Kebersihan Rumah',
+        statusKetersediaan: 'Available',
+        isOnline: true,
+      },
+      passwordPlain: 'PasswordAman123',
+      acceptedPasswords: ['PasswordAman123', 'password123', 'hashed_password_123'],
+    },
+    {
+      idPengguna: 'usr-provider-001',
+      namaPengguna: 'Budi Wijaya',
+      username: 'budi_jasa',
+      email: 'budi.wijaya@example.com',
+      nomorTelpon: '081298765432',
+      nomorTelepon: '081298765432',
+      role: 'PEMBERI_JASA',
+      avatarUrl: null,
+      akumulasiRating: 5.0,
+      riwayatRating: [5, 5],
+      pemberiJasa: {
+        idPemberiJasa: 'usr-provider-001',
+        namaToko: 'Servis & Renovasi Budi',
+        idKategoriJasa: 'kat-servis',
+        jenisJasa: 'Servis',
+        statusKetersediaan: 'Available',
+        isOnline: true,
+      },
+      passwordPlain: 'password123',
+      acceptedPasswords: ['password123', 'PasswordAman123'],
+    },
+    {
+      idPengguna: '444e8400-e29b-41d4-a716-446655440001',
+      namaPengguna: 'Rina Customer Care',
+      username: 'cs_cariuang',
+      email: 'cs@cariuang.id',
+      nomorTelpon: '081100001111',
+      nomorTelepon: '081100001111',
+      role: 'LAYANAN_PELANGGAN',
+      avatarUrl: null,
+      akumulasiRating: 0,
+      riwayatRating: [],
+      layananPelanggan: {
+        idLayananPelanggan: '444e8400-e29b-41d4-a716-446655440001',
+        status: 'Available',
+        jumlahTiketDipegang: 2,
+      },
+      passwordPlain: 'PasswordAman123',
+      acceptedPasswords: ['PasswordAman123', 'password123', 'hashed_password_123'],
+    },
+  ]
+  : [];
+function syncSessionUser(user: UserProfile, token?: string | null): void {
   setCurrentSessionUser({
     idPengguna: user.idPengguna,
     namaPengguna: user.namaPengguna,
@@ -107,6 +190,9 @@ function syncSessionUser(user: UserProfile): void {
         ? user.pemberiJasa?.idPemberiJasa || user.idPengguna
         : undefined,
   });
+  if (token !== undefined) {
+    setTicketSession(token, user.role);
+  }
 }
 
 function buildDerivedUsername(email: string, explicitUsername?: string): string {
@@ -153,7 +239,7 @@ export const authService = {
 
       if (response.ok && response.data?.token && response.data?.user) {
         setApiAuthToken(response.data.token);
-        syncSessionUser(response.data.user);
+        syncSessionUser(response.data.user, response.data.token);
         return {
           success: true,
           message: response.message || 'Login berhasil.',
@@ -166,24 +252,41 @@ export const authService = {
         message: response.message || 'Email atau password salah',
       };
     } catch {
-      // Fallback ke store lokal apabila server backend belum berjalan
+      // Pada production build, selalu kembalikan pesan kegagalan server
+      if (!__DEV__) {
+        return {
+          success: false,
+          message: 'Tidak dapat terhubung ke server. Periksa koneksi internet Anda.',
+        };
+      }
+
+      // Fallback ke store lokal saat development (mis. saat Expo Tunnel --tunnel)
       const matched = localUsersStore.find(
         (u) =>
           u.email.toLowerCase() === cleanId.toLowerCase() ||
           u.username.toLowerCase() === cleanId.toLowerCase()
       );
 
-      if (!matched || matched.passwordPlain !== rawPassword) {
+      const isPasswordValid =
+        Boolean(matched) &&
+        (matched!.passwordPlain === rawPassword ||
+          Boolean(matched!.acceptedPasswords?.includes(rawPassword)));
+
+      if (!matched || !isPasswordValid) {
         return {
           success: false,
           message: 'Email atau password salah',
         };
       }
 
-      const { passwordPlain: _, ...safeUser } = matched;
+      const {
+        passwordPlain: _,
+        acceptedPasswords: __,
+        ...safeUser
+      } = matched;
       const mockToken = `local-jwt-${safeUser.idPengguna}-${Date.now()}`;
       setApiAuthToken(mockToken);
-      syncSessionUser(safeUser);
+      syncSessionUser(safeUser, mockToken);
 
       return {
         success: true,
@@ -248,7 +351,7 @@ export const authService = {
 
       const fallbackToken = `jwt-${response.data.idPengguna}`;
       setApiAuthToken(fallbackToken);
-      syncSessionUser(response.data);
+      syncSessionUser(response.data, fallbackToken);
       return {
         success: true,
         message: 'Registrasi pelanggan berhasil.',
@@ -258,6 +361,13 @@ export const authService = {
         },
       };
     } catch {
+      if (!__DEV__) {
+        return {
+          success: false,
+          message: 'Tidak dapat terhubung ke server. Periksa koneksi internet Anda.',
+        };
+      }
+
       const exists = localUsersStore.some(
         (u) =>
           u.email.toLowerCase() === email ||
@@ -286,11 +396,12 @@ export const authService = {
       localUsersStore.push({
         ...newUser,
         passwordPlain: payload.password,
+        acceptedPasswords: [payload.password],
       });
 
       const token = `local-jwt-${newUser.idPengguna}`;
       setApiAuthToken(token);
-      syncSessionUser(newUser);
+      syncSessionUser(newUser, token);
       return {
         success: true,
         message: 'Registrasi pelanggan berhasil.',
@@ -367,7 +478,7 @@ export const authService = {
         role: 'PEMBERI_JASA',
       };
       setApiAuthToken(fallbackToken);
-      syncSessionUser(providerUser);
+      syncSessionUser(providerUser, fallbackToken);
       return {
         success: true,
         message: 'Registrasi pemberi jasa berhasil.',
@@ -377,6 +488,13 @@ export const authService = {
         },
       };
     } catch {
+      if (!__DEV__) {
+        return {
+          success: false,
+          message: 'Tidak dapat terhubung ke server. Periksa koneksi internet Anda.',
+        };
+      }
+
       const exists = localUsersStore.some(
         (u) =>
           u.email.toLowerCase() === email ||
@@ -414,11 +532,12 @@ export const authService = {
       localUsersStore.push({
         ...newProvider,
         passwordPlain: payload.password,
+        acceptedPasswords: [payload.password],
       });
 
       const token = `local-jwt-${newProvider.idPengguna}`;
       setApiAuthToken(token);
-      syncSessionUser(newProvider);
+      syncSessionUser(newProvider, token);
       return {
         success: true,
         message: 'Registrasi pemberi jasa berhasil.',
@@ -501,6 +620,13 @@ export const authService = {
         message: response.message || 'Gagal memperbarui profil pengguna.',
       };
     } catch {
+      if (!__DEV__) {
+        return {
+          success: false,
+          message: 'Tidak dapat terhubung ke server. Periksa koneksi internet Anda.',
+        };
+      }
+
       const duplicate = localUsersStore.find(
         (u) =>
           u.email.toLowerCase() === email &&
@@ -529,12 +655,20 @@ export const authService = {
         (u) => u.idPengguna === currentUser.idPengguna
       );
       if (idx !== -1) {
+        const nextPassword =
+          payload.password && payload.password.length >= 8
+            ? payload.password
+            : localUsersStore[idx].passwordPlain;
         localUsersStore[idx] = {
           ...localUsersStore[idx],
           ...updatedUser,
-          ...(payload.password && payload.password.length >= 8
-            ? { passwordPlain: payload.password }
-            : {}),
+          passwordPlain: nextPassword,
+          acceptedPasswords: Array.from(
+            new Set([
+              ...(localUsersStore[idx].acceptedPasswords ?? []),
+              nextPassword,
+            ])
+          ),
         };
       }
 
@@ -549,6 +683,7 @@ export const authService = {
 
   logout(): void {
     setApiAuthToken(null);
+    setTicketSession(null, 'PELANGGAN');
     setCurrentSessionUser({ ...DEV_USER });
   },
 };
