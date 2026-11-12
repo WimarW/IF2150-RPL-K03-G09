@@ -20,6 +20,10 @@ export default function MyTicketsScreen({ navigation }: any) {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Feather name="chevron-left" size={24} color="#1A237E" />
+        <Text style={styles.backText}>Kembali</Text>
+      </TouchableOpacity>
       <View style={styles.header}>
         <View>
           <Text style={styles.title}>Tiket Saya</Text>
@@ -55,6 +59,8 @@ export default function MyTicketsScreen({ navigation }: any) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#F8F9FA', padding: 20, paddingTop: 50 },
+  backButton: { flexDirection: 'row', alignItems: 'center', marginBottom: 15 },
+  backText: { color: '#1A237E', fontSize: 16, fontWeight: '600', marginLeft: 5 },
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 },
   title: { fontSize: 24, fontWeight: 'bold', color: '#1A237E' },
   subtitle: { fontSize: 14, color: '#78909C', marginTop: 4 },
