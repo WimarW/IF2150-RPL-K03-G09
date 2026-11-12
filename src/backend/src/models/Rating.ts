@@ -132,6 +132,13 @@ export class Rating {
       nilaiRating <= 5;
 
     const validatedScore = isValidScore ? Number(nilaiRating.toFixed(2)) : -1;
+    const sanitizedUlasan =
+      typeof ulasan === 'string' && ulasan.trim().length > 0 ? ulasan.trim() : null;
+    const sanitizedTags = Array.isArray(tags)
+      ? tags
+          .filter((t): t is string => typeof t === 'string' && t.trim().length > 0)
+          .map((t) => t.trim())
+      : [];
 
     return new Rating(
       idRating.trim(),
@@ -140,88 +147,137 @@ export class Rating {
       idKontrak.trim(),
       validatedScore,
       new Date(),
-      ulasan ? ulasan.trim() : null,
-      Array.isArray(tags) ? tags : []
+      sanitizedUlasan,
+      sanitizedTags
     );
   }
 
-  public async simpanKeDb(): Promise<void> {
+  public async simpanKeDb(txClient?: Prisma.TransactionClient): Promise<void> {
     if (this.nilaiRating === -1) {
       throw new Error('Nilai rating tidak valid untuk disimpan ke database.');
     }
 
-    await prisma.$transaction(
-      async (tx: Prisma.TransactionClient) => {
-        const createdRating = await tx.rating.create({
-          data: {
-            idRating: this.idRating,
-            idPenggunaPemberi: this.idPenggunaPemberi,
-            idPenggunaPenerima: this.idPenggunaPenerima,
-            idKontrakPekerjaan: this.idKontrakPekerjaan,
-            nilaiRating: this.nilaiRating,
-            ulasan: this.ulasan,
-            tags: this.tags,
-            tanggalRating: this.tanggalRating,
-          },
-        });
+    const run = async (tx: Prisma.TransactionClient) => {
+      const createdRating = await tx.rating.create({
+        data: {
+          idRating: this.idRating,
+          idPenggunaPemberi: this.idPenggunaPemberi,
+          idPenggunaPenerima: this.idPenggunaPenerima,
+          idKontrakPekerjaan: this.idKontrakPekerjaan,
+          nilaiRating: this.nilaiRating,
+          ulasan: this.ulasan,
+          tags: this.tags,
+          tanggalRating: this.tanggalRating,
+        },
+      });
 
-        this.tanggalRating = createdRating.tanggalRating;
+      this.tanggalRating = createdRating.tanggalRating;
 
-        await tx.kontrakPekerjaan.update({
-          where: {
-            idKontrakPekerjaan: this.idKontrakPekerjaan,
-          },
-          data: {
-            hasRating: true,
-          },
-        });
-      },
-      {
+      await tx.kontrakPekerjaan.update({
+        where: {
+          idKontrakPekerjaan: this.idKontrakPekerjaan,
+        },
+        data: {
+          hasRating: true,
+        },
+      });
+    };
+
+    if (txClient) {
+      await run(txClient);
+    } else {
+      await prisma.$transaction(run, {
         isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
-      }
-    );
+      });
+    }
   }
 
-  public async updateRatingPengguna(): Promise<void> {
+  public async updateRatingPengguna(
+    txClient?: Prisma.TransactionClient
+  ): Promise<{ akumulasiRating: number; riwayatRating: number[] }> {
     if (this.nilaiRating === -1) {
       throw new Error('Nilai rating tidak valid untuk memperbarui akumulasi rating pengguna.');
     }
 
-    await prisma.$transaction(
-      async (tx: Prisma.TransactionClient) => {
-        const penggunaPenerima = await tx.pengguna.findUnique({
-          where: {
-            idPengguna: this.idPenggunaPenerima,
-          },
-          select: {
-            riwayatRating: true,
-          },
-        });
+    const run = async (tx: Prisma.TransactionClient) => {
+      const penggunaPenerima = await tx.pengguna.findUnique({
+        where: {
+          idPengguna: this.idPenggunaPenerima,
+        },
+        select: {
+          riwayatRating: true,
+        },
+      });
 
-        if (!penggunaPenerima) {
-          throw new Error('Pengguna penerima rating tidak ditemukan.');
-        }
-
-        const riwayatBaru: number[] = [...penggunaPenerima.riwayatRating, this.nilaiRating];
-        const totalSkor: number = riwayatBaru.reduce((acc, curr) => acc + curr, 0);
-        const rataRataBaru: number = Number((totalSkor / riwayatBaru.length).toFixed(2));
-
-        await tx.pengguna.update({
-          where: {
-            idPengguna: this.idPenggunaPenerima,
-          },
-          data: {
-            riwayatRating: {
-              set: riwayatBaru,
-            },
-            akumulasiRating: rataRataBaru,
-          },
-        });
-      },
-      {
-        isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
+      if (!penggunaPenerima) {
+        throw new Error('Pengguna penerima rating tidak ditemukan.');
       }
-    );
+
+      const riwayatBaru: number[] = [...penggunaPenerima.riwayatRating, this.nilaiRating];
+      const totalSkor: number = riwayatBaru.reduce((acc, curr) => acc + curr, 0);
+      const rataRataBaru: number = Number((totalSkor / riwayatBaru.length).toFixed(2));
+
+      await tx.pengguna.update({
+        where: {
+          idPengguna: this.idPenggunaPenerima,
+        },
+        data: {
+          riwayatRating: {
+            set: riwayatBaru,
+          },
+          akumulasiRating: rataRataBaru,
+        },
+      });
+
+      return {
+        akumulasiRating: rataRataBaru,
+        riwayatRating: riwayatBaru,
+      };
+    };
+
+    if (txClient) {
+      return run(txClient);
+    }
+
+    return prisma.$transaction(run, {
+      isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
+    });
+  }
+
+  public async simpanRatingDanUpdatePengguna(
+    txClient?: Prisma.TransactionClient
+  ): Promise<{
+    rating: RatingPlainObject;
+    penerima: { akumulasiRating: number; riwayatRating: number[] };
+  }> {
+    const run = async (tx: Prisma.TransactionClient) => {
+      await this.simpanKeDb(tx);
+      const penerima = await this.updateRatingPengguna(tx);
+      return {
+        rating: this.toJSON(),
+        penerima,
+      };
+    };
+
+    if (txClient) {
+      return run(txClient);
+    }
+
+    return prisma.$transaction(run, {
+      isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
+    });
+  }
+
+  public static async findRatingByKontrakAndPemberi(
+    idKontrak: string,
+    idPemberi: string
+  ): Promise<RatingPlainObject | null> {
+    return prisma.rating.findFirst({
+      where: {
+        idKontrakPekerjaan: idKontrak,
+        idPenggunaPemberi: idPemberi,
+      },
+    });
   }
 
   public static async getRatingsByUserId(userId: string): Promise<RatingWithRelations[]> {
