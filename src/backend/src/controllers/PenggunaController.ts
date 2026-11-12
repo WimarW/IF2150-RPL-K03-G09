@@ -427,7 +427,7 @@ export class PenggunaController {
 
         return kontrak.statusPekerjaan === 'Done';
     }
-    public static async triggerRating(req: Request<TriggerRatingParams>,res: Response): Promise<void> {
+    public static async triggerRating(req: Request, res: Response): Promise<void> {
         try {
             const idPenggunaLogin = req.user?.idPengguna;
             const { idKontrak } = req.params;
