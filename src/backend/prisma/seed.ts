@@ -44,14 +44,14 @@ async function main() {
   }
 
   // 2. Seed Pengguna: Pelanggan (UUID)
-  const idPelanggan = '111e8400-e29b-41d4-a716-446655440001';
-  await prisma.pengguna.upsert({
+  const idPelangganSeed = '111e8400-e29b-41d4-a716-446655440001';
+  const pelanggan = await prisma.pengguna.upsert({
     where: { username: 'budi_pelanggan' },
     update: {
       password: defaultPasswordHash,
     },
     create: {
-      idPengguna: idPelanggan,
+      idPengguna: idPelangganSeed,
       namaPengguna: 'Budi Santoso',
       username: 'budi_pelanggan',
       password: defaultPasswordHash,
@@ -62,6 +62,8 @@ async function main() {
       riwayatRating: [5.0, 4.6],
     },
   });
+
+  const actualPelangganId = pelanggan.idPengguna;
 
   // 3. Seed Pengguna & Pemberi Jasa (UUID + koordinat GPS sekitar Bandung)
   const providers = [
@@ -109,8 +111,10 @@ async function main() {
     },
   ];
 
+  const providerIdMap: Record<string, string> = {};
+
   for (const prov of providers) {
-    await prisma.pengguna.upsert({
+    const userProv = await prisma.pengguna.upsert({
       where: { username: prov.username },
       update: {
         password: defaultPasswordHash,
@@ -130,8 +134,8 @@ async function main() {
       },
     });
 
-    await prisma.pemberiJasa.upsert({
-      where: { idPemberiJasa: prov.idPemberiJasa },
+    const pemberi = await prisma.pemberiJasa.upsert({
+      where: { idPemberiJasa: userProv.idPengguna },
       update: {
         namaToko: prov.namaToko,
         idKategoriJasa: prov.idKategoriJasa,
@@ -140,7 +144,7 @@ async function main() {
         longitude: prov.longitude,
       },
       create: {
-        idPemberiJasa: prov.idPemberiJasa,
+        idPemberiJasa: userProv.idPengguna,
         namaToko: prov.namaToko,
         idKategoriJasa: prov.idKategoriJasa,
         jenisJasa: prov.jenisJasa,
@@ -150,6 +154,8 @@ async function main() {
         isOnline: true,
       },
     });
+
+    providerIdMap[prov.username] = pemberi.idPemberiJasa;
   }
 
   // 4. Seed Pengguna & Layanan Pelanggan (UUID)
@@ -181,11 +187,15 @@ async function main() {
   });
 
   // 5. Seed Kontrak Pekerjaan (Riwayat Transaksi Pelanggan & Penyedia)
+  const ahmadId = providerIdMap['ahmad_teknik'] || providers[0].idPemberiJasa;
+  const sitiId = providerIdMap['siti_clean'] || providers[1].idPemberiJasa;
+  const dediId = providerIdMap['dedi_ledeng'] || providers[2].idPemberiJasa;
+
   const kontrakList = [
     {
       idKontrakPekerjaan: '333e8400-e29b-41d4-a716-446655440001',
-      idPelanggan,
-      idPemberiJasa: '222e8400-e29b-41d4-a716-446655440002', // Siti Bersih
+      idPelanggan: actualPelangganId,
+      idPemberiJasa: sitiId,
       detailPekerjaan: 'Bersih-bersih rumah · 2 jam',
       persetujuanHarga: 100000,
       statusPekerjaan: 'On Progress',
@@ -194,8 +204,8 @@ async function main() {
     },
     {
       idKontrakPekerjaan: '333e8400-e29b-41d4-a716-446655440002',
-      idPelanggan,
-      idPemberiJasa: '222e8400-e29b-41d4-a716-446655440002', // Siti Bersih
+      idPelanggan: actualPelangganId,
+      idPemberiJasa: sitiId,
       detailPekerjaan: 'Cuci & setrika · 3 kg',
       persetujuanHarga: 60000,
       statusPekerjaan: 'Done',
@@ -204,8 +214,8 @@ async function main() {
     },
     {
       idKontrakPekerjaan: '333e8400-e29b-41d4-a716-446655440003',
-      idPelanggan,
-      idPemberiJasa: '222e8400-e29b-41d4-a716-446655440001', // Ahmad Teknik
+      idPelanggan: actualPelangganId,
+      idPemberiJasa: ahmadId,
       detailPekerjaan: 'Servis AC & Perbaikan Elektronik',
       persetujuanHarga: 120000,
       statusPekerjaan: 'Done',
@@ -214,8 +224,8 @@ async function main() {
     },
     {
       idKontrakPekerjaan: '333e8400-e29b-41d4-a716-446655440004',
-      idPelanggan,
-      idPemberiJasa: '222e8400-e29b-41d4-a716-446655440003', // Kang Dedi Pipa
+      idPelanggan: actualPelangganId,
+      idPemberiJasa: dediId,
       detailPekerjaan: 'Angkut barang pindahan',
       persetujuanHarga: 150000,
       statusPekerjaan: 'Dibatalkan',
@@ -237,15 +247,15 @@ async function main() {
     where: {
       idKontrakPekerjaan_idPenggunaPemberi: {
         idKontrakPekerjaan: '333e8400-e29b-41d4-a716-446655440003',
-        idPenggunaPemberi: idPelanggan,
+        idPenggunaPemberi: actualPelangganId,
       },
     },
     update: {},
     create: {
       idRating: '888e8400-e29b-41d4-a716-446655440001',
       idKontrakPekerjaan: '333e8400-e29b-41d4-a716-446655440003',
-      idPenggunaPemberi: idPelanggan,
-      idPenggunaPenerima: '222e8400-e29b-41d4-a716-446655440001',
+      idPenggunaPemberi: actualPelangganId,
+      idPenggunaPenerima: ahmadId,
       nilaiRating: 5.0,
       ulasan: 'Pekerjaan servis AC sangat rapi dan teknisi ramah.',
       tags: ['Tepat Waktu', 'Kerja Bersih', 'Ramah'],
