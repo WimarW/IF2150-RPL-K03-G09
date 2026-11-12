@@ -155,7 +155,7 @@ model Notifikasi {
   idPenerima      String   @map("id_penerima")
   isiNotifikasi   String   @map("isi_pesan")
   waktuNotifikasi DateTime @default(now()) @map("waktu_notifikasi")
-  statusBaca      String   @default("Unread") @map("status_baca")
+  statusBaca      Boolean   @default(false) @map("status_baca")
 
   penerima Pengguna @relation(fields: [idPenerima], references: [idPengguna])
 

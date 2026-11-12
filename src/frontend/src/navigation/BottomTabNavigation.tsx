@@ -2,13 +2,16 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { RootTabParamList } from './types';
-import { BerandaScreen } from '../views/BerandaScreen';
+import { HomeView } from '../views/home/HomeView';
 import { RiwayatScreen } from '../views/RiwayatScreen';
 import { ChatScreen } from '../views/ChatScreen';
+import { useUnreadCounts } from '../context/UnreadContext';
 
 const Tab = createBottomTabNavigator<RootTabParamList>();
 
 export const BottomTabNavigator: React.FC = () => {
+  const { unreadMessages } = useUnreadCounts();
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -30,7 +33,11 @@ export const BottomTabNavigator: React.FC = () => {
         },
       })}
     >
-      <Tab.Screen name="Beranda" component={BerandaScreen} />
+      <Tab.Screen
+        name="Beranda"
+        component={HomeView}
+        options={{ headerShown: false }}
+      />
       <Tab.Screen
         name="Riwayat"
         component={RiwayatScreen}
@@ -39,7 +46,14 @@ export const BottomTabNavigator: React.FC = () => {
           tabBarLabel: 'Riwayat',
         }}
       />
-      <Tab.Screen name="Chat" component={ChatScreen} />
+      <Tab.Screen
+        name="Chat"
+        component={ChatScreen}
+        options={{
+          headerShown: false,
+          tabBarBadge: unreadMessages > 0 ? unreadMessages : undefined,
+        }}
+      />
     </Tab.Navigator>
   );
 };
