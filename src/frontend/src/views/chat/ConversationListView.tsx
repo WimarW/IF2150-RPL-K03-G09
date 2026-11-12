@@ -82,15 +82,25 @@ export const ConversationListView: React.FC = () => {
             <Text style={styles.title}>Pesan</Text>
             <Text style={styles.subtitle}>Obrolan dengan pemberi jasa & CS</Text>
           </View>
-          {!isPenyediaJasa && (
+          <View style={styles.headerActions}>
+            {/* UC08: buka daftar tiket laporan ke CS (pelanggan & pemberi jasa) */}
             <TouchableOpacity
               style={styles.pencilButton}
-              onPress={handlePencilClick}
-              accessibilityLabel="Mulai percakapan baru"
+              onPress={() => navigation.navigate('MyTickets')}
+              accessibilityLabel="Tiket laporan ke CS"
             >
-              <Feather name="edit-2" size={18} color={colors.navy} />
+              <Feather name="life-buoy" size={18} color={colors.navy} />
             </TouchableOpacity>
-          )}
+            {!isPenyediaJasa && (
+              <TouchableOpacity
+                style={[styles.pencilButton, styles.headerActionGap]}
+                onPress={handlePencilClick}
+                accessibilityLabel="Mulai percakapan baru"
+              >
+                <Feather name="edit-2" size={18} color={colors.navy} />
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
 
         <SearchField value={searchQuery} onChangeText={setSearchQuery} />
@@ -166,6 +176,12 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: colors.textSecondary,
     marginTop: 2,
+  },
+  headerActions: {
+    flexDirection: 'row',
+  },
+  headerActionGap: {
+    marginLeft: 8,
   },
   pencilButton: {
     width: 40,
