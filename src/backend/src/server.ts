@@ -3,6 +3,7 @@ import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { Server as SocketIOServer } from 'socket.io';
+import ratingsRoutes from './routes/ratings.routes';
 
 import authRouter from './routes/auth.routes';
 import usersRouter from './routes/user.routes';
@@ -91,6 +92,8 @@ export function createApp(): {
   // ---------- Routes ----------
   app.use('/api/auth', authRouter);
   app.use('/api/users', usersRouter);
+  app.use('/api/ratings', ratingsRoutes);
+
 
   app.get('/health', (_req: Request, res: Response) => {
     res.status(200).json({ status: 'ok', uptime: process.uptime() });
