@@ -131,6 +131,7 @@ export class Komunikasi {
   ): Promise<KomunikasiRecord[]> {
     return prisma.komunikasi.findMany({
       where: {
+        idTiket: null,
         OR: [
           { idPengguna: idPengguna1, idPenerima: idPengguna2 },
           { idPengguna: idPengguna2, idPenerima: idPengguna1 },
@@ -173,6 +174,7 @@ export class Komunikasi {
     const [distinctDirectionMessages, unreadGroups] = await Promise.all([
       prisma.komunikasi.findMany({
         where: {
+          idTiket: null,
           OR: [{ idPengguna }, { idPenerima: idPengguna }],
         },
         orderBy: {
@@ -199,6 +201,7 @@ export class Komunikasi {
       prisma.komunikasi.groupBy({
         by: ['idPengguna'],
         where: {
+          idTiket: null,
           idPenerima: idPengguna,
           isChatTerbaca: false,
         },
@@ -250,6 +253,7 @@ export class Komunikasi {
   ): Promise<number> {
     const updated = await prisma.komunikasi.updateMany({
       where: {
+        idTiket: null,
         idPengguna: idLawanBicara,
         idPenerima: idPenerimaLogin,
         isChatTerbaca: false,
