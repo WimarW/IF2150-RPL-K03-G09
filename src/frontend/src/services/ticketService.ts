@@ -2,7 +2,7 @@
  * Service tiket laporan & Layanan Pelanggan (UC08, UC09).
  * Memakai sesi & API_BASE_URL dari ./api (sama dengan fitur chat), plus token JWT untuk endpoint tiket.
  */
-import { API_BASE_URL, ApiError, Role, getCurrentUser, setCurrentUserRole } from './api';
+import { API_BASE_URL, ApiError, Role, getApiAuthToken, getCurrentUser, setCurrentUserRole } from './api';
 
 export { ApiError };
 export type { Role };
@@ -18,31 +18,59 @@ if (DEV_ROLE === 'PELANGGAN' || DEV_ROLE === 'PEMBERI_JASA' || DEV_ROLE === 'LAY
 
 let authToken: string | null = null;
 let tokenOwner = ''; // "idPengguna:role" pemilik token yang tersimpan
+let sessionRoleOverride: Role | null = null;
 
 /** Panggil setelah login asli berhasil (token dari POST /api/auth/login). */
-export function setTicketSession(token: string | null) {
-  authToken = token;
+export function setTicketSession(token: string | null, role?: Role) {
+  sessionRoleOverride = role ?? null;
   const u = getCurrentUser();
-  tokenOwner = token ? `${u.idPengguna}:${u.role}` : '';
+  const effectiveRole = role ?? u.role;
+  if (token && !token.startsWith('local-jwt-')) {
+    authToken = token;
+    tokenOwner = `${u.idPengguna}:${effectiveRole}`;
+  } else {
+    authToken = null;
+    tokenOwner = '';
+  }
 }
 
-export const getRole = (): Role => getCurrentUser().role;
+export const getRole = (): Role => sessionRoleOverride ?? getCurrentUser().role;
 export const isCS = () => getRole() === 'LAYANAN_PELANGGAN';
-export const imageUrl = (p?: string | null) => (p ? `${SERVER_ORIGIN}${p}` : null);
+export const imageUrl = (p?: string | null) => {
+  if (!p) return null;
+  if (/^https?:\/\//i.test(p)) return p;
+  return `${SERVER_ORIGIN}${p.startsWith('/') ? p : `/${p}`}`;
+};
 
 /**
  * Ambil token. Kalau belum login asli, minta token development ke backend
  * (POST /api/auth/dev-token, aktif bila backend dijalankan dengan ENABLE_DEV_TOKEN=true).
  */
-async function getToken(): Promise<string | null> {
+async function getToken(forceRefresh = false): Promise<string | null> {
   const u = getCurrentUser();
-  const owner = `${u.idPengguna}:${u.role}`;
-  if (authToken && tokenOwner === owner) return authToken;
+  const effectiveRole = sessionRoleOverride ?? u.role;
+  const owner = `${u.idPengguna}:${effectiveRole}`;
+  if (forceRefresh) {
+    authToken = null;
+    tokenOwner = '';
+  } else {
+    const apiToken = getApiAuthToken();
+    if (!authToken && apiToken && !apiToken.startsWith('local-jwt-')) {
+      authToken = apiToken;
+      tokenOwner = owner;
+    }
+    if (authToken && tokenOwner === owner) return authToken;
+  }
   try {
     const res = await fetch(`${API_BASE_URL}/auth/dev-token`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify({ idPengguna: u.idPengguna, role: u.role }),
+      body: JSON.stringify({
+        idPengguna: u.idPengguna,
+        namaPengguna: u.namaPengguna,
+        email: u.email,
+        role: effectiveRole,
+      }),
     });
     const json: any = await res.json().catch(() => null);
     if (res.ok && json?.data?.token) {
@@ -58,24 +86,34 @@ async function getToken(): Promise<string | null> {
 
 /** path relatif terhadap API_BASE_URL, contoh '/tickets/mine'. Mengembalikan field `data`. */
 export async function api<T = any>(path: string, opts: { method?: string; json?: unknown; form?: FormData } = {}): Promise<T> {
-  const headers: Record<string, string> = { Accept: 'application/json' };
-  const token = await getToken();
-  if (token) headers.Authorization = `Bearer ${token}`;
-  let body: any;
-  if (opts.json !== undefined) { headers['Content-Type'] = 'application/json'; body = JSON.stringify(opts.json); }
-  if (opts.form) body = opts.form; // Content-Type multipart diisi otomatis
-
   const url = `${API_BASE_URL}${path}`;
   const method = opts.method ?? 'GET';
+
+  const sendOnce = async (forceRefresh: boolean): Promise<{ status: number; json: any }> => {
+    const headers: Record<string, string> = { Accept: 'application/json' };
+    const token = await getToken(forceRefresh);
+    if (token) headers.Authorization = `Bearer ${token}`;
+    let body: any;
+    if (opts.json !== undefined) {
+      headers['Content-Type'] = 'application/json';
+      body = JSON.stringify(opts.json);
+    }
+    if (opts.form) body = opts.form; // Content-Type multipart diisi otomatis
+
+    if (opts.form) {
+      return sendMultipart(url, method, headers, opts.form);
+    }
+    const res = await fetch(url, { method, headers, body });
+    const parsed = await res.json().catch(() => null);
+    return { status: res.status, json: parsed };
+  };
+
   let status: number;
   let json: any;
   try {
-    if (opts.form) {
-      ({ status, json } = await sendMultipart(url, method, headers, opts.form));
-    } else {
-      const res = await fetch(url, { method, headers, body });
-      status = res.status;
-      json = await res.json().catch(() => null);
+    ({ status, json } = await sendOnce(false));
+    if (status === 401) {
+      ({ status, json } = await sendOnce(true));
     }
   } catch {
     throw new ApiError('Tidak dapat terhubung ke server. Periksa koneksi internet Anda.', 0);

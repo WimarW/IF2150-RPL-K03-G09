@@ -5,6 +5,8 @@ import { Role } from '@prisma/client';
 async function main() {
   console.log('🌱 Memulai proses seeding database CariUang dengan format UUID...');
 
+  await prisma.$executeRawUnsafe(`CREATE SEQUENCE IF NOT EXISTS seq_nomor_tiket START 2000;`);
+
   const defaultPasswordHash = await bcrypt.hash('PasswordAman123', 10);
 
   // 1. Seed Kategori Jasa (UUID)

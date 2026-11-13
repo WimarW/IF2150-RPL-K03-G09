@@ -30,25 +30,50 @@ const MOCK_NOTIFICATIONS: AppNotification[] = [
   },
 ];
 
+type NotificationsEnvelope =
+  | AppNotification[]
+  | { items?: AppNotification[]; unreadCount?: number; nextCursor?: string | null };
+
+function extractRefId(isi: string, existingRefId?: string): string | undefined {
+  if (existingRefId) return existingRefId;
+  const match = isi.match(/#([A-Za-z0-9-]+)/);
+  return match?.[1];
+}
+
 export const notificationService = {
   async getNotifications(): Promise<AppNotification[]> {
-    if (CHAT_CONFIG.USE_MOCK) {
+    if (CHAT_CONFIG.USE_MOCK_CHAT) {
       await new Promise((resolve) => setTimeout(resolve, 300));
       return MOCK_NOTIFICATIONS.map((n) => ({
         ...n,
         tipe: n.tipe || inferNotificationType(n.isiNotifikasi),
+        refId: extractRefId(n.isiNotifikasi, n.refId),
       }));
     }
 
-    const data = await apiGet<AppNotification[]>('/notifications');
-    return data.map((n) => ({
-      ...n,
-      tipe: n.tipe || inferNotificationType(n.isiNotifikasi),
-    }));
+    try {
+      const data = await apiGet<NotificationsEnvelope>('/notifications');
+      const rawItems = Array.isArray(data)
+        ? data
+        : Array.isArray(data?.items)
+          ? data.items
+          : [];
+      return rawItems.map((n) => ({
+        ...n,
+        tipe: n.tipe || inferNotificationType(n.isiNotifikasi),
+        refId: extractRefId(n.isiNotifikasi, n.refId),
+      }));
+    } catch {
+      return MOCK_NOTIFICATIONS.map((n) => ({
+        ...n,
+        tipe: n.tipe || inferNotificationType(n.isiNotifikasi),
+        refId: extractRefId(n.isiNotifikasi, n.refId),
+      }));
+    }
   },
 
   async markAsRead(idNotifikasi: string): Promise<void> {
-    if (CHAT_CONFIG.USE_MOCK) {
+    if (CHAT_CONFIG.USE_MOCK_CHAT) {
       const target = MOCK_NOTIFICATIONS.find((n) => n.idNotifikasi === idNotifikasi);
       if (target) {
         target.statusBaca = true;
@@ -59,7 +84,7 @@ export const notificationService = {
   },
 
   async markAllAsRead(): Promise<void> {
-    if (CHAT_CONFIG.USE_MOCK) {
+    if (CHAT_CONFIG.USE_MOCK_CHAT) {
       MOCK_NOTIFICATIONS.forEach((n) => {
         n.statusBaca = true;
       });

@@ -683,7 +683,7 @@ export const authService = {
 
   logout(): void {
     setApiAuthToken(null);
-    setTicketSession(null, 'PELANGGAN');
     setCurrentSessionUser({ ...DEV_USER });
+    setTicketSession(null, 'PELANGGAN');
   },
 };

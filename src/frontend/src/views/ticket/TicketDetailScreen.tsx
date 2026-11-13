@@ -7,6 +7,7 @@ import { Feather } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { api, avatarColor, formatTanggal, formatWaktu, isCS as cekIsCS, imageUrl } from '../../services/ticketService';
+import { getCurrentUser } from '../../services/api';
 
 const MAX_BYTES = 5 * 1024 * 1024;
 
@@ -55,7 +56,13 @@ export default function TicketDetailScreen({ route, navigation }: any) {
     return () => clearInterval(t);
   }, [load]);
 
+  const currentUser = getCurrentUser();
   const closed = ticket?.status === 'Selesai';
+  const handledByOtherCS = Boolean(
+    isCS && ticket?.assignedTo && ticket.assignedTo !== currentUser.idPengguna
+  );
+  const waitingForCS = Boolean(!isCS && ticket && !ticket.assignedTo);
+  const canReply = !closed && !handledByOtherCS && !waitingForCS;
   // Laporan awal diambil dari data tiket; `messages` berisi seluruh percakapan mediasi
   const chat = messages;
 
@@ -73,7 +80,7 @@ export default function TicketDetailScreen({ route, navigation }: any) {
 
   const sendMessage = async () => {
     const text = reply.trim();
-    if (!text || sending || closed) return;
+    if ((!text && !attach) || sending || !canReply) return;
     setSending(true);
     try {
       const form = new FormData();
@@ -123,14 +130,14 @@ export default function TicketDetailScreen({ route, navigation }: any) {
             <Text style={styles.headerSubtitle}>{ticket.title} • {ticket.status}</Text>
           </View>
         </TouchableOpacity>
-        {isCS && !closed && (
+        {isCS && !closed && !handledByOtherCS && (
           <TouchableOpacity onPress={handleResolveTicket} style={styles.resolveButton}>
             <Text style={styles.resolveText}>Tutup Tiket</Text>
           </TouchableOpacity>
         )}
       </View>
 
-      <ScrollView ref={scrollRef} style={styles.chatContainer} contentContainerStyle={{ paddingBottom: closed ? 20 + insets.bottom : 20 }}>
+      <ScrollView ref={scrollRef} style={styles.chatContainer} contentContainerStyle={{ paddingBottom: !canReply ? 20 + insets.bottom : 20 }}>
         <View style={styles.reportCard}>
           <View style={styles.reportHeader}>
             <View style={[styles.avatar, { backgroundColor: color }]}><Text style={styles.avatarText}>{ticket.initials}</Text></View>
@@ -155,21 +162,24 @@ export default function TicketDetailScreen({ route, navigation }: any) {
           return (
             <View key={msg.id} style={[styles.messageRow, mine ? styles.messageRowRight : styles.messageRowLeft]}>
               <View style={[styles.bubble, mine ? styles.bubbleRight : styles.bubbleLeft]}>
-                {img && <Image source={{ uri: img }} style={styles.bubbleImage} />}
-                <Text style={[styles.messageText, mine ? styles.textWhite : styles.textBlack]}>{msg.text}</Text>
+                {img && <Image source={{ uri: img }} style={[styles.bubbleImage, !msg.text && { marginBottom: 0 }]} />}
+                {msg.text ? <Text style={[styles.messageText, mine ? styles.textWhite : styles.textBlack]}>{msg.text}</Text> : null}
               </View>
               <Text style={styles.timeText}>{formatWaktu(msg.time)}</Text>
             </View>
           );
         })}
 
-        {!closed && !isCS && !ticket.assignedTo && (
-          <Text style={styles.closedText}>Tiket sedang menunggu petugas CS.</Text>
+        {handledByOtherCS && !closed && (
+          <Text style={styles.closedText}>Tiket ini sedang ditangani oleh petugas CS lain.</Text>
+        )}
+        {waitingForCS && !closed && (
+          <Text style={styles.closedText}>Menunggu petugas CS mengambil dan membalas tiket ini.</Text>
         )}
         {closed && <Text style={styles.closedText}>Tiket telah ditutup. Ruang obrolan tidak dapat digunakan lagi.</Text>}
       </ScrollView>
 
-      {!closed && (
+      {canReply && (
         <>
           {attach && (
             <View style={styles.attachPreview}>
@@ -182,7 +192,11 @@ export default function TicketDetailScreen({ route, navigation }: any) {
               <Feather name="paperclip" size={24} color="#78909C" />
             </TouchableOpacity>
             <TextInput style={styles.input} placeholder="Ketik balasan..." value={reply} onChangeText={setReply} multiline />
-            <TouchableOpacity style={[styles.sendButton, (!reply.trim() || sending) && { opacity: 0.5 }]} onPress={sendMessage} disabled={!reply.trim() || sending}>
+            <TouchableOpacity
+              style={[styles.sendButton, ((!reply.trim() && !attach) || sending) && { opacity: 0.5 }]}
+              onPress={sendMessage}
+              disabled={(!reply.trim() && !attach) || sending}
+            >
               {sending ? <ActivityIndicator color="white" /> : <Feather name="send" size={20} color="white" />}
             </TouchableOpacity>
           </View>
