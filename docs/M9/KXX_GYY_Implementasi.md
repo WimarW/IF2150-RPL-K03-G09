@@ -229,13 +229,9 @@ Tabel B.4. Kontribusi Anggota
 
 | NIM | Nama | Modul / Fitur yang Dikerjakan | Persentase Kontribusi |
 | :--- | :--- | :--- | :--- |
-| *13525120* | *Naufal Hasbialhaq* | *Setup Docker Compose PostgreSQL 16, Skema DDL, dan Seeder Data Uji
-database, Pengujian Otomatis Unit Test & Integration Test Alur Kunci, UI Beranda Pelanggan, Rekomendasi Pencarian, Hasil Pencarian, dan Integrasi Peta Lokasi (UC02), UI Pendaftaran Layanan Penyedia Jasa (UC01), Backend Pendaftaran Jasa, Katalog Kategori, dan Pencarian Terdekat (Haversine)* | *20%* |
-| *13525009* | *Wimar Widiarto* | *UI Beri Penilaian & Dialog Popup Rating Pasca Transaksi (UC10)
-, Backend Penilaian (Rating) Dua Arah dan Akumulasi Rating Array PostgreSQL, UI Login, Registrasi Pelanggan/Penyedia Jasa, dan Profil Saya
-, UI Login, Registrasi Pelanggan/Penyedia Jasa, dan Profil Saya, Backend Autentikasi (Login & Register Multi-Role) dan Manajemen Profil, Inisialisasi Struktur Monorepo MVC, Backend Express.js, dan Frontend React Native, Backend Autentikasi (Login & Register Multi-Role) dan Manajemen Profil* | *20%* |
-| *13525093* | *Vinsensius Juan Setiady* | *UI Daftar Pesan, Ruang Obrolan (Pelanggan & Penyedia Jasa), dan Notifikasi
-, Backend Komunikasi Chat Real-Time dan Layanan Notifikasi Otomatis, Penyusunan Dokumentasi Utama Aplikasi (src/README.md) & Build APK Android, Issue Testing* | *20%* |
+| *13525120* | *Naufal Hasbialhaq* | *Setup Docker Compose PostgreSQL 16, Skema DDL, dan Seeder Data Uji, database, Pengujian Otomatis Unit Test & Integration Test Alur Kunci, UI Beranda Pelanggan, Rekomendasi Pencarian, Hasil Pencarian, dan Integrasi Peta Lokasi (UC02), UI Pendaftaran Layanan Penyedia Jasa (UC01), Backend Pendaftaran Jasa, Katalog Kategori, dan Pencarian Terdekat (Haversine)* | *20%* |
+| *13525009* | *Wimar Widiarto* | *UI Beri Penilaian & Dialog Popup Rating Pasca Transaksi (UC10), Backend Penilaian (Rating) Dua Arah dan Akumulasi Rating Array PostgreSQL, UI Login, Registrasi Pelanggan/Penyedia Jasa, dan Profil Saya, UI Login, Registrasi Pelanggan/Penyedia Jasa, dan Profil Saya, Backend Autentikasi (Login & Register Multi-Role) dan Manajemen Profil, Inisialisasi Struktur Monorepo MVC, Backend Express.js, dan Frontend React Native, Backend Autentikasi (Login & Register Multi-Role) dan Manajemen Profil* | *20%* |
+| *13525093* | *Vinsensius Juan Setiady* | *UI Daftar Pesan, Ruang Obrolan (Pelanggan & Penyedia Jasa), dan Notifikasi,Backend Komunikasi Chat Real-Time dan Layanan Notifikasi Otomatis, Penyusunan Dokumentasi Utama Aplikasi (src/README.md) & Build APK Android, Issue Testing* | *20%* |
 | *13525126* | *Raymond Edson Sabajan* | * Komponen Pembuatan & Konfirmasi Kontrak di Ruang Obrolan (UC05), Backend Kontrak Pekerjaan, Optimistic Locking Ketersediaan, dan Auto-Cancel 30 Menit, Komponen Pembuatan & Konfirmasi Kontrak di Ruang Obrolan (UC05), Backend Kontrak Pekerjaan, Optimistic Locking Ketersediaan, dan Auto-Cancel 30 Menit* | *20%* |
 | *13525048* | *Yohanes Nicholas Setiawan* | * Finalisasi Laporan M9 (K03_G09_Implementasi.md), Traceability Tabel B.5, Logbook & AI Usage, UI Buat Tiket Laporan, Beranda CS, dan Ruang Obrolan Mediasi Tiket (UC08, UC09), Backend Tiket Laporan Masalah, Auto-Assign CS, dan Mediasi Obrolan Tiket
 * | *20%* |
