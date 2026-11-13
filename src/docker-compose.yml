@@ -17,21 +17,47 @@ services:
       timeout: 5s
       retries: 5
 
-  # backend:
-  #   build:
-  #     context: ./backend
-  #     dockerfile: Dockerfile
-  #   container_name: cariuang-backend
-  #   restart: always
-  #   environment:
-  #     PORT: 5000
-  #     DATABASE_URL: "postgresql://cariuang_user:cariuang_password@db:5432/cariuang_db?schema=public"
-  #     JWT_SECRET: "kunci_rahasia_cariuang_2026"
-  #   ports:
-  #     - "5000:5000"
-  #   depends_on:
-  #     db:
-  #       condition: service_healthy
+  backend:
+    build:
+      context: ./backend
+      dockerfile: DockerFile
+    container_name: cariuang-backend
+    restart: always
+    environment:
+      PORT: 5000
+      DATABASE_URL: "postgresql://cariuang_user:cariuang_password@db:5432/cariuang_db?schema=public"
+      JWT_SECRET: "kunci_rahasia_cariuang_2026"
+      # Token tanpa password untuk tes frontend selama halaman login belum ada. Matikan di produksi.
+      ENABLE_DEV_TOKEN: "true"
+    ports:
+      - "5000:5000"
+    volumes:
+      # foto bukti tiket laporan tidak hilang saat container dibuat ulang
+      - uploads:/app/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: cariuang-frontend
+    restart: always
+    environment:
+      - EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
+      - REACT_NATIVE_PACKAGER_HOSTNAME=${REACT_NATIVE_PACKAGER_HOSTNAME:-localhost}
+      - EXPO_PUBLIC_API_URL=${EXPO_PUBLIC_API_URL:-http://localhost:5000/api}
+    ports:
+      - "8081:8081"
+      - "19000:19000"
+      - "19001:19001"
+      - "19002:19002"
+    depends_on:
+      - backend
+    stdin_open: true
+    tty: true
 
 volumes:
   pgdata:
+  uploads:

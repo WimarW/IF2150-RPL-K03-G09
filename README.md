@@ -1,100 +1,278 @@
+# CariUang
 
-# Tugas Besar IF2150 Rekayasa Perangkat Lunak
+### <img src="./docs/M7/assets/diagram/cariuang.svg" width="100" height="100">
 
 ---
 
-## 1. Overview
+<div style="text-align:justify;">
+"CariUang" adalah suatu perangkat lunak berbasis *mobile application* pada sistem operasi Android yang menjadi jembatan antara pekerja jasa (freelance) dan pengguna yang ingin menggunakan jasa mereka. Perangkat lunak ini memungkinkan pengguna untuk mengunggah kebutuhan jasa dan memilih jasa mereka. Kemudian, pemilik jasa dapat terhubung dengan pengguna untuk memberikan estimasi harga. Jika harga disetujui, pengguna akan menginput persetujuan/deskripsi pekerjaan dan harga ke apikasi sebelum disetujui oleh pemilik jasa. Jika tidak disetujui, pengguna akan kembali memilih pemilik jasa yang lain. Setelah itu, pemilik jasa akan melakukan pekerjaan sesuai persetujuan/deskripsi pekerjaan. Setelah semua pekerjaan selesai, pengguna akan membayar harga yang telah ditetapkan sebelumnya.
 
-Setiap milestone, asisten akan merilis materi/spesifikasi baru ke **repository original** yang ada di organisasi GitHub mata kuliah ini. Kelompok bekerja di **hasil fork** dari repository tersebut, dan setiap ada milestone baru, kelompok melakukan **sync** untuk pull update tersebut ke repo hasil fork.
+Jika pengguna bingung akan pekerja jasa mana yang memiliki performa terbaik mengenai salah satu pekerjaan spesifik, perangkat lunak ini memiliki sistem rekomendasi pemilik jasa yang dikelompokkan kepada berbagai kelompok pekerjaan. Pengguna kemudian dapat langsung menghubungi pemilik jasa untuk menggunakan jasa mereka.
 
---- 
-## 2. Repository Structure
+Di dalam perangkat lunak yang kami buat, terdapat sistem *rating* untuk memberi penilaian terhadap kinerja pemilik jasa dan perilaku pengguna jasa. Rating diberikan oleh pengguna kepada pemilik jasa dan begitupun sebaliknya, sehingga baik pengguna atau pemilik jasa harus memberikan pelayanan atau perilaku yang terbaik untuk menjaga rating mereka. Jika rating melewati batas bawah yang telah ditentukan, baik pemilik atau pengguna jasa akan mendapatkan sanksi tertentu.
 
-Repository original disusun per milestone:
+Jika pengguna atau pemilik jasa memiliki beberapa keluhan yang tidak dapat diselesaikan antara kedua belah pihak, pengguna dapat membuat aduan kepada pihak Customer Service untuk ditindaklanjuti. Pengguna dapat mengirim tiket laporan mengenai berbagai topik spesifik dengan cara mengisi suatu form yang terdapat di menu Laporan. Setelah tiket dikirim, pihak Customer Service kemudian akan meninjau laporan tersebut untuk mencari langkah penyelesaian yang paling baik. Setelah selesai, pihak Customer Service akan memberikan tanggapan kepada pelapor mengenai hal yang telah dilakukan atau tindakan lanjutan yang perlu dilakukan.
+</div>
 
+---
+
+## 1. Tech Stack & Versi yang Digunakan
+
+* **Mobile Frontend:** React Native 0.88.1, Expo SDK ~58.0.22, TypeScript ~6.0.3, React Navigation v7
+* **Backend API:** Node.js (>= v24.0.0), Express.js 4.21.2, Socket.IO 4.8.4, TypeScript 5.7.2
+* **Database & ORM:** PostgreSQL 16 (via Docker image `postgres:16-alpine`), Prisma ORM 5.22.0
+* **Testing:** Jest (~30.5.2) & Jest-Expo (~58.0.14)
+
+---
+
+## 2. Prasyarat Software & Langkah Instalasi Dependensi
+
+### Prasyarat Sistem
+* **Node.js** versi `>= 24.x` dan **npm**
+* **Docker & Docker Compose** (Pastikan Docker Desktop sudah dibuka dan berstatus *running* untuk macOS/Windows, atau service Docker aktif `sudo service docker start` untuk Linux/WSL)
+* **Expo Go** (terpasang pada perangkat HP fisik Android/iOS) atau **Android Emulator** (Android Studio)
+
+### Langkah Instalasi Dependensi
+
+Jalankan perintah berikut secara berurutan untuk memasang seluruh *dependencies* pada backend dan frontend:
+
+```bash
+# 1. Pasang dependensi Backend
+cd src/backend
+npm install
+
+# 2. Pasang dependensi Frontend
+cd ../frontend
+npm install
+
+# 3. Kembali ke root repository
+cd ../..
 ```
-docs/
-	assets/                        # aset dokumen umum
-	K03_G09_AI-Usage.md            # dokumentasi penggunaan AI
-	K03_G09_Logbook.md             # dokumentasi logbook pekerjaan kelompok
-	M1/                            # milestone 1
-		assets/                    # gambar, diagram, dll untuk milestone ini
-			diagram/              
-				Swimlane.png	   # Gambar diagram swimlane perangkat lunak
-			foto-asistensi.png	   # foto dokumentasi asistensi
-		K03_G09_Form-Asistensi.md  # dokumentasi asistensi
-		K03_G09_Final_TB.md    # dokumen tugas besar
-	M2/                            # milestone 2
-		assets/                    # gambar, diagram, dll untuk milestone ini
-			diagram/              
-			foto-asistensi.png	   # foto dokumentasi asistensi
-		K03_G09_Form-Asistensi.md  # dokumentasi asistensi
-		K03_G09_RG.md    # dokumen tugas besar
-src/                               # source code perangkat lunak
+
+---
+
+## 3. Konfigurasi Environment, Docker, Migrasi, dan Seed Data
+
+### A. Konfigurasi Environment Variable (`.env`)
+
+#### 1. Backend (`src/backend/.env`)
+Salin berkas template `src/.env.example` ke `src/backend/.env`:
+
+```bash
+cp src/.env.example src/backend/.env
 ```
 
-**Penting:** setiap rilis milestone baru hanya akan **menambah** folder/file baru. Asisten tidak akan mengubah isi folder milestone yang sudah rilis sebelumnya. Ini artinya kelompok bebas mengedit apapun yang sudah dikerjakan di folder-folder lama tanpa takut tertimpa saat sync.
+Pastikan isi `src/backend/.env` sesuai *(port `5433` disesuaikan dengan mapping port PostgreSQL pada `src/docker-compose.yml`)*:
+
+```env
+PORT=5000
+NODE_ENV=development
+DATABASE_URL="postgresql://cariuang_user:cariuang_password@localhost:5433/cariuang_db?schema=public"
+JWT_SECRET="kunci_rahasia_cariuang_2026_super_aman_minimal_32_karakter"
+JWT_EXPIRES_IN="7d"
+```
+*(Catatan: Jika port `5000` di macOS bentrok dengan AirPlay Receiver, Anda dapat mengubah `PORT=3000` dan menyesuaikan port mapping).*
+
+#### 2. Frontend (`src/frontend/.env`)
+Buat berkas `src/frontend/.env` untuk menentukan alamat *endpoint* backend. Nilai `EXPO_PUBLIC_API_URL` harus disesuaikan dengan jenis perangkat yang Anda gunakan untuk menguji aplikasi:
+
+* **Opsi 1 — Pengujian via HP Fisik (Expo Go):**
+  HP fisik tidak dapat mengakses `localhost` laptop. Gunakan IP lokal Wi-Fi laptop Anda (dapatkan IP melalui perintah `ipconfig getifaddr en0` di Mac atau `ipconfig` di Windows).
+  ```env
+  EXPO_PUBLIC_API_URL=http://<IP_WIFI_LAPTOP>:5000/api
+  ```
+  *(Contoh: `EXPO_PUBLIC_API_URL=http://192.168.1.101:5000/api`)*
+
+* **Opsi 2 — Pengujian via Android Emulator:**
+  Android Emulator menggunakan alias IP khusus `10.0.2.2` untuk terhubung ke localhost mesin host:
+  ```env
+  EXPO_PUBLIC_API_URL=http://10.0.2.2:5000/api
+  ```
+
+* **Opsi 3 — Pengujian via iOS Simulator atau Web Browser:**
+  ```env
+  EXPO_PUBLIC_API_URL=http://localhost:5000/api
+  ```
 
 ---
 
-## 3. Initial Setup
+### B. Menjalankan Database PostgreSQL via Docker Compose
 
-Lakukan ini **sekali saja** di awal.
+Pastikan Docker Desktop aktif, lalu jalankan container PostgreSQL dari folder `src`:
 
-1. **Fork repository.** Satu orang perwakilan kelompok membuka repository original [IF2150-RPL](https://github.com/RPL-24/IF2150-RPL), klik tombol **Fork**, lalu pilih tujuan fork ke **akun pribadi** perwakilan tersebut.
-2. **Ganti nama repository hasil fork.** Repository original bernama `IF2150-RPL`. Saat melakukan fork, ganti nama repository menjadi format `IF2150-RPL-KXX-GYY`, dengan `XX` adalah nomor kelas (contoh: `01`) dan `YY` adalah nomor kelompok (contoh: `10`). Misalnya, kelas 01 kelompok 10 akan menamai repo fork-nya `IF2150-RPL-K01-G10`.
-3. **Set repo menjadi public, lalu invite anggota kelompok.** Perwakilan yang fork tadi otomatis jadi owner dari repo fork tersebut. Repo hasil fork **wajib public**: buka **Settings → General → Danger Zone → Change visibility**, lalu ubah ke **Public**. Selain itu, tetap invite semua anggota kelompok sebagai collaborator supaya bisa push/commit langsung: masuk ke **Settings → Collaborators and teams → Add people**, lalu invite satu per satu. Setiap anggota hanya akan punya akses commit ke repo fork kelompok sendiri, bukan ke repo kelompok lain atau ke organisasi.
-4. **Aktifkan notifikasi rilis.** Buka repository original (bukan fork kalian), klik tombol **Watch → Custom**, lalu centang **Releases**. Dengan ini kalian akan otomatis dapat notifikasi setiap kali asisten merilis tubes baru, tanpa perlu bolak-balik cek manual.
-
----
-
-## 4. Working Rules
-
-- **Secara default, kerjakan progres langsung di branch `main`** pada repo fork kelompok, ini bukan keharusan teknis, hanya disederhanakan supaya tidak ada risiko salah push ke branch yang salah. Kelompok yang sudah nyaman dengan git boleh memakai branch working tambahan, asal branch `main` tetap dijaga untuk menerima update sync dari asisten, dan progres di branch tambahan rutin digabungkan (merge) dari `main` setiap kali selesai sync.
-- **Jangan mengubah atau menghapus** folder milestone yang sudah pernah dirilis sebelumnya, supaya proses sync ke depannya tetap lancar.
-- Commit sesering mungkin dengan message yang jelas. Riwayat commit yang rapi memudahkan asisten memahami progres kelompok saat menilai. Kelompok bisa mengikuti standar [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) untuk format commit messages yang lebih terstruktur.
+```bash
+# Menyalakan service database PostgreSQL
+cd src
+docker compose up -d db
+cd ..
+```
 
 ---
 
-## 5. Receiving New Milestone Updates (Sync)
+### C. Migrasi Skema Basis Data & Seed Data Awal
 
-Saat asisten merilis milestone baru, perhatikan yang perlu kelompok lakukan.
+Jalankan Prisma generate, migrasi skema tabel, dan pengisian data dummy awal (pastikan container `db` pada langkah B sudah berstatus *healthy*):
 
-1. Buka `main` branch repository **fork** kelompok. Akan muncul keterangan _"This branch is X commits behind"_. 
-2. Klik tombol **Sync fork**, lalu **Update branch**. Materi milestone baru akan otomatis masuk ke branch `main` fork kelompok, tergabung dengan progres yang sudah kelompok kerjakan.
-3. Jika proses sync berhasil tanpa keterangan konflik, kelompok bisa langsung lanjut kerja seperti biasa.
-4. Jika GitHub meminta kelompok membuat **pull request** untuk resolve konflik, artinya ada bentrokan file, segera hubungi asisten sebelum mencoba resolve sendiri, terutama jika belum familiar dengan proses merge conflict.
+```bash
+cd src/backend
+# Sinkronisasi client Prisma
+npm run db:generate
 
----
+# Jalankan migrasi schema ke PostgreSQL (port 5433 sesuai src/docker-compose.yml)
+npx prisma migrate deploy
 
-## 6. Submission Mechanism per Milestone
+# Isi database dengan data uji coba awal (seed)
+npm run db:seed
 
-Pengumpulan milestone **tidak dilihat dari commit terakhir**, melainkan dari **tag** yang kelompok buat sebelum deadline.
+cd ../..
+```
 
-Cara membuat tag submission:
-
-1. Pastikan semua perubahan untuk milestone ini sudah di-commit ke branch `main` fork kelompok.
-2. Buka tab **Releases** di repo fork kelompok → **Draft a new release**.
-3. Di bagian tag, ketik tag baru dengan format `vX.Y`, dengan `X` adalah nomor milestone pengerjaan tugas dan `Y` adalah nomor revisi pada milestone tersebut.
-4. Pastikan target rilis mengarah ke branch `main` (commit terakhir kelompok saat itu).
-
-Contoh penggunaan format tag:
-
-| Tag | Keterangan |
-| :--- | :--- |
-| `v1.0` | Release milestone pertama |
-| `v1.1` | Revisi pertama pada milestone pertama |
-| `v2.0` | Release milestone kedua |
-
-Khusus pengumpulan final, kelompok **WAJIB** membuat release dengan format tag di atas.
-
-Tag inilah yang jadi bukti resmi apa yang kelompok kumpulkan untuk milestone tersebut. Ulangi langkah ini di setiap deadline milestone.
+*(Alternatif jika Anda menjalankan seluruh stack via `cd src && docker compose up -d --build`: container backend sudah otomatis menjalankan `prisma migrate deploy`, sehingga Anda cukup menjalankan seed melalui container backend dengan `docker exec -it cariuang-backend npx prisma db seed`.)*
 
 ---
 
-<br>
-<p align="center">
-	<text>Selamat mengerjakan!</text>
-	<br>
-	<text>Tim Asisten RPL 2024</text>
-</p>
+## 4. Langkah Menjalankan Aplikasi & Rangkaian Pengujian (Test)
+
+### A. Menjalankan Backend Server (Terminal 1)
+```bash
+cd src/backend
+npm run dev
+```
+Backend API dan server Socket.IO akan berjalan pada `http://localhost:5000`.
+
+### B. Menjalankan Frontend Expo (Terminal 2)
+```bash
+cd src/frontend
+npx expo start -c
+```
+* **Untuk HP Fisik:** Buka aplikasi **Expo Go**, lalu scan QR code yang muncul di terminal (pastikan HP dan laptop berada dalam satu jaringan Wi-Fi yang sama).
+* **Untuk Android Emulator:** Tekan tombol **`a`** pada keyboard.
+* **Untuk iOS Simulator:** Tekan tombol **`i`** pada keyboard.
+
+### C. Menjalankan Rangkaian Pengujian Otomatis (Unit Test)
+
+Seluruh pengujian unit dapat dijalankan dengan perintah Jest:
+
+```bash
+# 1. Menjalankan pengujian backend (Katalog Jasa & Kontrak Pekerjaan)
+cd src/backend
+npm test
+
+# 2. Menjalankan pengujian frontend (Catalog Helper & Formatters)
+cd ../frontend
+npm test
+
+cd ../..
+```
+
+---
+## 5. Menjalankan Backend, Frontend, dan Database Bersamaan dengan Docker
+
+Seluruh *stack* (`db`, `backend`, dan `frontend`) telah dikonfigurasi pada `src/docker-compose.yml` sehingga dapat dibangun dan dijalankan secara bersamaan dalam satu perintah.
+
+### A. Persiapan Environment (`src/.env`)
+Salin berkas `src/.env.example` ke `src/.env` sebelum menjalankan Docker Compose:
+
+```bash
+cp src/.env.example src/.env
+```
+
+Sesuaikan nilai `EXPO_PUBLIC_API_URL` (dan opsional `REACT_NATIVE_PACKAGER_HOSTNAME`) pada `src/.env` sesuai perangkat pengujian agar aplikasi Expo dapat menghubungi API backend pada port `5000`:
+
+* **HP Fisik (Expo Go):** gunakan IP Wi-Fi lokal laptop, misalnya:
+  ```env
+  REACT_NATIVE_PACKAGER_HOSTNAME=<IP_WIFI_LAPTOP>
+  EXPO_PUBLIC_API_URL=http://<IP_WIFI_LAPTOP>:5000/api
+  ```
+* **Android Emulator:**
+  ```env
+  EXPO_PUBLIC_API_URL=http://10.0.2.2:5000/api
+  ```
+* **Web Browser / iOS Simulator:**
+  ```env
+  EXPO_PUBLIC_API_URL=http://localhost:5000/api
+  ```
+
+### B. Build dan Jalankan Seluruh Container
+Pastikan Docker sudah aktif, lalu jalankan perintah berikut dari root repository:
+
+```bash
+cd src
+docker compose up -d --build
+```
+
+Perintah di atas akan menjalankan tiga service secara berurutan:
+1. **`db` (`cariuang-db`):** PostgreSQL 16 pada port host `5433` dengan *persistent volume* `pgdata`.
+2. **`backend` (`cariuang-backend`):** Menunggu `db` berstatus *healthy*, menjalankan `npx prisma migrate deploy`, lalu menyalakan API & Socket.IO pada port `5000` (dengan *volume* `uploads` untuk lampiran/foto).
+3. **`frontend` (`cariuang-frontend`):** Menjalankan `npx expo start --tunnel ngrok` pada port `8081`, `19000`, `19001`, dan `19002`.
+
+### C. Seed Data Awal & Menampilkan QR Code Expo
+Container `backend` hanya menjalankan migrasi skema secara otomatis. Untuk mengisi data awal (`prisma/seed.ts`), jalankan:
+
+```bash
+docker exec -it cariuang-backend npx prisma db seed
+```
+
+Untuk melihat QR code Expo Go dan memantau log service yang sedang berjalan:
+
+```bash
+# Menampilkan QR code Expo & log frontend
+docker compose logs -f frontend
+
+# Memantau status seluruh container
+docker compose ps
+
+# Memantau log backend
+docker compose logs -f backend
+```
+
+*(Tekan `Ctrl + C` untuk keluar dari tampilan log tanpa mematikan container.)*
+
+### D. Menghentikan Container
+Untuk menghentikan seluruh service yang berjalan di latar belakang:
+
+```bash
+cd src
+docker compose down
+```
+
+*(Gunakan `docker compose down -v` apabila Anda juga ingin menghapus volume data PostgreSQL `pgdata` dan berkas `uploads`.)*
+## 6. Daftar Akun & Kredensial Uji Coba
+
+Gunakan kredensial akun uji coba berikut yang telah terisi secara otomatis melalui `prisma/seed.ts`:
+
+| Peran (*Role*) | Username | Email | Password | Nama Akun / Keterangan |
+|---|---|---|---|---|
+| **Pelanggan** | `budi_pelanggan` | `budi@pelanggan.com` | `PasswordAman123` | Budi Santoso (Pelanggan) |
+| **Pemberi Jasa (AC)** | `ahmad_teknik` | `ahmad@cariuang.id` | `PasswordAman123` | Ahmad Teknik (Ahmad Jaya AC & Elektronik) |
+| **Pemberi Jasa (Kebersihan)** | `siti_clean` | `siti@cariuang.id` | `PasswordAman123` | Siti Bersih (Kinclong Home Cleaning) |
+| **Pemberi Jasa (Pipa & Ledeng)** | `dedi_ledeng` | `dedi@cariuang.id` | `PasswordAman123` | Kang Dedi Pipa (Dedi Plumbing Bandung) |
+| **Layanan Pelanggan (CS)** | `cs_cariuang` | `cs@cariuang.id` | `PasswordAman123` | Rina Customer Care |
+
+---
+
+## 7. Daftar Modul/Fitur & Pembagian Tugas Anggota
+
+| NIM | Nama Anggota | Use Case & Antarmuka | Deskripsi Modul & Kontribusi |
+|---|---|---|---|
+| **13525120** | Naufal Hasbialhaq | **UC01, UC02** (UI-04, UI-05, UI-06, UI-16) | Setup Database PostgreSQL, Pendaftaran Jasa, Katalog, Pencarian & Peta Lokasi, Unit/Integration Test |
+| **13525009** | Wimar Widiarto | **UC10, UC11, UC12** (UI-01, UI-02, UI-03, UI-11, UI-14) | Setup Monorepo MVC, Autentikasi Multi-Role & Profil, Sistem Rating Dua Arah |
+| **13525093** | Vinsensius Juan Setiady | **UC03 & UC04** (UI-07, UI-08, UI-09, UI-13) | Chat Real-Time, Sistem Notifikasi Otomatis, `src/README.md` |
+| **13525126** | Raymond Edson Sabajan | **UC05, UC06, UC07** (UI-08, UI-09, UI-10, UI-12) | Siklus Kontrak Pekerjaan (Optimistic Locking & Auto-Cancel), Riwayat Pesanan, Profiling & Indeks DB |
+| **13525048** | Yohanes Nicholas Setiawan | **UC08 & UC09** (UI-15, UI-17, UI-18g) | Tiket Laporan Masalah, Auto-Assign & Dashboard CS, Mediasi Tiket |
+
+---
+
+## 8. Struktur Basis Data & Relasi Tabel
+
+Aplikasi menggunakan skema basis data relasional PostgreSQL yang dimodelkan melalui Prisma ORM (`src/backend/prisma/schema.prisma`):
+
+1. **`Pengguna`**: Entitas pengguna utama aplikasi yang menyimpan informasi akun, kredensial password, role (`PELANGGAN`, `PEMBERI_JASA`, `LAYANAN_PELANGGAN`), serta akumulasi rating.
+2. **`PemberiJasa`**: Detail spesifik penyedia jasa (nama toko, deskripsi jasa, tarif dasar, jam kerja, daerah kerja, koordinat latitude/longitude, status ketersediaan). Berelasi *one-to-one* dengan `Pengguna` dan *many-to-one* dengan `KategoriJasa`.
+3. **`KategoriJasa`**: Master data kategori klasifikasi jenis pekerjaan jasa (misal: Jasa Kebersihan, Perbaikan AC, Tukang Ledeng).
+4. **`LayananPelanggan`**: Detail akun staf operasional customer care. Berelasi *one-to-one* dengan `Pengguna`.
+5. **`KontrakPekerjaan`**: Entitas transaksi pekerjaan dan negosiasi antara pelanggan dan penyedia jasa (status: `MENUNGGU`, `DITERIMA`, `DITOLAK`, `SELESAI`, `DIBATALKAN`).
+6. **`Komunikasi`**: Riwayat percakapan pesan teks secara realtime antara dua pengguna (dilengkapi status keterbacaan dan waktu kirim).
+7. **`TiketLaporan`**: Aduan keluhan/masalah dari pengguna kepada Layanan Pelanggan beserta bukti foto dan status penyelesaian (`Menunggu`, `Diproses`, `Selesai`).
+8. **`Rating`**: Rekam penilaian rating numerik (1-5) dan ulasan feedback timbal balik antara pengguna setelah transaksi kontrak selesai.
+9. **`Notifikasi`**: Riwayat pemberitahuan aktivitas pengguna (pesanan baru, pesan baru, tiket laporan, atau promo) beserta status telah dibaca.

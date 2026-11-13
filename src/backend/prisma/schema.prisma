@@ -92,7 +92,7 @@ model KontrakPekerjaan {
 
   pelanggan   Pengguna    @relation("PelangganKontrak", fields: [idPelanggan], references: [idPengguna])
   pemberiJasa PemberiJasa @relation(fields: [idPemberiJasa], references: [idPemberiJasa])
-  rating      Rating?
+  ratings     Rating[]
 
   @@map("kontrak_pekerjaan")
 }
@@ -137,16 +137,17 @@ model Rating {
   idRating           String   @id @default(uuid()) @map("id_rating")
   idPenggunaPemberi  String   @map("id_pengguna_pemberi")
   idPenggunaPenerima String   @map("id_pengguna_penerima")
-  idKontrakPekerjaan String   @unique @map("id_kontrak_pekerjaan")
+  idKontrakPekerjaan String   @map("id_kontrak_pekerjaan")
   nilaiRating        Float    @map("nilai_rating")
   ulasan             String?
   tags               String[] @default([])
   tanggalRating      DateTime @default(now()) @map("tanggal_rating")
 
-  pemberi Pengguna         @relation("RatingPemberi", fields: [idPenggunaPemberi], references: [idPengguna])
-  penerima Pengguna        @relation("RatingPenerima", fields: [idPenggunaPenerima], references: [idPengguna])
-  kontrak KontrakPekerjaan @relation(fields: [idKontrakPekerjaan], references: [idKontrakPekerjaan])
+  pemberi  Pengguna         @relation("RatingPemberi", fields: [idPenggunaPemberi], references: [idPengguna])
+  penerima Pengguna         @relation("RatingPenerima", fields: [idPenggunaPenerima], references: [idPengguna])
+  kontrak  KontrakPekerjaan @relation(fields: [idKontrakPekerjaan], references: [idKontrakPekerjaan])
 
+  @@unique([idKontrakPekerjaan, idPenggunaPemberi])
   @@map("rating")
 }
 
@@ -155,7 +156,7 @@ model Notifikasi {
   idPenerima      String   @map("id_penerima")
   isiNotifikasi   String   @map("isi_pesan")
   waktuNotifikasi DateTime @default(now()) @map("waktu_notifikasi")
-  statusBaca      String   @default("Unread") @map("status_baca")
+  statusBaca      Boolean   @default(false) @map("status_baca")
 
   penerima Pengguna @relation(fields: [idPenerima], references: [idPengguna])
 
