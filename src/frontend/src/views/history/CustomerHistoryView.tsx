@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Modal,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -9,6 +10,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { useSessionUser } from '../../services/api';
 import {
   CustomerTransactionItem,
   HistoryDisplayStatus,
@@ -16,6 +18,7 @@ import {
   confirmContractCompletion,
   fetchCustomerTransactions,
   getCustomerTransactionsSnapshot,
+  getLastBackendSyncStatus,
   subscribeCustomerTransactions,
 } from '../../services/ratingService';
 import {
@@ -64,6 +67,7 @@ function getStatusBadgeTheme(status: HistoryDisplayStatus): StatusBadgeTheme {
  * - Penyembunyian tombol "Beri Rating" seketika setelah penilaian berhasil dikirim (`hasRating = true`).
  */
 export const CustomerHistoryView: React.FC = () => {
+  const { user } = useSessionUser();
   const [transactions, setTransactions] = useState<CustomerTransactionItem[]>(
     () => getCustomerTransactionsSnapshot()
   );
@@ -73,14 +77,30 @@ export const CustomerHistoryView: React.FC = () => {
   const [detailTarget, setDetailTarget] =
     useState<CustomerTransactionItem | null>(null);
   const [feedbackBanner, setFeedbackBanner] = useState<string | null>(null);
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+  const [syncWarning, setSyncWarning] = useState<string | null>(null);
+
+  const loadFromBackend = useCallback(async () => {
+    setIsRefreshing(true);
+    await fetchCustomerTransactions();
+    const syncStatus = getLastBackendSyncStatus();
+    if (syncStatus.source === 'offline' && syncStatus.error) {
+      setSyncWarning(
+        `Mode offline (${syncStatus.apiBaseUrl}): ${syncStatus.error}`
+      );
+    } else {
+      setSyncWarning(null);
+    }
+    setIsRefreshing(false);
+  }, []);
 
   useEffect(() => {
     const unsubscribe = subscribeCustomerTransactions((updatedItems) => {
       setTransactions(updatedItems);
     });
-    fetchCustomerTransactions();
+    loadFromBackend();
     return unsubscribe;
-  }, []);
+  }, [loadFromBackend]);
 
   const filteredTransactions = useMemo(
     () => filterTransactionsByTab(transactions, activeFilter),
@@ -150,6 +170,9 @@ export const CustomerHistoryView: React.FC = () => {
         style={styles.container}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={isRefreshing} onRefresh={loadFromBackend} />
+        }
       >
         {/* UI-10-01: Header Judul & Subjudul */}
         <View testID="UI-10-01-header" style={styles.headerSection}>
@@ -188,6 +211,14 @@ export const CustomerHistoryView: React.FC = () => {
             );
           })}
         </View>
+
+        {/* Banner Peringatan Koneksi Backend (Jika offline / salah URL) */}
+        {syncWarning ? (
+          <View testID="UI-10-offline-warning" style={styles.warningBanner}>
+            <Ionicons name="cloud-offline-outline" size={18} color="#C47A00" />
+            <Text style={styles.warningBannerText}>{syncWarning}</Text>
+          </View>
+        ) : null}
 
         {/* Banner Feedback Sukses Penilaian */}
         {feedbackBanner ? (
@@ -362,7 +393,9 @@ export const CustomerHistoryView: React.FC = () => {
         <RatingModal
           visible={Boolean(ratingTarget)}
           idKontrakPekerjaan={ratingTarget.idKontrak}
-          idPenggunaPemberi={ratingTarget.idPenggunaPelanggan}
+          idPenggunaPemberi={
+            ratingTarget.idPenggunaPelanggan || user.idPengguna
+          }
           idPenggunaPenerima={ratingTarget.idPenggunaPenyedia}
           namaPenerima={ratingTarget.namaPenyedia}
           inisialPenerima={ratingTarget.inisialPenyedia}
@@ -517,6 +550,22 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '600',
     color: '#078875',
+  },
+  warningBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFF0DC',
+    borderRadius: 14,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    gap: 8,
+    marginBottom: 16,
+  },
+  warningBannerText: {
+    flex: 1,
+    fontSize: 12,
+    fontWeight: '500',
+    color: '#C47A00',
   },
   cardList: {
     gap: 14,
