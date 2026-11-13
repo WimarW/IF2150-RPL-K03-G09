@@ -1,54 +1,115 @@
 /**
  * Service tiket laporan & Layanan Pelanggan (UC08, UC09).
- * Berdiri sendiri (tidak bergantung pada services/api.ts) supaya aman saat merge ke develop.
+ * Memakai sesi & API_BASE_URL dari ./api (sama dengan fitur chat), plus token JWT untuk endpoint tiket.
  */
-import { Platform } from 'react-native';
+import { API_BASE_URL, ApiError, Role, getCurrentUser, setCurrentUserRole } from './api';
 
-const defaultApiUrl = Platform.OS === 'android' ? 'http://10.0.2.2:5000/api' : 'http://localhost:5000/api';
-const rawEnvUrl = process.env.EXPO_PUBLIC_API_URL?.trim();
-export const API_BASE_URL = (rawEnvUrl && rawEnvUrl.length > 0 ? rawEnvUrl : defaultApiUrl).replace(/\/+$/, '');
+export { ApiError };
+export type { Role };
+
 const SERVER_ORIGIN = API_BASE_URL.replace(/\/api$/, '');
 
-export type Role = 'PELANGGAN' | 'PEMBERI_JASA' | 'LAYANAN_PELANGGAN';
+// ===== Mode development (selama halaman login belum ada) =====
+// EXPO_PUBLIC_DEV_ROLE=LAYANAN_PELANGGAN -> aplikasi dibuka sebagai CS (langsung ke Beranda CS)
+const DEV_ROLE = process.env.EXPO_PUBLIC_DEV_ROLE?.trim() as Role | undefined;
+if (DEV_ROLE === 'PELANGGAN' || DEV_ROLE === 'PEMBERI_JASA' || DEV_ROLE === 'LAYANAN_PELANGGAN') {
+  setCurrentUserRole(DEV_ROLE);
+}
 
 let authToken: string | null = null;
-let currentRole: Role = 'PELANGGAN';
+let tokenOwner = ''; // "idPengguna:role" pemilik token yang tersimpan
 
-/** Panggil setelah login berhasil: token & role dari POST /api/auth/login. */
-export function setTicketSession(token: string | null, role: Role) {
+/** Panggil setelah login asli berhasil (token dari POST /api/auth/login). */
+export function setTicketSession(token: string | null) {
   authToken = token;
-  currentRole = role;
+  const u = getCurrentUser();
+  tokenOwner = token ? `${u.idPengguna}:${u.role}` : '';
 }
-export const getRole = () => currentRole;
-export const isCS = () => currentRole === 'LAYANAN_PELANGGAN';
+
+export const getRole = (): Role => getCurrentUser().role;
+export const isCS = () => getRole() === 'LAYANAN_PELANGGAN';
 export const imageUrl = (p?: string | null) => (p ? `${SERVER_ORIGIN}${p}` : null);
 
-export class ApiError extends Error {
-  constructor(message: string, public readonly status: number) {
-    super(message);
-    this.name = 'ApiError';
+/**
+ * Ambil token. Kalau belum login asli, minta token development ke backend
+ * (POST /api/auth/dev-token, aktif bila backend dijalankan dengan ENABLE_DEV_TOKEN=true).
+ */
+async function getToken(): Promise<string | null> {
+  const u = getCurrentUser();
+  const owner = `${u.idPengguna}:${u.role}`;
+  if (authToken && tokenOwner === owner) return authToken;
+  try {
+    const res = await fetch(`${API_BASE_URL}/auth/dev-token`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({ idPengguna: u.idPengguna, role: u.role }),
+    });
+    const json: any = await res.json().catch(() => null);
+    if (res.ok && json?.data?.token) {
+      authToken = json.data.token;
+      tokenOwner = owner;
+      return authToken;
+    }
+  } catch {
+    // diteruskan sebagai 401 oleh request utama
   }
+  return authToken;
 }
 
 /** path relatif terhadap API_BASE_URL, contoh '/tickets/mine'. Mengembalikan field `data`. */
 export async function api<T = any>(path: string, opts: { method?: string; json?: unknown; form?: FormData } = {}): Promise<T> {
   const headers: Record<string, string> = { Accept: 'application/json' };
-  if (authToken) headers.Authorization = `Bearer ${authToken}`;
+  const token = await getToken();
+  if (token) headers.Authorization = `Bearer ${token}`;
   let body: any;
   if (opts.json !== undefined) { headers['Content-Type'] = 'application/json'; body = JSON.stringify(opts.json); }
   if (opts.form) body = opts.form; // Content-Type multipart diisi otomatis
 
-  let res: Response;
+  const url = `${API_BASE_URL}${path}`;
+  const method = opts.method ?? 'GET';
+  let status: number;
+  let json: any;
   try {
-    res = await fetch(`${API_BASE_URL}${path}`, { method: opts.method ?? 'GET', headers, body });
+    if (opts.form) {
+      ({ status, json } = await sendMultipart(url, method, headers, opts.form));
+    } else {
+      const res = await fetch(url, { method, headers, body });
+      status = res.status;
+      json = await res.json().catch(() => null);
+    }
   } catch {
     throw new ApiError('Tidak dapat terhubung ke server. Periksa koneksi internet Anda.', 0);
   }
-  const json: any = await res.json().catch(() => null);
-  if (!res.ok || json?.success === false) {
-    throw new ApiError(json?.message ?? 'Terjadi kesalahan pada server', res.status);
+  if (status === 401) {
+    throw new ApiError('Sesi tidak valid. Silakan login (atau aktifkan ENABLE_DEV_TOKEN di backend).', 401);
+  }
+  if (status < 200 || status >= 300 || json?.success === false) {
+    throw new ApiError(json?.message ?? 'Terjadi kesalahan pada server', status);
   }
   return (json?.data ?? json) as T;
+}
+
+/**
+ * Kirim FormData lewat XMLHttpRequest.
+ * `fetch` global di Expo 58 adalah expo/fetch, yang TIDAK mendukung file React Native
+ * berbentuk { uri, name, type } (melempar "Unsupported FormDataPart implementation").
+ * XHR bawaan React Native mendukungnya secara native.
+ */
+function sendMultipart(url: string, method: string, headers: Record<string, string>, form: FormData): Promise<{ status: number; json: any }> {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open(method, url);
+    Object.entries(headers).forEach(([k, v]) => xhr.setRequestHeader(k, v)); // Content-Type multipart diisi otomatis
+    xhr.timeout = 60000;
+    xhr.onload = () => {
+      let json: any = null;
+      try { json = JSON.parse(xhr.responseText); } catch { /* bukan JSON */ }
+      resolve({ status: xhr.status, json });
+    };
+    xhr.onerror = () => reject(new Error('network'));
+    xhr.ontimeout = () => reject(new Error('timeout'));
+    xhr.send(form);
+  });
 }
 
 export const formatWaktu = (iso: string) =>

@@ -2,10 +2,12 @@ import React, { useCallback, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, RefreshControl, ActivityIndicator } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { api, waktuRelatif } from '../../services/ticketService';
 
 // Daftar tiket milik pelanggan / pemberi jasa (dibuka dari Daftar Pesan, UI-07)
 export default function MyTicketsScreen({ navigation }: any) {
+  const insets = useSafeAreaInsets();
   const [tickets, setTickets] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -19,7 +21,11 @@ export default function MyTicketsScreen({ navigation }: any) {
   useFocusEffect(useCallback(() => { load(); }, [load]));
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { paddingTop: insets.top + 15 }]}>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Feather name="chevron-left" size={24} color="#1A237E" />
+        <Text style={styles.backText}>Kembali</Text>
+      </TouchableOpacity>
       <View style={styles.header}>
         <View>
           <Text style={styles.title}>Tiket Saya</Text>
@@ -33,6 +39,7 @@ export default function MyTicketsScreen({ navigation }: any) {
       {loading ? <ActivityIndicator color="#1ABC9C" style={{ marginTop: 30 }} /> : (
         <FlatList
           data={tickets} keyExtractor={(i) => i.id}
+          contentContainerStyle={{ paddingBottom: insets.bottom + 20 }}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => { setRefreshing(true); load(); }} />}
           ListEmptyComponent={<Text style={styles.empty}>Belum ada tiket laporan</Text>}
           renderItem={({ item }) => (
@@ -54,7 +61,9 @@ export default function MyTicketsScreen({ navigation }: any) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F8F9FA', padding: 20, paddingTop: 50 },
+  container: { flex: 1, backgroundColor: '#F8F9FA', paddingHorizontal: 20 },
+  backButton: { flexDirection: 'row', alignItems: 'center', marginBottom: 15 },
+  backText: { color: '#1A237E', fontSize: 16, fontWeight: '600', marginLeft: 5 },
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 },
   title: { fontSize: 24, fontWeight: 'bold', color: '#1A237E' },
   subtitle: { fontSize: 14, color: '#78909C', marginTop: 4 },

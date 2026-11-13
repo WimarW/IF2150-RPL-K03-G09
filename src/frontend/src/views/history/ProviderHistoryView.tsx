@@ -3,7 +3,7 @@
  * Traceability:
  * - Tabel 6.12 DPPL (UI-12-01 s.d. UI-12-07)
  * - UC01 (Tujuan pengalihan setelah pendaftaran penyedia jasa berhasil)
- * - UC04 & UC06 (Pelaporan pekerjaan telah selesai oleh penyedia jasa -> mengubah status dari 'On Progress' ke 'Menunggu Konfirmasi Pelanggan')
+ * - UC04, UC06, UC11 (Pelaporan pekerjaan telah selesai oleh penyedia jasa -> mengubah status dari 'On Progress' ke 'Menunggu Konfirmasi Pelanggan')
  */
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -20,7 +20,8 @@ import {
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
-import { RootStackParamList } from '../../navigation/types';
+import { UI_THEME } from '../../components/Header';
+import { RootStackParamList, ScreenName } from '../../navigation/types';
 import { HistoryFilterTab, ProviderJobItem } from '../../types/chat';
 import {
   contractService,
@@ -66,14 +67,24 @@ const FILTER_TABS: HistoryFilterTab[] = ['Semua', 'Selesai', 'On Progress'];
 export interface ProviderHistoryViewProps {
   initialJobs?: ProviderJobItem[];
   onBackPress?: () => void;
+  onNavigate?: (screen: ScreenName) => void;
 }
 
 export const ProviderHistoryView: React.FC<ProviderHistoryViewProps> = ({
   initialJobs,
   onBackPress,
+  onNavigate,
 }) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const handleOpenProfile = useCallback(() => {
+    if (onNavigate) {
+      onNavigate('Profile');
+    } else {
+      navigation.navigate('Profile');
+    }
+  }, [navigation, onNavigate]);
 
   const [activeTab, setActiveTab] = useState<HistoryFilterTab>('Semua');
   const [jobs, setJobs] = useState<ProviderJobItem[]>(
@@ -329,21 +340,36 @@ export const ProviderHistoryView: React.FC<ProviderHistoryViewProps> = ({
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container} testID="ui12-provider-history">
-        {/* UI-12-01 Tombol Kembali */}
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={handleBack}
-          testID="UI-12-01-back-button"
-          accessibilityRole="button"
-          accessibilityLabel="Kembali"
-        >
-          <Ionicons name="chevron-back" size={22} color="#153B65" />
-          <Text style={styles.backButtonText}>Kembali</Text>
-        </TouchableOpacity>
+        {/* UI-12-01 Tombol Kembali & Akses Profil Penyedia Jasa */}
+        <View style={styles.topBadgeRow}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={handleBack}
+            testID="UI-12-01-back-button"
+            accessibilityRole="button"
+            accessibilityLabel="Kembali"
+          >
+            <Ionicons name="chevron-back" size={22} color="#153B65" />
+            <Text style={styles.backButtonText}>Kembali</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            testID="provider-profile-button"
+            style={styles.profileBadgeBtn}
+            onPress={handleOpenProfile}
+            activeOpacity={0.8}
+            accessibilityRole="button"
+            accessibilityLabel="Profil Saya"
+          >
+            <Text style={styles.profileBadgeText}>Profil Saya</Text>
+          </TouchableOpacity>
+        </View>
 
         {/* UI-12-02 Header "Riwayat Pekerjaan" */}
         <View style={styles.headerBlock} testID="UI-12-02-header">
-          <Text style={styles.headerTitle}>Riwayat Pekerjaan</Text>
+          <Text style={styles.headerTitle} testID="provider-history-title">
+            Riwayat Pekerjaan
+          </Text>
           <Text style={styles.headerSubtitle}>
             Daftar pekerjaan yang telah kamu selesaikan
           </Text>
@@ -506,11 +532,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 14,
   },
+  topBadgeRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
   backButton: {
     flexDirection: 'row',
     alignItems: 'center',
     alignSelf: 'flex-start',
-    marginBottom: 12,
     gap: 4,
     marginLeft: -4,
   },
@@ -518,6 +549,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     color: '#153B65',
+  },
+  profileBadgeBtn: {
+    backgroundColor: '#DDF3EE',
+    borderRadius: 12,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderWidth: 1,
+    borderColor: UI_THEME.primary,
+  },
+  profileBadgeText: {
+    fontSize: 13,
+    fontWeight: '800',
+    color: UI_THEME.textTitle,
   },
   headerBlock: {
     marginBottom: 16,

@@ -1,7 +1,9 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { NativeModules, Platform } from 'react-native';
 
-function extractDevServerHost(): string | null {
+const DEFAULT_PORT = 5000;
+
+function extractExpoHostIp(): string | null {
   try {
     if (
       Platform.OS === 'web' &&
@@ -13,92 +15,133 @@ function extractDevServerHost(): string | null {
 
     const scriptURL: string | undefined =
       NativeModules?.SourceCode?.scriptURL;
-    if (typeof scriptURL === 'string' && scriptURL.startsWith('http')) {
-      const match = scriptURL.match(/^https?:\/\/([^:/]+)/i);
-      const host = match?.[1];
-      if (
-        host &&
-        !host.endsWith('.exp.direct') &&
-        !host.includes('ngrok')
-      ) {
-        return host;
-      }
+    if (!scriptURL) return null;
+    const match = scriptURL.match(/^https?:\/\/([^/:]+)(?::\d+)?\//i);
+    if (!match?.[1]) return null;
+    const host = match[1];
+    // Abaikan domain tunnel ngrok/expo.dev karena tunnel hanya meneruskan port Metro (8081), bukan port 5000
+    if (
+      host.includes('ngrok') ||
+      host.includes('exp.direct') ||
+      host.includes('expo.dev') ||
+      host === 'localhost' ||
+      host === '127.0.0.1'
+    ) {
+      return null;
     }
+    return host;
   } catch {
-    // Abaikan pada environment headless / unit test
+    return null;
   }
-  return null;
 }
 
-function resolveApiBaseUrl(): string {
-  const rawEnvUrl = process.env.EXPO_PUBLIC_API_URL?.trim();
-  const isEnvLocalhost =
-    Boolean(rawEnvUrl) &&
-    /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?/i.test(rawEnvUrl!);
-
-  // 1. Jika diset ke URL non-localhost (production domain, ngrok, atau IP LAN)
-  if (rawEnvUrl && rawEnvUrl.length > 0 && !isEnvLocalhost) {
-    return rawEnvUrl.replace(/\/+$/, '');
+function resolveDefaultBaseUrl(): string {
+  const envUrl = process.env.EXPO_PUBLIC_API_URL;
+  if (envUrl && envUrl.trim().length > 0) {
+    return envUrl.trim().replace(/\/+$/, '');
   }
 
-  // 2. Deteksi otomatis hostname saat development (Browser Web / Expo Go LAN)
-  const devHost = extractDevServerHost();
-  if (devHost) {
-    return `http://${devHost}:5000/api`;
+  const detectedLanHost = extractExpoHostIp();
+  if (detectedLanHost) {
+    return `http://${detectedLanHost}:${DEFAULT_PORT}/api`;
   }
 
-  // 3. Fallback Android Emulator (10.0.2.2) vs iOS/Web localhost
-  if (rawEnvUrl && rawEnvUrl.length > 0) {
-    if (Platform.OS === 'android') {
-      return rawEnvUrl
-        .replace(/localhost|127\.0\.0\.1/i, '10.0.2.2')
-        .replace(/\/+$/, '');
+  // Android Emulator membutuhkan 10.0.2.2 untuk mengakses host localhost:5000
+  if (Platform.OS === 'android') {
+    return `http://10.0.2.2:${DEFAULT_PORT}/api`;
+  }
+
+  return `http://localhost:${DEFAULT_PORT}/api`;
+}
+
+export const API_BASE_URL = resolveDefaultBaseUrl();
+export const REQUEST_TIMEOUT_MS = 3500;
+export const AUTH_TIMEOUT_MS = 2000;
+
+/**
+ * Daftar kandidat Base URL yang akan dicoba secara berurutan apabila URL utama tidak dapat dijangkau
+ * (mis. perbedaan antara Android Emulator 10.0.2.2, iOS/Web/adb-reverse localhost, atau port 5000/3000).
+ */
+export function getCandidateApiBaseUrls(): string[] {
+  const candidates: string[] = [];
+  const addCandidate = (url: string) => {
+    const clean = url.trim().replace(/\/+$/, '');
+    if (clean && !candidates.includes(clean)) {
+      candidates.push(clean);
     }
-    return rawEnvUrl.replace(/\/+$/, '');
+  };
+
+  const envUrl = process.env.EXPO_PUBLIC_API_URL;
+  if (envUrl && envUrl.trim().length > 0) {
+    addCandidate(envUrl);
   }
 
-  return Platform.OS === 'android'
-    ? 'http://10.0.2.2:5000/api'
-    : 'http://localhost:5000/api';
+  const detectedLanHost = extractExpoHostIp();
+  if (detectedLanHost) {
+    addCandidate(`http://${detectedLanHost}:5000/api`);
+  }
+
+  if (Platform.OS === 'android') {
+    addCandidate('http://10.0.2.2:5000/api');
+    addCandidate('http://localhost:5000/api');
+  } else {
+    addCandidate('http://localhost:5000/api');
+    addCandidate('http://10.0.2.2:5000/api');
+  }
+
+  return candidates;
 }
 
-export const API_BASE_URL: string = resolveApiBaseUrl();
+let authToken: string | null = null;
 
-export const REQUEST_TIMEOUT_MS = 15000;
+export const setApiAuthToken = (token: string | null): void => {
+  authToken = token;
+};
+
+export const getApiAuthToken = (): string | null => authToken;
+
+// ============================================================================
+// Manajemen Sesi Pengguna Sementara (Mock Session) & Sinkronisasi Auth
+// ============================================================================
 
 export type Role = 'PELANGGAN' | 'PEMBERI_JASA' | 'LAYANAN_PELANGGAN';
 
 export interface SessionUser {
   idPengguna: string;
   namaPengguna: string;
-  username: string;
+  username?: string;
+  email: string;
   role: Role;
+  idPemberiJasa?: string;
 }
 
+/**
+ * Data pengguna untuk keperluan development.
+ */
 export const DEV_USER: SessionUser = {
-  idPengguna: '111e8400-e29b-41d4-a716-446655440001',
-  namaPengguna: 'Budi Santoso',
+  idPengguna: 'usr-pelanggan-001',
+  namaPengguna: 'Naufal Hasbialhaq',
   username: 'budi_pelanggan',
+  email: 'naufal.h@example.com',
   role: 'PELANGGAN',
+  idPemberiJasa: undefined,
 };
 
-type SessionListener = (user: SessionUser) => void;
+export type SessionListener = (user: SessionUser) => void;
 
 let currentSessionUser: SessionUser = { ...DEV_USER };
-let currentAuthToken: string | null = null;
 let devLoginPromise: Promise<string | null> | null = null;
 const sessionListeners = new Set<SessionListener>();
 
-export function getCurrentUser(): SessionUser {
-  return currentSessionUser;
-}
-
 export function getAuthToken(): string | null {
-  return currentAuthToken;
+  return authToken;
 }
 
-export function setAuthToken(token: string | null, user?: Partial<SessionUser>): void {
-  currentAuthToken = token;
+export function setAuthToken(
+  token: string | null,
+  user?: Partial<SessionUser>
+): void {
+  authToken = token;
   if (user) {
     currentSessionUser = {
       ...currentSessionUser,
@@ -108,15 +151,50 @@ export function setAuthToken(token: string | null, user?: Partial<SessionUser>):
   }
 }
 
-export function setCurrentUserRole(role: Role): void {
+/**
+ * Mengambil informasi pengguna yang sedang aktif pada sesi saat ini.
+ */
+export function getCurrentUser(): SessionUser {
+  return currentSessionUser;
+}
+
+/**
+ * Memperbarui seluruh data pengguna aktif pada sesi saat ini (dipanggil saat login/registrasi/update profil/logout).
+ */
+export function setCurrentSessionUser(user: SessionUser): SessionUser {
+  currentSessionUser = { ...user };
+  sessionListeners.forEach((listener) => listener(currentSessionUser));
+  return currentSessionUser;
+}
+
+/**
+ * Mengubah role pengguna pada sesi saat ini (misal: setelah berhasil registrasi penyedia jasa).
+ */
+export function setCurrentUserRole(
+  role: Role,
+  idPemberiJasa?: string
+): SessionUser {
   currentSessionUser = {
     ...currentSessionUser,
     role,
+    idPemberiJasa:
+      role === 'PEMBERI_JASA'
+        ? idPemberiJasa ||
+          currentSessionUser.idPemberiJasa ||
+          currentSessionUser.idPengguna
+        : undefined,
   };
+
   sessionListeners.forEach((listener) => listener(currentSessionUser));
+  return currentSessionUser;
 }
 
-export function subscribeSession(listener: SessionListener): () => void {
+/**
+ * Berlangganan perubahan sesi pengguna secara reaktif.
+ */
+export function subscribeSession(
+  listener: (user: SessionUser) => void
+): () => void {
   sessionListeners.add(listener);
   return () => {
     sessionListeners.delete(listener);
@@ -125,11 +203,11 @@ export function subscribeSession(listener: SessionListener): () => void {
 
 /**
  * Memastikan sesi dev memiliki JWT token valid dari `POST /api/auth/login`
- * (menggunakan akun seed `budi_pelanggan` / `Password123!`) saat belum login manual.
+ * saat belum login manual.
  */
 export async function ensureDevAuthToken(): Promise<string | null> {
-  if (currentAuthToken) {
-    return currentAuthToken;
+  if (authToken) {
+    return authToken;
   }
 
   if (typeof process !== 'undefined' && process.env?.JEST_WORKER_ID) {
@@ -150,7 +228,7 @@ export async function ensureDevAuthToken(): Promise<string | null> {
         skipAuth: true,
         body: {
           username: currentSessionUser.username || DEV_USER.username,
-          password: 'Password123!',
+          password: 'PasswordAman123',
         },
       });
 
@@ -175,8 +253,10 @@ export async function ensureDevAuthToken(): Promise<string | null> {
 
 export interface UseSessionUserResult {
   user: SessionUser;
-  setRole: (role: Role) => void;
+  isPelanggan: boolean;
   isPenyediaJasa: boolean;
+  isCS: boolean;
+  updateRole: (role: Role, idPemberiJasa?: string) => SessionUser;
 }
 
 export function useSessionUser(): UseSessionUserResult {
@@ -184,21 +264,24 @@ export function useSessionUser(): UseSessionUserResult {
 
   useEffect(() => {
     setUser(getCurrentUser());
-    return subscribeSession((updatedUser) => {
+    const unsubscribe = subscribeSession((updatedUser) => {
       setUser(updatedUser);
     });
-  }, []);
-
-  const setRole = useCallback((role: Role) => {
-    setCurrentUserRole(role);
+    return unsubscribe;
   }, []);
 
   return {
     user,
-    setRole,
+    isPelanggan: user.role === 'PELANGGAN',
     isPenyediaJasa: user.role === 'PEMBERI_JASA',
+    isCS: user.role === 'LAYANAN_PELANGGAN',
+    updateRole: setCurrentUserRole,
   };
 }
+
+// ============================================================================
+// Utilitas Klien HTTP (Fetch Wrapper dengan Timeout & Error Handling)
+// ============================================================================
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
@@ -206,105 +289,261 @@ export interface ApiRequestOptions {
   method?: HttpMethod;
   body?: unknown;
   headers?: Record<string, string>;
+  timeoutMs?: number;
+  signal?: AbortSignal;
   skipAuth?: boolean;
 }
 
 export interface ApiResponse<T> {
   success: boolean;
   message?: string;
+  data: T;
+}
+
+export interface ApiAuthEnvelope<T = unknown> {
+  ok: boolean;
+  status: number;
+  message?: string;
   data?: T;
-  count?: number;
 }
 
 export class ApiError extends Error {
   public readonly status: number;
+  public readonly details?: unknown;
+  public readonly isNetworkError: boolean;
 
-  constructor(message: string, status: number) {
+  constructor(
+    message: string,
+    status = 0,
+    details?: unknown,
+    isNetworkError = false
+  ) {
     super(message);
     this.name = 'ApiError';
     this.status = status;
+    this.details = details;
+    this.isNetworkError = isNetworkError;
   }
 }
 
-function buildUrl(path: string): string {
-  const normalizedBase = API_BASE_URL.replace(/\/+$/, '');
-  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
-  return `${normalizedBase}${normalizedPath}`;
+function isApiEnvelope<T>(payload: unknown): payload is ApiResponse<T> {
+  return (
+    typeof payload === 'object' &&
+    payload !== null &&
+    'data' in payload &&
+    ('success' in payload || 'status' in payload)
+  );
+}
+
+let lastWorkingBaseUrl: string | null = null;
+const unreachableBaseUrls = new Set<string>();
+
+async function fetchWithTimeout(
+  url: string,
+  init: RequestInit,
+  timeoutMs: number,
+  externalSignal?: AbortSignal
+): Promise<Response> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+  const onExternalAbort = () => controller.abort();
+  if (externalSignal) {
+    if (externalSignal.aborted) {
+      controller.abort();
+    } else {
+      externalSignal.addEventListener('abort', onExternalAbort);
+    }
+  }
+
+  try {
+    return await fetch(url, {
+      ...init,
+      signal: controller.signal,
+    });
+  } finally {
+    clearTimeout(timeoutId);
+    if (externalSignal) {
+      externalSignal.removeEventListener('abort', onExternalAbort);
+    }
+  }
 }
 
 export async function apiRequest<T>(
   path: string,
-  options?: ApiRequestOptions
+  options: ApiRequestOptions = {}
 ): Promise<T> {
-  const method: HttpMethod = options?.method ?? 'GET';
-  const url = buildUrl(path);
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+  const {
+    method = 'GET',
+    body,
+    headers = {},
+    timeoutMs = REQUEST_TIMEOUT_MS,
+    signal,
+    skipAuth = false,
+  } = options;
 
-  const mergedHeaders: Record<string, string> = {
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
-    ...(options?.headers ?? {}),
-  };
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+  const baseUrl = lastWorkingBaseUrl ?? API_BASE_URL;
+  const url = `${baseUrl}${normalizedPath}`;
 
-  if (
-    !options?.skipAuth &&
-    !mergedHeaders.Authorization &&
-    currentAuthToken
-  ) {
-    mergedHeaders.Authorization = `Bearer ${currentAuthToken}`;
-  }
-
-  let response: Response;
   try {
-    response = await fetch(url, {
-      method,
-      headers: mergedHeaders,
-      body:
-        options?.body !== undefined
-          ? typeof options.body === 'string'
-            ? options.body
-            : JSON.stringify(options.body)
-          : undefined,
-      signal: controller.signal,
-    });
-  } catch {
-    clearTimeout(timeoutId);
+    const response = await fetchWithTimeout(
+      url,
+      {
+        method,
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'X-User-Id': currentSessionUser.idPengguna,
+          'X-User-Role': currentSessionUser.role,
+          ...(!skipAuth && authToken
+            ? { Authorization: `Bearer ${authToken}` }
+            : {}),
+          ...headers,
+        },
+        body:
+          body !== undefined
+            ? typeof body === 'string'
+              ? body
+              : JSON.stringify(body)
+            : undefined,
+      },
+      timeoutMs,
+      signal
+    );
+
+    lastWorkingBaseUrl = baseUrl;
+
+    const rawText = await response.text();
+    let parsed: unknown = null;
+
+    if (rawText) {
+      try {
+        parsed = JSON.parse(rawText);
+      } catch {
+        parsed = rawText;
+      }
+    }
+
+    if (!response.ok) {
+      const serverMessage =
+        typeof parsed === 'object' &&
+        parsed !== null &&
+        'message' in parsed &&
+        typeof (parsed as { message: unknown }).message === 'string'
+          ? (parsed as { message: string }).message
+          : `Permintaan gagal dengan kode status ${response.status}.`;
+
+      throw new ApiError(serverMessage, response.status, parsed, false);
+    }
+
+    if (isApiEnvelope<T>(parsed)) {
+      return parsed.data;
+    }
+
+    return parsed as T;
+  } catch (error: unknown) {
+    if (error instanceof ApiError) {
+      throw error;
+    }
+
+    if (error instanceof Error && error.name === 'AbortError') {
+      throw new ApiError(
+        'Waktu koneksi ke server habis. Periksa koneksi internet Anda lalu coba lagi.',
+        0,
+        undefined,
+        true
+      );
+    }
+
     throw new ApiError(
       'Tidak dapat terhubung ke server. Periksa koneksi internet Anda.',
-      0
+      0,
+      error,
+      true
     );
   }
+}
 
-  clearTimeout(timeoutId);
+/**
+ * Helper khusus endpoint autentikasi & profil yang mengembalikan amplop `{ ok, status, message, data }`.
+ * Dilengkapi timeout cepat (3.5 detik) dan percobaan multi-host (localhost:5000 / 10.0.2.2:5000)
+ * agar tidak pernah stuck loading ketika perangkat menggunakan tunnel atau emulator.
+ */
+export async function apiAuthRequest<T = unknown>(
+  endpoint: string,
+  options: RequestInit = {}
+): Promise<ApiAuthEnvelope<T>> {
+  const headers: Record<string, string> = {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+    'X-User-Id': currentSessionUser.idPengguna,
+    'X-User-Role': currentSessionUser.role,
+    ...(options.headers as Record<string, string>),
+  };
 
-  let json: ApiResponse<T> | null = null;
-  try {
-    const rawText = await response.text();
-    if (rawText.trim().length > 0) {
-      json = JSON.parse(rawText) as ApiResponse<T>;
+  if (authToken) {
+    headers.Authorization = `Bearer ${authToken}`;
+  }
+
+  const normalizedPath = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+  const allCandidates = lastWorkingBaseUrl
+    ? [
+        lastWorkingBaseUrl,
+        ...getCandidateApiBaseUrls().filter((u) => u !== lastWorkingBaseUrl),
+      ]
+    : getCandidateApiBaseUrls();
+
+  const candidates = allCandidates.filter((u) => !unreachableBaseUrls.has(u));
+  if (candidates.length === 0) {
+    throw new Error('Backend tidak dapat dijangkau dari jaringan perangkat ini.');
+  }
+
+  let lastError: unknown = null;
+
+  for (const baseUrl of candidates) {
+    try {
+      const response = await fetchWithTimeout(
+        `${baseUrl}${normalizedPath}`,
+        {
+          ...options,
+          headers,
+        },
+        AUTH_TIMEOUT_MS
+      );
+
+      lastWorkingBaseUrl = baseUrl;
+      unreachableBaseUrls.delete(baseUrl);
+      const json = await response.json().catch(() => ({}));
+
+      return {
+        ok: response.ok,
+        status: response.status,
+        message: json.message,
+        data: json.data as T | undefined,
+      };
+    } catch (err) {
+      unreachableBaseUrls.add(baseUrl);
+      lastError = err;
     }
-  } catch {
-    json = null;
   }
 
-  if (!response.ok || (json !== null && json.success === false)) {
-    const errorMessage =
-      json?.message && json.message.trim().length > 0
-        ? json.message
-        : 'Terjadi kesalahan pada server';
-    throw new ApiError(errorMessage, response.status);
-  }
-
-  return (json?.data ?? (json as unknown as T)) as T;
+  throw lastError ?? new Error('Network request failed');
 }
 
-export async function apiGet<T>(path: string): Promise<T> {
-  return apiRequest<T>(path, { method: 'GET' });
+export function apiGet<T>(
+  path: string,
+  options?: Omit<ApiRequestOptions, 'method' | 'body'>
+): Promise<T> {
+  return apiRequest<T>(path, { ...options, method: 'GET' });
 }
 
-export async function apiPost<T>(path: string, body: unknown): Promise<T> {
-  return apiRequest<T>(path, { method: 'POST', body });
+export function apiPost<T>(
+  path: string,
+  body?: unknown,
+  options?: Omit<ApiRequestOptions, 'method' | 'body'>
+): Promise<T> {
+  return apiRequest<T>(path, { ...options, method: 'POST', body });
 }
 
 export async function apiPatch<T>(path: string, body?: unknown): Promise<T> {

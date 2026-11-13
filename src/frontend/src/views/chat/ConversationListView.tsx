@@ -54,7 +54,12 @@ export const ConversationListView: React.FC = () => {
     isOnline?: boolean
   ) => {
     if (isPenyediaJasa) {
-      navigation.navigate('ProviderChat', { partnerId, partnerName, isCS, isOnline });
+      navigation.navigate('ProviderChat', {
+        partnerId,
+        partnerName,
+        isCS,
+        isOnline,
+      });
       return;
     }
     navigation.navigate('CustomerChat', {
@@ -80,17 +85,29 @@ export const ConversationListView: React.FC = () => {
         <View style={styles.headerRow}>
           <View>
             <Text style={styles.title}>Pesan</Text>
-            <Text style={styles.subtitle}>Obrolan dengan pemberi jasa & CS</Text>
+            <Text style={styles.subtitle}>
+              Obrolan dengan pemberi jasa & CS
+            </Text>
           </View>
-          {!isPenyediaJasa && (
+          <View style={styles.headerActions}>
+            {/* UC08: buka daftar tiket laporan ke CS (pelanggan & pemberi jasa) */}
             <TouchableOpacity
               style={styles.pencilButton}
-              onPress={handlePencilClick}
-              accessibilityLabel="Mulai percakapan baru"
+              onPress={() => navigation.navigate('MyTickets')}
+              accessibilityLabel="Tiket laporan ke CS"
             >
-              <Feather name="edit-2" size={18} color={colors.navy} />
+              <Feather name="life-buoy" size={18} color={colors.navy} />
             </TouchableOpacity>
-          )}
+            {!isPenyediaJasa && (
+              <TouchableOpacity
+                style={[styles.pencilButton, styles.headerActionGap]}
+                onPress={handlePencilClick}
+                accessibilityLabel="Mulai percakapan baru"
+              >
+                <Feather name="edit-2" size={18} color={colors.navy} />
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
 
         <SearchField value={searchQuery} onChangeText={setSearchQuery} />
@@ -102,7 +119,10 @@ export const ConversationListView: React.FC = () => {
         ) : error ? (
           <View style={styles.centerContainer}>
             <Text style={styles.errorText}>{error}</Text>
-            <TouchableOpacity style={styles.retryBtn} onPress={() => loadConversations()}>
+            <TouchableOpacity
+              style={styles.retryBtn}
+              onPress={() => loadConversations()}
+            >
               <Text style={styles.retryBtnText}>Coba lagi</Text>
             </TouchableOpacity>
           </View>
@@ -167,6 +187,12 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     marginTop: 2,
   },
+  headerActions: {
+    flexDirection: 'row',
+  },
+  headerActionGap: {
+    marginLeft: 8,
+  },
   pencilButton: {
     width: 40,
     height: 40,
@@ -203,3 +229,5 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 });
+
+export default ConversationListView;
