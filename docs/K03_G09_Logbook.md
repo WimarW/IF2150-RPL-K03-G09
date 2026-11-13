@@ -148,6 +148,7 @@
 | 10-11-2026 | Raymond Edson Sabajan |  Menghubungkan Backend pengguna dan perbaikan error | 1 jam | Done | - |
 | 11-11-2026 | Raymond Edson Sabajan |  Menghubungkan Backend notifikasi | 1 jam | Done | - |
 | 11-11-2026 | Wimar Widiarto | Implementasi login dan registrasi | 3 jam | Done | - | 
+| 11-11-2026 | Vinsensius Juan Setiady | Implementasi fitur chat | 5 jam | Done | - |
 | 12-11-2026 | Wimar Widiarto | Implementasi 2 way rating | 5 Jam | Done | - |
 | 12-11-2026 | Raymond Edson Sabajan |  Mengimplementasikan frontend widget kontrak kerja | 1 jam | Done | - |
 | 13-11-2026 | Raymond Edson Sabajan |  Mengimplementasikan riwayat pekerjaan dan optimalisasi| 3 jam | Done | - |
