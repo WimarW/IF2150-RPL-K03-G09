@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   ScrollView,
-  KeyboardAvoidingView,
-  Platform,
   Modal,
   StyleSheet,
   Alert,
 } from 'react-native';
+import { KeyboardAwareView } from '../../components/common/KeyboardAwareView';
 import Header from '../../components/Header';
 import InputField from '../../components/InputField';
 import Button from '../../components/Button';
 import { useAuthController } from '../../controllers/useAuthController';
+import { useSessionUser } from '../../services/api';
 import { ScreenName } from '../../navigation/types';
 
 export interface ProfileViewProps {
@@ -47,71 +47,20 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
   onBack,
   onLogoutSuccess,
 }) => {
-  const {
-    user,
-    isLoading,
-    validateRequiredName,
-    validateEmailInstant,
-    validatePasswordInstant,
-    updateUserProfile,
-    logoutSession,
-  } = useAuthController();
+  const { user, logoutSession } = useAuthController();
+  // Cadangan bila konteks auth belum terisi: sesi aktif yang sama dengan yang dipakai request API
+  const { user: sessionUser } = useSessionUser();
 
-  const [namaLengkap, setNamaLengkap] = useState<string>(
-    user?.namaPengguna || 'Naufal Hasbialhaq'
-  );
-  const [email, setEmail] = useState<string>(
-    user?.email || 'naufal.h@example.com'
-  );
-  const [password, setPassword] = useState<string>('password123');
+  // Data profil hanya ditampilkan (read-only) dan selalu mengikuti akun yang sedang login
+  const namaLengkap = user?.namaPengguna || sessionUser.namaPengguna || '';
+  const email = user?.email || sessionUser.email || '';
+  const username = user?.username || sessionUser.username || '';
+  // Password tersimpan ter-hash di server sehingga tidak bisa (dan tidak boleh) ditampilkan
+  const PASSWORD_MASK = '••••••••';
+
   const [avatarBgIndex, setAvatarBgIndex] = useState<number>(0);
-  const [feedbackBanner, setFeedbackBanner] = useState<{
-    type: 'success' | 'error';
-    text: string;
-  } | null>(null);
   const [isLogoutModalVisible, setIsLogoutModalVisible] =
     useState<boolean>(false);
-
-  useEffect(() => {
-    if (user) {
-      setNamaLengkap(user.namaPengguna);
-      setEmail(user.email);
-    }
-  }, [user]);
-
-  // Validasi instan (Acceptance Criteria)
-  const nameValidation = validateRequiredName(namaLengkap);
-  const emailValidation = validateEmailInstant(email, false);
-  const passwordValidation = validatePasswordInstant(password);
-
-  const isFormValid =
-    nameValidation.isValid &&
-    emailValidation.isValid &&
-    passwordValidation.isValid;
-
-  const hasChanges =
-    Boolean(user) &&
-    (namaLengkap.trim() !== user?.namaPengguna ||
-      email.trim().toLowerCase() !== user?.email.toLowerCase() ||
-      password !== 'password123');
-
-  const handleSaveProfile = async () => {
-    setFeedbackBanner(null);
-    if (!isFormValid) {
-      return;
-    }
-
-    const result = await updateUserProfile({
-      namaPengguna: namaLengkap,
-      email,
-      password,
-    });
-
-    setFeedbackBanner({
-      type: result.success ? 'success' : 'error',
-      text: result.message,
-    });
-  };
 
   /**
    * UI-14-04: Ikon kamera untuk mengganti foto profil / avatar
@@ -137,10 +86,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
   const initials = getInitials(namaLengkap);
 
   return (
-    <KeyboardAvoidingView
-      style={styles.safeArea}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-    >
+    <KeyboardAwareView style={styles.safeArea}>
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
@@ -175,84 +121,43 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
             </View>
           </View>
 
-          {feedbackBanner ? (
-            <View
-              style={[
-                styles.feedbackBanner,
-                feedbackBanner.type === 'success'
-                  ? styles.feedbackSuccess
-                  : styles.feedbackError,
-              ]}
-            >
-              <Text
-                style={[
-                  styles.feedbackText,
-                  feedbackBanner.type === 'success'
-                    ? styles.feedbackSuccessText
-                    : styles.feedbackErrorText,
-                ]}
-              >
-                {feedbackBanner.text}
-              </Text>
-            </View>
-          ) : null}
-
-          {/* UI-14-05: Field Nama Lengkap */}
+          {/* UI-14-05: Field Nama Lengkap (read-only, sesuai akun login) */}
           <InputField
             testID="profile-name-input"
             label="Nama Lengkap"
             value={namaLengkap}
-            onChangeText={(text) => {
-              setFeedbackBanner(null);
-              setNamaLengkap(text);
-            }}
-            placeholder="Masukkan nama lengkap"
             leftIcon="person"
-            autoCapitalize="words"
-            errorMessage={nameValidation.errorMessage}
+            disabled
           />
 
-          {/* UI-14-06: Field Email */}
+          {username ? (
+            <InputField
+              testID="profile-username-input"
+              label="Username"
+              value={username}
+              leftIcon="person"
+              disabled
+            />
+          ) : null}
+
+          {/* UI-14-06: Field Email (read-only) */}
           <InputField
             testID="profile-email-input"
             label="Email"
             value={email}
-            onChangeText={(text) => {
-              setFeedbackBanner(null);
-              setEmail(text);
-            }}
-            placeholder="Masukkan email"
             leftIcon="mail"
-            keyboardType="email-address"
-            autoCapitalize="none"
-            errorMessage={emailValidation.errorMessage}
+            disabled
           />
 
-          {/* UI-14-07 & UI-14-08: Field Password + Ikon Mata Show/Hide */}
+          {/* UI-14-07: Field Password (read-only, disamarkan) */}
           <InputField
             testID="profile-password-input"
             label="Password"
-            value={password}
-            onChangeText={(text) => {
-              setFeedbackBanner(null);
-              setPassword(text);
-            }}
-            placeholder="Minimal 8 karakter"
+            value={PASSWORD_MASK}
             leftIcon="lock"
-            isPassword
-            errorMessage={passwordValidation.errorMessage}
+            disabled
+            helperText="Data akun hanya dapat dilihat dan tidak dapat diubah di halaman ini."
           />
-
-          {hasChanges && (
-            <Button
-              testID="profile-save-button"
-              title="Simpan Perubahan"
-              onPress={handleSaveProfile}
-              disabled={!isFormValid}
-              loading={isLoading}
-              style={styles.saveProfileBtn}
-            />
-          )}
         </View>
 
         {/* UI-14-09: Button "Keluar Akun" */}
@@ -304,7 +209,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
           </View>
         </View>
       </Modal>
-    </KeyboardAvoidingView>
+    </KeyboardAwareView>
   );
 };
 
@@ -370,34 +275,6 @@ const styles = StyleSheet.create({
     borderRadius: 2.5,
     borderWidth: 1.2,
     borderColor: '#FFFFFF',
-  },
-  feedbackBanner: {
-    borderRadius: 12,
-    paddingVertical: 10,
-    paddingHorizontal: 14,
-    marginBottom: 16,
-    borderWidth: 1,
-  },
-  feedbackSuccess: {
-    backgroundColor: '#DCFCE7',
-    borderColor: '#86EFAC',
-  },
-  feedbackError: {
-    backgroundColor: '#FEE2E2',
-    borderColor: '#FCA5A5',
-  },
-  feedbackText: {
-    fontSize: 13,
-    fontWeight: '600',
-  },
-  feedbackSuccessText: {
-    color: '#166534',
-  },
-  feedbackErrorText: {
-    color: '#991B1B',
-  },
-  saveProfileBtn: {
-    marginTop: 8,
   },
   bottomSection: {
     marginTop: 40,
