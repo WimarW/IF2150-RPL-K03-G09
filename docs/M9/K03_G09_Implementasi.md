@@ -220,6 +220,13 @@ Tabel B.2. Bukti Best Practices
 
 ## B.3 Kendala dan Catatan Penting
 
+### Kendala implementasi fitur (Sudah Diperbaiki)
+- Fitur chat antar user yang tidak menyimpan hasil chat ke backend, sehingga perlu dilakukan perbaikan dalam integrasi frontend dan backend.<br>
+- Terdapat ketidak sinkronan antara data pada dashboard utama dengan riwayat pekerjaan.
+
+### Catatan Penting
+Untuk bagian aplikasi yang meminta input text, keyboard yang muncul dapat menutupi tampilan aplikasi. Selain itu, ada notifikasi di chat yang tidak bisa hilang sendiri, sehingga harus tutup chat kemudan buka lagi agar hilang.
+
 Tuliskan kendala yang ditemui, fitur yang belum sempurna (*known issues*), serta hal yang perlu diketahui asisten saat menjalankan atau menilai aplikasi (misalnya akun uji khusus, urutan menjalankan, atau batasan).
 
 ## B.4 Kontribusi Anggota
