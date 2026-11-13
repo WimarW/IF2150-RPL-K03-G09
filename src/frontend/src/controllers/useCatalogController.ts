@@ -29,10 +29,15 @@ import {
   registerServiceProvider,
   searchServiceProviders,
 } from '../services/serviceCatalogService';
+import { subscribeContracts } from '../services/contractService';
 import {
-  getAllCachedContracts,
-  subscribeContracts,
-} from '../services/contractService';
+  CustomerTransactionItem,
+  fetchCustomerTransactions,
+  getCustomerTransactionsSnapshot,
+  subscribeCustomerTransactions,
+} from '../services/ratingService';
+import { filterTransactionsByTab } from './useRatingController';
+import { useFocusEffect } from '@react-navigation/native';
 
 export interface PendaftaranJasaForm {
   namaToko: string;
@@ -972,7 +977,27 @@ export interface OnProgressOrderSummary {
   judulPekerjaan: string;
   namaPemberiJasa: string;
   createdAt: string; // ISO
+  /** Label tanggal siap tampil (dipakai bila createdAt bukan ISO, mis. data dari Riwayat) */
+  tanggalLabel?: string;
   statusPekerjaan: 'On Progress';
+}
+
+/**
+ * Memilih pesanan berjalan pertama dengan kriteria yang sama seperti tab "On Progress" di Riwayat.
+ */
+export function pickActiveOrder(
+  items: CustomerTransactionItem[]
+): OnProgressOrderSummary | null {
+  const order = filterTransactionsByTab(items, 'On Progress')[0];
+  if (!order) return null;
+  return {
+    idKontrakPekerjaan: order.idKontrak,
+    judulPekerjaan: order.judulPekerjaan,
+    namaPemberiJasa: order.namaPenyedia,
+    createdAt: order.waktuTransaksi,
+    tanggalLabel: order.waktuTransaksi,
+    statusPekerjaan: 'On Progress',
+  };
 }
 
 const BULAN_INDONESIA = [
@@ -1043,43 +1068,38 @@ export function useHomeCatalogController(): UseHomeCatalogControllerResult {
     []
   );
 
+  // Kartu On Progress memakai sumber data yang sama dengan layar Riwayat (ratingService -> GET /kontrak),
+  // agar pesanan yang tampil di Beranda selalu ada di Riwayat.
   const [activeOrder, setActiveOrder] =
-    useState<OnProgressOrderSummary | null>(() => {
-      const onProg = getAllCachedContracts().find(
-        (c) => c.statusPekerjaan === 'On Progress' || c.status === 'DITERIMA'
-      );
-      if (!onProg) return null;
-      return {
-        idKontrakPekerjaan: onProg.idKontrakPekerjaan || onProg.idKontrak,
-        judulPekerjaan: `${onProg.jasa} - ${onProg.deskripsi}`,
-        namaPemberiJasa: 'Budi Wijaya',
-        createdAt: onProg.createdAt || new Date().toISOString(),
-        statusPekerjaan: 'On Progress',
-      };
-    });
+    useState<OnProgressOrderSummary | null>(() =>
+      pickActiveOrder(getCustomerTransactionsSnapshot())
+    );
+
+  const syncActiveOrderFromBackend = useCallback(async () => {
+    if (isPenyediaJasa) return;
+    const items = await fetchCustomerTransactions();
+    setActiveOrder(pickActiveOrder(items));
+  }, [isPenyediaJasa]);
 
   useEffect(() => {
-    const syncActiveOrder = () => {
-      const onProg = getAllCachedContracts().find(
-        (c) => c.statusPekerjaan === 'On Progress' || c.status === 'DITERIMA'
-      );
-      if (!onProg) {
-        setActiveOrder(null);
-        return;
-      }
-      setActiveOrder({
-        idKontrakPekerjaan: onProg.idKontrakPekerjaan || onProg.idKontrak,
-        judulPekerjaan: `${onProg.jasa} - ${onProg.deskripsi}`,
-        namaPemberiJasa: 'Budi Wijaya',
-        createdAt: onProg.createdAt || new Date().toISOString(),
-        statusPekerjaan: 'On Progress',
-      });
-    };
-    syncActiveOrder();
-    return subscribeContracts(() => {
-      syncActiveOrder();
+    const unsubscribeTransactions = subscribeCustomerTransactions((items) => {
+      setActiveOrder(pickActiveOrder(items));
     });
+    const unsubscribeContracts = subscribeContracts(() => {
+      setActiveOrder(pickActiveOrder(getCustomerTransactionsSnapshot()));
+    });
+    return () => {
+      unsubscribeTransactions();
+      unsubscribeContracts();
+    };
   }, []);
+
+  // Muat ulang setiap kali Beranda difokuskan (mis. kembali dari Riwayat / setelah konfirmasi pekerjaan)
+  useFocusEffect(
+    useCallback(() => {
+      void syncActiveOrderFromBackend();
+    }, [syncActiveOrderFromBackend])
+  );
   const [isLoadingRecommendations, setIsLoadingRecommendations] =
     useState<boolean>(true);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
@@ -1171,13 +1191,16 @@ export function useHomeCatalogController(): UseHomeCatalogControllerResult {
     }
     try {
       const freshCoords = await requestLocation();
-      await loadRecommendations(freshCoords, true);
+      await Promise.all([
+        loadRecommendations(freshCoords, true),
+        syncActiveOrderFromBackend(),
+      ]);
     } finally {
       if (isMountedRef.current) {
         setIsRefreshing(false);
       }
     }
-  }, [loadRecommendations, requestLocation]);
+  }, [loadRecommendations, requestLocation, syncActiveOrderFromBackend]);
 
   return {
     user,

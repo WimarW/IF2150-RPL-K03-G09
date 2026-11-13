@@ -1,8 +1,9 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Image, Modal } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { ChatMessage } from '../../types/chat';
 import { colors } from '../../theme/colors';
+import { resolveFileUrl } from '../../services/api';
 
 interface ChatBubbleProps {
   message: ChatMessage;
@@ -15,7 +16,9 @@ export const ChatBubble: React.FC<ChatBubbleProps> = React.memo(({
   isOutgoing,
   onRetry,
 }) => {
-  const { isiPesan, waktuTerkirim, statusChat, clientId } = message;
+  const { isiPesan, waktuTerkirim, statusChat, clientId, lampiranUrl } = message;
+  const imageUri = resolveFileUrl(lampiranUrl);
+  const [isImageOpen, setIsImageOpen] = useState(false);
   const formattedTime = new Date(waktuTerkirim).toLocaleTimeString([], {
     hour: '2-digit',
     minute: '2-digit',
@@ -32,12 +35,50 @@ export const ChatBubble: React.FC<ChatBubbleProps> = React.memo(({
           styles.bubble,
           isOutgoing ? styles.outgoingBubble : styles.incomingBubble,
           isFailed && styles.failedBubble,
+          imageUri ? styles.imageBubble : null,
         ]}
       >
-        <Text style={[styles.text, isOutgoing ? styles.outgoingText : styles.incomingText]}>
-          {isiPesan}
-        </Text>
+        {imageUri && (
+          <TouchableOpacity
+            onPress={() => setIsImageOpen(true)}
+            activeOpacity={0.85}
+            accessibilityLabel="Lihat foto lampiran"
+          >
+            <Image source={{ uri: imageUri }} style={styles.image} resizeMode="cover" />
+          </TouchableOpacity>
+        )}
+        {isiPesan.length > 0 && (
+          <Text
+            style={[
+              styles.text,
+              isOutgoing ? styles.outgoingText : styles.incomingText,
+              imageUri ? styles.captionText : null,
+            ]}
+          >
+            {isiPesan}
+          </Text>
+        )}
       </View>
+
+      {imageUri && (
+        <Modal
+          visible={isImageOpen}
+          transparent
+          animationType="fade"
+          onRequestClose={() => setIsImageOpen(false)}
+        >
+          <View style={styles.modalBackdrop}>
+            <TouchableOpacity
+              style={styles.modalClose}
+              onPress={() => setIsImageOpen(false)}
+              accessibilityLabel="Tutup foto"
+            >
+              <Feather name="x" size={28} color={colors.white} />
+            </TouchableOpacity>
+            <Image source={{ uri: imageUri }} style={styles.fullImage} resizeMode="contain" />
+          </View>
+        </Modal>
+      )}
 
       <View style={styles.metaRow}>
         <Text style={styles.time}>{formattedTime}</Text>
@@ -98,6 +139,37 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 14,
     lineHeight: 20,
+  },
+  imageBubble: {
+    padding: 4,
+  },
+  image: {
+    width: 220,
+    height: 220,
+    borderRadius: 14,
+    backgroundColor: colors.bg,
+  },
+  captionText: {
+    paddingHorizontal: 8,
+    paddingTop: 6,
+    paddingBottom: 4,
+  },
+  modalBackdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.92)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalClose: {
+    position: 'absolute',
+    top: 48,
+    right: 20,
+    zIndex: 1,
+    padding: 6,
+  },
+  fullImage: {
+    width: '100%',
+    height: '80%',
   },
   incomingText: {
     color: colors.navy,
