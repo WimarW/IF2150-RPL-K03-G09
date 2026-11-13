@@ -1,6 +1,6 @@
 /**
  * [Naufal Hasbialhaq] UI-16 Daftar Penyedia Jasa
- * Traceability: UC01 Mendaftarkan Jasa (Skenario Normal & Skenario Alternatif 1), KF04, KF05,
+ * Traceability: UC01 Mendaftarkan Jasa (Skenario Normal & Skenario Alternatif 1), UC12, KF04, KF05,
  * Kelas DPPL C14 KategoriJasaUI, C05 PemberiJasaUI, C15 KategoriJasaController,
  * Antarmuka UI-16 (UI-16-01 s.d. UI-16-07) -> Pengalihan ke UI-12 (Riwayat Pekerjaan)
  */
@@ -21,7 +21,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { Header, UI_THEME } from '../../components/Header';
 import { InputField, InputFieldHandle } from '../../components/InputField';
@@ -39,9 +39,17 @@ import {
   sanitizeTarifInput,
   useCatalogController,
 } from '../../controllers/useCatalogController';
+import { useAuthController } from '../../controllers/useAuthController';
+import { PendingProviderRegistration } from '../../navigation/types';
 
 export const ServiceRegistrationView: React.FC = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
+  const route = useRoute<any>();
+  const pendingProvider: PendingProviderRegistration | undefined =
+    route?.params?.pendingProvider;
+
+  const { registerPemberiJasa } = useAuthController();
+
   const {
     isPenyediaJasa,
     form,
@@ -107,6 +115,21 @@ export const ServiceRegistrationView: React.FC = () => {
     }
 
     Keyboard.dismiss();
+
+    // Jika berasal dari alur Buat Akun Jasa (UI-03), daftarkan juga akun penyedia jasa ke AuthController
+    if (pendingProvider) {
+      await registerPemberiJasa({
+        namaPengguna: pendingProvider.namaPengguna,
+        email: pendingProvider.email,
+        password: pendingProvider.password,
+        namaToko: form.namaToko.trim(),
+        idKategoriJasa: `kat-${form.jenisJasa.toLowerCase()}`,
+        jenisJasa: form.jenisJasa,
+        latitude: coordinates?.latitude,
+        longitude: coordinates?.longitude,
+      });
+    }
+
     const result = await submitRegistration();
     if (!result) {
       scrollViewRef.current?.scrollTo({ y: 0, animated: true });

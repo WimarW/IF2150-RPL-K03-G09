@@ -54,7 +54,12 @@ export const ConversationListView: React.FC = () => {
     isOnline?: boolean
   ) => {
     if (isPenyediaJasa) {
-      navigation.navigate('ProviderChat', { partnerId, partnerName, isCS, isOnline });
+      navigation.navigate('ProviderChat', {
+        partnerId,
+        partnerName,
+        isCS,
+        isOnline,
+      });
       return;
     }
     navigation.navigate('CustomerChat', {
@@ -80,7 +85,9 @@ export const ConversationListView: React.FC = () => {
         <View style={styles.headerRow}>
           <View>
             <Text style={styles.title}>Pesan</Text>
-            <Text style={styles.subtitle}>Obrolan dengan pemberi jasa & CS</Text>
+            <Text style={styles.subtitle}>
+              Obrolan dengan pemberi jasa & CS
+            </Text>
           </View>
           <View style={styles.headerActions}>
             {/* UC08: buka daftar tiket laporan ke CS (pelanggan & pemberi jasa) */}
@@ -112,7 +119,10 @@ export const ConversationListView: React.FC = () => {
         ) : error ? (
           <View style={styles.centerContainer}>
             <Text style={styles.errorText}>{error}</Text>
-            <TouchableOpacity style={styles.retryBtn} onPress={() => loadConversations()}>
+            <TouchableOpacity
+              style={styles.retryBtn}
+              onPress={() => loadConversations()}
+            >
               <Text style={styles.retryBtnText}>Coba lagi</Text>
             </TouchableOpacity>
           </View>
@@ -219,3 +229,5 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 });
+
+export default ConversationListView;

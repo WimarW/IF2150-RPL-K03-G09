@@ -2,97 +2,184 @@ import React from 'react';
 import {
   ActivityIndicator,
   Pressable,
+  StyleProp,
   StyleSheet,
   Text,
+  View,
   ViewStyle,
 } from 'react-native';
 import { UI_THEME } from './Header';
 
+export type ButtonVariant =
+  | 'primary'
+  | 'secondary'
+  | 'dangerOutline'
+  | 'secondaryOutline';
+
 export interface ButtonProps {
   title: string;
   onPress: () => void;
+  variant?: ButtonVariant;
   disabled?: boolean;
   loading?: boolean;
-  variant?: 'primary' | 'secondary';
-  style?: ViewStyle;
+  showArrow?: boolean;
+  showLogoutIcon?: boolean;
+  style?: StyleProp<ViewStyle>;
   testID?: string;
 }
 
+/**
+ * Komponen Button global CariUang
+ * Mendukung varian primary, secondary, dangerOutline (Keluar Akun UI-14-09), dan secondaryOutline.
+ */
 export const Button: React.FC<ButtonProps> = ({
   title,
   onPress,
+  variant = 'primary',
   disabled = false,
   loading = false,
-  variant = 'primary',
+  showArrow = false,
+  showLogoutIcon = false,
   style,
   testID,
 }) => {
-  const isDisabled = disabled || loading;
+  const isInteractive = !disabled && !loading;
+  const isPrimary = variant === 'primary';
+  const isDangerOutline = variant === 'dangerOutline';
+  const isSecondaryOutline =
+    variant === 'secondary' || variant === 'secondaryOutline';
+
+  const spinnerColor = isPrimary
+    ? '#FFFFFF'
+    : isDangerOutline
+    ? '#C24136'
+    : UI_THEME.primary;
 
   return (
     <Pressable
+      onPress={isInteractive ? onPress : undefined}
+      disabled={!isInteractive}
       style={({ pressed }) => [
-        styles.button,
-        variant === 'secondary' ? styles.buttonSecondary : styles.buttonPrimary,
-        isDisabled && styles.buttonDisabled,
-        pressed && !isDisabled && styles.buttonPressed,
+        styles.base,
+        isPrimary && styles.primary,
+        isSecondaryOutline && styles.secondary,
+        isDangerOutline && styles.dangerOutline,
+        !isInteractive && isPrimary && styles.disabledPrimary,
+        !isInteractive && !isPrimary && styles.disabledOutline,
+        isInteractive && pressed && styles.pressed,
         style,
       ]}
-      onPress={onPress}
-      disabled={isDisabled}
       accessibilityRole="button"
-      accessibilityLabel={title}
-      accessibilityState={{ disabled: isDisabled, busy: loading }}
+      accessibilityState={{ disabled: !isInteractive, busy: loading }}
       testID={testID}
     >
       {loading ? (
-        <ActivityIndicator
-          size="small"
-          color={variant === 'secondary' ? UI_THEME.primary : UI_THEME.surface}
-        />
+        <ActivityIndicator color={spinnerColor} size="small" />
       ) : (
-        <Text
-          style={[
-            styles.buttonText,
-            variant === 'secondary' && styles.buttonTextSecondary,
-          ]}
-        >
-          {title}
-        </Text>
+        <View style={styles.contentRow}>
+          {showLogoutIcon && (
+            <View style={styles.logoutIconBox}>
+              <Text style={styles.logoutIconSymbol}>↪</Text>
+            </View>
+          )}
+          <Text
+            style={[
+              styles.labelBase,
+              isPrimary && styles.primaryLabel,
+              isSecondaryOutline && styles.secondaryLabel,
+              isDangerOutline && styles.dangerOutlineLabel,
+            ]}
+          >
+            {title}
+          </Text>
+          {showArrow && (
+            <Text
+              style={[
+                styles.arrowSymbol,
+                isPrimary && styles.primaryLabel,
+                isSecondaryOutline && styles.secondaryLabel,
+              ]}
+            >
+              →
+            </Text>
+          )}
+        </View>
       )}
     </Pressable>
   );
 };
 
 const styles = StyleSheet.create({
-  button: {
-    height: 56,
-    borderRadius: 14,
-    justifyContent: 'center',
-    alignItems: 'center',
+  base: {
+    width: '100%',
+    minHeight: 54,
+    paddingVertical: 14,
     paddingHorizontal: 20,
+    borderRadius: 14,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  buttonPrimary: {
+  primary: {
     backgroundColor: UI_THEME.primary,
+    shadowColor: '#0F8A75',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 3,
   },
-  buttonSecondary: {
+  secondary: {
     backgroundColor: UI_THEME.surface,
     borderWidth: 1.5,
     borderColor: UI_THEME.primary,
   },
-  buttonDisabled: {
-    opacity: 0.55,
+  dangerOutline: {
+    backgroundColor: '#FFF5F5',
+    borderWidth: 1.5,
+    borderColor: '#C24136',
   },
-  buttonPressed: {
-    opacity: 0.85,
+  disabledPrimary: {
+    backgroundColor: '#98CBC3',
+    shadowOpacity: 0,
+    elevation: 0,
   },
-  buttonText: {
+  disabledOutline: {
+    opacity: 0.5,
+  },
+  pressed: {
+    opacity: 0.88,
+  },
+  contentRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  labelBase: {
     fontSize: 16,
     fontWeight: '700',
-    color: UI_THEME.surface,
+    letterSpacing: 0.2,
   },
-  buttonTextSecondary: {
+  primaryLabel: {
+    color: '#FFFFFF',
+  },
+  secondaryLabel: {
     color: UI_THEME.primary,
+  },
+  dangerOutlineLabel: {
+    color: '#C24136',
+  },
+  arrowSymbol: {
+    fontSize: 19,
+    fontWeight: '700',
+    marginLeft: 10,
+  },
+  logoutIconBox: {
+    marginRight: 8,
+  },
+  logoutIconSymbol: {
+    fontSize: 17,
+    fontWeight: '800',
+    color: '#C24136',
   },
 });
 
