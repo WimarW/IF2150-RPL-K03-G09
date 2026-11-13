@@ -38,6 +38,15 @@ export type RootStackParamList = {
     isCS?: boolean;
     isOnline?: boolean;
   };
+  // Penilaian & Ulasan (UC10 - UI-11)
+  Rating: {
+    idKontrakPekerjaan: string;
+    idPenggunaPenerima: string;
+    namaPenerima: string;
+    inisialPenerima?: string;
+    detailPekerjaan: string;
+    initialStars?: number;
+  };
   // Didaftarkan oleh branch UI-13 / UI-14
   Notification: undefined; // UI-13 (Vinsensius)
   Profile: undefined; // UI-14 (Wimar)

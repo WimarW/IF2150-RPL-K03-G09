@@ -3,502 +3,237 @@
  * Traceability:
  * - Tabel 6.10 DPPL (UI-10-01 s.d. UI-10-06)
  * - UC07 (Pelanggan mengonfirmasi penyelesaian pekerjaan dan pembayaran -> Tombol "Konfirmasi Selesai")
- * - UC10 (Pelanggan memberikan rating dan ulasan -> Tombol "Beri Rating" & Slot UI-11)
+ * - UC10 (Pelanggan memberikan rating dan ulasan -> Tombol "Beri Rating" & Modal UI-11)
  */
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
-  ActivityIndicator,
-  FlatList,
   Modal,
-  SafeAreaView,
+  RefreshControl,
+  ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../navigation/types';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
+import { useSessionUser } from '../../services/api';
 import {
   CustomerTransactionItem,
   HistoryDisplayStatus,
   HistoryFilterTab,
-} from '../../types/chat';
+  confirmContractCompletion,
+  fetchCustomerTransactions,
+  getCustomerTransactionsSnapshot,
+  getLastBackendSyncStatus,
+  subscribeCustomerTransactions,
+} from '../../services/ratingService';
 import {
   contractService,
-  formatTanggalSelesaiIndonesia,
-  getCachedCustomerHistory,
-  resetMockContracts,
   subscribeContracts,
 } from '../../services/contractService';
 import {
-  filterCustomerTransactionsByTab,
+  filterTransactionsByTab,
   shouldShowBeriRatingButton,
-  shouldShowKonfirmasiSelesaiButton,
-  shouldShowLihatDetailButton,
-} from '../../controllers/useContractController';
-
-export type { HistoryFilterTab, CustomerTransactionItem };
-export type TransactionDisplayStatus = HistoryDisplayStatus;
-
-export interface RatingSlotProps {
-  visible: boolean;
-  transaction: CustomerTransactionItem | null;
-  onClose: () => void;
-  onSubmitted: (
-    idKontrak: string,
-    nilaiRating: number,
-    komentar?: string
-  ) => void;
-}
-
-let registeredRatingSlotComponent: React.ComponentType<RatingSlotProps> | null =
-  null;
-
-/**
- * Mendaftarkan komponen eksternal untuk slot Rating (UI-11) apabila dibutuhkan saat integrasi branch rating.
- */
-export function registerRatingSlotComponent(
-  component: React.ComponentType<RatingSlotProps> | null
-): void {
-  registeredRatingSlotComponent = component;
-}
-
-export const INITIAL_CUSTOMER_TRANSACTIONS: CustomerTransactionItem[] =
-  getCachedCustomerHistory();
-
-/**
- * Menandai kontrak sebagai sudah dinilai pada store bersama (kompatibel penuh dengan branch feat/frontend-rating-ui).
- */
-export function markTransactionAsRated(
-  idKontrak: string,
-  nilaiRating?: number,
-  komentar?: string
-): void {
-  contractService.markContractRated(idKontrak, nilaiRating, komentar);
-}
-
-/**
- * Mereset daftar transaksi ke kondisi awal untuk keperluan pengujian.
- */
-export function resetCustomerTransactions(): void {
-  resetMockContracts();
-}
-
-function formatRupiah(amount: number): string {
-  const formatted = Math.max(0, Math.round(amount))
-    .toString()
-    .replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-  return `Rp ${formatted}`;
-}
+} from '../../controllers/useRatingController';
+import { RatingModal } from '../rating/RatingView';
 
 const FILTER_TABS: HistoryFilterTab[] = ['Semua', 'Selesai', 'On Progress'];
 
-export interface CustomerHistoryViewProps {
-  initialTransactions?: CustomerTransactionItem[];
-  RatingSlotComponent?: React.ComponentType<RatingSlotProps>;
-  onOpenRatingSlot?: (transaction: CustomerTransactionItem) => void;
+interface StatusBadgeTheme {
+  backgroundColor: string;
+  dotColor: string;
+  textColor: string;
 }
 
-export const CustomerHistoryView: React.FC<CustomerHistoryViewProps> = ({
-  initialTransactions,
-  RatingSlotComponent,
-  onOpenRatingSlot,
-}) => {
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+function getStatusBadgeTheme(status: HistoryDisplayStatus): StatusBadgeTheme {
+  switch (status) {
+    case 'On Progress':
+      return {
+        backgroundColor: '#FFF0DC',
+        dotColor: '#C47A00',
+        textColor: '#C47A00',
+      };
+    case 'Selesai':
+      return {
+        backgroundColor: '#DDF5EE',
+        dotColor: '#078875',
+        textColor: '#078875',
+      };
+    case 'Dibatalkan':
+      return {
+        backgroundColor: '#FBE7E7',
+        dotColor: '#C93636',
+        textColor: '#C93636',
+      };
+  }
+}
 
-  const [activeTab, setActiveTab] = useState<HistoryFilterTab>('Semua');
+/**
+ * Layar Riwayat Transaksi Pelanggan (`UI-10` / Kelas DPPL `C02 PenggunaUI`).
+ * Mendukung:
+ * - UC07: Tombol "Konfirmasi Selesai" pada pesanan yang dilaporkan selesai oleh penyedia jasa.
+ * - Skenario Normal `UC10`: Konfirmasi pesanan selesai otomatis memunculkan dialog Beri Penilaian (`UI-11`).
+ * - Skenario Alternatif 1 `UC10`: Jika dialog ditutup (`‹ Kembali`), tombol "Beri Rating" (`UI-10-06`)
+ *   tetap tersedia di kartu riwayat dan dapat dibuka kapan saja.
+ * - Penyembunyian tombol "Beri Rating" seketika setelah penilaian berhasil dikirim (`hasRating = true`).
+ */
+export const CustomerHistoryView: React.FC = () => {
+  const { user } = useSessionUser();
   const [transactions, setTransactions] = useState<CustomerTransactionItem[]>(
-    () => initialTransactions ?? getCachedCustomerHistory()
+    () => getCustomerTransactionsSnapshot()
   );
-  const [selectedDetail, setSelectedDetail] =
+  const [activeFilter, setActiveFilter] = useState<HistoryFilterTab>('Semua');
+  const [ratingTarget, setRatingTarget] =
     useState<CustomerTransactionItem | null>(null);
-  const [ratingSlotTarget, setRatingSlotTarget] =
+  const [detailTarget, setDetailTarget] =
     useState<CustomerTransactionItem | null>(null);
-  const [slotStars, setSlotStars] = useState<number>(5);
-  const [slotComment, setSlotComment] = useState<string>('');
-  const [isSubmittingRating, setIsSubmittingRating] = useState<boolean>(false);
-  const [confirmingId, setConfirmingId] = useState<string | null>(null);
-  const [bannerMessage, setBannerMessage] = useState<string | null>(null);
+  const [feedbackBanner, setFeedbackBanner] = useState<string | null>(null);
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+  const [syncWarning, setSyncWarning] = useState<string | null>(null);
 
-  const syncTransactions = useCallback(() => {
-    if (initialTransactions) return;
-    setTransactions(getCachedCustomerHistory());
-  }, [initialTransactions]);
+  const loadFromBackend = useCallback(async () => {
+    setIsRefreshing(true);
+    await fetchCustomerTransactions();
+    const syncStatus = getLastBackendSyncStatus();
+    if (syncStatus.source === 'offline' && syncStatus.error) {
+      setSyncWarning(
+        `Mode offline (${syncStatus.apiBaseUrl}): ${syncStatus.error}`
+      );
+    } else {
+      setSyncWarning(null);
+    }
+    setIsRefreshing(false);
+  }, []);
 
   useEffect(() => {
-    if (initialTransactions) {
-      setTransactions(initialTransactions);
-      return;
-    }
-    syncTransactions();
-    const unsubscribe = subscribeContracts(() => {
-      syncTransactions();
+    const unsubscribeRating = subscribeCustomerTransactions((updatedItems) => {
+      setTransactions(updatedItems);
     });
-    return unsubscribe;
-  }, [initialTransactions, syncTransactions]);
-
-  useFocusEffect(
-    useCallback(() => {
-      if (!initialTransactions) {
-        syncTransactions();
-        void contractService.fetchContractHistory().then(() => {
-          syncTransactions();
-        });
-      }
-    }, [initialTransactions, syncTransactions])
-  );
+    const unsubscribeContracts = subscribeContracts(() => {
+      setTransactions(getCustomerTransactionsSnapshot());
+    });
+    loadFromBackend();
+    return () => {
+      unsubscribeRating();
+      unsubscribeContracts();
+    };
+  }, [loadFromBackend]);
 
   const filteredTransactions = useMemo(
-    () => filterCustomerTransactionsByTab(transactions, activeTab),
-    [transactions, activeTab]
+    () => filterTransactionsByTab(transactions, activeFilter),
+    [transactions, activeFilter]
   );
 
   /**
-   * Membuka alur Beri Rating (UI-10-06 -> UI-11):
-   * - Apabila layar 'Rating' sudah terdaftar di RootNavigator (setelah merge branch rating), navigasi langsung ke 'Rating'.
-   * - Apabila belum terdaftar, tampilkan slot Rating (UI-11) bawaan yang terhubung ke POST /api/ratings.
+   * Membuka form/modal Beri Penilaian (`UI-11`) dari tombol "Beri Rating" (`UI-10-06`)
+   * sesuai Skenario Alternatif 1 `UC10`.
    */
-  const openRatingFlow = useCallback(
-    (item: CustomerTransactionItem) => {
-      if (onOpenRatingSlot) {
-        onOpenRatingSlot(item);
-        return;
-      }
-
-      const navState =
-        typeof navigation.getState === 'function'
-          ? navigation.getState()
-          : undefined;
-      const hasRatingRoute =
-        Array.isArray(navState?.routeNames) &&
-        navState.routeNames.includes('Rating');
-
-      if (hasRatingRoute) {
-        navigation.navigate('Rating', {
-          idKontrak: item.idKontrak,
-          idPemberiJasa: item.idPemberiJasa,
-          namaPemberiJasa: item.namaPemberiJasa,
-          kategoriJasa: item.kategoriJasa,
-          rincianPekerjaan: item.rincianPekerjaan,
-          tanggalSelesai:
-            item.tanggalSelesai ||
-            formatTanggalSelesaiIndonesia(item.tanggalWaktu),
-          biayaLayanan: item.totalHarga,
-          inisialPemberiJasa: item.inisialPemberiJasa,
-        });
-        return;
-      }
-
-      setSlotStars(5);
-      setSlotComment('');
-      setRatingSlotTarget(item);
-    },
-    [navigation, onOpenRatingSlot]
-  );
+  const handleOpenRatingModal = useCallback((item: CustomerTransactionItem) => {
+    setFeedbackBanner(null);
+    setRatingTarget(item);
+  }, []);
 
   /**
-   * UC07: Pelanggan menekan tombol "Konfirmasi Selesai" pada pesanan yang dilaporkan selesai oleh penyedia jasa.
-   * Memanggil PATCH /api/kontrak/:id/konfirmasi dan mengubah status menjadi 'Done' ('Selesai').
+   * Menangani `UC07` (Konfirmasi Selesai oleh Pelanggan) & Skenario Normal `UC10`:
+   * Saat pelanggan mengonfirmasi pekerjaan selesai (`Done`), status kontrak diperbarui
+   * ke backend (`PATCH /api/kontrak/:id/konfirmasi`) maupun store penyedia jasa (`UI-12`),
+   * lalu dialog popup Beri Penilaian (`UI-11`) langsung ditampilkan.
    */
-  const handleConfirmComplete = useCallback(
+  const handleConfirmOrderCompleted = useCallback(
     async (item: CustomerTransactionItem) => {
-      if (confirmingId) return;
-      setConfirmingId(item.idKontrak);
-      try {
-        await contractService.confirmWorkByCustomer(item.idKontrak);
-
-        if (initialTransactions) {
-          setTransactions((prev) =>
-            prev.map((tx) =>
-              tx.idKontrak === item.idKontrak
-                ? {
-                    ...tx,
-                    statusPekerjaan: 'Done',
-                    statusDisplay: 'Selesai',
-                  }
-                : tx
-            )
-          );
-        } else {
-          syncTransactions();
-        }
-
-        setBannerMessage(
-          'Pekerjaan berhasil dikonfirmasi selesai. Anda kini dapat memberikan rating.'
-        );
-      } catch (err: unknown) {
-        const msg =
-          err instanceof Error
-            ? err.message
-            : 'Gagal mengonfirmasi penyelesaian pekerjaan.';
-        setBannerMessage(msg);
-      } finally {
-        setConfirmingId(null);
+      const updated = await confirmContractCompletion(item.idKontrak);
+      await contractService.confirmWorkByCustomer(item.idKontrak);
+      if (updated) {
+        setRatingTarget(updated);
       }
     },
-    [confirmingId, initialTransactions, syncTransactions]
+    []
   );
 
-  const handleSlotSubmitRating = useCallback(async () => {
-    if (!ratingSlotTarget || isSubmittingRating) return;
-    setIsSubmittingRating(true);
-    try {
-      await contractService.submitContractRating({
-        idKontrak: ratingSlotTarget.idKontrak,
-        idPemberiJasa: ratingSlotTarget.idPemberiJasa,
-        nilaiRating: slotStars,
-        komentar: slotComment,
-      });
+  /**
+   * Skenario Alternatif 1 `UC10`:
+   * Menutup dialog Beri Penilaian tanpa menyimpan penilaian.
+   * Kesempatan menilai tetap tersimpan karena `hasRating` bernilai `false`.
+   */
+  const handleCancelRatingModal = useCallback(() => {
+    setRatingTarget(null);
+  }, []);
 
-      if (initialTransactions) {
-        setTransactions((prev) =>
-          prev.map((tx) =>
-            tx.idKontrak === ratingSlotTarget.idKontrak
-              ? {
-                  ...tx,
-                  hasRating: true,
-                  nilaiRating: slotStars,
-                  komentar: slotComment,
-                }
-              : tx
-          )
-        );
-      } else {
-        syncTransactions();
-      }
-
-      setRatingSlotTarget(null);
-      setBannerMessage('Terima kasih! Penilaian Anda berhasil disimpan.');
-    } catch (err: unknown) {
-      const msg =
-        err instanceof Error ? err.message : 'Gagal menyimpan penilaian.';
-      setBannerMessage(msg);
-    } finally {
-      setIsSubmittingRating(false);
-    }
-  }, [
-    initialTransactions,
-    isSubmittingRating,
-    ratingSlotTarget,
-    slotComment,
-    slotStars,
-    syncTransactions,
-  ]);
-
-  const ActiveRatingSlot = RatingSlotComponent ?? registeredRatingSlotComponent;
-
-  const renderBadge = (item: CustomerTransactionItem) => {
-    if (item.statusDisplay === 'On Progress') {
-      return (
-        <View
-          style={[styles.badge, styles.badgeOnProgress]}
-          testID={`UI-10-04-badge-${item.idKontrak}`}
-        >
-          <View style={[styles.badgeDot, styles.dotOnProgress]} />
-          <Text style={[styles.badgeText, styles.badgeTextOnProgress]}>
-            On Progress
-          </Text>
-        </View>
+  /**
+   * Setelah submit berhasil (`201 Created`):
+   * - Modal `UI-11` ditutup kembali ke layar Riwayat (`UI-10`)
+   * - Status `hasRating` langsung `true` sehingga tombol "Beri Rating" (`UI-10-06`) seketika tersembunyi
+   * - Menyinkronkan nilai rating ke store `contractService` (untuk tampilan `UI-12` Penyedia Jasa)
+   * - Menampilkan feedback sukses kepada pengguna.
+   */
+  const handleRatingSubmitted = useCallback(
+    (result: {
+      idKontrakPekerjaan: string;
+      nilaiRating: number;
+      ulasan: string;
+      tags: string[];
+      message: string;
+    }) => {
+      contractService.markContractRated(
+        result.idKontrakPekerjaan,
+        result.nilaiRating,
+        result.ulasan
       );
-    }
-
-    if (item.statusDisplay === 'Selesai') {
-      return (
-        <View
-          style={[styles.badge, styles.badgeSelesai]}
-          testID={`UI-10-04-badge-${item.idKontrak}`}
-        >
-          <View style={[styles.badgeDot, styles.dotSelesai]} />
-          <Text style={[styles.badgeText, styles.badgeTextSelesai]}>
-            Selesai
-          </Text>
-        </View>
+      setRatingTarget(null);
+      setTransactions(getCustomerTransactionsSnapshot());
+      setFeedbackBanner(
+        `Penilaian ${result.nilaiRating} bintang berhasil dikirim. Terima kasih!`
       );
-    }
-
-    return (
-      <View
-        style={[styles.badge, styles.badgeDibatalkan]}
-        testID={`UI-10-04-badge-${item.idKontrak}`}
-      >
-        <View style={[styles.badgeDot, styles.dotDibatalkan]} />
-        <Text style={[styles.badgeText, styles.badgeTextDibatalkan]}>
-          Dibatalkan
-        </Text>
-      </View>
-    );
-  };
-
-  const renderCard = ({ item }: { item: CustomerTransactionItem }) => {
-    const showConfirmCompleteButton = shouldShowKonfirmasiSelesaiButton(
-      item.statusPekerjaan
-    );
-    const showDetailButton = shouldShowLihatDetailButton(
-      item.statusPekerjaan,
-      item.statusDisplay
-    );
-    const showRateButton = shouldShowBeriRatingButton(
-      item.statusPekerjaan,
-      item.hasRating,
-      item.statusDisplay
-    );
-    const isConfirming = confirmingId === item.idKontrak;
-
-    return (
-      <View
-        style={styles.card}
-        testID={`UI-10-03-card-${item.idKontrak}`}
-      >
-        <View style={styles.cardTopRow}>
-          <View style={styles.cardTitleBlock}>
-            <Text style={styles.cardTitle}>{item.rincianPekerjaan}</Text>
-            <Text style={styles.cardDate}>{item.tanggalWaktu}</Text>
-          </View>
-          {renderBadge(item)}
-        </View>
-
-        <View style={styles.dashedDivider} />
-
-        <View style={styles.providerRow}>
-          <View style={styles.providerInfo}>
-            <View style={styles.avatarCircle}>
-              <Text style={styles.avatarInitials}>
-                {item.inisialPemberiJasa}
-              </Text>
-            </View>
-            <Text style={styles.providerName}>{item.namaPemberiJasa}</Text>
-          </View>
-          <Text style={styles.priceText}>{formatRupiah(item.totalHarga)}</Text>
-        </View>
-
-        {/* UC07: Tombol "Konfirmasi Selesai" pada pesanan yang dilaporkan selesai oleh penyedia jasa */}
-        {showConfirmCompleteButton && (
-          <View style={styles.confirmActionWrap}>
-            <Text style={styles.waitingConfirmationInfo}>
-              Penyedia jasa telah menyelesaikan pekerjaan ini
-            </Text>
-            <View style={styles.actionRow}>
-              <TouchableOpacity
-                style={styles.detailButton}
-                onPress={() => setSelectedDetail(item)}
-                testID={`UI-10-05-detail-${item.idKontrak}`}
-                accessibilityRole="button"
-                accessibilityLabel={`Lihat detail ${item.rincianPekerjaan}`}
-              >
-                <Text style={styles.detailButtonText}>Lihat Detail</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={[
-                  styles.confirmCompleteButton,
-                  isConfirming && styles.buttonDisabled,
-                ]}
-                onPress={() => handleConfirmComplete(item)}
-                disabled={isConfirming}
-                testID={`UI-10-confirm-complete-${item.idKontrak}`}
-                accessibilityRole="button"
-                accessibilityLabel={`Konfirmasi selesai ${item.rincianPekerjaan}`}
-              >
-                {isConfirming ? (
-                  <ActivityIndicator size="small" color="#FFFFFF" />
-                ) : (
-                  <Text style={styles.confirmCompleteButtonText}>
-                    Konfirmasi Selesai
-                  </Text>
-                )}
-              </TouchableOpacity>
-            </View>
-          </View>
-        )}
-
-        {/* UI-10-05 ("Lihat Detail") & UI-10-06 ("Beri Rating") untuk pesanan berstatus Selesai */}
-        {showDetailButton && (
-          <View style={styles.actionRow}>
-            <TouchableOpacity
-              style={styles.detailButton}
-              onPress={() => setSelectedDetail(item)}
-              testID={`UI-10-05-detail-${item.idKontrak}`}
-              accessibilityRole="button"
-              accessibilityLabel={`Lihat detail ${item.rincianPekerjaan}`}
-            >
-              <Text style={styles.detailButtonText}>Lihat Detail</Text>
-            </TouchableOpacity>
-
-            {showRateButton ? (
-              <TouchableOpacity
-                style={styles.rateButton}
-                onPress={() => openRatingFlow(item)}
-                testID={`UI-10-06-rate-${item.idKontrak}`}
-                accessibilityRole="button"
-                accessibilityLabel={`Beri rating untuk ${item.namaPemberiJasa}`}
-              >
-                <Text style={styles.rateButtonText}>Beri Rating</Text>
-              </TouchableOpacity>
-            ) : (
-              <View
-                style={styles.ratedBadge}
-                testID={`UI-10-rated-indicator-${item.idKontrak}`}
-              >
-                <Text style={styles.ratedBadgeText}>
-                  ★ Sudah Dinilai
-                  {typeof item.nilaiRating === 'number'
-                    ? ` (${item.nilaiRating.toFixed(1)})`
-                    : ''}
-                </Text>
-              </View>
-            )}
-          </View>
-        )}
-      </View>
-    );
-  };
+    },
+    []
+  );
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
-        {/* UI-10-01 Header "Riwayat" */}
-        <View style={styles.headerBlock} testID="UI-10-01-header">
+    <SafeAreaView style={styles.safeArea} edges={['top']}>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefreshing}
+            onRefresh={loadFromBackend}
+          />
+        }
+      >
+        {/* UI-10-01: Header Judul & Subjudul */}
+        <View testID="UI-10-01-header" style={styles.headerSection}>
           <Text style={styles.headerTitle}>Riwayat</Text>
           <Text style={styles.headerSubtitle}>Semua transaksi jasamu</Text>
         </View>
 
-        {bannerMessage && (
-          <View
-            style={styles.successBanner}
-            testID="UI-10-rating-success-banner"
-          >
-            <Text style={styles.successBannerText}>{bannerMessage}</Text>
-            <TouchableOpacity
-              onPress={() => setBannerMessage(null)}
-              accessibilityRole="button"
-              accessibilityLabel="Tutup pesan"
-            >
-              <Text style={styles.successBannerDismiss}>Tutup</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-
-        {/* UI-10-02 Chip Filter Status */}
-        <View style={styles.filterRow} testID="UI-10-02-filter-row">
+        {/* UI-10-02: Filter Chip ("Semua", "Selesai", "On Progress") */}
+        <View testID="UI-10-02-filter-row" style={styles.filterRow}>
           {FILTER_TABS.map((tab) => {
-            const isActive = activeTab === tab;
+            const isActive = activeFilter === tab;
             return (
               <TouchableOpacity
                 key={tab}
-                style={[styles.filterChip, isActive && styles.filterChipActive]}
-                onPress={() => setActiveTab(tab)}
                 testID={`UI-10-02-filter-${tab}`}
+                style={[
+                  styles.filterChip,
+                  isActive
+                    ? styles.filterChipActive
+                    : styles.filterChipInactive,
+                ]}
+                onPress={() => setActiveFilter(tab)}
+                activeOpacity={0.8}
                 accessibilityRole="button"
                 accessibilityState={{ selected: isActive }}
               >
                 <Text
                   style={[
                     styles.filterChipText,
-                    isActive && styles.filterChipTextActive,
+                    isActive
+                      ? styles.filterChipTextActive
+                      : styles.filterChipTextInactive,
                   ]}
                 >
                   {tab}
@@ -508,182 +243,279 @@ export const CustomerHistoryView: React.FC<CustomerHistoryViewProps> = ({
           })}
         </View>
 
-        {/* UI-10-03 Daftar Kartu Transaksi */}
-        <FlatList
-          data={filteredTransactions}
-          keyExtractor={(item) => item.idKontrak}
-          renderItem={renderCard}
-          contentContainerStyle={styles.listContent}
-          showsVerticalScrollIndicator={false}
-          testID="UI-10-03-transaction-list"
-          ListEmptyComponent={
-            <View style={styles.emptyState}>
+        {/* Banner Peringatan Koneksi Backend (Jika offline / salah URL) */}
+        {syncWarning ? (
+          <View testID="UI-10-offline-warning" style={styles.warningBanner}>
+            <Ionicons name="cloud-offline-outline" size={18} color="#C47A00" />
+            <Text style={styles.warningBannerText}>{syncWarning}</Text>
+          </View>
+        ) : null}
+
+        {/* Banner Feedback Sukses Penilaian */}
+        {feedbackBanner ? (
+          <View
+            testID="UI-10-rating-success-banner"
+            style={styles.successBanner}
+          >
+            <Ionicons name="checkmark-circle" size={18} color="#078875" />
+            <Text style={styles.successBannerText}>{feedbackBanner}</Text>
+            <TouchableOpacity
+              onPress={() => setFeedbackBanner(null)}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            >
+              <Ionicons name="close" size={16} color="#078875" />
+            </TouchableOpacity>
+          </View>
+        ) : null}
+
+        {/* UI-10-03: Daftar Kartu Transaksi */}
+        <View testID="UI-10-03-transaction-list" style={styles.cardList}>
+          {filteredTransactions.length === 0 ? (
+            <View style={styles.emptyContainer}>
               <Text style={styles.emptyTitle}>Belum ada transaksi</Text>
-              <Text style={styles.emptyDesc}>
-                Tidak ada riwayat transaksi untuk filter {activeTab}.
+              <Text style={styles.emptySubtitle}>
+                Tidak ada riwayat transaksi untuk filter "{activeFilter}".
               </Text>
             </View>
-          }
-        />
+          ) : (
+            filteredTransactions.map((item) => {
+              const badgeTheme = getStatusBadgeTheme(item.displayStatus);
+              const showBeriRating = shouldShowBeriRatingButton(item);
+              const isDone =
+                item.statusPekerjaan === 'Done' ||
+                item.displayStatus === 'Selesai';
+              const isOnProgress = item.displayStatus === 'On Progress';
+              const isReportedDoneByProvider =
+                item.statusPekerjaan === 'Menunggu Konfirmasi Pelanggan';
 
-        {/* Modal UI-10-05 "Lihat Detail" */}
-        <Modal
-          visible={selectedDetail !== null}
-          transparent
-          animationType="fade"
-          onRequestClose={() => setSelectedDetail(null)}
-        >
-          <View style={styles.modalBackdrop}>
-            <View style={styles.modalCard} testID="UI-10-05-detail-modal">
-              <Text style={styles.modalTitle}>Detail Transaksi</Text>
-              {selectedDetail && (
-                <>
-                  <View style={styles.modalRow}>
-                    <Text style={styles.modalLabel}>Pekerjaan</Text>
-                    <Text style={styles.modalValue}>
-                      {selectedDetail.rincianPekerjaan}
-                    </Text>
-                  </View>
-                  <View style={styles.modalRow}>
-                    <Text style={styles.modalLabel}>Penyedia Jasa</Text>
-                    <Text style={styles.modalValue}>
-                      {selectedDetail.namaPemberiJasa}
-                    </Text>
-                  </View>
-                  <View style={styles.modalRow}>
-                    <Text style={styles.modalLabel}>Waktu</Text>
-                    <Text style={styles.modalValue}>
-                      {selectedDetail.tanggalWaktu}
-                    </Text>
-                  </View>
-                  <View style={styles.modalRow}>
-                    <Text style={styles.modalLabel}>Status</Text>
-                    <Text style={styles.modalValue}>
-                      {selectedDetail.statusPekerjaan ===
-                      'Menunggu Konfirmasi Pelanggan'
-                        ? 'Menunggu Konfirmasi Pelanggan'
-                        : selectedDetail.statusDisplay}
-                    </Text>
-                  </View>
-                  <View style={styles.modalRow}>
-                    <Text style={styles.modalLabel}>Total Harga</Text>
-                    <Text style={styles.modalValue}>
-                      {formatRupiah(selectedDetail.totalHarga)}
-                    </Text>
-                  </View>
-                </>
-              )}
-              <TouchableOpacity
-                style={styles.modalCloseBtn}
-                onPress={() => setSelectedDetail(null)}
-                testID="UI-10-05-close-detail"
-              >
-                <Text style={styles.modalCloseText}>Tutup</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
-
-        {/* Slot Komponen Rating (UI-11) agar kompatibel saat merge dengan branch rating */}
-        {ActiveRatingSlot ? (
-          <ActiveRatingSlot
-            visible={ratingSlotTarget !== null}
-            transaction={ratingSlotTarget}
-            onClose={() => setRatingSlotTarget(null)}
-            onSubmitted={(idKontrak, nilaiRating, komentar) => {
-              markTransactionAsRated(idKontrak, nilaiRating, komentar);
-              setRatingSlotTarget(null);
-              syncTransactions();
-              setBannerMessage(
-                'Terima kasih! Penilaian Anda berhasil disimpan.'
-              );
-            }}
-          />
-        ) : (
-          <Modal
-            visible={ratingSlotTarget !== null}
-            transparent
-            animationType="fade"
-            onRequestClose={() => setRatingSlotTarget(null)}
-          >
-            <View style={styles.modalBackdrop}>
-              <View style={styles.modalCard} testID="UI-11-rating-slot-modal">
-                <Text style={styles.modalTitle}>Beri Rating</Text>
-                {ratingSlotTarget && (
-                  <>
-                    <Text style={styles.ratingSubtitle}>
-                      Bagaimana hasil pekerjaan{' '}
-                      <Text style={styles.ratingProviderBold}>
-                        {ratingSlotTarget.namaPemberiJasa}
-                      </Text>{' '}
-                      ({ratingSlotTarget.rincianPekerjaan})?
-                    </Text>
-
-                    <View style={styles.starsRow} testID="UI-11-slot-stars">
-                      {[1, 2, 3, 4, 5].map((star) => {
-                        const active = star <= slotStars;
-                        return (
-                          <TouchableOpacity
-                            key={star}
-                            onPress={() => setSlotStars(star)}
-                            testID={`UI-11-slot-star-${star}`}
-                            style={[
-                              styles.starBtn,
-                              active && styles.starBtnActive,
-                            ]}
-                          >
-                            <Text
-                              style={[
-                                styles.starText,
-                                active && styles.starTextActive,
-                              ]}
-                            >
-                              ★
-                            </Text>
-                          </TouchableOpacity>
-                        );
-                      })}
+              return (
+                <View
+                  key={item.idKontrak}
+                  testID={`UI-10-03-card-${item.idKontrak}`}
+                  style={styles.transactionCard}
+                >
+                  {/* Baris Atas: Judul Pekerjaan, Waktu, & UI-10-04 Status Badge */}
+                  <View style={styles.cardTopRow}>
+                    <View style={styles.cardTitleColumn}>
+                      <Text style={styles.jobTitleText} numberOfLines={1}>
+                        {item.judulPekerjaan}
+                      </Text>
+                      <Text style={styles.timestampText}>
+                        {item.waktuTransaksi}
+                      </Text>
                     </View>
 
-                    <TextInput
-                      style={styles.commentInput}
-                      placeholder="Tulis ulasan singkat Anda (opsional)..."
-                      placeholderTextColor="#94A3B8"
-                      value={slotComment}
-                      onChangeText={setSlotComment}
-                      multiline
-                      testID="UI-11-slot-comment-input"
-                    />
-
-                    <View style={styles.slotActionsRow}>
-                      <TouchableOpacity
-                        style={styles.slotCancelBtn}
-                        onPress={() => setRatingSlotTarget(null)}
-                        testID="UI-11-slot-cancel"
-                      >
-                        <Text style={styles.slotCancelText}>Batal</Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
+                    {/* UI-10-04: Status Badge */}
+                    <View
+                      testID={`UI-10-04-badge-${item.idKontrak}`}
+                      style={[
+                        styles.statusBadge,
+                        { backgroundColor: badgeTheme.backgroundColor },
+                      ]}
+                    >
+                      <View
                         style={[
-                          styles.slotSubmitBtn,
-                          isSubmittingRating && styles.buttonDisabled,
+                          styles.statusDot,
+                          { backgroundColor: badgeTheme.dotColor },
                         ]}
-                        onPress={handleSlotSubmitRating}
-                        disabled={isSubmittingRating}
-                        testID="UI-11-slot-submit"
+                      />
+                      <Text
+                        style={[
+                          styles.statusBadgeText,
+                          { color: badgeTheme.textColor },
+                        ]}
                       >
-                        <Text style={styles.slotSubmitText}>
-                          {isSubmittingRating ? 'Mengirim...' : 'Kirim Rating'}
+                        {item.displayStatus}
+                      </Text>
+                    </View>
+                  </View>
+
+                  {/* Garis Pemisah Putus-Putus */}
+                  <View style={styles.dashedDivider} />
+
+                  {/* Baris Penyedia Jasa & Total Harga */}
+                  <View style={styles.providerPriceRow}>
+                    <View style={styles.providerIdentityRow}>
+                      <View style={styles.providerAvatar}>
+                        <Text style={styles.providerAvatarText}>
+                          {item.inisialPenyedia}
+                        </Text>
+                      </View>
+                      <Text style={styles.providerNameText}>
+                        {item.namaPenyedia}
+                      </Text>
+                    </View>
+
+                    <Text style={styles.priceText}>{item.hargaFormatted}</Text>
+                  </View>
+
+                  {/* Indikator jika penyedia jasa telah melaporkan pekerjaan selesai (UC06 -> UC07) */}
+                  {isReportedDoneByProvider ? (
+                    <Text style={styles.reportedCompletedNote}>
+                      Penyedia jasa telah melaporkan pekerjaan ini selesai
+                    </Text>
+                  ) : null}
+
+                  {/* Baris Tombol Aksi untuk Pesanan Selesai (`UI-10-05` & `UI-10-06`) */}
+                  {isDone ? (
+                    <View style={styles.actionButtonsRow}>
+                      {/* UI-10-05: Tombol "Lihat Detail" */}
+                      <TouchableOpacity
+                        testID={`UI-10-05-detail-${item.idKontrak}`}
+                        style={[
+                          styles.detailButton,
+                          !showBeriRating && styles.detailButtonExpanded,
+                        ]}
+                        onPress={() => setDetailTarget(item)}
+                        activeOpacity={0.8}
+                        accessibilityRole="button"
+                      >
+                        <Text style={styles.detailButtonText}>Lihat Detail</Text>
+                      </TouchableOpacity>
+
+                      {/* UI-10-06: Tombol "Beri Rating" (Hanya muncul jika belum dinilai) */}
+                      {showBeriRating ? (
+                        <TouchableOpacity
+                          testID={`UI-10-06-rate-${item.idKontrak}`}
+                          style={styles.rateButton}
+                          onPress={() => handleOpenRatingModal(item)}
+                          activeOpacity={0.85}
+                          accessibilityRole="button"
+                        >
+                          <Text style={styles.rateButtonText}>Beri Rating</Text>
+                        </TouchableOpacity>
+                      ) : (
+                        <View
+                          testID={`UI-10-rated-indicator-${item.idKontrak}`}
+                          style={styles.ratedBadgeBox}
+                        >
+                          <Ionicons name="star" size={14} color="#F4A340" />
+                          <Text style={styles.ratedBadgeText}>
+                            {item.nilaiRatingDiberikan
+                              ? `${item.nilaiRatingDiberikan}/5 · Dinilai`
+                              : 'Telah Dinilai'}
+                          </Text>
+                        </View>
+                      )}
+                    </View>
+                  ) : null}
+
+                  {/* Tombol Konfirmasi Pesanan Selesai (UC07 & Skenario Normal UC10) */}
+                  {isOnProgress ? (
+                    <View style={styles.actionButtonsRow}>
+                      <TouchableOpacity
+                        testID={`UI-10-05-detail-${item.idKontrak}`}
+                        style={styles.detailButton}
+                        onPress={() => setDetailTarget(item)}
+                        activeOpacity={0.8}
+                      >
+                        <Text style={styles.detailButtonText}>Lihat Detail</Text>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        testID={`UI-10-confirm-complete-${item.idKontrak}`}
+                        style={styles.confirmCompleteButton}
+                        onPress={() => handleConfirmOrderCompleted(item)}
+                        activeOpacity={0.85}
+                      >
+                        <Text style={styles.confirmCompleteButtonText}>
+                          Konfirmasi Selesai
                         </Text>
                       </TouchableOpacity>
                     </View>
-                  </>
-                )}
-              </View>
-            </View>
-          </Modal>
-        )}
-      </View>
+                  ) : null}
+                </View>
+              );
+            })
+          )}
+        </View>
+      </ScrollView>
+
+      {/* Modal Layar Beri Penilaian (`UI-11`) untuk Skenario Normal & Alternatif 1 `UC10` */}
+      {ratingTarget ? (
+        <RatingModal
+          visible={Boolean(ratingTarget)}
+          idKontrakPekerjaan={ratingTarget.idKontrak}
+          idPenggunaPemberi={
+            ratingTarget.idPenggunaPelanggan || user.idPengguna
+          }
+          idPenggunaPenerima={ratingTarget.idPenggunaPenyedia}
+          namaPenerima={ratingTarget.namaPenyedia}
+          inisialPenerima={ratingTarget.inisialPenyedia}
+          detailPekerjaan={ratingTarget.detailPekerjaan}
+          onCancel={handleCancelRatingModal}
+          onSuccess={handleRatingSubmitted}
+        />
+      ) : null}
+
+      {/* Modal Ringkasan Detail Transaksi (`UI-10-05`) */}
+      <Modal
+        visible={Boolean(detailTarget)}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setDetailTarget(null)}
+      >
+        <View style={styles.detailModalBackdrop}>
+          <View style={styles.detailModalCard}>
+            <Text style={styles.detailModalTitle}>Detail Transaksi</Text>
+            {detailTarget ? (
+              <>
+                <View style={styles.detailItemRow}>
+                  <Text style={styles.detailLabel}>Pekerjaan</Text>
+                  <Text style={styles.detailValue}>
+                    {detailTarget.detailPekerjaan}
+                  </Text>
+                </View>
+                <View style={styles.detailItemRow}>
+                  <Text style={styles.detailLabel}>Penyedia Jasa</Text>
+                  <Text style={styles.detailValue}>
+                    {detailTarget.namaPenyedia}
+                  </Text>
+                </View>
+                <View style={styles.detailItemRow}>
+                  <Text style={styles.detailLabel}>Waktu</Text>
+                  <Text style={styles.detailValue}>
+                    {detailTarget.waktuTransaksi}
+                  </Text>
+                </View>
+                <View style={styles.detailItemRow}>
+                  <Text style={styles.detailLabel}>Status</Text>
+                  <Text style={styles.detailValue}>
+                    {detailTarget.statusPekerjaan ===
+                    'Menunggu Konfirmasi Pelanggan'
+                      ? 'Menunggu Konfirmasi Pelanggan'
+                      : detailTarget.displayStatus}
+                  </Text>
+                </View>
+                <View style={styles.detailItemRow}>
+                  <Text style={styles.detailLabel}>Total Biaya</Text>
+                  <Text style={styles.detailValue}>
+                    {detailTarget.hargaFormatted}
+                  </Text>
+                </View>
+                {detailTarget.hasRating ? (
+                  <View style={styles.detailItemRow}>
+                    <Text style={styles.detailLabel}>Penilaian Anda</Text>
+                    <Text style={styles.detailValue}>
+                      ★ {detailTarget.nilaiRatingDiberikan ?? 5}/5
+                      {detailTarget.ulasanDiberikan
+                        ? ` — "${detailTarget.ulasanDiberikan}"`
+                        : ''}
+                    </Text>
+                  </View>
+                ) : null}
+              </>
+            ) : null}
+
+            <TouchableOpacity
+              style={styles.detailCloseButton}
+              onPress={() => setDetailTarget(null)}
+            >
+              <Text style={styles.detailCloseButtonText}>Tutup</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -691,263 +523,262 @@ export const CustomerHistoryView: React.FC<CustomerHistoryViewProps> = ({
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
   },
   container: {
     flex: 1,
-    paddingHorizontal: 20,
-    paddingTop: 18,
+    backgroundColor: '#FFFFFF',
   },
-  headerBlock: {
-    marginBottom: 16,
+  scrollContent: {
+    paddingHorizontal: 24,
+    paddingTop: 16,
+    paddingBottom: 32,
+  },
+  headerSection: {
+    marginBottom: 20,
   },
   headerTitle: {
     fontSize: 28,
-    fontWeight: '800',
+    fontWeight: '700',
     color: '#153B65',
+    letterSpacing: -0.4,
     marginBottom: 4,
   },
   headerSubtitle: {
     fontSize: 14,
-    color: '#6E8299',
-  },
-  successBanner: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: '#DCFCE7',
-    borderColor: '#86EFAC',
-    borderWidth: 1,
-    borderRadius: 12,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-    marginBottom: 14,
-    gap: 10,
-  },
-  successBannerText: {
-    flex: 1,
-    fontSize: 13,
-    fontWeight: '600',
-    color: '#166534',
-  },
-  successBannerDismiss: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#15803D',
+    fontWeight: '400',
+    color: '#7A8FA8',
   },
   filterRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    marginBottom: 18,
+    marginBottom: 20,
   },
   filterChip: {
-    paddingHorizontal: 22,
-    paddingVertical: 10,
-    borderRadius: 24,
-    borderWidth: 1,
-    borderColor: '#DCE4ED',
-    backgroundColor: '#FFFFFF',
+    height: 32,
+    paddingHorizontal: 18,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   filterChipActive: {
     backgroundColor: '#153B65',
-    borderColor: '#153B65',
+  },
+  filterChipInactive: {
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E5EDF2',
   },
   filterChipText: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#6E8299',
+    fontSize: 12,
   },
   filterChipTextActive: {
     color: '#FFFFFF',
+    fontWeight: '600',
   },
-  listContent: {
-    paddingBottom: 28,
+  filterChipTextInactive: {
+    color: '#7A8FA8',
+    fontWeight: '500',
+  },
+  successBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#DDF5EE',
+    borderRadius: 14,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    gap: 8,
+    marginBottom: 16,
+  },
+  successBannerText: {
+    flex: 1,
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#078875',
+  },
+  warningBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFF0DC',
+    borderRadius: 14,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    gap: 8,
+    marginBottom: 16,
+  },
+  warningBannerText: {
+    flex: 1,
+    fontSize: 12,
+    fontWeight: '500',
+    color: '#C47A00',
+  },
+  cardList: {
     gap: 14,
   },
-  card: {
+  transactionCard: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 18,
+    borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#E2E9F1',
-    padding: 18,
+    borderColor: '#E5EDF2',
+    padding: 16,
   },
   cardTopRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'flex-start',
+    justifyContent: 'space-between',
     gap: 12,
+    marginBottom: 14,
   },
-  cardTitleBlock: {
+  cardTitleColumn: {
     flex: 1,
   },
-  cardTitle: {
-    fontSize: 16,
-    fontWeight: '800',
+  jobTitleText: {
+    fontSize: 15,
+    fontWeight: '700',
     color: '#153B65',
     marginBottom: 4,
   },
-  cardDate: {
+  timestampText: {
     fontSize: 12,
-    color: '#7A8EA4',
+    fontWeight: '400',
+    color: '#7A8FA8',
   },
-  badge: {
+  statusBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
+    height: 24,
+    paddingHorizontal: 10,
+    borderRadius: 12,
     gap: 6,
   },
-  badgeDot: {
-    width: 7,
-    height: 7,
-    borderRadius: 4,
+  statusDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
   },
-  badgeText: {
-    fontSize: 12,
+  statusBadgeText: {
+    fontSize: 11,
     fontWeight: '700',
   },
-  badgeOnProgress: {
-    backgroundColor: '#FDF1DC',
-  },
-  dotOnProgress: {
-    backgroundColor: '#B25E00',
-  },
-  badgeTextOnProgress: {
-    color: '#B25E00',
-  },
-  badgeSelesai: {
-    backgroundColor: '#DCF4ED',
-  },
-  dotSelesai: {
-    backgroundColor: '#0B8F6A',
-  },
-  badgeTextSelesai: {
-    color: '#0B8F6A',
-  },
-  badgeDibatalkan: {
-    backgroundColor: '#FDE8E8',
-  },
-  dotDibatalkan: {
-    backgroundColor: '#D92D20',
-  },
-  badgeTextDibatalkan: {
-    color: '#D92D20',
-  },
   dashedDivider: {
-    height: 1,
-    borderWidth: 0.6,
-    borderColor: '#E3EAF2',
+    borderBottomWidth: 1,
+    borderColor: '#E5EDF2',
     borderStyle: 'dashed',
-    marginVertical: 14,
+    marginBottom: 14,
   },
-  providerRow: {
+  providerPriceRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
+    justifyContent: 'space-between',
   },
-  providerInfo: {
+  providerIdentityRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
   },
-  avatarCircle: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
-    backgroundColor: '#DCF4ED',
-    justifyContent: 'center',
+  providerAvatar: {
+    width: 35,
+    height: 32,
+    borderRadius: 11,
+    backgroundColor: '#DDF5EE',
     alignItems: 'center',
+    justifyContent: 'center',
   },
-  avatarInitials: {
-    fontSize: 13,
-    fontWeight: '800',
+  providerAvatarText: {
+    fontSize: 12,
+    fontWeight: '700',
     color: '#153B65',
   },
-  providerName: {
+  providerNameText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#153B65',
+  },
+  priceText: {
     fontSize: 14,
     fontWeight: '700',
     color: '#153B65',
   },
-  priceText: {
-    fontSize: 16,
-    fontWeight: '800',
-    color: '#153B65',
-  },
-  confirmActionWrap: {
-    marginTop: 14,
-    paddingTop: 12,
-    borderTopWidth: 1,
-    borderTopColor: '#EDF2F7',
-  },
-  waitingConfirmationInfo: {
+  reportedCompletedNote: {
+    marginTop: 10,
     fontSize: 12,
     fontWeight: '600',
-    color: '#B25E00',
+    color: '#C47A00',
   },
-  actionRow: {
+  actionButtonsRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: 10,
     marginTop: 14,
   },
   detailButton: {
     flex: 1,
-    paddingVertical: 11,
+    height: 36,
     borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#CBD6E3',
     backgroundColor: '#FFFFFF',
+    borderWidth: 1.2,
+    borderColor: '#CFDCE7',
     alignItems: 'center',
+    justifyContent: 'center',
+  },
+  detailButtonExpanded: {
+    flex: 1,
   },
   detailButtonText: {
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: '700',
     color: '#153B65',
   },
-  confirmCompleteButton: {
-    flex: 1.25,
-    paddingVertical: 11,
+  rateButton: {
+    flex: 1,
+    height: 36,
     borderRadius: 12,
-    backgroundColor: '#0E9F6E',
+    backgroundColor: '#F4A340',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  rateButtonText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#153B65',
+  },
+  ratedBadgeBox: {
+    flex: 1,
+    height: 36,
+    borderRadius: 12,
+    backgroundColor: '#F7F9F8',
+    borderWidth: 1,
+    borderColor: '#E5EDF2',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+  },
+  ratedBadgeText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#153B65',
+  },
+  confirmCompleteButton: {
+    flex: 1,
+    height: 36,
+    borderRadius: 12,
+    backgroundColor: '#20AE9B',
     alignItems: 'center',
     justifyContent: 'center',
   },
   confirmCompleteButtonText: {
-    fontSize: 13,
-    fontWeight: '800',
+    fontSize: 12,
+    fontWeight: '700',
     color: '#FFFFFF',
   },
-  rateButton: {
-    flex: 1,
-    paddingVertical: 11,
-    borderRadius: 12,
-    backgroundColor: '#EE9B3A',
-    alignItems: 'center',
-  },
-  rateButtonText: {
-    fontSize: 13,
-    fontWeight: '800',
-    color: '#153B65',
-  },
-  ratedBadge: {
-    flex: 1,
-    paddingVertical: 11,
-    borderRadius: 12,
-    backgroundColor: '#F1F5F9',
-    alignItems: 'center',
-  },
-  ratedBadgeText: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#64748B',
-  },
-  buttonDisabled: {
-    opacity: 0.65,
-  },
-  emptyState: {
-    paddingVertical: 48,
+  emptyContainer: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: '#E5EDF2',
+    padding: 28,
     alignItems: 'center',
   },
   emptyTitle: {
@@ -956,136 +787,60 @@ const styles = StyleSheet.create({
     color: '#153B65',
     marginBottom: 6,
   },
-  emptyDesc: {
+  emptySubtitle: {
     fontSize: 13,
-    color: '#6E8299',
+    color: '#7A8FA8',
+    textAlign: 'center',
   },
-  modalBackdrop: {
+  detailModalBackdrop: {
     flex: 1,
-    backgroundColor: 'rgba(15, 23, 42, 0.45)',
-    justifyContent: 'center',
+    backgroundColor: 'rgba(21, 59, 101, 0.45)',
     alignItems: 'center',
+    justifyContent: 'center',
     padding: 24,
   },
-  modalCard: {
+  detailModalCard: {
     width: '100%',
     backgroundColor: '#FFFFFF',
-    borderRadius: 18,
+    borderRadius: 20,
     padding: 20,
   },
-  modalTitle: {
+  detailModalTitle: {
     fontSize: 18,
-    fontWeight: '800',
+    fontWeight: '700',
     color: '#153B65',
-    marginBottom: 14,
+    marginBottom: 16,
   },
-  modalRow: {
+  detailItemRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: '#F1F5F9',
+    borderBottomColor: '#E9F0ED',
     gap: 12,
   },
-  modalLabel: {
+  detailLabel: {
     fontSize: 13,
-    color: '#64748B',
+    color: '#7A8FA8',
   },
-  modalValue: {
+  detailValue: {
+    flex: 1,
     fontSize: 13,
-    fontWeight: '700',
+    fontWeight: '600',
     color: '#153B65',
     textAlign: 'right',
-    flexShrink: 1,
   },
-  modalCloseBtn: {
+  detailCloseButton: {
     marginTop: 18,
-    backgroundColor: '#153B65',
-    paddingVertical: 12,
-    borderRadius: 12,
-    alignItems: 'center',
-  },
-  modalCloseText: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    fontWeight: '700',
-  },
-  ratingSubtitle: {
-    fontSize: 13,
-    color: '#475569',
-    lineHeight: 20,
-    marginBottom: 14,
-  },
-  ratingProviderBold: {
-    fontWeight: '700',
-    color: '#153B65',
-  },
-  starsRow: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 10,
-    marginBottom: 16,
-  },
-  starBtn: {
-    width: 44,
     height: 44,
     borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#153B65',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  starBtnActive: {
-    borderColor: '#F59E0B',
-    backgroundColor: '#FEF3C7',
-  },
-  starText: {
-    fontSize: 22,
-    color: '#CBD5E1',
-  },
-  starTextActive: {
-    color: '#F59E0B',
-  },
-  commentInput: {
-    borderWidth: 1,
-    borderColor: '#CBD5E1',
-    borderRadius: 12,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-    minHeight: 80,
-    fontSize: 13,
-    color: '#1E293B',
-    textAlignVertical: 'top',
-    marginBottom: 16,
-  },
-  slotActionsRow: {
-    flexDirection: 'row',
-    gap: 10,
-  },
-  slotCancelBtn: {
-    flex: 1,
-    paddingVertical: 12,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#CBD5E1',
-    alignItems: 'center',
-  },
-  slotCancelText: {
-    fontSize: 13,
+  detailCloseButtonText: {
+    fontSize: 14,
     fontWeight: '700',
-    color: '#475569',
-  },
-  slotSubmitBtn: {
-    flex: 1.2,
-    paddingVertical: 12,
-    borderRadius: 12,
-    backgroundColor: '#0E9F6E',
-    alignItems: 'center',
-  },
-  slotSubmitText: {
-    fontSize: 13,
-    fontWeight: '800',
     color: '#FFFFFF',
   },
 });

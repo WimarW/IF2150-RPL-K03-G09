@@ -1,8 +1,11 @@
 import prisma from '../src/database/prisma';
 import { Role } from '@prisma/client';
+import bcrypt from 'bcrypt';
 
 async function main() {
   console.log('🌱 Memulai proses seeding database CariUang dengan format UUID...');
+
+  const defaultPasswordHash = await bcrypt.hash('Password123!', 10);
 
   // 1. Seed Kategori Jasa (UUID)
   const kategoriList = [
@@ -41,15 +44,17 @@ async function main() {
   }
 
   // 2. Seed Pengguna: Pelanggan (UUID)
-  const idPelanggan = '111e8400-e29b-41d4-a716-446655440001';
-  await prisma.pengguna.upsert({
+  const idPelangganSeed = '111e8400-e29b-41d4-a716-446655440001';
+  const pelanggan = await prisma.pengguna.upsert({
     where: { username: 'budi_pelanggan' },
-    update: {},
+    update: {
+      password: defaultPasswordHash,
+    },
     create: {
-      idPengguna: idPelanggan,
+      idPengguna: idPelangganSeed,
       namaPengguna: 'Budi Santoso',
       username: 'budi_pelanggan',
-      password: 'hashed_password_123',
+      password: defaultPasswordHash,
       email: 'budi@example.com',
       nomorTelpon: '081234567890',
       role: Role.PELANGGAN,
@@ -57,6 +62,8 @@ async function main() {
       riwayatRating: [5.0, 4.6],
     },
   });
+
+  const actualPelangganId = pelanggan.idPengguna;
 
   // 3. Seed Pengguna & Pemberi Jasa (UUID + koordinat GPS sekitar Bandung)
   const providers = [
@@ -71,7 +78,7 @@ async function main() {
       namaToko: 'Ahmad Jaya AC & Elektronik',
       idKategoriJasa: '550e8400-e29b-41d4-a716-446655440002',
       jenisJasa: 'Perbaikan Elektronik & AC',
-      latitude: -6.8915, // Sekitar ITB Ganesha / Dago (dekat)
+      latitude: -6.8915, // Sekitar ITB Ganesha / Dago
       longitude: 107.6107,
     },
     {
@@ -99,15 +106,18 @@ async function main() {
       namaToko: 'Dedi Plumbing Bandung',
       idKategoriJasa: '550e8400-e29b-41d4-a716-446655440003',
       jenisJasa: 'Tukang Ledeng & Pipa',
-      latitude: -6.9430, // Sekitar Buah Batu (lebih jauh)
+      latitude: -6.9430, // Sekitar Buah Batu
       longitude: 107.6335,
     },
   ];
 
+  const providerIdMap: Record<string, string> = {};
+
   for (const prov of providers) {
-    await prisma.pengguna.upsert({
+    const userProv = await prisma.pengguna.upsert({
       where: { username: prov.username },
       update: {
+        password: defaultPasswordHash,
         akumulasiRating: prov.akumulasiRating,
         riwayatRating: prov.riwayatRating,
       },
@@ -115,7 +125,7 @@ async function main() {
         idPengguna: prov.idPemberiJasa,
         namaPengguna: prov.namaPengguna,
         username: prov.username,
-        password: 'hashed_password_123',
+        password: defaultPasswordHash,
         email: prov.email,
         nomorTelpon: prov.nomorTelpon,
         role: Role.PEMBERI_JASA,
@@ -124,8 +134,8 @@ async function main() {
       },
     });
 
-    await prisma.pemberiJasa.upsert({
-      where: { idPemberiJasa: prov.idPemberiJasa },
+    const pemberi = await prisma.pemberiJasa.upsert({
+      where: { idPemberiJasa: userProv.idPengguna },
       update: {
         namaToko: prov.namaToko,
         idKategoriJasa: prov.idKategoriJasa,
@@ -134,7 +144,7 @@ async function main() {
         longitude: prov.longitude,
       },
       create: {
-        idPemberiJasa: prov.idPemberiJasa,
+        idPemberiJasa: userProv.idPengguna,
         namaToko: prov.namaToko,
         idKategoriJasa: prov.idKategoriJasa,
         jenisJasa: prov.jenisJasa,
@@ -144,18 +154,22 @@ async function main() {
         isOnline: true,
       },
     });
+
+    providerIdMap[prov.username] = pemberi.idPemberiJasa;
   }
 
   // 4. Seed Pengguna & Layanan Pelanggan (UUID)
   const idLayananPelanggan = '444e8400-e29b-41d4-a716-446655440001';
   await prisma.pengguna.upsert({
     where: { username: 'cs_cariuang' },
-    update: {},
+    update: {
+      password: defaultPasswordHash,
+    },
     create: {
       idPengguna: idLayananPelanggan,
       namaPengguna: 'Rina Customer Care',
       username: 'cs_cariuang',
-      password: 'hashed_password_123',
+      password: defaultPasswordHash,
       email: 'cs@cariuang.id',
       nomorTelpon: '081100001111',
       role: Role.LAYANAN_PELANGGAN,
@@ -172,14 +186,92 @@ async function main() {
     },
   });
 
-  console.log('✅ Seeding database CariUang selesai!');
+  // 5. Seed Kontrak Pekerjaan (Riwayat Transaksi Pelanggan & Penyedia)
+  const ahmadId = providerIdMap['ahmad_teknik'] || providers[0].idPemberiJasa;
+  const sitiId = providerIdMap['siti_clean'] || providers[1].idPemberiJasa;
+  const dediId = providerIdMap['dedi_ledeng'] || providers[2].idPemberiJasa;
+
+  const kontrakList = [
+    {
+      idKontrakPekerjaan: '333e8400-e29b-41d4-a716-446655440001',
+      idPelanggan: actualPelangganId,
+      idPemberiJasa: sitiId,
+      detailPekerjaan: 'Bersih-bersih rumah · 2 jam',
+      persetujuanHarga: 100000,
+      statusPekerjaan: 'On Progress',
+      hasRating: false,
+      createdAt: new Date('2026-05-12T14:20:00Z'),
+    },
+    {
+      idKontrakPekerjaan: '333e8400-e29b-41d4-a716-446655440002',
+      idPelanggan: actualPelangganId,
+      idPemberiJasa: sitiId,
+      detailPekerjaan: 'Cuci & setrika · 3 kg',
+      persetujuanHarga: 60000,
+      statusPekerjaan: 'Done',
+      hasRating: false, // Belum dinilai -> Tombol "Beri Rating" (UI-10-06) akan muncul
+      createdAt: new Date('2026-05-08T09:10:00Z'),
+    },
+    {
+      idKontrakPekerjaan: '333e8400-e29b-41d4-a716-446655440003',
+      idPelanggan: actualPelangganId,
+      idPemberiJasa: ahmadId,
+      detailPekerjaan: 'Servis AC & Perbaikan Elektronik',
+      persetujuanHarga: 120000,
+      statusPekerjaan: 'Done',
+      hasRating: true, // Sudah dinilai
+      createdAt: new Date('2026-04-20T10:00:00Z'),
+    },
+    {
+      idKontrakPekerjaan: '333e8400-e29b-41d4-a716-446655440004',
+      idPelanggan: actualPelangganId,
+      idPemberiJasa: dediId,
+      detailPekerjaan: 'Angkut barang pindahan',
+      persetujuanHarga: 150000,
+      statusPekerjaan: 'Dibatalkan',
+      hasRating: false,
+      createdAt: new Date('2026-04-27T11:30:00Z'),
+    },
+  ];
+
+  for (const kontrak of kontrakList) {
+    await prisma.kontrakPekerjaan.upsert({
+      where: { idKontrakPekerjaan: kontrak.idKontrakPekerjaan },
+      update: kontrak,
+      create: kontrak,
+    });
+  }
+
+  // 6. Seed Rating untuk Kontrak yang Sudah Dinilai (Kontrak 3)
+  await prisma.rating.upsert({
+    where: {
+      idKontrakPekerjaan_idPenggunaPemberi: {
+        idKontrakPekerjaan: '333e8400-e29b-41d4-a716-446655440003',
+        idPenggunaPemberi: actualPelangganId,
+      },
+    },
+    update: {},
+    create: {
+      idRating: '888e8400-e29b-41d4-a716-446655440001',
+      idKontrakPekerjaan: '333e8400-e29b-41d4-a716-446655440003',
+      idPenggunaPemberi: actualPelangganId,
+      idPenggunaPenerima: ahmadId,
+      nilaiRating: 5.0,
+      ulasan: 'Pekerjaan servis AC sangat rapi dan teknisi ramah.',
+      tags: ['Tepat Waktu', 'Kerja Bersih', 'Ramah'],
+      tanggalRating: new Date('2026-04-20T12:30:00Z'),
+    },
+  });
+
+  console.log('✅ Seeding database CariUang selesai (Kategori, Pengguna, Pemberi Jasa, Kontrak, dan Rating)!');
 }
 
 main()
-  .catch((e) => {
-    console.error('❌ Gagal melakukan seeding:', e);
-    process.exit(1);
-  })
-  .finally(async () => {
+  .then(async () => {
     await prisma.$disconnect();
+  })
+  .catch(async (e) => {
+    console.error('❌ Gagal melakukan seeding:', e);
+    await prisma.$disconnect();
+    throw e;
   });

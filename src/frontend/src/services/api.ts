@@ -1,17 +1,68 @@
-
 import { useCallback, useEffect, useState } from 'react';
-import { Platform } from 'react-native';
+import { NativeModules, Platform } from 'react-native';
 
-const defaultApiUrl =
-  Platform.OS === 'android'
+function extractDevServerHost(): string | null {
+  try {
+    if (
+      Platform.OS === 'web' &&
+      typeof window !== 'undefined' &&
+      window.location?.hostname
+    ) {
+      return window.location.hostname;
+    }
+
+    const scriptURL: string | undefined =
+      NativeModules?.SourceCode?.scriptURL;
+    if (typeof scriptURL === 'string' && scriptURL.startsWith('http')) {
+      const match = scriptURL.match(/^https?:\/\/([^:/]+)/i);
+      const host = match?.[1];
+      if (
+        host &&
+        !host.endsWith('.exp.direct') &&
+        !host.includes('ngrok')
+      ) {
+        return host;
+      }
+    }
+  } catch {
+    // Abaikan pada environment headless / unit test
+  }
+  return null;
+}
+
+function resolveApiBaseUrl(): string {
+  const rawEnvUrl = process.env.EXPO_PUBLIC_API_URL?.trim();
+  const isEnvLocalhost =
+    Boolean(rawEnvUrl) &&
+    /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?/i.test(rawEnvUrl!);
+
+  // 1. Jika diset ke URL non-localhost (production domain, ngrok, atau IP LAN)
+  if (rawEnvUrl && rawEnvUrl.length > 0 && !isEnvLocalhost) {
+    return rawEnvUrl.replace(/\/+$/, '');
+  }
+
+  // 2. Deteksi otomatis hostname saat development (Browser Web / Expo Go LAN)
+  const devHost = extractDevServerHost();
+  if (devHost) {
+    return `http://${devHost}:5000/api`;
+  }
+
+  // 3. Fallback Android Emulator (10.0.2.2) vs iOS/Web localhost
+  if (rawEnvUrl && rawEnvUrl.length > 0) {
+    if (Platform.OS === 'android') {
+      return rawEnvUrl
+        .replace(/localhost|127\.0\.0\.1/i, '10.0.2.2')
+        .replace(/\/+$/, '');
+    }
+    return rawEnvUrl.replace(/\/+$/, '');
+  }
+
+  return Platform.OS === 'android'
     ? 'http://10.0.2.2:5000/api'
     : 'http://localhost:5000/api';
+}
 
-const rawEnvUrl = process.env.EXPO_PUBLIC_API_URL?.trim();
-
-export const API_BASE_URL: string = (
-  rawEnvUrl && rawEnvUrl.length > 0 ? rawEnvUrl : defaultApiUrl
-).replace(/\/+$/, '');
+export const API_BASE_URL: string = resolveApiBaseUrl();
 
 export const REQUEST_TIMEOUT_MS = 15000;
 
@@ -24,7 +75,6 @@ export interface SessionUser {
   role: Role;
 }
 
-
 export const DEV_USER: SessionUser = {
   idPengguna: '111e8400-e29b-41d4-a716-446655440001',
   namaPengguna: 'Budi Santoso',
@@ -36,18 +86,26 @@ type SessionListener = (user: SessionUser) => void;
 
 let currentSessionUser: SessionUser = { ...DEV_USER };
 let currentAuthToken: string | null = null;
+let devLoginPromise: Promise<string | null> | null = null;
 const sessionListeners = new Set<SessionListener>();
 
-export function setAuthToken(token: string | null): void {
-  currentAuthToken = token;
+export function getCurrentUser(): SessionUser {
+  return currentSessionUser;
 }
 
 export function getAuthToken(): string | null {
   return currentAuthToken;
 }
 
-export function getCurrentUser(): SessionUser {
-  return currentSessionUser;
+export function setAuthToken(token: string | null, user?: Partial<SessionUser>): void {
+  currentAuthToken = token;
+  if (user) {
+    currentSessionUser = {
+      ...currentSessionUser,
+      ...user,
+    };
+    sessionListeners.forEach((listener) => listener(currentSessionUser));
+  }
 }
 
 export function setCurrentUserRole(role: Role): void {
@@ -65,12 +123,61 @@ export function subscribeSession(listener: SessionListener): () => void {
   };
 }
 
+/**
+ * Memastikan sesi dev memiliki JWT token valid dari `POST /api/auth/login`
+ * (menggunakan akun seed `budi_pelanggan` / `Password123!`) saat belum login manual.
+ */
+export async function ensureDevAuthToken(): Promise<string | null> {
+  if (currentAuthToken) {
+    return currentAuthToken;
+  }
+
+  if (typeof process !== 'undefined' && process.env?.JEST_WORKER_ID) {
+    return null;
+  }
+
+  if (devLoginPromise) {
+    return devLoginPromise;
+  }
+
+  devLoginPromise = (async () => {
+    try {
+      const loginData = await apiRequest<{
+        token?: string;
+        user?: Partial<SessionUser>;
+      }>('/auth/login', {
+        method: 'POST',
+        skipAuth: true,
+        body: {
+          username: currentSessionUser.username || DEV_USER.username,
+          password: 'Password123!',
+        },
+      });
+
+      if (loginData?.token) {
+        setAuthToken(loginData.token, loginData.user);
+        return loginData.token;
+      }
+      return null;
+    } catch (err) {
+      console.warn(
+        '[api] Auto-login dev session gagal:',
+        err instanceof Error ? err.message : err
+      );
+      return null;
+    } finally {
+      devLoginPromise = null;
+    }
+  })();
+
+  return devLoginPromise;
+}
+
 export interface UseSessionUserResult {
   user: SessionUser;
   setRole: (role: Role) => void;
   isPenyediaJasa: boolean;
 }
-
 
 export function useSessionUser(): UseSessionUserResult {
   const [user, setUser] = useState<SessionUser>(() => getCurrentUser());
@@ -99,6 +206,7 @@ export interface ApiRequestOptions {
   method?: HttpMethod;
   body?: unknown;
   headers?: Record<string, string>;
+  skipAuth?: boolean;
 }
 
 export interface ApiResponse<T> {
@@ -133,18 +241,31 @@ export async function apiRequest<T>(
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
+  const mergedHeaders: Record<string, string> = {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+    ...(options?.headers ?? {}),
+  };
+
+  if (
+    !options?.skipAuth &&
+    !mergedHeaders.Authorization &&
+    currentAuthToken
+  ) {
+    mergedHeaders.Authorization = `Bearer ${currentAuthToken}`;
+  }
+
   let response: Response;
   try {
     response = await fetch(url, {
       method,
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        ...(currentAuthToken ? { Authorization: `Bearer ${currentAuthToken}` } : {}),
-        ...(options?.headers ?? {}),
-      },
+      headers: mergedHeaders,
       body:
-        options?.body !== undefined ? JSON.stringify(options.body) : undefined,
+        options?.body !== undefined
+          ? typeof options.body === 'string'
+            ? options.body
+            : JSON.stringify(options.body)
+          : undefined,
       signal: controller.signal,
     });
   } catch {

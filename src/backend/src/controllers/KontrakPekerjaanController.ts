@@ -618,7 +618,7 @@ export class KontrakPekerjaanController {
               },
             },
           },
-          rating: true,
+          ratings: true,
         },
         orderBy: { createdAt: 'desc' },
       });
