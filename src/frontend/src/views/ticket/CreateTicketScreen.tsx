@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image, ScrollView, Modal, ActivityIndicator } from 'react-native';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { api } from '../../services/ticketService';
 
 const MAX_BYTES = 5 * 1024 * 1024;
 const issueOptions = ['Laporan Pembayaran', 'Kendala Aplikasi', 'Perilaku Pengguna', 'Lainnya'];
 
 export default function CreateTicketScreen({ navigation }: any) {
+  const insets = useSafeAreaInsets();
   const [issueType, setIssueType] = useState('');
   const [description, setDescription] = useState('');
   const [image, setImage] = useState<{ uri: string; type: string } | null>(null);
@@ -72,7 +74,7 @@ export default function CreateTicketScreen({ navigation }: any) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingTop: insets.top + 15 }]}>
         <TouchableOpacity onPress={handleBackPress} style={styles.backButton}>
           <Feather name="chevron-left" size={24} color="#1A237E" />
           <Text style={styles.backText}>Kembali</Text>
@@ -117,14 +119,14 @@ export default function CreateTicketScreen({ navigation }: any) {
         <Text style={styles.privacyText}>Data laporanmu akan dijaga kerahasiaannya.</Text>
       </ScrollView>
 
-      <TouchableOpacity style={[styles.submitButton, !canSubmit && styles.submitDisabled]} onPress={handleSubmit} disabled={!canSubmit}>
+      <TouchableOpacity style={[styles.submitButton, { marginBottom: 20 + insets.bottom }, !canSubmit && styles.submitDisabled]} onPress={handleSubmit} disabled={!canSubmit}>
         {loading ? <ActivityIndicator color="white" /> : <Text style={styles.submitButtonText}>Kirim Laporan</Text>}
       </TouchableOpacity>
 
       {/* Picker jenis masalah (Alert maks 3 tombol di Android, jadi pakai Modal) */}
       <Modal visible={pickerOpen} transparent animationType="fade" onRequestClose={() => setPickerOpen(false)}>
         <TouchableOpacity style={styles.modalBackdrop} activeOpacity={1} onPress={() => setPickerOpen(false)}>
-          <View style={styles.sheet}>
+          <View style={[styles.sheet, { paddingBottom: 30 + insets.bottom }]}>
             <Text style={styles.sheetTitle}>Pilih Jenis Permasalahan</Text>
             {issueOptions.map((opt) => (
               <TouchableOpacity key={opt} style={styles.sheetItem} onPress={() => { setIssueType(opt); setPickerOpen(false); }}>
@@ -141,7 +143,7 @@ export default function CreateTicketScreen({ navigation }: any) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#F8F9FA' },
-  header: { padding: 20, paddingTop: 50 },
+  header: { paddingHorizontal: 20, paddingBottom: 20 },
   backButton: { flexDirection: 'row', alignItems: 'center', marginBottom: 15 },
   backText: { color: '#1A237E', fontSize: 16, fontWeight: '600', marginLeft: 5 },
   title: { fontSize: 24, fontWeight: 'bold', color: '#1A237E' },

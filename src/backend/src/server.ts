@@ -16,6 +16,11 @@ import { KomunikasiController } from './controllers/KomunikasiController';
 import { KontrakPekerjaanController } from './controllers/KontrakPekerjaanController';
 import { NotifikasiController, RealtimeEmitter } from './controllers/NotifikasiController';
 import { createKontrakRouter } from './routes/kontrakRoutes';
+import { createTicketsRouter } from './routes/tickets.routes';
+import csRouter from './routes/cs.routes';
+import devAuthRouter from './routes/devAuth.routes';
+import { LayananPelangganCtrl } from './controllers/LayananPelangganCtrl';
+import { UPLOAD_DIR } from './middlewares/upload.middleware';
 import { startAutoCancelWorker } from './workers/autoCancelKontrakWorker';
 
 dotenv.config();
@@ -110,6 +115,18 @@ export function createApp(): {
   // Chat & Notifikasi (realtime)
   app.use('/api/chats', createChatsRouter(komunikasiController));
   app.use('/api/notifications', createNotificationsRouter(notifikasiController));
+
+  // Tiket Laporan & Layanan Pelanggan (UC08, UC09) - notifikasi lewat NotifikasiController (realtime)
+  LayananPelangganCtrl.setNotifikasiController(notifikasiController);
+  app.use('/api/tickets', createTicketsRouter(notifikasiController));
+  app.use('/api/cs', csRouter);
+  app.use('/uploads', express.static(UPLOAD_DIR)); // foto bukti tiket; produksi: tambahkan auth / signed URL
+
+  // Token tanpa password untuk development (halaman login belum ada). Aktif hanya jika ENABLE_DEV_TOKEN=true
+  if (process.env.ENABLE_DEV_TOKEN === 'true') {
+    app.use('/api/auth', devAuthRouter);
+    console.warn('[server]: ENABLE_DEV_TOKEN aktif - POST /api/auth/dev-token tersedia (jangan dipakai di produksi)');
+  }
 
   // Mount Route Kontrak Pekerjaan (UC05, UC06, UC07) terhubung dengan Notifikasi & Chat
   const kontrakRouter = createKontrakRouter(kontrakPekerjaanController);
