@@ -3,11 +3,10 @@ import {
   View,
   FlatList,
   StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
   ActivityIndicator,
   Text,
 } from 'react-native';
+import { KeyboardAwareView } from '../../components/common/KeyboardAwareView';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ChatHeader } from '../../components/chat/ChatHeader';
 import { ChatBubble } from '../../components/chat/ChatBubble';
@@ -18,6 +17,7 @@ import { Snackbar } from '../../components/common/Snackbar';
 import { colors } from '../../theme/colors';
 import { formatDateSeparatorLabel } from '../../utils/chatUtils';
 import {
+  ChatAttachment,
   ChatMessage,
   ContractFormErrors,
   ContractFormValues,
@@ -35,7 +35,7 @@ export interface ChatRoomProps {
   error: string | null;
   snackbarMessage: string | null;
   onDismissSnackbar: () => void;
-  onSend: (text: string) => void;
+  onSend: (text: string, attachment?: ChatAttachment | null) => void;
   onRetry: (clientId: string) => void;
   onBack: () => void;
   onMorePress?: () => void;
@@ -141,10 +141,7 @@ export const ChatRoom: React.FC<ChatRoomProps> = ({
         onMorePress={onMorePress}
       />
 
-      <KeyboardAvoidingView
-        style={styles.container}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      >
+      <KeyboardAwareView style={styles.container} includeBottomInset={false}>
         {isLoading ? (
           <View style={styles.centerContainer}>
             <ActivityIndicator size="large" color={colors.primary} />
@@ -202,7 +199,7 @@ export const ChatRoom: React.FC<ChatRoomProps> = ({
         )}
 
         <MessageInput onSend={onSend} onPressAttach={onPressAttach} />
-      </KeyboardAvoidingView>
+      </KeyboardAwareView>
 
       <Snackbar message={snackbarMessage} onDismiss={onDismissSnackbar} />
     </SafeAreaView>
