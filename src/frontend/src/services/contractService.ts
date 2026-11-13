@@ -43,6 +43,11 @@ export interface BackendRatingInfo {
   idPenilai?: string;
   idDinilai?: string;
   idPemberiJasa?: string;
+  /** Skema tabel `rating` backend (Prisma) */
+  idPenggunaPemberi?: string;
+  idPenggunaPenerima?: string;
+  ulasan?: string | null;
+  tags?: string[];
 }
 
 export interface BackendKontrakDetail {
@@ -76,6 +81,10 @@ export interface BackendKontrakDetail {
   } | null;
   rating?: BackendRatingInfo | null;
   ratings?: BackendRatingInfo[] | null;
+  /** Field turunan per pengguna login dari GET /api/kontrak (UC10 dua arah) */
+  hasRatedByMe?: boolean;
+  ratingDariSaya?: BackendRatingInfo | null;
+  ratingUntukSaya?: BackendRatingInfo | null;
 }
 
 export interface ChatPartnerKontrakResponse {
@@ -352,6 +361,43 @@ export function extractRatingFromBackendRow(
 }
 
 /**
+ * UC10 dua arah: memisahkan rating yang DIBERIKAN oleh pengguna login dan rating yang DITERIMA
+ * olehnya pada satu kontrak. Memakai field turunan backend (`hasRatedByMe`, `ratingDariSaya`,
+ * `ratingUntukSaya`) bila tersedia, dan fallback ke array `ratings` mentah.
+ */
+export function extractPerUserRatingFromBackendRow(
+  raw: BackendKontrakDetail,
+  currentUserId?: string
+): {
+  hasRatedByMe: boolean;
+  diberikan: BackendRatingInfo | null;
+  diterima: BackendRatingInfo | null;
+} {
+  const ratings = Array.isArray(raw.ratings) ? raw.ratings : [];
+  const pemberiOf = (r: BackendRatingInfo) => r.idPenggunaPemberi ?? r.idPenilai;
+  const penerimaOf = (r: BackendRatingInfo) =>
+    r.idPenggunaPenerima ?? r.idDinilai;
+
+  const diberikan =
+    raw.ratingDariSaya ??
+    (currentUserId
+      ? ratings.find((r) => pemberiOf(r) === currentUserId) ?? null
+      : null);
+  const diterima =
+    raw.ratingUntukSaya ??
+    (currentUserId
+      ? ratings.find((r) => penerimaOf(r) === currentUserId) ?? null
+      : null);
+
+  return {
+    hasRatedByMe:
+      typeof raw.hasRatedByMe === 'boolean' ? raw.hasRatedByMe : diberikan !== null,
+    diberikan,
+    diterima,
+  };
+}
+
+/**
  * Mengonversi objek kontrak dari backend ke struktur ContractRecord (DummyContract) di frontend.
  */
 export function mapBackendToContractRecord(
@@ -389,6 +435,10 @@ export function mapBackendToContractRecord(
     raw.pelanggan?.namaPengguna?.trim() || 'Naufal Hasbialhaq';
 
   const ratingInfo = extractRatingFromBackendRow(raw);
+  const perUserRating = extractPerUserRatingFromBackendRow(
+    raw,
+    getCurrentUser()?.idPengguna
+  );
   const tanggalWaktu = formatTanggalWaktuIndonesia(createdIso);
   const tanggalSelesai = formatTanggalSelesaiIndonesia(createdIso);
   const rincianPekerjaan =
@@ -415,8 +465,22 @@ export function mapBackendToContractRecord(
     status,
     statusPekerjaan,
     hasRating: ratingInfo.hasRating,
-    nilaiRating: ratingInfo.nilaiRating,
-    komentar: ratingInfo.komentar,
+    nilaiRating:
+      typeof perUserRating.diterima?.nilaiRating === 'number'
+        ? Number(perUserRating.diterima.nilaiRating)
+        : ratingInfo.nilaiRating,
+    komentar:
+      perUserRating.diterima
+        ? perUserRating.diterima.ulasan ?? perUserRating.diterima.komentar ?? null
+        : ratingInfo.komentar,
+    hasRatedByMe: perUserRating.hasRatedByMe,
+    nilaiRatingDiberikan:
+      typeof perUserRating.diberikan?.nilaiRating === 'number'
+        ? Number(perUserRating.diberikan.nilaiRating)
+        : null,
+    ulasanDiberikan:
+      perUserRating.diberikan?.ulasan ?? perUserRating.diberikan?.komentar ?? null,
+    tagsDiberikan: perUserRating.diberikan?.tags ?? [],
     waktu: formatTimeShort(createdIso) || '14.28',
     tanggalWaktu,
     tanggalSelesai,
@@ -520,6 +584,13 @@ export function mapContractRecordToProviderItem(
     nilaiRating:
       typeof record.nilaiRating === 'number' ? record.nilaiRating : null,
     komentar: record.komentar ?? null,
+    hasRatedByMe: Boolean(record.hasRatedByMe),
+    nilaiRatingDiberikan:
+      typeof record.nilaiRatingDiberikan === 'number'
+        ? record.nilaiRatingDiberikan
+        : null,
+    ulasanDiberikan: record.ulasanDiberikan ?? null,
+    tagsDiberikan: record.tagsDiberikan ? [...record.tagsDiberikan] : [],
   };
 }
 
@@ -1402,6 +1473,30 @@ export const contractService = {
         hasRating: true,
         ...(typeof nilaiRating === 'number' ? { nilaiRating } : {}),
         ...(komentar !== undefined ? { komentar } : {}),
+      }
+    );
+  },
+
+  /**
+   * UC10 dua arah (UI-12 -> UI-11): Menandai bahwa penyedia jasa telah memberi rating ke pelanggan.
+   * Tidak menyentuh `nilaiRating`/`hasRating` karena keduanya merepresentasikan rating dari pelanggan.
+   */
+  markContractRatedByProvider(
+    idKontrak: string,
+    nilaiRating: number,
+    ulasan?: string,
+    tags?: string[]
+  ): ContractRecord {
+    const cleanId = (idKontrak ?? '').trim();
+    const existing = getHistoryContractById(cleanId);
+    return updateContractStatusInStores(
+      cleanId,
+      existing?.statusPekerjaan ?? 'Done',
+      {
+        hasRatedByMe: true,
+        nilaiRatingDiberikan: nilaiRating,
+        ulasanDiberikan: ulasan?.trim() || null,
+        tagsDiberikan: tags && tags.length > 0 ? [...tags] : [],
       }
     );
   },

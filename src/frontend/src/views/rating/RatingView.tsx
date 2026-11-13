@@ -15,10 +15,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import {
-  RATING_TAG_OPTIONS,
+  getRatingTagOptions,
   useRatingController,
 } from '../../controllers/useRatingController';
-import { getInitialsFromName } from '../../services/ratingService';
+import { getInitialsFromName, RaterRole } from '../../services/ratingService';
 import { RootStackParamList } from '../../navigation/types';
 
 export interface RatingFormProps {
@@ -30,6 +30,11 @@ export interface RatingFormProps {
   detailPekerjaan: string;
   initialStars?: number;
   token?: string;
+  /**
+   * Peran pemberi rating. `PELANGGAN` (default) menilai penyedia jasa,
+   * `PEMBERI_JASA` menilai pelanggan (UC10 dua arah) dengan teks & tag yang disesuaikan.
+   */
+  raterRole?: RaterRole;
   /** true bila form dirender di dalam RatingModal (memengaruhi penanganan keyboard Android) */
   insideModal?: boolean;
   onCancel: () => void;
@@ -55,10 +60,13 @@ export const RatingFormContent: React.FC<RatingFormProps> = ({
   detailPekerjaan,
   initialStars = 0,
   token,
+  raterRole = 'PELANGGAN',
   insideModal = false,
   onCancel,
   onSuccess,
 }) => {
+  const isProviderRater = raterRole === 'PEMBERI_JASA';
+  const tagOptions = getRatingTagOptions(raterRole);
   const {
     nilaiRating,
     ulasan,
@@ -85,7 +93,8 @@ export const RatingFormContent: React.FC<RatingFormProps> = ({
   });
 
   const avatarInitials =
-    inisialPenerima || getInitialsFromName(namaPenerima || 'Mitra Jasa');
+    inisialPenerima ||
+    getInitialsFromName(namaPenerima || (isProviderRater ? 'Pelanggan' : 'Mitra Jasa'));
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
@@ -107,7 +116,9 @@ export const RatingFormContent: React.FC<RatingFormProps> = ({
             onPress={pressBatalRating}
             activeOpacity={0.7}
             accessibilityRole="button"
-            accessibilityLabel="Kembali ke Riwayat"
+            accessibilityLabel={
+              isProviderRater ? 'Kembali ke Riwayat Pekerjaan' : 'Kembali ke Riwayat'
+            }
           >
             <Text style={styles.backButtonText}>‹ Kembali</Text>
           </TouchableOpacity>
@@ -116,7 +127,9 @@ export const RatingFormContent: React.FC<RatingFormProps> = ({
           <View testID="UI-11-02-header" style={styles.headerSection}>
             <Text style={styles.headerTitle}>Beri Penilaian</Text>
             <Text style={styles.headerSubtitle}>
-              Bagaimana pengalaman kerjamu?
+              {isProviderRater
+                ? 'Bagaimana pengalamanmu bekerja dengan pelanggan ini?'
+                : 'Bagaimana pengalaman kerjamu?'}
             </Text>
           </View>
 
@@ -129,6 +142,9 @@ export const RatingFormContent: React.FC<RatingFormProps> = ({
               <Text style={styles.providerNameText} numberOfLines={1}>
                 {namaPenerima}
               </Text>
+              {isProviderRater ? (
+                <Text style={styles.roleLabelText}>Pelanggan</Text>
+              ) : null}
               <Text style={styles.jobDetailText} numberOfLines={2}>
                 {detailPekerjaan}
               </Text>
@@ -180,7 +196,11 @@ export const RatingFormContent: React.FC<RatingFormProps> = ({
               <TextInput
                 testID="UI-11-06-review-input"
                 style={styles.textAreaInput}
-                placeholder="Ceritakan pengalamanmu selama menggunakan jasa ini..."
+                placeholder={
+                  isProviderRater
+                    ? 'Ceritakan pengalamanmu melayani pelanggan ini...'
+                    : 'Ceritakan pengalamanmu selama menggunakan jasa ini...'
+                }
                 placeholderTextColor="#A2B1C1"
                 multiline
                 numberOfLines={4}
@@ -196,7 +216,7 @@ export const RatingFormContent: React.FC<RatingFormProps> = ({
           <View style={styles.sectionBlock}>
             <Text style={styles.sectionTitle}>Beri Tag (Opsional)</Text>
             <View testID="UI-11-07-tag-group" style={styles.tagsRow}>
-              {RATING_TAG_OPTIONS.map((tag) => {
+              {tagOptions.map((tag) => {
                 const isTagSelected = selectedTags.includes(tag);
                 return (
                   <TouchableOpacity
@@ -291,7 +311,7 @@ export const RatingView: React.FC = () => {
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const route = useRoute<RouteProp<RootStackParamList, 'Rating'>>();
 
-  const params = route.params ?? {
+  const params: RootStackParamList['Rating'] = route.params ?? {
     idKontrakPekerjaan: 'kontrak-001',
     idPenggunaPenerima: 'penyedia-budi-001',
     namaPenerima: 'Budi Wijaya',
@@ -307,6 +327,7 @@ export const RatingView: React.FC = () => {
       inisialPenerima={params.inisialPenerima}
       detailPekerjaan={params.detailPekerjaan}
       initialStars={params.initialStars}
+      raterRole={params.raterRole}
       onCancel={() => {
         if (navigation.canGoBack()) {
           navigation.goBack();
@@ -396,6 +417,12 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#153B65',
     marginBottom: 4,
+  },
+  roleLabelText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#20AE9B',
+    marginBottom: 2,
   },
   jobDetailText: {
     fontSize: 13,

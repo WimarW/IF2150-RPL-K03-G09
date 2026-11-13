@@ -404,7 +404,7 @@ export class KontrakPekerjaanController {
       detail.idPemberiJasa,
       `Pelanggan telah mengonfirmasi penyelesaian pekerjaan "${detail.detailPekerjaan}" dan menyelesaikan pembayaran sebesar Rp ${detail.persetujuanHarga.toLocaleString(
         'id-ID'
-      )}. Status pekerjaan kini Done.`
+      )}. Status pekerjaan kini Done. Beri penilaian untuk pelanggan melalui menu Riwayat Pekerjaan.`
     );
 
     this.emitKontrakRealtime('kontrak:updated', {
@@ -623,9 +623,25 @@ export class KontrakPekerjaanController {
         orderBy: { createdAt: 'desc' },
       });
 
+      // UC10 (rating 2 arah): kolom `hasRating` pada kontrak bernilai true begitu salah satu
+      // pihak menilai. Untuk UI, setiap pihak butuh status penilaiannya sendiri, sehingga
+      // ditambahkan field turunan per pengguna yang sedang login.
+      const data = list.map((kontrak) => {
+        const ratingDariSaya =
+          kontrak.ratings.find((r) => r.idPenggunaPemberi === userId) ?? null;
+        const ratingUntukSaya =
+          kontrak.ratings.find((r) => r.idPenggunaPenerima === userId) ?? null;
+        return {
+          ...kontrak,
+          hasRatedByMe: ratingDariSaya !== null,
+          ratingDariSaya,
+          ratingUntukSaya,
+        };
+      });
+
       res.status(200).json({
         success: true,
-        data: list,
+        data,
       });
     } catch (error) {
       this.handleErrorResponse(res, error);
