@@ -19,6 +19,11 @@ import {
   getAuthToken,
   getCurrentUser,
 } from './api';
+import {
+  markContractDoneInStore,
+  markContractRatedInStore,
+  markContractWaitingConfirmationInStore,
+} from './ratingService';
 import { CHAT_CONFIG } from '../config/chatConfig';
 import {
   ContractCardStatus,
@@ -1251,6 +1256,7 @@ export const contractService = {
           updatedBackend,
           existing?.jasa || DEFAULT_JASA_NAME
         );
+        markContractWaitingConfirmationInStore(cleanId);
         return updateContractStatusInStores(
           cleanId,
           'Menunggu Konfirmasi Pelanggan',
@@ -1263,6 +1269,7 @@ export const contractService = {
       }
     }
 
+    markContractWaitingConfirmationInStore(cleanId);
     return updateContractStatusInStores(
       cleanId,
       'Menunggu Konfirmasi Pelanggan'
@@ -1303,6 +1310,7 @@ export const contractService = {
           updatedBackend,
           existing?.jasa || DEFAULT_JASA_NAME
         );
+        markContractDoneInStore(cleanId);
         return updateContractStatusInStores(cleanId, 'Done', {
           ...mapped,
           hasRating: existing?.hasRating ?? false,
@@ -1314,6 +1322,7 @@ export const contractService = {
       }
     }
 
+    markContractDoneInStore(cleanId);
     return updateContractStatusInStores(cleanId, 'Done', {
       hasRating: existing?.hasRating ?? false,
     });
@@ -1361,6 +1370,7 @@ export const contractService = {
     }
 
     const existing = getHistoryContractById(cleanId);
+    markContractRatedInStore(cleanId, nilai, payload.komentar?.trim());
     return updateContractStatusInStores(
       cleanId,
       existing?.statusPekerjaan ?? 'Done',
@@ -1381,6 +1391,9 @@ export const contractService = {
     komentar?: string
   ): ContractRecord {
     const cleanId = (idKontrak ?? '').trim();
+    if (typeof nilaiRating === 'number') {
+      markContractRatedInStore(cleanId, nilaiRating, komentar);
+    }
     const existing = getHistoryContractById(cleanId);
     return updateContractStatusInStores(
       cleanId,

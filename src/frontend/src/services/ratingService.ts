@@ -340,6 +340,23 @@ export function markContractRatedInStore(
   return updatedItem;
 }
 
+export function markContractWaitingConfirmationInStore(
+  idKontrak: string
+): CustomerTransactionItem | null {
+  let updatedItem: CustomerTransactionItem | null = null;
+  customerTransactionsStore = customerTransactionsStore.map((item) => {
+    if (item.idKontrak !== idKontrak) return item;
+    updatedItem = {
+      ...item,
+      statusPekerjaan: 'Menunggu Konfirmasi Pelanggan',
+      displayStatus: 'On Progress',
+    };
+    return updatedItem;
+  });
+  notifyListeners();
+  return updatedItem;
+}
+
 export function markContractDoneInStore(
   idKontrak: string
 ): CustomerTransactionItem | null {
