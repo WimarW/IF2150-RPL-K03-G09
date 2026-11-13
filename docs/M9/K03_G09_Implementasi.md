@@ -227,8 +227,6 @@ Tabel B.2. Bukti Best Practices
 ### Catatan Penting
 Untuk bagian aplikasi yang meminta input text, keyboard yang muncul dapat menutupi tampilan aplikasi. Selain itu, ada notifikasi di chat yang tidak bisa hilang sendiri, sehingga harus tutup chat kemudan buka lagi agar hilang.
 
-Tuliskan kendala yang ditemui, fitur yang belum sempurna (*known issues*), serta hal yang perlu diketahui asisten saat menjalankan atau menilai aplikasi (misalnya akun uji khusus, urutan menjalankan, atau batasan).
-
 ## B.4 Kontribusi Anggota
 
 Tabel B.4. Kontribusi Anggota
