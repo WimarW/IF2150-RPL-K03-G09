@@ -1,6 +1,7 @@
 import crypto from 'crypto';
 import { NextFunction, Request, Response, Router } from 'express';
 import { KomunikasiController } from '../controllers/KomunikasiController';
+import { uploadFoto } from '../middlewares/upload.middleware';
 
 export interface AuthenticatedRequest extends Omit<Request, 'user'> {
   user?: {
@@ -104,7 +105,8 @@ export function createChatsRouter(controller?: KomunikasiController): Router {
 
   // /conversations didaftarkan sebelum /:idLawanBicara agar tidak tertangkap sebagai parameter
   router.get('/conversations', komunikasiController.getConversationsHandler);
-  router.post('/', komunikasiController.sendChatHandler);
+  // Menerima JSON biasa atau multipart/form-data dengan foto opsional di field 'lampiran'
+  router.post('/', uploadFoto('lampiran'), komunikasiController.sendChatHandler);
   router.get('/:idLawanBicara', komunikasiController.getChatHistoryHandler);
   router.patch('/:idLawanBicara/read', komunikasiController.markChatReadHandler);
 

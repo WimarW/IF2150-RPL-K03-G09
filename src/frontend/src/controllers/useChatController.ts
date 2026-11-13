@@ -1,7 +1,14 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { AppState, AppStateStatus } from 'react-native';
-import { ChatMessage, ConversationSummary } from '../types/chat';
+import { ChatAttachment, ChatMessage, ConversationSummary } from '../types/chat';
 import { chatService } from '../services/chatService';
+import { ApiError, getCurrentUser } from '../services/api';
+
+/** Pesan dari server (mis. ukuran/format foto) ditampilkan apa adanya; selain itu pesan koneksi umum. */
+function sendErrorMessage(err: unknown): string {
+  if (err instanceof ApiError && err.status > 0) return err.message;
+  return 'Pesan tidak terkirim. Periksa koneksimu lalu coba lagi.';
+}
 import { CHAT_CONFIG } from '../config/chatConfig';
 import { mergeMessages } from '../utils/chatUtils';
 import { useUnreadCounts } from '../context/UnreadContext';
@@ -26,7 +33,9 @@ export function useChatController(
     if (!isSilent) setIsLoading(true);
     setError(null);
     try {
-      const data = await chatService.getConversations();
+      // Chat dengan Layanan Pelanggan tidak ditampilkan di daftar chat (beserta badge unread-nya);
+      // percakapan CS hanya diakses lewat tombol CS / menu tiket laporan.
+      const data = (await chatService.getConversations()).filter((c) => !c.isCS);
       setConversations(data);
       const totalUnread = data.reduce((acc, c) => acc + c.unreadCount, 0);
       setUnreadMessages(totalUnread);
@@ -72,11 +81,11 @@ export function useChatController(
   }, [decrementUnreadMessagesBy]);
 
   const sendChat = useCallback(
-    async (text: string) => {
+    async (text: string, attachment?: ChatAttachment | null) => {
       if (!partnerId) return;
 
       const trimmed = text.trim();
-      if (!trimmed) return;
+      if (!trimmed && !attachment) return;
       if (trimmed.length > CHAT_CONFIG.MAX_MESSAGE_LENGTH) {
         setSnackbarMessage(`Pesan terlalu panjang (maks ${CHAT_CONFIG.MAX_MESSAGE_LENGTH} karakter).`);
         return;
@@ -86,9 +95,12 @@ export function useChatController(
       const optimisticMsg: ChatMessage = {
         idChat: clientId,
         clientId,
-        idPengguna: 'current-user-id', // will be matched in backend
+        idPengguna: getCurrentUser().idPengguna,
         idPenerima: partnerId,
         isiPesan: trimmed,
+        // Tampilkan foto lokal dulu selama proses unggah
+        lampiranUrl: attachment?.uri ?? null,
+        localAttachment: attachment ?? null,
         waktuTerkirim: new Date().toISOString(),
         isChatTerbaca: false,
         statusChat: 'SENDING',
@@ -104,18 +116,19 @@ export function useChatController(
           clientId,
           partnerName,
           isCS,
-          isOnline
+          isOnline,
+          attachment
         );
         // 3. Sukses
         setMessages((prev) =>
           prev.map((m) => (m.clientId === clientId ? { ...result, statusChat: 'SENT' } : m))
         );
-      } catch {
+      } catch (err: unknown) {
         // 5.2 Skenario Alternatif 1: Gagal
         setMessages((prev) =>
           prev.map((m) => (m.clientId === clientId ? { ...m, statusChat: 'FAILED' } : m))
         );
-        setSnackbarMessage('Pesan tidak terkirim. Periksa koneksimu lalu coba lagi.');
+        setSnackbarMessage(sendErrorMessage(err));
       }
     },
     [partnerId, partnerName, isCS, isOnline]
@@ -139,16 +152,17 @@ export function useChatController(
           clientId,
           partnerName,
           isCS,
-          isOnline
+          isOnline,
+          targetMsg.localAttachment
         );
         setMessages((prev) =>
           prev.map((m) => (m.clientId === clientId ? { ...result, statusChat: 'SENT' } : m))
         );
-      } catch {
+      } catch (err: unknown) {
         setMessages((prev) =>
           prev.map((m) => (m.clientId === clientId ? { ...m, statusChat: 'FAILED' } : m))
         );
-        setSnackbarMessage('Pesan tidak terkirim. Periksa koneksimu lalu coba lagi.');
+        setSnackbarMessage(sendErrorMessage(err));
       }
     },
     [partnerId, partnerName, isCS, isOnline, messages]

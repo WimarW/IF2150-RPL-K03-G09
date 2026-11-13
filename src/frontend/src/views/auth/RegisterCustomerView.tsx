@@ -4,10 +4,9 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
-  KeyboardAvoidingView,
-  Platform,
   StyleSheet,
 } from 'react-native';
+import { KeyboardAwareView } from '../../components/common/KeyboardAwareView';
 import Header from '../../components/Header';
 import InputField from '../../components/InputField';
 import Button from '../../components/Button';
@@ -105,10 +104,7 @@ export const RegisterCustomerView: React.FC<RegisterCustomerViewProps> = ({
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.safeArea}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-    >
+    <KeyboardAwareView style={styles.safeArea}>
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
@@ -260,7 +256,7 @@ export const RegisterCustomerView: React.FC<RegisterCustomerViewProps> = ({
           </Text>
         </View>
       </ScrollView>
-    </KeyboardAvoidingView>
+    </KeyboardAwareView>
   );
 };
 

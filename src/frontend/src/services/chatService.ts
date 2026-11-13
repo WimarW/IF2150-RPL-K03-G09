@@ -1,6 +1,56 @@
-import { apiGet, apiPost, apiRequest, getCurrentUser } from './api';
-import { ChatMessage, ConversationSummary } from '../types/chat';
+import { apiPost, apiRequest, apiUpload, getCurrentUser } from './api';
+import { ChatAttachment, ChatMessage, ConversationSummary } from '../types/chat';
 import { CHAT_CONFIG } from '../config/chatConfig';
+
+// ===== Bentuk respons backend (/api/chats) =====
+interface ServerChatMessage {
+  idChat: string;
+  idPengguna: string;
+  idPenerima: string;
+  isiPesan: string;
+  lampiranUrl?: string | null;
+  waktuTerkirim: string;
+  isChatTerbaca: boolean;
+  statusChat?: string;
+}
+
+interface ServerConversation {
+  idLawanBicara: string;
+  namaLawanBicara: string;
+  roleLawanBicara?: string;
+  isiPesanTerakhir: string;
+  waktuTerkirim: string;
+  unreadCount: number;
+}
+
+const ATTACHMENT_PREVIEW_TEXT = '📷 Foto';
+
+function toChatMessage(m: ServerChatMessage): ChatMessage {
+  return {
+    idChat: m.idChat,
+    // Pesan dari server tidak membawa clientId; pakai idChat agar key stabil antara hasil kirim & polling
+    clientId: m.idChat,
+    idPengguna: m.idPengguna,
+    idPenerima: m.idPenerima,
+    isiPesan: m.isiPesan ?? '',
+    lampiranUrl: m.lampiranUrl ?? null,
+    waktuTerkirim: new Date(m.waktuTerkirim).toISOString(),
+    isChatTerbaca: Boolean(m.isChatTerbaca),
+    statusChat: 'SENT',
+  };
+}
+
+function toConversationSummary(c: ServerConversation): ConversationSummary {
+  return {
+    partnerId: c.idLawanBicara,
+    partnerName: c.namaLawanBicara,
+    isCS: c.roleLawanBicara === 'LAYANAN_PELANGGAN',
+    isOnline: false, // backend belum menyediakan status online lawan bicara
+    lastMessage: c.isiPesanTerakhir,
+    lastMessageAt: new Date(c.waktuTerkirim).toISOString(),
+    unreadCount: c.unreadCount ?? 0,
+  };
+}
 
 let MOCK_FAIL_NEXT_SEND = false;
 
@@ -206,19 +256,23 @@ const MOCK_MESSAGES_STORE: Record<string, ChatMessage[]> = {
 
 export const chatService = {
   async getConversations(): Promise<ConversationSummary[]> {
-    if (CHAT_CONFIG.USE_MOCK) {
+    if (CHAT_CONFIG.USE_MOCK_CHAT) {
       await new Promise((resolve) => setTimeout(resolve, 300));
       return [...MOCK_CONVERSATIONS];
     }
-    return apiGet<ConversationSummary[]>('/chats');
+    const data = await apiRequest<ServerConversation[]>('/chats/conversations');
+    return (data ?? []).map(toConversationSummary);
   },
 
   async getChatHistory(partnerId: string): Promise<ChatMessage[]> {
-    if (CHAT_CONFIG.USE_MOCK) {
+    if (CHAT_CONFIG.USE_MOCK_CHAT) {
       await new Promise((resolve) => setTimeout(resolve, 300));
       return MOCK_MESSAGES_STORE[partnerId] || [];
     }
-    return apiGet<ChatMessage[]>(`/chats/${partnerId}`);
+    const data = await apiRequest<ServerChatMessage[]>(
+      `/chats/${encodeURIComponent(partnerId)}`
+    );
+    return (data ?? []).map((m) => toChatMessage(m));
   },
 
   async sendChat(
@@ -227,9 +281,10 @@ export const chatService = {
     clientId: string,
     partnerName?: string,
     isCS = false,
-    isOnline = true
+    isOnline = true,
+    attachment?: ChatAttachment | null
   ): Promise<ChatMessage> {
-    if (CHAT_CONFIG.USE_MOCK) {
+    if (CHAT_CONFIG.USE_MOCK_CHAT) {
       await new Promise((resolve) => setTimeout(resolve, 500));
       if (MOCK_FAIL_NEXT_SEND) {
         MOCK_FAIL_NEXT_SEND = false; // Reset after failing once
@@ -242,10 +297,12 @@ export const chatService = {
         idPengguna: getCurrentUser().idPengguna,
         idPenerima,
         isiPesan,
+        lampiranUrl: attachment?.uri ?? null,
         waktuTerkirim: new Date().toISOString(),
         isChatTerbaca: false,
         statusChat: 'SENT',
       };
+      const lastMessage = isiPesan || (attachment ? ATTACHMENT_PREVIEW_TEXT : '');
 
       if (!MOCK_MESSAGES_STORE[idPenerima]) {
         MOCK_MESSAGES_STORE[idPenerima] = [];
@@ -256,7 +313,7 @@ export const chatService = {
       const convIndex = MOCK_CONVERSATIONS.findIndex((c) => c.partnerId === idPenerima);
       if (convIndex !== -1) {
         const existing = MOCK_CONVERSATIONS[convIndex];
-        existing.lastMessage = isiPesan;
+        existing.lastMessage = lastMessage;
         existing.lastMessageAt = newMsg.waktuTerkirim;
         if (partnerName) existing.partnerName = partnerName;
         MOCK_CONVERSATIONS.splice(convIndex, 1);
@@ -267,7 +324,7 @@ export const chatService = {
           partnerName: partnerName || 'Mitra Jasa',
           isCS,
           isOnline,
-          lastMessage: isiPesan,
+          lastMessage,
           lastMessageAt: newMsg.waktuTerkirim,
           unreadCount: 0,
         });
@@ -276,11 +333,25 @@ export const chatService = {
       return newMsg;
     }
 
-    return apiPost<ChatMessage>('/chats', { idPenerima, isiPesan, clientId });
+    if (attachment) {
+      const form = new FormData();
+      form.append('idPenerima', idPenerima);
+      form.append('isiPesan', isiPesan);
+      form.append('lampiran', {
+        uri: attachment.uri,
+        name: attachment.mimeType === 'image/png' ? 'lampiran.png' : 'lampiran.jpg',
+        type: attachment.mimeType,
+      } as unknown as Blob);
+      const saved = await apiUpload<ServerChatMessage>('/chats', form);
+      return toChatMessage(saved);
+    }
+
+    const saved = await apiPost<ServerChatMessage>('/chats', { idPenerima, isiPesan });
+    return toChatMessage(saved);
   },
 
   async markConversationRead(partnerId: string): Promise<void> {
-    if (CHAT_CONFIG.USE_MOCK) {
+    if (CHAT_CONFIG.USE_MOCK_CHAT) {
       const conv = MOCK_CONVERSATIONS.find((c) => c.partnerId === partnerId);
       if (conv) {
         conv.unreadCount = 0;
@@ -293,6 +364,6 @@ export const chatService = {
       return;
     }
 
-    await apiRequest<void>(`/chats/${partnerId}/read`, { method: 'PATCH' });
+    await apiRequest<void>(`/chats/${encodeURIComponent(partnerId)}/read`, { method: 'PATCH' });
   },
 };

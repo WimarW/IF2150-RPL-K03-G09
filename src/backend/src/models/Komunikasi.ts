@@ -6,6 +6,7 @@ export interface DataChatInput {
   idPengirim: string;
   idPenerima: string;
   isiPesan: string;
+  lampiranUrl?: string | null;
 }
 
 export interface KomunikasiRecord {
@@ -13,6 +14,7 @@ export interface KomunikasiRecord {
   idPengguna: string;
   idPenerima: string;
   isiPesan: string;
+  lampiranUrl: string | null;
   waktuTerkirim: Date;
   isChatTerbaca: boolean;
   statusChat: string;
@@ -22,6 +24,7 @@ export interface KomunikasiRecord {
 export interface ConversationItem {
   idLawanBicara: string;
   namaLawanBicara: string;
+  roleLawanBicara: string;
   isiPesanTerakhir: string;
   waktuTerkirim: Date;
   unreadCount: number;
@@ -37,6 +40,7 @@ export class Komunikasi {
   private idPengguna: string;
   private idPenerima: string;
   private isiPesan: string;
+  private lampiranUrl: string | null;
   private waktuTerkirim: Date;
   private isChatTerbaca: boolean;
   private statusChat: string;
@@ -61,6 +65,7 @@ export class Komunikasi {
     this.idPengguna = input.idPengirim;
     this.idPenerima = input.idPenerima;
     this.isiPesan = input.isiPesan;
+    this.lampiranUrl = input.lampiranUrl ?? null;
     this.waktuTerkirim = new Date();
     this.isChatTerbaca = false;
     this.statusChat = 'SENT';
@@ -79,6 +84,7 @@ export class Komunikasi {
         idPengguna: this.idPengguna,
         idPenerima: this.idPenerima,
         isiPesan: this.isiPesan,
+        lampiranUrl: this.lampiranUrl,
         waktuTerkirim: this.waktuTerkirim,
         isChatTerbaca: this.isChatTerbaca,
         statusChat: this.statusChat,
@@ -143,6 +149,7 @@ export class Komunikasi {
       idPengguna: this.idPengguna,
       idPenerima: this.idPenerima,
       isiPesan: this.isiPesan,
+      lampiranUrl: this.lampiranUrl,
       waktuTerkirim: this.waktuTerkirim,
       isChatTerbaca: this.isChatTerbaca,
       statusChat: this.statusChat,
@@ -177,12 +184,14 @@ export class Komunikasi {
             select: {
               idPengguna: true,
               namaPengguna: true,
+              role: true,
             },
           },
           penerima: {
             select: {
               idPengguna: true,
               namaPengguna: true,
+              role: true,
             },
           },
         },
@@ -210,16 +219,19 @@ export class Komunikasi {
     for (const msg of distinctDirectionMessages) {
       const isOutgoing = msg.idPengguna === idPengguna;
       const idLawanBicara = isOutgoing ? msg.idPenerima : msg.idPengguna;
-      const namaLawanBicara = isOutgoing
-        ? (msg.penerima?.namaPengguna ?? msg.idPenerima)
-        : (msg.pengirim?.namaPengguna ?? msg.idPengguna);
+      const lawanBicara = isOutgoing ? msg.penerima : msg.pengirim;
+      const namaLawanBicara = lawanBicara?.namaPengguna ?? idLawanBicara;
+      const roleLawanBicara = lawanBicara?.role ?? 'PELANGGAN';
+      // Pesan berisi lampiran saja disimpan dengan isiPesan kosong
+      const isiPesanTerakhir = msg.isiPesan || (msg.lampiranUrl ? '📷 Foto' : '');
 
       const existing = latestPerPartnerMap.get(idLawanBicara);
       if (!existing || msg.waktuTerkirim > existing.waktuTerkirim) {
         latestPerPartnerMap.set(idLawanBicara, {
           idLawanBicara,
           namaLawanBicara,
-          isiPesanTerakhir: msg.isiPesan,
+          roleLawanBicara,
+          isiPesanTerakhir,
           waktuTerkirim: msg.waktuTerkirim,
           unreadCount: unreadCountMap.get(idLawanBicara) ?? 0,
         });

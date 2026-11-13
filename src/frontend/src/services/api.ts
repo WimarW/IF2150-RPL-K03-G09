@@ -466,6 +466,73 @@ export async function apiRequest<T>(
 }
 
 /**
+ * Mengubah path file dari backend (mis. `/uploads/abc.jpg`) menjadi URL lengkap.
+ * URI lokal (file://, content://) dan URL absolut dikembalikan apa adanya.
+ */
+export function resolveFileUrl(path?: string | null): string | null {
+  if (!path) return null;
+  if (/^[a-z][a-z0-9+.-]*:/i.test(path)) return path;
+  const origin = (lastWorkingBaseUrl ?? API_BASE_URL).replace(/\/api\/?$/, '');
+  return `${origin}${path.startsWith('/') ? path : `/${path}`}`;
+}
+
+/**
+ * Kirim multipart/form-data (mis. upload foto) dengan token & base URL yang sama dengan apiRequest.
+ * Content-Type sengaja tidak di-set agar boundary multipart dibuat otomatis oleh fetch.
+ */
+export async function apiUpload<T>(
+  path: string,
+  form: FormData,
+  timeoutMs = 30000
+): Promise<T> {
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+  const baseUrl = lastWorkingBaseUrl ?? API_BASE_URL;
+
+  let response: Response;
+  try {
+    response = await fetchWithTimeout(
+      `${baseUrl}${normalizedPath}`,
+      {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'X-User-Id': currentSessionUser.idPengguna,
+          'X-User-Role': currentSessionUser.role,
+          ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+        },
+        body: form,
+      },
+      timeoutMs
+    );
+  } catch (error: unknown) {
+    const isTimeout = error instanceof Error && error.name === 'AbortError';
+    throw new ApiError(
+      isTimeout
+        ? 'Waktu unggah habis. Periksa koneksi internet Anda lalu coba lagi.'
+        : 'Tidak dapat terhubung ke server. Periksa koneksi internet Anda.',
+      0,
+      error,
+      true
+    );
+  }
+
+  lastWorkingBaseUrl = baseUrl;
+  const parsed: unknown = await response.json().catch(() => null);
+
+  if (!response.ok) {
+    const body = parsed as { message?: string; error?: { message?: string } } | null;
+    throw new ApiError(
+      body?.message ?? body?.error?.message ?? `Permintaan gagal dengan kode status ${response.status}.`,
+      response.status,
+      parsed,
+      false
+    );
+  }
+
+  return (isApiEnvelope<T>(parsed) ? parsed.data : parsed) as T;
+}
+
+/**
  * Helper khusus endpoint autentikasi & profil yang mengembalikan amplop `{ ok, status, message, data }`.
  * Dilengkapi timeout cepat (3.5 detik) dan percobaan multi-host (localhost:5000 / 10.0.2.2:5000)
  * agar tidak pernah stuck loading ketika perangkat menggunakan tunnel atau emulator.
