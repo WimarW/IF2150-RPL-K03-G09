@@ -202,10 +202,10 @@ Tabel B.2. Bukti Best Practices
 
 | Praktik | Bukti | Keterangan |
 | :--- | :--- | :--- |
-| Branching | *[Tautan ke daftar branch / graph commit]* | *[Skema yang dipakai]* |
-| Semantic commit | *[Tautan ke riwayat commit]* | *[Ringkasan]* |
-| Track tasks | *[Tautan ke Issues/Projects]* | *[Jumlah issue, pembagian]* |
-| Pull request dan review | *[Tautan ke 2-3 PR representatif]* | *[Siapa me-review siapa]* |
+| Branching | https://github.com/WimarW/IF2150-RPL-K03-G09/branches | Setiap issue dikerjakan dalam branchnya sendiri kemdidan jika sudah selesai implementasi dimerge ke dalam develop. Setelah semua fitur terimplementasi pada develop dan lulus testing. <br> Skema penamaan yang digunakan <prefix>/<fitur> <br> List Prefix: <br> - feat: Implementasi fitur baru<br> - fix: Memperbaiki sebuah bug <br> - test: Melakukan unit test atau integration test |
+| Semantic commit | https://github.com/WimarW/IF2150-RPL-K03-G09/commits/main/ <br> https://github.com/WimarW/IF2150-RPL-K03-G09/commits/develop | Message commit mengikuti aturan semantic commit |
+| Track tasks | https://github.com/WimarW/IF2150-RPL-K03-G09/issues | 30 Issues <br>  |
+| Pull request dan review | https://github.com/WimarW/IF2150-RPL-K03-G09/pull/35<br>https://github.com/WimarW/IF2150-RPL-K03-G09/pull/34<br>https://github.com/WimarW/IF2150-RPL-K03-G09/pull/36<br>https://github.com/WimarW/IF2150-RPL-K03-G09/pull/38<br> | Review PR biasa dilakukan oleh Juan dan Hasbi karena paling familiar dengan web development, namun anggota lain juga melakukan beberapa review pr |
 | Pengujian | *[Tautan ke `src/tests/` dan hasil test]* | *[Apa yang diuji, cara menjalankan]* |
 
 ### B.2.1 Profiling dan Optimasi
