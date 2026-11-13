@@ -1,9 +1,11 @@
 import { useCallback, useMemo, useState } from 'react';
 import {
   CreateRatingPayload,
+  CustomerRatingTag,
   CustomerTransactionItem,
   HistoryFilterTab,
-  RatingTag,
+  ProviderRatingTag,
+  RaterRole,
   submitRating,
   verifyContractForRating,
 } from '../services/ratingService';
@@ -16,11 +18,43 @@ export const RATING_PREDICATE_LABELS: Record<number, string> = {
   5: 'Sangat Baik',
 };
 
-export const RATING_TAG_OPTIONS: RatingTag[] = [
+/** Tag UI-11-07 saat Pelanggan menilai Penyedia Jasa */
+export const RATING_TAG_OPTIONS: CustomerRatingTag[] = [
   'Tepat Waktu',
   'Kerja Bersih',
   'Ramah',
 ];
+
+/** Tag UI-11-07 saat Penyedia Jasa menilai Pelanggan (UC10 dua arah) */
+export const PROVIDER_RATING_TAG_OPTIONS: ProviderRatingTag[] = [
+  'Ramah',
+  'Komunikatif',
+  'Instruksi Jelas',
+  'Bayar Tepat Waktu',
+];
+
+/**
+ * Mengembalikan daftar chip tag sesuai peran pemberi rating.
+ */
+export function getRatingTagOptions(raterRole: RaterRole = 'PELANGGAN'): string[] {
+  return raterRole === 'PEMBERI_JASA'
+    ? PROVIDER_RATING_TAG_OPTIONS
+    : RATING_TAG_OPTIONS;
+}
+
+/**
+ * Menentukan apakah tombol "Beri Rating" ditampilkan pada kartu Riwayat Pekerjaan Penyedia (UI-12).
+ * Muncul jika kontrak sudah Selesai (`Done`) dan penyedia jasa belum menilai pelanggan.
+ */
+export function shouldShowProviderBeriRatingButton(job: {
+  statusPekerjaan?: string;
+  statusDisplay?: string;
+  hasRatedByMe?: boolean;
+}): boolean {
+  const isCompleted =
+    job.statusPekerjaan === 'Done' || job.statusDisplay === 'Selesai';
+  return isCompleted && !job.hasRatedByMe;
+}
 
 /**
  * Mengembalikan teks predikat dinamis sesuai jumlah bintang (UI-11-05).

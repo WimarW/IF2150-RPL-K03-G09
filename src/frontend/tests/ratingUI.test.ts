@@ -164,3 +164,76 @@ describe('UI-11 Beri Penilaian & UI-10 Riwayat Pelanggan (UC10)', () => {
     });
   });
 });
+
+import {
+  PROVIDER_RATING_TAG_OPTIONS,
+  getRatingTagOptions,
+  shouldShowProviderBeriRatingButton,
+} from '../src/controllers/useRatingController';
+import { extractPerUserRatingFromBackendRow } from '../src/services/contractService';
+
+describe('UC10 dua arah: Penyedia Jasa memberi rating ke Pelanggan', () => {
+  const baseRow = {
+    idKontrakPekerjaan: 'kontrak-dua-arah',
+    idPelanggan: 'pelanggan-1',
+    idPemberiJasa: 'mitra-1',
+    detailPekerjaan: 'Servis AC',
+    persetujuanHarga: 150000,
+    statusPekerjaan: 'Done',
+    createdAt: '2026-05-12T07:20:00.000Z',
+  };
+
+  it('memakai tag khusus penyedia jasa dan tetap mempertahankan tag pelanggan', () => {
+    expect(getRatingTagOptions('PEMBERI_JASA')).toEqual(PROVIDER_RATING_TAG_OPTIONS);
+    expect(getRatingTagOptions('PELANGGAN')).toEqual(RATING_TAG_OPTIONS);
+    expect(getRatingTagOptions()).toEqual(RATING_TAG_OPTIONS);
+  });
+
+  it('tombol "Beri Rating" penyedia hanya muncul saat Done dan penyedia belum menilai', () => {
+    expect(shouldShowProviderBeriRatingButton({ statusPekerjaan: 'Done', hasRatedByMe: false })).toBe(true);
+    expect(shouldShowProviderBeriRatingButton({ statusPekerjaan: 'Done', hasRatedByMe: true })).toBe(false);
+    expect(
+      shouldShowProviderBeriRatingButton({ statusPekerjaan: 'Menunggu Konfirmasi Pelanggan' })
+    ).toBe(false);
+  });
+
+  it('rating dari pelanggan tidak dianggap sebagai rating milik penyedia', () => {
+    const row = {
+      ...baseRow,
+      hasRating: true,
+      ratings: [
+        { idPenggunaPemberi: 'pelanggan-1', idPenggunaPenerima: 'mitra-1', nilaiRating: 5 },
+      ],
+    };
+    const perUser = extractPerUserRatingFromBackendRow(row, 'mitra-1');
+    expect(perUser.hasRatedByMe).toBe(false);
+    expect(perUser.diterima?.nilaiRating).toBe(5);
+    expect(perUser.diberikan).toBeNull();
+  });
+
+  it('mengutamakan field turunan backend hasRatedByMe & ratingDariSaya', () => {
+    const perUser = extractPerUserRatingFromBackendRow(
+      {
+        ...baseRow,
+        hasRatedByMe: true,
+        ratingDariSaya: { nilaiRating: 4, ulasan: 'Komunikatif', tags: ['Komunikatif'] },
+        ratingUntukSaya: null,
+      },
+      'mitra-1'
+    );
+    expect(perUser.hasRatedByMe).toBe(true);
+    expect(perUser.diberikan?.nilaiRating).toBe(4);
+  });
+
+  it('riwayat pelanggan tetap menampilkan "Beri Rating" walau penyedia sudah menilai duluan', () => {
+    const mapped = mapBackendKontrakToTransaction({
+      ...baseRow,
+      hasRating: true,
+      ratings: [
+        { idPenggunaPemberi: 'mitra-1', idPenggunaPenerima: 'pelanggan-1', nilaiRating: 4 },
+      ],
+    });
+    expect(mapped.hasRating).toBe(false);
+    expect(shouldShowBeriRatingButton(mapped)).toBe(true);
+  });
+});

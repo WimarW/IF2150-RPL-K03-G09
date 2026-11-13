@@ -327,14 +327,14 @@ function createMockReqRes(options: {
 const JWT_SECRET =
   process.env.JWT_SECRET || 'dev_fallback_secret_cariuang_2026_ChangeInProd';
 
-describe('KontrakPekerjaan & KontrakPekerjaanController (UC05, UC06, UC07)', () => {
+describe('[KF02][KF06][KF07][KF10][KF11][KF12][KF13] KontrakPekerjaan & KontrakPekerjaanController (UC05, UC06, UC07 | ALGO-036 s.d. ALGO-043)', () => {
   const controller = new KontrakPekerjaanController();
 
   beforeEach(() => {
     setupMockPrisma();
   });
 
-  it('ALGO-037 (saveKontrak Q-017 & Q-018), ALGO-038 (newKontrak), ALGO-039 (makeKontrak), ALGO-040 (fetchKontrakPekerjaan Q-019), dan KNF18', async () => {
+  it('[KF10][KF11] ALGO-036 (statusUpdate Q-016), ALGO-037 (saveKontrak Q-017 & Q-018), ALGO-038 (newKontrak), ALGO-039 (makeKontrak), ALGO-040 (fetchKontrakPekerjaan Q-019), dan KNF18', async () => {
     const kontrak = new KontrakPekerjaan();
     kontrak.newKontrak({
       idPelanggan: 'cust-1',
@@ -384,7 +384,7 @@ describe('KontrakPekerjaan & KontrakPekerjaanController (UC05, UC06, UC07)', () 
     ).toBe(false);
   });
 
-  it('UC05, ALGO-043 (kirimInput), KNF04 & KNF19: Pelanggan membuat kontrak -> status Menunggu & Optimistic Lock penyedia jasa', async () => {
+  it('[KF02][KF06][KF10][KF11] UC05, ALGO-043 (kirimInput), KNF04 & KNF19: Pelanggan membuat kontrak -> status Menunggu, notifikasi penyedia, & Optimistic Lock', async () => {
     const kontrak = await controller.kirimInput(
       'Servis resleting jaket kulit',
       85000,
@@ -413,7 +413,7 @@ describe('KontrakPekerjaan & KontrakPekerjaanController (UC05, UC06, UC07)', () 
     });
   });
 
-  it('Penyedia menerima kontrak (Optimistic Locking KNF04 & KNF19) -> On Progress -> Selesai (UC06, KNF20) -> Konfirmasi Pelanggan (UC07, ALGO-042, KNF21, KNF22) -> Done', async () => {
+  it('[KF02][KF06][KF11][KF12][KF13] ALGO-041, ALGO-042: Penyedia menerima kontrak (Optimistic Locking KNF04 & KNF19) -> On Progress -> Selesai (UC06, KNF20) -> Konfirmasi Pelanggan (UC07, KNF21, KNF22) -> Done', async () => {
     const kontrak = await controller.kirimInput(
       'Sol sepatu kulit 2 pasang',
       100000,
@@ -463,7 +463,7 @@ describe('KontrakPekerjaan & KontrakPekerjaanController (UC05, UC06, UC07)', () 
     );
   });
 
-  it('KF07 & KNF11: Auto-cancel 30 menit membatalkan kontrak Menunggu yang kedaluwarsa dan membuka kunci penyedia jasa', async () => {
+  it('[KF07] KNF11: Auto-cancel 30 menit membatalkan kontrak Menunggu yang kedaluwarsa dan membuka kunci penyedia jasa', async () => {
     const kontrak = await controller.kirimInput(
       'Perbaikan engsel pintu kayu',
       150000,
@@ -494,7 +494,7 @@ describe('KontrakPekerjaan & KontrakPekerjaanController (UC05, UC06, UC07)', () 
     );
   });
 
-  it('KNF22: Validasi state transition menolak perubahan status yang tidak sah & mendukung Pengguna.konfirmasiPekerjaan()', async () => {
+  it('[KF11][KF13] ALGO-036, ALGO-042, KNF22: Validasi state transition menolak perubahan status yang tidak sah & mendukung Pengguna.konfirmasiPekerjaan()', async () => {
     const kontrak = await controller.kirimInput(
       'Bersih taman rumah',
       90000,
@@ -519,7 +519,7 @@ describe('KontrakPekerjaan & KontrakPekerjaanController (UC05, UC06, UC07)', () 
     );
   });
 
-  it('REST API Handlers + JWT Auth Middleware (auth.middleware.ts): alur lengkap dari pembuatan kontrak hingga selesai', async () => {
+  it('[KF02][KF10][KF11][KF12][KF13] ALGO-036 s.d. ALGO-043: REST API Handlers + JWT Auth Middleware (auth.middleware.ts): alur lengkap dari pembuatan kontrak hingga selesai', async () => {
     const pelangganToken = jwt.sign(
       {
         idPengguna: 'cust-1',
@@ -615,7 +615,7 @@ describe('KontrakPekerjaan & KontrakPekerjaanController (UC05, UC06, UC07)', () 
     );
   });
 
-  it('Integrasi dengan NotifikasiController (C30), KomunikasiController (C21), dan Socket.IO RealtimeEmitter', async () => {
+  it('[KF06][KF10] ALGO-043: Integrasi dengan NotifikasiController (C30), KomunikasiController (C21), dan Socket.IO RealtimeEmitter', async () => {
     const emittedEvents: Array<{
       idPengguna: string;
       event: string;
@@ -704,5 +704,86 @@ describe('KontrakPekerjaan & KontrakPekerjaanController (UC05, UC06, UC07)', () 
       'Pasang bracket TV 50 inch'
     );
     expect(roomData.riwayatChat).toHaveLength(1);
+  });
+
+  it('[KF02][KF10][KF11] ALGO-036, ALGO-039, ALGO-040, ALGO-041: Edge case fetch/get null, makeKontrak data tidak valid, dan statusUpdate string kosong', async () => {
+    await expect(
+      KontrakPekerjaan.fetchKontrakPekerjaan('kontrak-tidak-ada')
+    ).resolves.toBeNull();
+    await expect(KontrakPekerjaan.fetchKontrakPekerjaan('')).resolves.toBeNull();
+    await expect(
+      controller.getKontrakPekerjaan('kontrak-tidak-ada')
+    ).resolves.toBeNull();
+
+    const emptyDetailKontrak = new KontrakPekerjaan();
+    emptyDetailKontrak.newKontrak({
+      idPelanggan: 'cust-1',
+      idPemberiJasa: 'provider-1',
+      detailPekerjaan: '   ',
+      persetujuanHarga: 50000,
+    });
+    expect(emptyDetailKontrak.makeKontrak()).toBe(false);
+    expect(emptyDetailKontrak.getIdKontrakPekerjaan()).toBeNull();
+
+    const negativePriceKontrak = new KontrakPekerjaan();
+    negativePriceKontrak.newKontrak({
+      idPelanggan: 'cust-1',
+      idPemberiJasa: 'provider-1',
+      detailPekerjaan: 'Perbaikan instalasi listrik',
+      persetujuanHarga: -1000,
+    });
+    expect(negativePriceKontrak.makeKontrak()).toBe(false);
+    expect(negativePriceKontrak.getIdKontrakPekerjaan()).toBeNull();
+
+    const statusKontrak = new KontrakPekerjaan();
+    await expect(statusKontrak.statusUpdate('')).resolves.toBe(false);
+    await expect(
+      statusKontrak.statusUpdate('statusPekerjaan', '')
+    ).resolves.toBe(false);
+  });
+
+  it('[KF02][KF10] ALGO-043: Menolak self-contract (idPelanggan === idPemberiJasa) dengan 400 SELF_CONTRACT_FORBIDDEN', async () => {
+    await expect(
+      controller.kirimInput(
+        'Memesan jasa milik sendiri',
+        100000,
+        'provider-1',
+        'provider-1',
+        1
+      )
+    ).rejects.toMatchObject({
+      statusCode: 400,
+      code: 'SELF_CONTRACT_FORBIDDEN',
+    });
+
+    const selfToken = jwt.sign(
+      {
+        idPengguna: 'provider-1',
+        username: 'pakbudi',
+        role: Role.PELANGGAN,
+      },
+      JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
+    const selfCall = createMockReqRes({
+      headers: { authorization: `Bearer ${selfToken}` },
+      body: {
+        idPemberiJasa: 'provider-1',
+        detailPekerjaan: 'Memesan jasa milik sendiri via HTTP',
+        persetujuanHarga: 100000,
+        expectedVersion: 1,
+      },
+    });
+    authenticateJWT(selfCall.req, selfCall.res, () => {});
+    await controller.handleKirimInput(selfCall.req, selfCall.res);
+
+    expect(selfCall.res.getStatus()).toBe(400);
+    expect(selfCall.res.getJson()).toMatchObject({
+      success: false,
+      code: 'SELF_CONTRACT_FORBIDDEN',
+    });
+    expect(mockDb.kontrakPekerjaan.size).toBe(0);
+    expect(mockDb.notifikasi).toHaveLength(0);
   });
 });

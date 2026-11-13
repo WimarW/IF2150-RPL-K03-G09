@@ -218,13 +218,13 @@ class MockPemberiJasa extends PemberiJasa {
   }
 }
 
-describe('Issue #5: Backend Pendaftaran Jasa, Katalog Kategori, dan Pencarian Terdekat (Haversine)', () => {
-  describe('1. Utility Formula Haversine (KNF05 & KNF06)', () => {
-    it('mengembalikan jarak 0 km untuk titik koordinat yang identik', () => {
+describe('Issue #5: Backend Pendaftaran Jasa, Katalog Kategori, dan Pencarian Terdekat [KF01 s.d. KF05, KF08]', () => {
+  describe('1. Utility Formula Haversine [KF03 | KNF05 & KNF06]', () => {
+    it('[KF03 | KNF05] mengembalikan jarak 0 km untuk titik koordinat yang identik', () => {
       expect(calculateHaversineDistance(-6.8915, 107.6107, -6.8915, 107.6107)).toBe(0);
     });
 
-    it('menghitung jarak GPS secara akurat antara ITB Ganesha, Cisitu, dan Buah Batu', () => {
+    it('[KF03 | KNF05] menghitung jarak GPS secara akurat antara ITB Ganesha, Cisitu, dan Buah Batu', () => {
       const dNear = calculateHaversineDistance(-6.8915, 107.6107, -6.8850, 107.6135);
       const dFar = calculateHaversineDistance(-6.8915, 107.6107, -6.9430, 107.6335);
 
@@ -235,8 +235,8 @@ describe('Issue #5: Backend Pendaftaran Jasa, Katalog Kategori, dan Pencarian Te
     });
   });
 
-  describe('2. Kelas C13 KategoriJasa & C15 KategoriJasaController', () => {
-    it('mengimplementasikan getter dan setter sesuai ALGO-022 s.d. ALGO-029', () => {
+  describe('2. Kelas C13 KategoriJasa & C15 KategoriJasaController [KF01, KF04, KF05 | ALGO-022 s.d. ALGO-035]', () => {
+    it('[KF01, KF04 | ALGO-022 s.d. ALGO-029] mengimplementasikan getter dan setter sesuai ALGO-022 s.d. ALGO-029', () => {
       const sampleId = randomUUID();
       const kategori = new KategoriJasa({
         idKategoriJasa: sampleId,
@@ -261,7 +261,7 @@ describe('Issue #5: Backend Pendaftaran Jasa, Katalog Kategori, dan Pencarian Te
       expect(kategori.getDaerahKerja()).toBe('Bandung Raya');
     });
 
-    it('[Acceptance Criteria #1] mengembalikan daftar seluruh kategori terurut alfabetis (ALGO-031, Q-015)', async () => {
+    it('[KF01 | Acceptance Criteria #1 | ALGO-031, Q-015] mengembalikan daftar seluruh kategori terurut alfabetis', async () => {
       const mockKategori = new MockKategoriJasa();
       const kCtrl = new KategoriJasaController(mockKategori, new PemberiJasaController(new MockPemberiJasa()));
 
@@ -275,7 +275,7 @@ describe('Issue #5: Backend Pendaftaran Jasa, Katalog Kategori, dan Pencarian Te
       expect(categories[0].idKategoriJasa).toMatch(UUID_REGEX);
     });
 
-    it('[Acceptance Criteria #3] menolak tarif negatif atau field kosong pada validateKategoriJasa (ALGO-033)', () => {
+    it('[KF04 | Acceptance Criteria #3 | ALGO-033] menolak tarif negatif atau field kosong pada validateKategoriJasa', () => {
       const kCtrl = new KategoriJasaController(new MockKategoriJasa(), new PemberiJasaController(new MockPemberiJasa()));
 
       expect(
@@ -309,7 +309,7 @@ describe('Issue #5: Backend Pendaftaran Jasa, Katalog Kategori, dan Pencarian Te
       ).toBe(true);
     });
 
-    it('menyimpan kategori baru dengan UUID otomatis dan memperbarui data PemberiJasa (ALGO-034 & ALGO-035)', async () => {
+    it('[KF04, KF05 | ALGO-034 & ALGO-035] menyimpan kategori baru dengan UUID otomatis dan memperbarui data PemberiJasa', async () => {
       const mockKategori = new MockKategoriJasa();
       const mockPemberi = new MockPemberiJasa();
       const pCtrl = new PemberiJasaController(mockPemberi);
@@ -332,8 +332,8 @@ describe('Issue #5: Backend Pendaftaran Jasa, Katalog Kategori, dan Pencarian Te
     });
   });
 
-  describe('3. Kelas C04 PemberiJasa & C06 PemberiJasaController (Pencarian & Sorting)', () => {
-    it('[Acceptance Criteria #2] mengurutkan hasil pencarian berdasarkan jarak terdekat Haversine (KNF05)', async () => {
+  describe('3. Kelas C04 PemberiJasa & C06 PemberiJasaController [KF02, KF03, KF08 | ALGO-002, ALGO-009, ALGO-011]', () => {
+    it('[KF03 | Acceptance Criteria #2 | KNF05] mengurutkan hasil pencarian berdasarkan jarak terdekat Haversine', async () => {
       const pCtrl = new PemberiJasaController(new MockPemberiJasa());
 
       const nearest = await pCtrl.searchServices({
@@ -350,7 +350,7 @@ describe('Issue #5: Backend Pendaftaran Jasa, Katalog Kategori, dan Pencarian Te
       expect(nearest[1].jarakKm!).toBeLessThan(nearest[2].jarakKm!);
     });
 
-    it('mengurutkan berdasarkan Rating Terbaik (DESC) dan Termurah (tarif ASC)', async () => {
+    it('[KF02 | KNF05] mengurutkan berdasarkan Rating Terbaik (DESC) dan Termurah (tarif ASC)', async () => {
       const pCtrl = new PemberiJasaController(new MockPemberiJasa());
 
       const bestRated = await pCtrl.searchServices({ sortBy: 'rating' });
@@ -360,7 +360,7 @@ describe('Issue #5: Backend Pendaftaran Jasa, Katalog Kategori, dan Pencarian Te
       expect(cheapest.map((p) => p.idPemberiJasa)).toEqual([PJ_SITI_ID, PJ_DEDI_ID, PJ_AHMAD_ID]);
     });
 
-    it('mengambil detail profil lengkap PemberiJasa berdasarkan ID (ALGO-002, Q-002)', async () => {
+    it('[KF08 | ALGO-002, ALGO-009, ALGO-011, Q-002] mengambil detail profil lengkap PemberiJasa berdasarkan ID', async () => {
       const pCtrl = new PemberiJasaController(new MockPemberiJasa());
       const detail = await pCtrl.fetchPemberiJasaById(PJ_AHMAD_ID);
 
@@ -372,7 +372,7 @@ describe('Issue #5: Backend Pendaftaran Jasa, Katalog Kategori, dan Pencarian Te
     });
   });
 
-  describe('4. HTTP Route Handlers Integration (/api/services)', () => {
+  describe('4. HTTP Route Handlers Integration (/api/services) [KF01, KF02, KF03, KF04, KF08]', () => {
     const kCtrl = new KategoriJasaController();
     const pCtrl = new PemberiJasaController();
 
@@ -380,7 +380,7 @@ describe('Issue #5: Backend Pendaftaran Jasa, Katalog Kategori, dan Pencarian Te
       jest.restoreAllMocks();
     });
 
-    it('GET /api/services/categories mengembalikan 200 beserta daftar kategori terurut alfabetis dengan UUID', async () => {
+    it('[KF01 | ALGO-031] GET /api/services/categories mengembalikan 200 beserta daftar kategori terurut alfabetis dengan UUID', async () => {
       jest.spyOn(prisma.kategoriJasa, 'findMany').mockResolvedValue([
         {
           idKategoriJasa: KAT_CLEAN_ID,
@@ -410,7 +410,7 @@ describe('Issue #5: Backend Pendaftaran Jasa, Katalog Kategori, dan Pencarian Te
       expect(resObj.body.data[0].jenisJasa).toBe('Jasa Kebersihan Rumah');
     });
 
-    it('POST /api/services/register mengembalikan 400 jika tarif negatif atau field kosong', async () => {
+    it('[KF04 | ALGO-033] POST /api/services/register mengembalikan 400 jika tarif negatif atau field kosong', async () => {
       const { req: reqNeg, res: resNeg, resObj: resObjNeg } = createMockReqRes({
         body: {
           jenisJasa: 'Jasa Kebersihan',
@@ -438,7 +438,7 @@ describe('Issue #5: Backend Pendaftaran Jasa, Katalog Kategori, dan Pencarian Te
       expect(resObjEmpty.body.success).toBe(false);
     });
 
-    it('GET /api/services/search mengembalikan penyedia jasa terurut terdekat berdasarkan koordinat user', async () => {
+    it('[KF02, KF03 | KNF05] GET /api/services/search mengembalikan penyedia jasa terurut terdekat berdasarkan koordinat user', async () => {
       jest.spyOn(prisma.pemberiJasa, 'findMany').mockResolvedValue([
         {
           idPemberiJasa: PJ_DEDI_ID,
@@ -516,10 +516,80 @@ describe('Issue #5: Backend Pendaftaran Jasa, Katalog Kategori, dan Pencarian Te
       expect(resObj.body.data[1].idPemberiJasa).toBe(PJ_DEDI_ID);
       expect(resObj.body.data[0].jarakKm).toBeLessThan(resObj.body.data[1].jarakKm);
     });
+
+    it('[KF08 | ALGO-002, ALGO-009, ALGO-011] GET /api/services/:id mengembalikan 200 beserta detail lengkap jasa dan lokasi pemberi jasa', async () => {
+      jest.spyOn(prisma.pemberiJasa, 'findUnique').mockResolvedValueOnce({
+        idPemberiJasa: PJ_AHMAD_ID,
+        namaToko: 'Ahmad Jaya AC',
+        idKategoriJasa: KAT_AC_ID,
+        jenisJasa: 'Perbaikan Elektronik & AC',
+        latitude: -6.8915,
+        longitude: 107.6107,
+        statusKetersediaan: 'Available',
+        isOnline: true,
+        version: 1,
+        pengguna: {
+          idPengguna: PJ_AHMAD_ID,
+          namaPengguna: 'Ahmad Teknik',
+          username: 'ahmad',
+          password: 'pw',
+          email: 'ahmad@cariuang.id',
+          nomorTelpon: '081298765431',
+          role: 'PEMBERI_JASA',
+          avatarUrl: null,
+          akumulasiRating: 4.9,
+          riwayatRating: [4.9],
+        },
+        kategoriJasa: {
+          idKategoriJasa: KAT_AC_ID,
+          jenisJasa: 'Perbaikan Elektronik & AC',
+          deskripsiJasa: 'Servis cuci AC dan perbaikan elektronik rumah tangga',
+          tarif: 120000,
+          jamKerja: '09:00 - 20:00',
+          daerahKerja: 'Seluruh Kota Bandung',
+        },
+      } as any);
+
+      const { req, res, resObj } = createMockReqRes({
+        params: { id: PJ_AHMAD_ID },
+      });
+      await pCtrl.getServiceByIdHandler(req, res);
+
+      expect(resObj.statusCode).toBe(200);
+      expect(resObj.body.success).toBe(true);
+      expect(resObj.body.data.idPemberiJasa).toBe(PJ_AHMAD_ID);
+      expect(resObj.body.data.namaToko).toBe('Ahmad Jaya AC');
+      expect(resObj.body.data.tarif).toBe(120000);
+      expect(resObj.body.data.latitude).toBe(-6.8915);
+      expect(resObj.body.data.longitude).toBe(107.6107);
+      expect(resObj.body.data.daerahKerja).toBe('Seluruh Kota Bandung');
+    });
+
+    it('[KF08 | ALGO-009] GET /api/services/:id mengembalikan 400 jika ID kosong atau hanya spasi', async () => {
+      const { req, res, resObj } = createMockReqRes({
+        params: { id: '   ' },
+      });
+      await pCtrl.getServiceByIdHandler(req, res);
+
+      expect(resObj.statusCode).toBe(400);
+      expect(resObj.body.success).toBe(false);
+    });
+
+    it('[KF08 | ALGO-002, ALGO-009] GET /api/services/:id mengembalikan 404 jika pemberi jasa tidak ditemukan', async () => {
+      jest.spyOn(prisma.pemberiJasa, 'findUnique').mockResolvedValueOnce(null);
+
+      const { req, res, resObj } = createMockReqRes({
+        params: { id: '999e8400-e29b-41d4-a716-446655449999' },
+      });
+      await pCtrl.getServiceByIdHandler(req, res);
+
+      expect(resObj.statusCode).toBe(404);
+      expect(resObj.body.success).toBe(false);
+    });
   });
 
-  describe('5. Issue #6: Pendaftaran Penyedia Jasa (UC01)', () => {
-    it('POST /api/services/register mengembalikan 201, mengubah role menjadi PEMBERI_JASA, dan menyimpan namaToko', async () => {
+  describe('5. Issue #6: Pendaftaran Penyedia Jasa [KF04, KF05 | UC01]', () => {
+    it('[KF04, KF05 | UC01] POST /api/services/register mengembalikan 201, mengubah role menjadi PEMBERI_JASA, dan menyimpan namaToko', async () => {
       const mockKategori = new MockKategoriJasa();
       const mockPemberi = new MockPemberiJasa();
       const kCtrl = new KategoriJasaController(
@@ -548,7 +618,7 @@ describe('Issue #5: Backend Pendaftaran Jasa, Katalog Kategori, dan Pencarian Te
       expect(resObj.body.data.pemberiJasa.role).toBe('PEMBERI_JASA');
     });
 
-    it('POST /api/services/register mengembalikan 400 jika namaToko kosong', async () => {
+    it('[KF04 | UC01] POST /api/services/register mengembalikan 400 jika namaToko kosong', async () => {
       const kCtrl = new KategoriJasaController(
         new MockKategoriJasa(),
         new PemberiJasaController(new MockPemberiJasa())
@@ -572,7 +642,7 @@ describe('Issue #5: Backend Pendaftaran Jasa, Katalog Kategori, dan Pencarian Te
       expect(resObj.body.success).toBe(false);
     });
 
-    it('POST /api/services/register mengembalikan 400 jika idPemberiJasa tidak dikirim', async () => {
+    it('[KF04 | UC01] POST /api/services/register mengembalikan 400 jika idPemberiJasa tidak dikirim', async () => {
       const kCtrl = new KategoriJasaController(
         new MockKategoriJasa(),
         new PemberiJasaController(new MockPemberiJasa())
@@ -595,7 +665,7 @@ describe('Issue #5: Backend Pendaftaran Jasa, Katalog Kategori, dan Pencarian Te
       expect(resObj.body.success).toBe(false);
     });
 
-    it('POST /api/services/register mengembalikan 404 jika idPemberiJasa tidak dikenal', async () => {
+    it('[KF04, KF05 | UC01] POST /api/services/register mengembalikan 404 jika idPemberiJasa tidak dikenal', async () => {
       const kCtrl = new KategoriJasaController(
         new MockKategoriJasa(),
         new PemberiJasaController(new MockPemberiJasa())
