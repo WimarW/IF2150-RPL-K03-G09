@@ -1,5 +1,4 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RootStackParamList, ScreenName } from './types';
 import { BottomTabNavigator } from './BottomTabNavigation';
@@ -150,76 +149,27 @@ export const RootNavigator: React.FC = () => {
       <Stack.Screen
         name="CreateTicket"
         component={CreateTicketScreen}
-        options={{
-          headerShown: true,
-          title: 'Buat Pengaduan',
-          headerStyle: { backgroundColor: '#1A5C4D' },
-          headerTintColor: '#FFFFFF',
-          headerTitleStyle: { fontWeight: 'bold' },
-        }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="MyTickets"
         component={MyTicketsScreen}
-        options={{
-          headerShown: true,
-          title: 'Daftar Tiket Saya',
-          headerStyle: { backgroundColor: '#1A5C4D' },
-          headerTintColor: '#FFFFFF',
-          headerTitleStyle: { fontWeight: 'bold' },
-        }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="TicketDetail"
         component={TicketDetailScreen}
-        options={{
-          headerShown: true,
-          title: 'Ruang Diskusi Tiket',
-          headerStyle: { backgroundColor: '#1A5C4D' },
-          headerTintColor: '#FFFFFF',
-          headerTitleStyle: { fontWeight: 'bold' },
-        }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="CSDashboard"
         component={CSDashboardScreen}
-        options={({ navigation }) => ({
-          headerShown: true,
-          title: 'Meja Kerja CS',
-          headerStyle: { backgroundColor: '#1A5C4D' },
-          headerTintColor: '#FFFFFF',
-          headerTitleStyle: { fontWeight: 'bold' },
-          headerRight: () => (
-            <TouchableOpacity
-              testID="cs-profile-avatar-button"
-              style={styles.csHeaderProfileBtn}
-              onPress={() => navigation.navigate('Profile')}
-              activeOpacity={0.8}
-            >
-              <Text style={styles.csHeaderProfileText}>Profil</Text>
-            </TouchableOpacity>
-          ),
-        })}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="CSHome"
         component={CSDashboardScreen}
-        options={({ navigation }) => ({
-          headerShown: true,
-          title: 'Meja Kerja CS',
-          headerStyle: { backgroundColor: '#1A5C4D' },
-          headerTintColor: '#FFFFFF',
-          headerTitleStyle: { fontWeight: 'bold' },
-          headerRight: () => (
-            <TouchableOpacity
-              style={styles.csHeaderProfileBtn}
-              onPress={() => navigation.navigate('Profile')}
-              activeOpacity={0.8}
-            >
-              <Text style={styles.csHeaderProfileText}>Profil</Text>
-            </TouchableOpacity>
-          ),
-        })}
+        options={{ headerShown: false }}
       />
       {/* Penilaian & Ulasan (UC10 - UI-11) */}
       <Stack.Screen
@@ -230,19 +180,5 @@ export const RootNavigator: React.FC = () => {
     </Stack.Navigator>
   );
 };
-
-const styles = StyleSheet.create({
-  csHeaderProfileBtn: {
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 10,
-  },
-  csHeaderProfileText: {
-    color: '#FFFFFF',
-    fontSize: 13,
-    fontWeight: '700',
-  },
-});
 
 export default RootNavigator;

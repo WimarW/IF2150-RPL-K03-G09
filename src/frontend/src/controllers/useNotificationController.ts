@@ -17,7 +17,7 @@ export function useNotificationController() {
   const [snackbarMessage, setSnackbarMessage] = useState<string | null>(null);
 
   const { setUnreadNotifications } = useUnreadCounts();
-  const { isPenyediaJasa } = useSessionUser();
+  const { isPenyediaJasa, isCS } = useSessionUser();
 
   const loadNotifications = useCallback(
     async (isSilent = false) => {
@@ -61,14 +61,27 @@ export function useNotificationController() {
         notificationService.markAsRead(item.idNotifikasi).catch(() => {});
       }
 
-      if (item.tipe === 'PESAN_BARU' || item.tipe === 'INFO_TIKET' || item.tipe === 'PESANAN_BARU') {
+      if (item.tipe === 'INFO_TIKET') {
+        const ticketId =
+          item.refId || item.isiNotifikasi.match(/#([A-Za-z0-9-]+)/)?.[1];
+        if (ticketId) {
+          return {
+            targetScreen: 'TicketDetail',
+            params: { ticketId },
+          };
+        }
+        return {
+          targetScreen: isCS ? 'CSDashboard' : 'MyTickets',
+        };
+      }
+
+      if (item.tipe === 'PESAN_BARU' || item.tipe === 'PESANAN_BARU') {
         const partnerId = item.refId || 'user-budi-wijaya';
-        const isCS = item.tipe === 'INFO_TIKET';
-        const partnerName = isCS ? 'Layanan Pelanggan' : 'Mitra Jasa';
+        const partnerName = 'Mitra Jasa';
         if (isPenyediaJasa) {
           return {
             targetScreen: 'ProviderChat',
-            params: { partnerId, partnerName, isCS },
+            params: { partnerId, partnerName, isCS: false },
           };
         }
         return {
@@ -78,7 +91,7 @@ export function useNotificationController() {
             namaPemberiJasa: partnerName,
             partnerId,
             partnerName,
-            isCS,
+            isCS: false,
             isOnline: true,
           },
         };
@@ -86,7 +99,7 @@ export function useNotificationController() {
 
       return null;
     },
-    [isPenyediaJasa, setUnreadNotifications]
+    [isCS, isPenyediaJasa, setUnreadNotifications]
   );
 
   const onRefresh = useCallback(async () => {
