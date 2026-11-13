@@ -137,7 +137,7 @@
 | 28-10-2026 | Vinsensius Juan Setiady |  Finalisasi Tubes | 180 menit | Done | - |
 | 28-10-2026 | Naufal Hasbialhaq |  Finalisasi Tubes | 180 menit | Done | - |
 
-### Milestone 8
+### Milestone 9
 | Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
 | :--- | :--- | :--- | :--- | :--- | :--- | 
 | 3-11-2026 | Naufal Hasbialhaq |  Init directory project | 1 jam | Done | - |
