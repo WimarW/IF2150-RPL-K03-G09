@@ -207,17 +207,13 @@ Tabel B.2. Bukti Best Practices
 
 ### B.2.1 Profiling dan Optimasi
 
-Pilih minimal satu fitur yang diprofil.
-
 | Informasi | Keterangan |
 | :--- | :--- |
-| Fitur / proses yang diprofil | *[Nama fitur]* |
-| Alat | *[mis. Chrome DevTools, cProfile, EXPLAIN]* |
-| Temuan (sebelum) | *[Bottleneck yang ditemukan, sertakan angka/tangkapan layar]* |
-| Perbaikan | *[Yang diubah]* |
-| Hasil (sesudah) | *[Perbandingan dengan sebelumnya]* |
-
-Jika tidak ada perbaikan yang perlu dilakukan, jelaskan hasil profiling dan alasan kenapa fitur tersebut sudah memadai.
+| Fitur / proses yang diprofil | Pencarian Penyedia Jasa (Q-002, Q-003), Kalkulasi Akumulasi Rating (Q-025), serta query pendukung untuk Riwayat Komunikasi (Q-022) dan Filter Tiket Laporan pada PostgreSQL. |
+| Alat | PostgreSQL 18 `EXPLAIN (ANALYZE, BUFFERS)` |
+| Temuan (sebelum) | - **Q-002 (Detail Penyedia Jasa):** Menggunakan *Bitmap Index Scan* pada `pemberi_jasa_pkey` dan *Index Scan* pada `pengguna_pkey`. **Execution Time:** `0.065 ms`, **Buffers:** `shared hit=7`. <br>- **Q-003 (Pencarian Penyedia Jasa by Kategori):** Melakukan *Sequential Scan* (`Seq Scan`) pada tabel `pemberi_jasa` karena kolom `id_kategori_jasa` belum terindeks. **Execution Time:** `0.115 ms`, **Buffers:** `shared hit=110`.<br>- **Q-025 (Kalkulasi & Update Rating):** Menggunakan *Index Scan* pada `pengguna_pkey` disertai `SubPlan` `unnest(riwayat_rating)`. **Execution Time:** `0.467 ms`, **Buffers:** `shared hit=34`.<br>- **Q-022 (Riwayat Komunikasi, 10.000 baris):** Melakukan `Seq Scan` dan `Sort` di memori. **Execution Time:** `2.027 ms`, **Buffers:** `shared hit=304`.<br>- **Filter Tiket Laporan (`status_tiket = 'Open'`, 5.000 baris):** Melakukan `Seq Scan` pada `tiket_laporan`. **Execution Time:** `0.800 ms`, **Buffers:** `shared hit=93`.<br><br><img src="../M9/assets/optimize//beforeQ002.png" width="600"><br><br><img src="../M9/assets/optimize//beforeQ003.png" width="600"><br><br><img src="../M9/assets/optimize//beforeQ025.png" width="600"><br><br><img src="../M9/assets/optimize//beforeQ022.png" width="1000">|
+| Perbaikan | Menambahkan *B-Tree Index* pada kolom filter dan pengurutan yang sering diakses:<br>1. `CREATE INDEX idx_pemberi_jasa_kategori ON pemberi_jasa(id_kategori_jasa);`<br>2. `CREATE INDEX idx_komunikasi_users ON komunikasi(id_pengguna, id_penerima, waktu_terkirim);`<br>3. `CREATE INDEX idx_tiket_status ON tiket_laporan(status_tiket);`<br>Dilanjutkan dengan `ANALYZE` untuk memperbarui statistik *query planner*. |
+| Hasil (sesudah) | - **Q-002:** **Execution Time:** `0.053 ms` (turun ~18,5%), **Buffers:** `shared hit=8`.<br>- **Q-003:** Rencana eksekusi beralih dari `Seq Scan` menjadi `Bitmap Index Scan using idx_pemberi_jasa_kategori`. **Execution Time** turun dari `0.115 ms` menjadi `0.029 ms` (lebih cepat ~74,8%), **Buffers** turun drastis dari `shared hit=110` menjadi `shared hit=5`.<br>- **Q-025:** **Execution Time** turun dari `0.467 ms` menjadi `0.074 ms` (pengurangan akses buffer dari `shared hit=34` menjadi `shared hit=18`).<br>- **Q-022:** Beralih menjadi `Bitmap Index Scan using idx_komunikasi_users` dengan `BitmapOr`. **Execution Time** turun dari `2.027 ms` menjadi `0.127 ms` (lebih cepat ~93,7%), **Buffers:** `shared hit=21 read=5`.<br>- **Filter Tiket Laporan:** Beralih menjadi `Index Scan using idx_tiket_status`. **Execution Time** turun dari `0.800 ms` menjadi `0.084 ms` (lebih cepat ~89,5%), **Buffers:** `shared hit=93 read=2`.<br><br><br><br><img src="../M9/assets/optimize//afterQ002.png" width="600"><br><br><img src="../M9/assets/optimize//afterQ003.png" width="600"><br><br><img src="../M9/assets/optimize//afterQ025.png" width="600"><br><br><img src="../M9/assets/optimize//afterQ022.png" width="1000"> |
 
 ## B.3 Kendala dan Catatan Penting
 
