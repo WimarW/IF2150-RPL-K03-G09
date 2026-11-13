@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { Role } from '@prisma/client';
+import { prisma } from '../database/prisma';
 import { Pengguna } from '../models/Pengguna';
 import { JwtUserPayload } from '../middlewares/auth.middleware';
 
@@ -17,6 +18,10 @@ export interface RegistrationInputPayload {
     nomorTelpon?: string;
     nomorTelepon?: string;
     avatarUrl?: string;
+}
+
+export interface TriggerRatingParams {
+  idKontrak: string;
 }
 
 export interface ValidationResult {
@@ -405,7 +410,131 @@ export class PenggunaController {
         });
         }
     }
+
+    public static async verifikasiStatusPekerjaan(idKontrak: string): Promise<boolean> {
+        if (!idKontrak || idKontrak.trim().length === 0) {
+            return false;
+        }
+
+        const kontrak = await prisma.kontrakPekerjaan.findUnique({
+        where: {idKontrakPekerjaan: idKontrak.trim(),},
+        select: {statusPekerjaan: true,},
+        });
+
+        if (!kontrak) {
+            return false;
+        }
+
+        return kontrak.statusPekerjaan === 'Done';
+    }
+    public static async triggerRating(req: Request, res: Response): Promise<void> {
+        try {
+            const idPenggunaLogin = req.user?.idPengguna;
+            const { idKontrak } = req.params;
+
+            if (!idPenggunaLogin) {
+                res.status(401).json({
+                success: false,
+                message: 'Pengguna belum terautentikasi.',
+                });
+                return;
+            }
+
+            if (!idKontrak || idKontrak.trim().length === 0) {
+                res.status(400).json({
+                success: false,
+                message: 'ID kontrak pekerjaan wajib disertakan.',
+                });
+                return;
+            }
+
+            const cleanIdKontrak = idKontrak.trim();
+
+            const kontrak = await prisma.kontrakPekerjaan.findUnique({
+                where: { idKontrakPekerjaan: cleanIdKontrak },
+                select: {
+                idKontrakPekerjaan: true,
+                idPelanggan: true,
+                idPemberiJasa: true,
+                statusPekerjaan: true,
+                hasRating: true,
+                detailPekerjaan: true,
+                },
+            });
+
+            if (!kontrak) {
+                res.status(404).json({
+                success: false,
+                message: 'Kontrak pekerjaan tidak ditemukan.',
+                });
+                return;
+            }
+
+            const isPihakTerkait =
+                kontrak.idPelanggan === idPenggunaLogin ||
+                kontrak.idPemberiJasa === idPenggunaLogin;
+
+            if (!isPihakTerkait) {
+                res.status(403).json({
+                success: false,
+                message: 'Anda bukan pihak yang terlibat dalam kontrak pekerjaan ini.',
+                });
+                return;
+            }
+
+            if (kontrak.statusPekerjaan !== 'Done') {
+                res.status(400).json({
+                success: false,
+                message: 'Pekerjaan belum berstatus Done',
+                });
+                return;
+            }
+
+            const existingRating = await prisma.rating.findFirst({
+                where: {
+                    idKontrakPekerjaan: cleanIdKontrak,
+                    idPenggunaPemberi: idPenggunaLogin,
+                },
+            });
+
+            if (existingRating) {
+                res.status(400).json({
+                success: false,
+                message: 'Anda sudah memberikan rating untuk kontrak pekerjaan ini.',
+                });
+                return;
+            }
+
+            const idPenggunaPenerima =
+                kontrak.idPelanggan === idPenggunaLogin
+                ? kontrak.idPemberiJasa
+                : kontrak.idPelanggan;
+
+            res.status(200).json({
+                success: true,
+                message: 'Kontrak pekerjaan siap untuk diberi rating.',
+                data: {
+                canRate: true,
+                idKontrakPekerjaan: kontrak.idKontrakPekerjaan,
+                idPenggunaPemberi: idPenggunaLogin,
+                idPenggunaPenerima,
+                detailPekerjaan: kontrak.detailPekerjaan,
+                },
+            });
+        } catch (error: unknown) {
+            const errorMessage =
+                error instanceof Error ? error.message : 'Terjadi kesalahan internal server.';
+            res.status(500).json({
+                success: false,
+                message: errorMessage,
+            });
+        }
+  }
 }
+
+
+
+
 
 
 
