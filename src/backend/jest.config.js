@@ -10,6 +10,7 @@ module.exports = {
     '^.+\\.tsx?$': [
       'ts-jest',
       {
+        tsconfig: '<rootDir>/tests/tsconfig.json',
         diagnostics: {
           ignoreCodes: [151002],
         },
