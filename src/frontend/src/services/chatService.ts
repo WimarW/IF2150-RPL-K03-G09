@@ -170,6 +170,38 @@ const MOCK_MESSAGES_STORE: Record<string, ChatMessage[]> = {
       statusChat: 'SENT',
     },
   ],
+  'user-naufal-hasbialhaq': [
+    {
+      idChat: 'msg-naufal-1',
+      clientId: 'c-naufal-1',
+      idPengguna: 'user-naufal-hasbialhaq',
+      idPenerima: getCurrentUser().idPengguna,
+      isiPesan: 'Halo kak Budi, saya butuh jasa bersih-bersih rumah 2 jam.',
+      waktuTerkirim: new Date(Date.now() - 1000 * 60 * 26).toISOString(),
+      isChatTerbaca: true,
+      statusChat: 'SENT',
+    },
+    {
+      idChat: 'msg-naufal-2',
+      clientId: 'c-naufal-2',
+      idPengguna: getCurrentUser().idPengguna,
+      idPenerima: 'user-naufal-hasbialhaq',
+      isiPesan: 'Halo kak Naufal, untuk 2 jam harganya Rp 100.000 ya.',
+      waktuTerkirim: new Date(Date.now() - 1000 * 60 * 24).toISOString(),
+      isChatTerbaca: true,
+      statusChat: 'SENT',
+    },
+    {
+      idChat: 'msg-naufal-3',
+      clientId: 'c-naufal-3',
+      idPengguna: 'user-naufal-hasbialhaq',
+      idPenerima: getCurrentUser().idPengguna,
+      isiPesan: 'Oke kak, saya buat kontraknya dulu ya.',
+      waktuTerkirim: new Date(Date.now() - 1000 * 60 * 22).toISOString(),
+      isChatTerbaca: true,
+      statusChat: 'SENT',
+    },
+  ],
 };
 
 export const chatService = {

@@ -1,6 +1,8 @@
 /**
- * [Vinsensius Juan Setiady] UI-08 Ruang Obrolan Pelanggan
- * Traceability: UC02 (Langkah N4 pressChat), UC03, KF09, Kelas DPPL C20 KomunikasiUI, Antarmuka UI-08
+ * [Vinsensius Juan Setiady & Raymond] UI-08 Ruang Obrolan Pelanggan
+ * Traceability: UC02 (Langkah N4 pressChat), UC03, UC05, KF09, KF10, KF11,
+ * Kelas DPPL C17 KontrakPekerjaanUI, C18 KontrakPekerjaanController, C20 KomunikasiUI,
+ * Antarmuka UI-08 (UI-08-01 s.d. UI-08-12)
  * Kontrak params RootStackParamList['CustomerChat'] dipertahankan untuk kompatibilitas UC02.
  */
 
@@ -8,6 +10,7 @@ import React from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { RootStackScreenProps } from '../../navigation/types';
 import { useChatController } from '../../controllers/useChatController';
+import { useContractController } from '../../controllers/useContractController';
 import { ChatRoom } from './ChatRoom';
 import { CHAT_CONFIG } from '../../config/chatConfig';
 
@@ -37,11 +40,26 @@ export const CustomerChatView: React.FC<
     markConversationRead,
   } = useChatController(partnerId, partnerName, isCS, isOnline);
 
+  const {
+    contract,
+    formValues,
+    formErrors,
+    isSubmitting,
+    loadContract,
+    inputDetailPekerjaan,
+    kirimInput,
+  } = useContractController(isCS ? undefined : partnerId, {
+    onShowSnackbar: setSnackbarMessage,
+  });
+
   useFocusEffect(
     React.useCallback(() => {
       loadChatHistory(partnerId);
       markConversationRead(partnerId);
-    }, [partnerId, loadChatHistory, markConversationRead])
+      if (!isCS) {
+        void loadContract(true);
+      }
+    }, [partnerId, isCS, loadChatHistory, markConversationRead, loadContract])
   );
 
   const handleMorePress = () => {
@@ -71,6 +89,14 @@ export const CustomerChatView: React.FC<
       onBack={() => navigation.goBack()}
       onMorePress={handleMorePress}
       onPressAttach={handlePressAttach}
+      contract={contract}
+      contractFormValues={formValues}
+      contractFormErrors={formErrors}
+      isContractSubmitting={isSubmitting}
+      onContractFieldChange={inputDetailPekerjaan}
+      onCreateContract={() => {
+        void kirimInput();
+      }}
     />
   );
 };
