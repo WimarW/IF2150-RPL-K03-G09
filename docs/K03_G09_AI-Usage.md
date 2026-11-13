@@ -93,6 +93,9 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | Gemini | Implementasi UI kontrak pekerjaan dan riwayat berdasarkan rancangan dari M8 | Implementasikan frontend riwayat transaksi dan pekerjaan, filter status, pelaporan pekerjaan selesai oleh penyedia jasa, dan tombol konfirmasi penyelesaian oleh pelanggan serta tambahkan widget pada bagian chat untuk memasukkan detail pekerjaan | melihat dan menguji hasil apakah sudah sesuai dengan foto rancangan atau tidak|
 | Gemini | Perbaikan DockerFile dan DockerCompose | Mengapa file docker-compose.yml ini dan DockerFile untuk backend ini tidak dapat berjalan dengan error X | Melihat apakah masalah yang ditemukan valid dan mengkonfirmasi perbaikannya dengan testing |
 | Claude | Perbaikan bug dan error yang masih terjadi dalam app | Claude tolong cek file di branch develop terus kamu cari bugnya dan coba difix | mengecek hasilnya dengan testing lanjutan untuk menambahkan ekkurangan yang masih ada |
+| Gemini | Mengimplementasi semuanya hal-hal tentang: Backend Pendaftaran Jasa, Katalog Kategori, dan Pencarian Terdekat, UI Pendaftaran Layanan Penyedia Jasa, UI Beranda Pelanggan, Rekomendasi Pencarian, Hasil Pencarian, dan Integrasi Peta Lokasi, testing dan finalisasi   | Analisis file issues.md yang berisi rencana kerja setiap orang, lalu buatkan prompt untuk mengimplementasikannya|- |
+| Gemini | Menginisiasi project directory dan rencana kerja | Memberikan file dppl dan sppl, lalu buatkan rencana kerja untuk 5 orang | - |
+
 
 
 ---
