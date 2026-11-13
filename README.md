@@ -166,8 +166,78 @@ cd ../..
 ```
 
 ---
+## 5. Menjalankan Backend, Frontend, dan Database Bersamaan dengan Docker
 
-## 5. Daftar Akun & Kredensial Uji Coba
+Seluruh *stack* (`db`, `backend`, dan `frontend`) telah dikonfigurasi pada `src/docker-compose.yml` sehingga dapat dibangun dan dijalankan secara bersamaan dalam satu perintah.
+
+### A. Persiapan Environment (`src/.env`)
+Salin berkas `src/.env.example` ke `src/.env` sebelum menjalankan Docker Compose:
+
+```bash
+cp src/.env.example src/.env
+```
+
+Sesuaikan nilai `EXPO_PUBLIC_API_URL` (dan opsional `REACT_NATIVE_PACKAGER_HOSTNAME`) pada `src/.env` sesuai perangkat pengujian agar aplikasi Expo dapat menghubungi API backend pada port `5000`:
+
+* **HP Fisik (Expo Go):** gunakan IP Wi-Fi lokal laptop, misalnya:
+  ```env
+  REACT_NATIVE_PACKAGER_HOSTNAME=<IP_WIFI_LAPTOP>
+  EXPO_PUBLIC_API_URL=http://<IP_WIFI_LAPTOP>:5000/api
+  ```
+* **Android Emulator:**
+  ```env
+  EXPO_PUBLIC_API_URL=http://10.0.2.2:5000/api
+  ```
+* **Web Browser / iOS Simulator:**
+  ```env
+  EXPO_PUBLIC_API_URL=http://localhost:5000/api
+  ```
+
+### B. Build dan Jalankan Seluruh Container
+Pastikan Docker sudah aktif, lalu jalankan perintah berikut dari root repository:
+
+```bash
+cd src
+docker compose up -d --build
+```
+
+Perintah di atas akan menjalankan tiga service secara berurutan:
+1. **`db` (`cariuang-db`):** PostgreSQL 16 pada port host `5433` dengan *persistent volume* `pgdata`.
+2. **`backend` (`cariuang-backend`):** Menunggu `db` berstatus *healthy*, menjalankan `npx prisma migrate deploy`, lalu menyalakan API & Socket.IO pada port `5000` (dengan *volume* `uploads` untuk lampiran/foto).
+3. **`frontend` (`cariuang-frontend`):** Menjalankan `npx expo start --tunnel ngrok` pada port `8081`, `19000`, `19001`, dan `19002`.
+
+### C. Seed Data Awal & Menampilkan QR Code Expo
+Container `backend` hanya menjalankan migrasi skema secara otomatis. Untuk mengisi data awal (`prisma/seed.ts`), jalankan:
+
+```bash
+docker exec -it cariuang-backend npx prisma db seed
+```
+
+Untuk melihat QR code Expo Go dan memantau log service yang sedang berjalan:
+
+```bash
+# Menampilkan QR code Expo & log frontend
+docker compose logs -f frontend
+
+# Memantau status seluruh container
+docker compose ps
+
+# Memantau log backend
+docker compose logs -f backend
+```
+
+*(Tekan `Ctrl + C` untuk keluar dari tampilan log tanpa mematikan container.)*
+
+### D. Menghentikan Container
+Untuk menghentikan seluruh service yang berjalan di latar belakang:
+
+```bash
+cd src
+docker compose down
+```
+
+*(Gunakan `docker compose down -v` apabila Anda juga ingin menghapus volume data PostgreSQL `pgdata` dan berkas `uploads`.)*
+## 6. Daftar Akun & Kredensial Uji Coba
 
 Gunakan kredensial akun uji coba berikut yang telah terisi secara otomatis melalui `prisma/seed.ts`:
 
@@ -181,7 +251,7 @@ Gunakan kredensial akun uji coba berikut yang telah terisi secara otomatis melal
 
 ---
 
-## 6. Daftar Modul/Fitur & Pembagian Tugas Anggota
+## 7. Daftar Modul/Fitur & Pembagian Tugas Anggota
 
 | NIM | Nama Anggota | Use Case & Antarmuka | Deskripsi Modul & Kontribusi |
 |---|---|---|---|
@@ -193,7 +263,7 @@ Gunakan kredensial akun uji coba berikut yang telah terisi secara otomatis melal
 
 ---
 
-## 7. Struktur Basis Data & Relasi Tabel
+## 8. Struktur Basis Data & Relasi Tabel
 
 Aplikasi menggunakan skema basis data relasional PostgreSQL yang dimodelkan melalui Prisma ORM (`src/backend/prisma/schema.prisma`):
 
