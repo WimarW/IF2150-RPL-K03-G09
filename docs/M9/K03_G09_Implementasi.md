@@ -7,36 +7,24 @@ IMPLEMENTASI PERANGKAT LUNAK
 </h1>
 <br>
 
-## *Nama Perangkat Lunak*
-### *[Logo Perangkat Lunak]*
+## Cari Uang
+### <img src="../M7/assets/diagram//cariuang.svg" width="100" height="100">
 
-### Untuk: *[Nama Asisten]*
+### Untuk: Agatha Tatianingseto
 
 Dipersiapkan oleh:
 | Informasi | Keterangan |
 | --- | --- |
-| Kelas | *\[Kelas\]* |
-| Kelompok | *\[Nomor Kelompok\]*  |
+| Kelas | 3 |
+| Kelompok | 9 |
 
 | NIM | Nama |
 |---|---|
-| *[NIM 1]* | *[Nama Anggota 1]* |
-| *[NIM 2]* | *[Nama Anggota 2]* |
-| *[NIM 3]* | *[Nama Anggota 3]* |
-| *[NIM 4]* | *[Nama Anggota 4]* |
-| *[NIM 5]* | *[Nama Anggota 5]* |
----
-
-> **Petunjuk pengerjaan:** *[Silahkan hapus bagian ini setelah selesai mengerjakan]*
->
-> Dokumen ini adalah **spesifikasi sekaligus template laporan singkat** Tugas 9. Bagian **Ketentuan Implementasi** (Bagian A) adalah aturan yang harus kalian ikuti, boleh dihapus dari laporan akhir. Bagian **Laporan Implementasi** (Bagian B) adalah yang **wajib kalian isi**. Gunakan nama, ID, kebutuhan, use case, dan kelas yang konsisten dengan SKPL, APL, dan DPPL.
-
----
-
-**Deadline:** Rabu, 11 November 2026, 21.50 WIB
-**Asistensi akbar:** *[Hari, DD Bulan YYYY, HH.MM WIB, lokasi/link]*
-
----
+| 13525120 | Naufal Hasbialhaq |
+| 13525009 | Wimar Widiarto |
+| 13525093 | Vinsensius Juan Setiady |
+| 13525126 | Raymond Edson Sabajan |
+| 13525048 | Yohanes Nicholas Setiawan |
 
 # BAGIAN A: Ketentuan Implementasi
 
@@ -283,6 +271,4 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | C29 | NotifikasiUI | Komponen layar + Hook | `frontend/views/chat/notifications/NotificationView.tsx` - `NotificationView` (UI-13); `frontend/components/notifications/NotificationCard.tsx`; `frontend/controllers/useNotificationController.ts`; `frontend/services/notificationService.ts`; `frontend/context/UnreadContext.tsx`; `frontend/components/chat/UnreadBadge.tsx` | `showNotifikasi` menjadi daftar notifikasi dan `NotificationCard`. `pressNotifikasi` menjadi `onItemPress`/`handleNotificationPress`. `closeNotifikasi` menjadi tombol kembali. Jumlah belum dibaca ditampilkan lewat `UnreadBadge`. `playSound`/`stopSound` tidak diimplementasikan (lihat B.1 No. 15). |
 | C30 | NotifikasiController | Kelas (Controller) + Route | `backend/controllers/NotifikasiController.ts` - `NotifikasiController`, `ExpoPushGateway`; `backend/routes/notifications.routes.ts` - `GET /api/notifications`, `PATCH /api/notifications/read-all`, `PATCH /api/notifications/:id/read` | `buatNotifikasi` dan `kirimNotifikasi` dengan nama yang sama; notifikasi disimpan lalu dipancarkan *realtime* (Socket.IO) dan sebagai *push notification*. Dipakai oleh C18 (kontrak), C21 (chat), C24 dan C12 (tiket). Ditambah `getNotifikasiPengguna`, `tandaiSatuNotifikasiTerbaca`, `tandaiSemuaNotifikasiTerbaca`. |
 
-Catatan:
-- Satu kelas perancangan boleh diwujudkan oleh beberapa file/unit, dan satu file/unit boleh mewujudkan beberapa kelas perancangan. Tuliskan semuanya.
-- Kelas perancangan yang **tidak diimplementasikan** atau **digabung/dipecah** tetap dicantumkan, dan alasannya dicatat di Bagian B.1.
+
