@@ -1,6 +1,6 @@
 # CariUang
 
-### <img src="../M7/assets/diagram//cariuang.svg" width="100" height="100">
+### <img src="./docs/M7/assets/diagram/cariuang.svg" width="100" height="100">
 
 ---
 
