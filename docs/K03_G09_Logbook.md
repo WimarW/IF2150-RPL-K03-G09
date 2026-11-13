@@ -106,6 +106,7 @@
 
 
 ### Milestone 6
+
 | Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
 | :--- | :--- | :--- | :--- | :--- | :--- | 
 | 07-10-2026 | Naufal Hasbialhaq |  Mengerjakan Bab 1 dan 2 | 120 menit | Done | - |
@@ -114,9 +115,8 @@
 | 07-10-2026 | Yohanes Nicholas Setiawan | Pembuatan Diagram Bab 1 | 120 menit  | 120 menit | Done | - |
 | 07-10-2026 | Vinsensius Juan Setiady | Membuat diagram bab 3 | 120 menit | Done | - |
 
-
-
 ### Milestone 7
+
 | Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
 | :--- | :--- | :--- | :--- | :--- | :--- | 
 | 18-10-2026 | Naufal Hasbialhaq |  sq UC01 normal | 120 menit | Done | - |
@@ -127,8 +127,8 @@
 | 21-10-2026 | Raymond Edson Sabajan | UC04-UC06 | 3 jam  | Done | - |
 | 21-10-2026 | Naufal Hasbialhaq | UC02 dan UC03 | 3 jam  | Done | - |
 
-
 ### Milestone 8
+
 | Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
 | :--- | :--- | :--- | :--- | :--- | :--- | 
 | 28-10-2026 | Naufal Hasbialhaq |  Finalisasi Tubes | 180 menit | Done | - |
@@ -137,7 +137,8 @@
 | 28-10-2026 | Vinsensius Juan Setiady |  Finalisasi Tubes | 180 menit | Done | - |
 | 28-10-2026 | Naufal Hasbialhaq |  Finalisasi Tubes | 180 menit | Done | - |
 
-### Milestone 8
+### Milestone 9
+
 | Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
 | :--- | :--- | :--- | :--- | :--- | :--- | 
 | 3-11-2026 | Naufal Hasbialhaq |  Init directory project | 1 jam | Done | - |
@@ -146,6 +147,8 @@
 | 8-11-2026 | Naufal Hasbialhaq |  UI Beranda Pelanggan, Rekomendasi Pencarian, Hasil Pencarian, dan Integrasi Peta Lokasi | 2 jam | Done | - |
 | 8-11-2026 | Raymond Edson Sabajan |  Implementasi Backend UC 5-7 | 2 jam | Done | - |
 | 10-11-2026 | Raymond Edson Sabajan |  Menghubungkan Backend pengguna dan perbaikan error | 1 jam | Done | - |
+| 10-11-2026 | Vinsensius Juan Setiady | Mengimplementasikan backend untuk notifikasi dan komunikasi | 3 jam | Done | - |
+| 11-11-2026 | Vinsensius Juan Setiady | Mengimplementasikan frontend untuk notifikasi dan komunikasi | 3 jam | Done | - |
 | 11-11-2026 | Raymond Edson Sabajan |  Menghubungkan Backend notifikasi | 1 jam | Done | - |
 | 11-11-2026 | Wimar Widiarto | Implementasi login dan registrasi | 3 jam | Done | - | 
 | 12-11-2026 | Wimar Widiarto | Implementasi 2 way rating | 5 Jam | Done | - |
@@ -155,3 +158,4 @@
 | 12-11-2026 | Yohanes Nicholas Setiawan | Implementasi CS ticketing, fix frontend ditutupi keyboard | 5 Jam | Done | - |
 | 13-11-2026 | Yohanes Nicholas Setiawan | Membantu proses debugging aplikasi | 3 Jam | Done | - |
 | 13-11-2026 | Wimar Widiarto | Membantu proses debugging aplikasi | 3 Jam | Done | - | 
+|
