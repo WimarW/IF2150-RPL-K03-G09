@@ -285,7 +285,7 @@ const OnProgressCard: React.FC<OnProgressCardProps> = React.memo(
             {activeOrder.judulPekerjaan}
           </Text>
           <Text style={styles.onProgressDate} numberOfLines={1}>
-            {formatTanggalPesanan(activeOrder.createdAt)}
+            {activeOrder.tanggalLabel ?? formatTanggalPesanan(activeOrder.createdAt)}
           </Text>
         </View>
         <Ionicons
