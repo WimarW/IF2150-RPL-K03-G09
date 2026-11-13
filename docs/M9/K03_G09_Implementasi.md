@@ -206,7 +206,10 @@ Tabel B.2. Bukti Best Practices
 | Semantic commit | https://github.com/WimarW/IF2150-RPL-K03-G09/commits/main/ <br> https://github.com/WimarW/IF2150-RPL-K03-G09/commits/develop | Message commit mengikuti aturan semantic commit |
 | Track tasks | https://github.com/WimarW/IF2150-RPL-K03-G09/issues | 30 Issues <br>  |
 | Pull request dan review | https://github.com/WimarW/IF2150-RPL-K03-G09/pull/35<br>https://github.com/WimarW/IF2150-RPL-K03-G09/pull/34<br>https://github.com/WimarW/IF2150-RPL-K03-G09/pull/36<br>https://github.com/WimarW/IF2150-RPL-K03-G09/pull/38<br> | Review PR biasa dilakukan oleh Juan dan Hasbi karena paling familiar dengan web development, namun anggota lain juga melakukan beberapa review pr |
-| Pengujian | *[Tautan ke `src/tests/` dan hasil test]* | *[Apa yang diuji, cara menjalankan]* |
+| Pengujian | src/backend/tests/
+test-execution-log.md | src/backend/tests/
+test-execution-log.md | Yang diuji: Unit & integration test backend menggunakan Jest (6 suite, 106 test case, 100% pass) yang mencakup seluruh KF01–KF21 SKPL dan ALGO-XXX DPPL2 (autentikasi, katalog & detail jasa, chat, kontrak pekerjaan, tiket laporan CS, dan rating) secara in-memory mock.
+Cara menjalankan: cd src/backend && npm test |
 
 ### B.2.1 Profiling dan Optimasi
 
