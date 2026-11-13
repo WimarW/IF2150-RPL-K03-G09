@@ -41,6 +41,17 @@ export type RootStackParamList = {
   // Didaftarkan oleh branch UI-13 / UI-14
   Notification: undefined; // UI-13 (Vinsensius)
   Profile: undefined; // UI-14 (Wimar)
+  // UI-11 Beri Rating (UC10)
+  Rating: {
+    idKontrak: string;
+    idPemberiJasa: string;
+    namaPemberiJasa: string;
+    kategoriJasa?: string;
+    rincianPekerjaan: string;
+    tanggalSelesai: string;
+    biayaLayanan: number;
+    inisialPemberiJasa?: string;
+  };
 };
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> =

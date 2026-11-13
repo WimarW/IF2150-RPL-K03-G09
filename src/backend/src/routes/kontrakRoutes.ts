@@ -37,6 +37,7 @@ export function createKontrakRouter(
   /**
    * Mengambil daftar riwayat kontrak pengguna yang sedang login (UI-10 & UI-12)
    */
+  router.get('/riwayat', authenticateJWT, controller.handleGetDaftarKontrak);
   router.get('/', authenticateJWT, controller.handleGetDaftarKontrak);
 
   /**

@@ -47,6 +47,12 @@ export interface DummyContract {
   idKontrakPekerjaan?: string;
   idPelanggan?: string;
   idPemberiJasa?: string;
+  namaPelanggan?: string;
+  inisialPelanggan?: string;
+  namaPemberiJasa?: string;
+  inisialPemberiJasa?: string;
+  kategoriJasa?: string;
+  rincianPekerjaan?: string;
   jasa: string;
   deskripsi: string;
   detailPekerjaan?: string;
@@ -55,12 +61,60 @@ export interface DummyContract {
   status: ContractCardStatus;
   statusPekerjaan?: StatusPekerjaan;
   hasRating?: boolean;
+  nilaiRating?: number | null;
+  komentar?: string | null;
   waktu: string;
+  tanggalWaktu?: string;
+  tanggalSelesai?: string;
   createdAt?: string;
   expiresAt?: string | null;
 }
 
 export type ContractRecord = DummyContract;
+
+export type HistoryFilterTab = 'Semua' | 'Selesai' | 'On Progress';
+
+export type HistoryDisplayStatus = 'On Progress' | 'Selesai' | 'Dibatalkan';
+
+export interface CustomerTransactionItem {
+  idKontrak: string;
+  idPelanggan?: string;
+  idPemberiJasa: string;
+  namaPemberiJasa: string;
+  inisialPemberiJasa: string;
+  kategoriJasa?: string;
+  rincianPekerjaan: string;
+  deskripsi?: string;
+  tanggalWaktu: string;
+  tanggalSelesai?: string;
+  totalHarga: number;
+  statusDisplay: HistoryDisplayStatus;
+  statusPekerjaan: StatusPekerjaan;
+  hasRating: boolean;
+  nilaiRating?: number | null;
+  komentar?: string | null;
+}
+
+export interface ProviderJobItem {
+  idKontrak: string;
+  idPelanggan: string;
+  idPemberiJasa: string;
+  namaPelanggan: string;
+  inisialPelanggan: string;
+  namaPemberiJasa?: string;
+  inisialPemberiJasa?: string;
+  kategoriJasa?: string;
+  rincianPekerjaan: string;
+  deskripsi?: string;
+  tanggalWaktu: string;
+  tanggalSelesai?: string;
+  totalHarga: number;
+  statusDisplay: HistoryDisplayStatus;
+  statusPekerjaan: StatusPekerjaan;
+  hasRating: boolean;
+  nilaiRating?: number | null;
+  komentar?: string | null;
+}
 
 export interface ContractFormValues {
   jasa: string;

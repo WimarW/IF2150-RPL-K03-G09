@@ -98,6 +98,7 @@ export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 export interface ApiRequestOptions {
   method?: HttpMethod;
   body?: unknown;
+  headers?: Record<string, string>;
 }
 
 export interface ApiResponse<T> {
@@ -140,6 +141,7 @@ export async function apiRequest<T>(
         'Content-Type': 'application/json',
         Accept: 'application/json',
         ...(currentAuthToken ? { Authorization: `Bearer ${currentAuthToken}` } : {}),
+        ...(options?.headers ?? {}),
       },
       body:
         options?.body !== undefined ? JSON.stringify(options.body) : undefined,
