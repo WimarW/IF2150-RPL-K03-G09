@@ -154,4 +154,4 @@
 | 13-11-2026 | Naufal Hasbialhaq |  Mengimplementasikan testing dan finalisasi | 3 jam | Done | - |
 | 12-11-2026 | Yohanes Nicholas Setiawan | Implementasi CS ticketing, fix frontend ditutupi keyboard | 5 Jam | Done | - |
 | 13-11-2026 | Yohanes Nicholas Setiawan | Membantu proses debugging aplikasi | 3 Jam | Done | - |
-| 13-11-2026 | Wimar Widiarto | Membantu proses debugging aplikasi | 3 Jam | Done | - | 
+| 13-11-2026 | Wimar Widiarto | Membantu proses debugging aplikasi | 3 Jam | Done | - | g
