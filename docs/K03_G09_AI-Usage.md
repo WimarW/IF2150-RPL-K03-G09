@@ -96,6 +96,7 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | Gemini | Mengimplementasi semuanya hal-hal tentang: Backend Pendaftaran Jasa, Katalog Kategori, dan Pencarian Terdekat, UI Pendaftaran Layanan Penyedia Jasa, UI Beranda Pelanggan, Rekomendasi Pencarian, Hasil Pencarian, dan Integrasi Peta Lokasi, testing dan finalisasi   | Analisis file issues.md yang berisi rencana kerja setiap orang, lalu buatkan prompt untuk mengimplementasikannya|- |
 | Gemini | Menginisiasi project directory dan rencana kerja | Memberikan file dppl dan sppl, lalu buatkan rencana kerja untuk 5 orang | - |
 | Gemini | Mengimplementasikan sistem rating dua arah | Memberikan file dppl, struktur direktori dan apa yang perlu diimplementasikan | - |
+| Gemini | Melakukan optimasi quary | buatkan langkah langkah bagaimana cara melakukan explain analyze postgre|- |
 
 
 
