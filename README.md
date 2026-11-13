@@ -56,17 +56,18 @@ cd ../..
 ### A. Konfigurasi Environment Variable (`.env`)
 
 #### 1. Backend (`src/backend/.env`)
-Salin berkas template `src/.env.example` ke dalam folder `src/backend/.env`:
+Salin berkas template `src/.env.example` ke `src/backend/.env`:
 
 ```bash
 cp src/.env.example src/backend/.env
 ```
 
-Isi berkas `src/backend/.env`:
+Pastikan isi `src/backend/.env` sesuai *(port `5433` disesuaikan dengan mapping port PostgreSQL pada `src/docker-compose.yml`)*:
+
 ```env
 PORT=5000
 NODE_ENV=development
-DATABASE_URL="postgresql://cariuang_user:cariuang_password@localhost:5432/cariuang_db?schema=public"
+DATABASE_URL="postgresql://cariuang_user:cariuang_password@localhost:5433/cariuang_db?schema=public"
 JWT_SECRET="kunci_rahasia_cariuang_2026_super_aman_minimal_32_karakter"
 JWT_EXPIRES_IN="7d"
 ```
@@ -110,21 +111,23 @@ cd ..
 
 ### C. Migrasi Skema Basis Data & Seed Data Awal
 
-Jalankan Prisma generate, migrasi skema tabel, dan pengisian data dummy awal:
+Jalankan Prisma generate, migrasi skema tabel, dan pengisian data dummy awal (pastikan container `db` pada langkah B sudah berstatus *healthy*):
 
 ```bash
 cd src/backend
 # Sinkronisasi client Prisma
 npm run db:generate
 
-# Jalankan migrasi schema ke PostgreSQL
-npm run db:migrate
+# Jalankan migrasi schema ke PostgreSQL (port 5433 sesuai src/docker-compose.yml)
+npx prisma migrate deploy
 
 # Isi database dengan data uji coba awal (seed)
 npm run db:seed
 
 cd ../..
 ```
+
+*(Alternatif jika Anda menjalankan seluruh stack via `cd src && docker compose up -d --build`: container backend sudah otomatis menjalankan `prisma migrate deploy`, sehingga Anda cukup menjalankan seed melalui container backend dengan `docker exec -it cariuang-backend npx prisma db seed`.)*
 
 ---
 
@@ -168,13 +171,13 @@ cd ../..
 
 Gunakan kredensial akun uji coba berikut yang telah terisi secara otomatis melalui `prisma/seed.ts`:
 
-| Peran (*Role*) | Username | Password | Nama Akun / Keterangan |
-|---|---|---|---|
-| **Pelanggan** | `budi_pelanggan` | `hashed_password_123` | Budi Santoso (Pelanggan) |
-| **Pemberi Jasa (AC)** | `ahmad_teknik` | `hashed_password_123` | Ahmad Teknik (Ahmad Jaya AC & Elektronik) |
-| **Pemberi Jasa (Kebersihan)** | `siti_clean` | `hashed_password_123` | Siti Bersih (Kinclong Home Cleaning) |
-| **Pemberi Jasa (Pipa & Ledeng)** | `dedi_ledeng` | `hashed_password_123` | Kang Dedi Pipa (Dedi Plumbing Bandung) |
-| **Layanan Pelanggan (CS)** | `cs_cariuang` | `hashed_password_123` | Rina Customer Care |
+| Peran (*Role*) | Username | Email | Password | Nama Akun / Keterangan |
+|---|---|---|---|---|
+| **Pelanggan** | `budi_pelanggan` | `budi@pelanggan.com` | `PasswordAman123` | Budi Santoso (Pelanggan) |
+| **Pemberi Jasa (AC)** | `ahmad_teknik` | `ahmad@cariuang.id` | `PasswordAman123` | Ahmad Teknik (Ahmad Jaya AC & Elektronik) |
+| **Pemberi Jasa (Kebersihan)** | `siti_clean` | `siti@cariuang.id` | `PasswordAman123` | Siti Bersih (Kinclong Home Cleaning) |
+| **Pemberi Jasa (Pipa & Ledeng)** | `dedi_ledeng` | `dedi@cariuang.id` | `PasswordAman123` | Kang Dedi Pipa (Dedi Plumbing Bandung) |
+| **Layanan Pelanggan (CS)** | `cs_cariuang` | `cs@cariuang.id` | `PasswordAman123` | Rina Customer Care |
 
 ---
 
