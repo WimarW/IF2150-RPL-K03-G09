@@ -185,11 +185,11 @@ Gunakan kredensial akun uji coba berikut yang telah terisi secara otomatis melal
 
 | NIM | Nama Anggota | Use Case & Antarmuka | Deskripsi Modul & Kontribusi |
 |---|---|---|---|
-| **13525120** | Naufal Hasbialhaq | **UC02** (UI-04, UI-05, UI-06) | **Katalog & Pencarian Jasa:** Implementasi rekomendasi pencarian, pencarian berbasis kata kunci & kategori, filter ketersediaan penyedia, pengurutan rating/jarak terdekat, dan integrasi view list hasil pencarian. |
-| **13525009** | Wimar Widiarto | **UC01** (UI-04, UI-16) | **Registrasi Jasa & Peta Lokasi:** Implementasi formulir pendaftaran penyedia jasa baru, perhitungan jarak geodesik Haversine, komponen visual peta lokasi (*MapViewCard*), dan ringkasan profil penyedia. |
-| **13525093** | Vinsensius Juan Setiady | **UC03 & UC04** (UI-07, UI-08, UI-09, UI-13) | **Komunikasi & Notifikasi:** Implementasi daftar percakapan, ruang obrolan negosiasi interaktif pelanggan & penyedia, penanganan pesan gagal kirim dengan opsi *retry*, integrasi pusat notifikasi, dan realtime event badge. |
-| **13525126** | Raymond Edson Sabajan | **UC05, UC06, UC07** (UI-08, UI-09, UI-10, UI-11) | **Kontrak Pekerjaan & Rating:** Implementasi pembuatan kontrak negosiasi pekerjaan pada obrolan, pembatalan kontrak otomatis (*background worker*) & manual, serta formulir sistem penilaian timbal balik (*rating*). |
-| **13525048** | Yohanes Nicholas Setiawan | **UC08 & UC09** (UI-15, UI-17, UI-18) | **Layanan Pelanggan & Tiket Laporan:** Implementasi pengajuan tiket laporan kendala/sengketa beserta upload lampiran bukti foto, dashboard penanganan tiket staf CS, dan ruang obrolan mediasi tiket. |
+| **13525120** | Naufal Hasbialhaq | **UC01, UC02** (UI-04, UI-05, UI-06, UI-16) | Setup Database PostgreSQL, Pendaftaran Jasa, Katalog, Pencarian & Peta Lokasi, Unit/Integration Test |
+| **13525009** | Wimar Widiarto | **UC10, UC11, UC12** (UI-01, UI-02, UI-03, UI-11, UI-14) | Setup Monorepo MVC, Autentikasi Multi-Role & Profil, Sistem Rating Dua Arah |
+| **13525093** | Vinsensius Juan Setiady | **UC03 & UC04** (UI-07, UI-08, UI-09, UI-13) | Chat Real-Time, Sistem Notifikasi Otomatis, `src/README.md` |
+| **13525126** | Raymond Edson Sabajan | **UC05, UC06, UC07** (UI-08, UI-09, UI-10, UI-12) | Siklus Kontrak Pekerjaan (Optimistic Locking & Auto-Cancel), Riwayat Pesanan, Profiling & Indeks DB |
+| **13525048** | Yohanes Nicholas Setiawan | **UC08 & UC09** (UI-15, UI-17, UI-18g) | Tiket Laporan Masalah, Auto-Assign & Dashboard CS, Mediasi Tiket |
 
 ---
 
