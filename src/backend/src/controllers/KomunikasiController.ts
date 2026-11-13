@@ -52,7 +52,7 @@ export class KomunikasiController {
     try {
       await this.notifikasiController.buatNotifikasi(
         dataChat.idPenerima,
-        'Pesan baru: ' + dataChat.isiPesan
+        'Pesan baru: ' + (dataChat.isiPesan || (dataChat.lampiranUrl ? '📷 Foto' : ''))
       );
     } catch (notifErr) {
       console.error(
@@ -72,6 +72,7 @@ export class KomunikasiController {
    */
   public async kirimPesan(dataChat: DataChatInput): Promise<KomunikasiRecord> {
     const { idPengirim, idPenerima, isiPesan } = dataChat;
+    const lampiranUrl = dataChat.lampiranUrl ?? null;
 
     if (!idPengirim || typeof idPengirim !== 'string' || idPengirim.trim().length === 0) {
       throw new HttpAppError(401, 'UNAUTHORIZED', 'Identitas pengirim tidak ditemukan.');
@@ -89,12 +90,16 @@ export class KomunikasiController {
       );
     }
 
-    if (typeof isiPesan !== 'string') {
+    // isiPesan boleh kosong bila pesan membawa lampiran gambar
+    if (isiPesan !== undefined && isiPesan !== null && typeof isiPesan !== 'string') {
+      throw new HttpAppError(400, 'INVALID_MESSAGE_TYPE', 'isiPesan wajib bertipe string.');
+    }
+    if (!lampiranUrl && typeof isiPesan !== 'string') {
       throw new HttpAppError(400, 'INVALID_MESSAGE_TYPE', 'isiPesan wajib bertipe string.');
     }
 
-    const trimmedPesan = isiPesan.trim();
-    if (trimmedPesan.length === 0) {
+    const trimmedPesan = (isiPesan ?? '').trim();
+    if (trimmedPesan.length === 0 && !lampiranUrl) {
       throw new HttpAppError(
         400,
         'EMPTY_MESSAGE',
@@ -124,6 +129,7 @@ export class KomunikasiController {
       idPengirim,
       idPenerima,
       isiPesan: trimmedPesan,
+      lampiranUrl,
     });
   }
 
@@ -199,10 +205,15 @@ export class KomunikasiController {
         return;
       }
 
+      // Lampiran opsional (multipart field 'lampiran'), sudah divalidasi oleh middleware uploadFoto
+      const file = (req as Request & { file?: { filename: string } }).file;
+      const lampiranUrl = file ? `/uploads/${file.filename}` : null;
+
       const savedMessage = await this.kirimPesan({
         idPengirim: idPengirimLogin,
         idPenerima: req.body?.idPenerima,
-        isiPesan: req.body?.isiPesan,
+        isiPesan: req.body?.isiPesan ?? '',
+        lampiranUrl,
       });
 
       res.status(201).json(savedMessage);

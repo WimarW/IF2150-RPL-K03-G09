@@ -9,6 +9,15 @@ export interface ChatMessage {
   waktuTerkirim: string; // ISO 8601
   isChatTerbaca: boolean;
   statusChat: ChatStatus;
+  /** Path relatif dari backend (mis. /uploads/xx.jpg) atau URI lokal saat pesan masih terkirim */
+  lampiranUrl?: string | null;
+  /** Lampiran lokal yang dipakai ulang saat kirim ulang pesan gagal */
+  localAttachment?: ChatAttachment | null;
+}
+
+export interface ChatAttachment {
+  uri: string;
+  mimeType: 'image/jpeg' | 'image/png';
 }
 
 export interface ConversationSummary {
