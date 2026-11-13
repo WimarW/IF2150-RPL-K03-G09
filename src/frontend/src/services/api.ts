@@ -117,8 +117,18 @@ export const DEV_USER: SessionUser = {
   idPemberiJasa: undefined,
 };
 
+export type SessionListener = (user: SessionUser) => void;
+
 let currentSessionUser: SessionUser = { ...DEV_USER };
-const sessionListeners = new Set<(user: SessionUser) => void>();
+const sessionListeners = new Set<SessionListener>();
+
+export function setAuthToken(token: string | null): void {
+  authToken = token;
+}
+
+export function getAuthToken(): string | null {
+  return authToken;
+}
 
 /**
  * Mengambil informasi pengguna yang sedang aktif pada sesi saat ini.
@@ -460,4 +470,8 @@ export function apiPost<T>(
   options?: Omit<ApiRequestOptions, 'method' | 'body'>
 ): Promise<T> {
   return apiRequest<T>(path, { ...options, method: 'POST', body });
+}
+
+export async function apiPatch<T>(path: string, body?: unknown): Promise<T> {
+  return apiRequest<T>(path, { method: 'PATCH', body });
 }
