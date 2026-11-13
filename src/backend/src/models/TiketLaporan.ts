@@ -11,6 +11,18 @@ export const statusDb = (label?: string): string | undefined => (label ? LABEL_T
 const withPelapor = { pelapor: { select: { namaPengguna: true, role: true } } } satisfies Prisma.TiketLaporanInclude;
 export type TiketRow = Prisma.TiketLaporanGetPayload<{ include: typeof withPelapor }>;
 
+function normalizeUploadPath(fileOrPath: string | null | undefined): string | null {
+  if (!fileOrPath) return null;
+  if (
+    fileOrPath.startsWith('http://') ||
+    fileOrPath.startsWith('https://') ||
+    fileOrPath.startsWith('/uploads/')
+  ) {
+    return fileOrPath;
+  }
+  return `/uploads/${fileOrPath.replace(/^\/+/, '')}`;
+}
+
 export function toTiketDto(t: TiketRow) {
   const nama = t.pelapor.namaPengguna;
   return {
@@ -19,7 +31,7 @@ export function toTiketDto(t: TiketRow) {
     initials: nama.split(/\s+/).slice(0, 2).map((s) => s[0]?.toUpperCase() ?? '').join(''),
     title: t.jenisTiket,
     desc: t.keteranganTiket,
-    image: t.buktiFotoUrl ? `/uploads/${t.buktiFotoUrl}` : null,
+    image: normalizeUploadPath(t.buktiFotoUrl),
     createdAt: t.tanggalTiket,
     status: STATUS_LABEL[t.statusTiket] ?? t.statusTiket,
     reporterRole: t.pelapor.role,
@@ -35,6 +47,7 @@ export function toTiketDto(t: TiketRow) {
 export class TiketLaporan {
   /** Nomor unik tiket, contoh A-2041 (sequence seq_nomor_tiket) */
   public static async generateId(db: Db): Promise<string> {
+    await db.$executeRawUnsafe(`CREATE SEQUENCE IF NOT EXISTS seq_nomor_tiket START 2000`);
     const r = await db.$queryRaw<{ n: bigint }[]>`SELECT nextval('seq_nomor_tiket') AS n`;
     return `A-${r[0].n}`;
   }
@@ -57,10 +70,16 @@ export class TiketLaporan {
     await db.$queryRaw`SELECT id_tiket FROM tiket_laporan WHERE id_tiket = ${idTiket} FOR UPDATE`;
   }
 
-  /** Tiket milik CS ini + tiket yang belum punya petugas */
+  /** Tiket milik CS ini + tiket aktif yang belum punya petugas */
   public static async daftarCs(idCs: string, status?: string) {
     return prisma.tiketLaporan.findMany({
-      where: { OR: [{ idLayananPelanggan: idCs }, { idLayananPelanggan: null }], ...(status ? { statusTiket: status } : {}) },
+      where: {
+        OR: [
+          { idLayananPelanggan: idCs },
+          { idLayananPelanggan: null, statusTiket: { not: 'Selesai' } },
+        ],
+        ...(status ? { statusTiket: status } : {}),
+      },
       orderBy: { tanggalTiket: 'desc' },
       include: withPelapor,
     });
@@ -73,7 +92,12 @@ export class TiketLaporan {
   public static async statistik(idCs: string) {
     const g = await prisma.tiketLaporan.groupBy({
       by: ['statusTiket'],
-      where: { OR: [{ idLayananPelanggan: idCs }, { idLayananPelanggan: null }] },
+      where: {
+        OR: [
+          { idLayananPelanggan: idCs },
+          { idLayananPelanggan: null, statusTiket: { not: 'Selesai' } },
+        ],
+      },
       _count: { _all: true },
     });
     const n = (s: string) => g.find((x) => x.statusTiket === s)?._count._all ?? 0;
@@ -100,7 +124,7 @@ export class TiketLaporan {
         idPengguna: p.idPengirim,
         idPenerima: p.idPenerima,
         isiPesan: p.isiPesan,
-        lampiranUrl: p.lampiranUrl ?? null,
+        lampiranUrl: normalizeUploadPath(p.lampiranUrl),
       },
     });
   }
@@ -116,7 +140,7 @@ export class TiketLaporan {
       sender: m.pengirim.role === 'LAYANAN_PELANGGAN' ? 'cs' : 'user',
       senderId: m.idPengguna,
       text: m.isiPesan,
-      image: m.lampiranUrl ? `/uploads/${m.lampiranUrl}` : null,
+      image: normalizeUploadPath(m.lampiranUrl),
       time: m.waktuTerkirim,
     }));
   }

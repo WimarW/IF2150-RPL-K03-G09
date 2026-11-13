@@ -73,7 +73,14 @@ export default function CSDashboardScreen({ navigation }: any) {
           <Text style={styles.title}>Beranda CS</Text>
           <Text style={styles.subtitle}>Pusat Bantuan & Laporan</Text>
         </View>
-        <View style={styles.profileBadge}><Text style={styles.profileText}>CS</Text></View>
+        <TouchableOpacity
+          style={styles.profileBadge}
+          onPress={() => navigation.navigate('Profile')}
+          testID="cs-profile-avatar-button"
+          activeOpacity={0.8}
+        >
+          <Text style={styles.profileText}>CS</Text>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.statsRow}>

@@ -28,31 +28,42 @@ export class LayananPelanggan extends Pengguna {
     }
 
     /**
-     * ALGO-019 / Q-013: cari CS dengan status = 'Available' ATAU jumlahTiketDipegang < 5.
+     * ALGO-019 / Q-013: cari CS dengan status = 'Available' DAN jumlahTiketDipegang < 5.
      * Diurutkan ke beban terkecil. FOR UPDATE membuat tiket yang masuk bersamaan antre,
      * sehingga beban CS terhitung benar.
      */
     public static async cariLayananKosong(tx: Prisma.TransactionClient): Promise<string | null> {
         const rows = await tx.$queryRaw<{ id_layanan_pelanggan: string }[]>`
             SELECT id_layanan_pelanggan FROM layanan_pelanggan
-            WHERE status = 'Available' OR jumlah_tiket_dipegang < 5
+            WHERE status = 'Available' AND jumlah_tiket_dipegang < 5
             ORDER BY jumlah_tiket_dipegang ASC, id_layanan_pelanggan ASC
-            LIMIT 1 FOR UPDATE`;
+            FOR UPDATE SKIP LOCKED
+            LIMIT 1`;
         return rows[0]?.id_layanan_pelanggan ?? null;
     }
 
     public static async tambahBeban(tx: Prisma.TransactionClient, idLayananPelanggan: string): Promise<void> {
-        await tx.layananPelanggan.update({
+        const updated = await tx.layananPelanggan.update({
             where: { idLayananPelanggan },
             data: { jumlahTiketDipegang: { increment: 1 } },
         });
+        if (updated.jumlahTiketDipegang >= 5 && updated.status === 'Available') {
+            await tx.layananPelanggan.update({
+                where: { idLayananPelanggan },
+                data: { status: 'Busy' },
+            });
+        }
     }
 
     public static async kurangiBeban(tx: Prisma.TransactionClient, idLayananPelanggan: string): Promise<void> {
-        await tx.layananPelanggan.updateMany({
-            where: { idLayananPelanggan, jumlahTiketDipegang: { gt: 0 } },
-            data: { jumlahTiketDipegang: { decrement: 1 } },
-        });
+        await tx.$executeRaw`
+            UPDATE layanan_pelanggan
+            SET jumlah_tiket_dipegang = GREATEST(jumlah_tiket_dipegang - 1, 0),
+                status = CASE
+                    WHEN GREATEST(jumlah_tiket_dipegang - 1, 0) < 5 AND status = 'Busy' THEN 'Available'
+                    ELSE status
+                END
+            WHERE id_layanan_pelanggan = ${idLayananPelanggan}`;
     }
 
     public override toJSON(): Record<string, unknown> {
