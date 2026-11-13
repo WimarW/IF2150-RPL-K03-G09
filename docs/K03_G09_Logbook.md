@@ -141,7 +141,8 @@
 | Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
 | :--- | :--- | :--- | :--- | :--- | :--- | 
 | 3-11-2026 | Naufal Hasbialhaq |  Init directory project | 1 jam | Done | - |
-| 4-11-2026 | Naufal Hasbialhaq |  Backend Pendaftaran Jasa, Katalog Kategori, dan Pencarian Terdekat | 2 jam | Done | - |
+| 6-11-2026 | Vinsensius Juan Setiady | init issue di github | 1 jam | Done | - |
+| 7-11-2026 | Naufal Hasbialhaq |  Backend Pendaftaran Jasa, Katalog Kategori, dan Pencarian Terdekat | 2 jam | Done | - |
 | 7-11-2026 | Naufal Hasbialhaq |  UI Pendaftaran Layanan Penyedia Jasa | 2 jam | Done | - |
 | 8-11-2026 | Naufal Hasbialhaq |  UI Beranda Pelanggan, Rekomendasi Pencarian, Hasil Pencarian, dan Integrasi Peta Lokasi | 2 jam | Done | - |
 | 8-11-2026 | Raymond Edson Sabajan |  Implementasi Backend UC 5-7 | 2 jam | Done | - |
