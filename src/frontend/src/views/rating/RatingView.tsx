@@ -1,9 +1,7 @@
 import React from 'react';
 import {
   ActivityIndicator,
-  KeyboardAvoidingView,
   Modal,
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -11,6 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { KeyboardAwareView } from '../../components/common/KeyboardAwareView';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
@@ -31,6 +30,8 @@ export interface RatingFormProps {
   detailPekerjaan: string;
   initialStars?: number;
   token?: string;
+  /** true bila form dirender di dalam RatingModal (memengaruhi penanganan keyboard Android) */
+  insideModal?: boolean;
   onCancel: () => void;
   onSuccess: (result: {
     idKontrakPekerjaan: string;
@@ -54,6 +55,7 @@ export const RatingFormContent: React.FC<RatingFormProps> = ({
   detailPekerjaan,
   initialStars = 0,
   token,
+  insideModal = false,
   onCancel,
   onSuccess,
 }) => {
@@ -87,9 +89,10 @@ export const RatingFormContent: React.FC<RatingFormProps> = ({
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
-      <KeyboardAvoidingView
+      <KeyboardAwareView
         style={styles.keyboardContainer}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        includeBottomInset={false}
+        insideModal={insideModal}
       >
         <ScrollView
           style={styles.scrollView}
@@ -251,7 +254,7 @@ export const RatingFormContent: React.FC<RatingFormProps> = ({
             )}
           </TouchableOpacity>
         </View>
-      </KeyboardAvoidingView>
+      </KeyboardAwareView>
     </SafeAreaView>
   );
 };
@@ -275,7 +278,7 @@ export const RatingModal: React.FC<RatingModalProps> = ({
       presentationStyle="fullScreen"
       onRequestClose={formProps.onCancel}
     >
-      <RatingFormContent {...formProps} />
+      <RatingFormContent {...formProps} insideModal />
     </Modal>
   );
 };

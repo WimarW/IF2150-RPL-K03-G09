@@ -4,11 +4,10 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
-  KeyboardAvoidingView,
-  Platform,
   StyleSheet,
   Alert,
 } from 'react-native';
+import { KeyboardAwareView } from '../../components/common/KeyboardAwareView';
 import Header from '../../components/Header';
 import InputField from '../../components/InputField';
 import Button from '../../components/Button';
@@ -87,10 +86,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ onNavigate }) => {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.safeArea}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-    >
+    <KeyboardAwareView style={styles.safeArea}>
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
@@ -180,7 +176,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ onNavigate }) => {
           </Text>
         </View>
       </ScrollView>
-    </KeyboardAvoidingView>
+    </KeyboardAwareView>
   );
 };
 

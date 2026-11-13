@@ -10,16 +10,15 @@ import {
   AccessibilityInfo,
   ActivityIndicator,
   Keyboard,
-  KeyboardAvoidingView,
   LayoutChangeEvent,
   Modal,
-  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
+import { KeyboardAwareView } from '../../components/common/KeyboardAwareView';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -146,10 +145,7 @@ export const ServiceRegistrationView: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
-      <KeyboardAvoidingView
-        style={styles.keyboardAvoiding}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      >
+      <KeyboardAwareView style={styles.keyboardAvoiding} includeBottomInset={false}>
         <ScrollView
           ref={scrollViewRef}
           style={styles.scrollView}
@@ -450,7 +446,7 @@ export const ServiceRegistrationView: React.FC = () => {
             testID="ui16-submit"
           />
         </View>
-      </KeyboardAvoidingView>
+      </KeyboardAwareView>
 
       {/* Dialog Sukses Pendaftaran Penyedia Jasa -> Redirect ke UI-12 */}
       <Modal
