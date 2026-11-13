@@ -114,6 +114,7 @@ export type RootStackParamList = {
     inisialPenerima?: string;
     detailPekerjaan: string;
     initialStars?: number;
+    raterRole?: 'PELANGGAN' | 'PEMBERI_JASA';
   };
   Notification: undefined;
   Profile: undefined;
