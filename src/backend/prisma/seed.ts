@@ -1,11 +1,11 @@
+import bcrypt from 'bcrypt';
 import prisma from '../src/database/prisma';
 import { Role } from '@prisma/client';
-import bcrypt from 'bcrypt';
 
 async function main() {
   console.log('🌱 Memulai proses seeding database CariUang dengan format UUID...');
 
-  const defaultPasswordHash = await bcrypt.hash('Password123!', 10);
+  const defaultPasswordHash = await bcrypt.hash('PasswordAman123', 10);
 
   // 1. Seed Kategori Jasa (UUID)
   const kategoriList = [
@@ -48,6 +48,7 @@ async function main() {
   const pelanggan = await prisma.pengguna.upsert({
     where: { username: 'budi_pelanggan' },
     update: {
+      email: 'budi@pelanggan.com',
       password: defaultPasswordHash,
     },
     create: {
@@ -55,7 +56,7 @@ async function main() {
       namaPengguna: 'Budi Santoso',
       username: 'budi_pelanggan',
       password: defaultPasswordHash,
-      email: 'budi@example.com',
+      email: 'budi@pelanggan.com',
       nomorTelpon: '081234567890',
       role: Role.PELANGGAN,
       akumulasiRating: 4.8,

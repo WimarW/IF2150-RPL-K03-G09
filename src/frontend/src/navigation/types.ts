@@ -1,6 +1,64 @@
-import { NavigatorScreenParams } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import type { NavigatorScreenParams } from '@react-navigation/native';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { SortKey } from '../services/serviceCatalogService';
+
+export type UserRole = 'PELANGGAN' | 'PEMBERI_JASA' | 'LAYANAN_PELANGGAN';
+
+export interface UserProfile {
+  idPengguna: string;
+  namaPengguna: string;
+  username: string;
+  email: string;
+  nomorTelpon?: string;
+  nomorTelepon?: string;
+  role: UserRole;
+  avatarUrl?: string | null;
+  akumulasiRating?: number;
+  riwayatRating?: number[];
+  pemberiJasa?: {
+    idPemberiJasa: string;
+    namaToko: string;
+    idKategoriJasa: string;
+    jenisJasa: string;
+    statusKetersediaan: string;
+    isOnline: boolean;
+  };
+  layananPelanggan?: {
+    idLayananPelanggan: string;
+    status: string;
+    jumlahTiketDipegang: number;
+  };
+}
+
+export interface PendingProviderRegistration {
+  namaPengguna: string;
+  email: string;
+  password: string;
+}
+
+/**
+ * Daftar layar navigasi utama terkait fitur Autentikasi & Profil:
+ * - UI-01: Login
+ * - UI-02: RegisterCustomer (Buat Akun Pengguna)
+ * - UI-03: RegisterProvider (Buat Akun Jasa)
+ * - UI-04: Home (Beranda Pelanggan)
+ * - UI-12: ProviderHistory (Riwayat Pesanan Pemberi Jasa / Beranda Penyedia Jasa)
+ * - UI-14: Profile (Profil Saya)
+ * - UI-16: ServiceRegistration (Alur Verifikasi / Pendaftaran Jasa Penyedia Jasa)
+ * - UI-17: CSHome (Beranda Layanan Pelanggan)
+ */
+export type ScreenName =
+  | 'Login'
+  | 'RegisterCustomer'
+  | 'RegisterProvider'
+  | 'ServiceRegistration'
+  | 'Home'
+  | 'ProviderHistory'
+  | 'CSHome'
+  | 'Chat'
+  | 'Profile';
+
+export type MainTabName = 'HomeTab' | 'HistoryTab' | 'ChatTab';
 
 export type RootTabParamList = {
   Beranda: undefined;
@@ -8,37 +66,47 @@ export type RootTabParamList = {
   Chat: undefined;
 };
 
+export interface ChatRouteParams {
+  conversationId?: string;
+  partnerId?: string;
+  partnerName?: string;
+  idPemberiJasa?: string;
+  namaPemberiJasa?: string;
+  namaToko?: string;
+  jenisJasa?: string;
+  isCS?: boolean;
+  isOnline?: boolean;
+}
+
 export type RootStackParamList = {
+  Login: undefined;
+  RegisterCustomer: undefined;
+  RegisterProvider: undefined;
   Main: NavigatorScreenParams<RootTabParamList> | undefined;
-  // Tiket laporan & Layanan Pelanggan (UC08, UC09)
-  CreateTicket: undefined;
+  CreateTicket: { orderId?: string } | undefined;
   MyTickets: undefined;
   TicketDetail: { ticketId: string };
   CSDashboard: undefined;
-  // Katalog, Pencarian, Chat & Notifikasi
-  ServiceRegistration: undefined;
-  SearchRecommendation: { initialQuery?: string } | undefined;
+  CSHome: undefined;
+  ServiceRegistration:
+    | { pendingProvider?: PendingProviderRegistration }
+    | undefined;
+  ProviderHistory: undefined;
+  SearchRecommendation:
+    | {
+        initialQuery?: string;
+        initialCategoryId?: string;
+        initialCategoryName?: string;
+      }
+    | undefined;
   SearchResult: {
     keyword: string;
     kategori?: string;
     initialSort?: SortKey;
     focusProviderId?: string;
   };
-  CustomerChat: {
-    idPemberiJasa: string;
-    namaPemberiJasa: string;
-    isOnline?: boolean;
-    partnerId?: string;
-    partnerName?: string;
-    isCS?: boolean;
-  };
-  ProviderChat: {
-    partnerId: string;
-    partnerName: string;
-    isCS?: boolean;
-    isOnline?: boolean;
-  };
-  // Penilaian & Ulasan (UC10 - UI-11)
+  CustomerChat: ChatRouteParams | undefined;
+  ProviderChat: ChatRouteParams | undefined;
   Rating: {
     idKontrakPekerjaan: string;
     idPenggunaPenerima: string;
@@ -47,9 +115,8 @@ export type RootStackParamList = {
     detailPekerjaan: string;
     initialStars?: number;
   };
-  // Didaftarkan oleh branch UI-13 / UI-14
-  Notification: undefined; // UI-13 (Vinsensius)
-  Profile: undefined; // UI-14 (Wimar)
+  Notification: undefined;
+  Profile: undefined;
 };
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> =

@@ -1,22 +1,40 @@
 /**
  * UI-12 Riwayat Pekerjaan Penyedia — Kelas DPPL C05 PemberiJasaUI
  * Traceability: UC01 (Tujuan pengalihan setelah pendaftaran penyedia jasa berhasil),
- * UC04, UC06, Antarmuka UI-12
+ * UC04, UC06, UC11, Antarmuka UI-12
  */
 
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import { UI_THEME } from '../../components/Header';
 import { useSessionUser } from '../../services/api';
+import { ScreenName } from '../../navigation/types';
 import {
   getAllCachedContracts,
   subscribeContracts,
 } from '../../services/contractService';
 import { ContractRecord } from '../../types/chat';
 
-export const ProviderHistoryView: React.FC = () => {
+export interface ProviderHistoryViewProps {
+  onNavigate?: (screen: ScreenName) => void;
+}
+
+export const ProviderHistoryView: React.FC<ProviderHistoryViewProps> = ({
+  onNavigate,
+}) => {
   const { user } = useSessionUser();
+  const navigation = useNavigation<any>();
+
+  const handleOpenProfile = () => {
+    if (onNavigate) {
+      onNavigate('Profile');
+    } else {
+      navigation.navigate('Profile');
+    }
+  };
+
   const [activeContracts, setActiveContracts] = useState<ContractRecord[]>(() =>
     getAllCachedContracts().filter(
       (c) => c.statusPekerjaan === 'On Progress' || c.status === 'DITERIMA'
@@ -38,15 +56,29 @@ export const ProviderHistoryView: React.FC = () => {
   return (
     <View style={styles.container} testID="ui12-provider-history">
       <View style={styles.headerCard}>
-        <View style={styles.badge}>
-          <Ionicons
-            name="checkmark-circle"
-            size={16}
-            color={UI_THEME.primary}
-          />
-          <Text style={styles.badgeText}>Penyedia Jasa Aktif</Text>
+        <View style={styles.topBadgeRow}>
+          <View style={styles.badge}>
+            <Ionicons
+              name="checkmark-circle"
+              size={16}
+              color={UI_THEME.primary}
+            />
+            <Text style={styles.badgeText}>Penyedia Jasa Aktif</Text>
+          </View>
+
+          <TouchableOpacity
+            testID="provider-profile-button"
+            style={styles.profileBadgeBtn}
+            onPress={handleOpenProfile}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.profileBadgeText}>Profil Saya</Text>
+          </TouchableOpacity>
         </View>
-        <Text style={styles.title}>Riwayat Pekerjaan</Text>
+
+        <Text style={styles.title} testID="provider-history-title">
+          Riwayat Pekerjaan
+        </Text>
         <Text style={styles.subtitle}>
           Halo, {user.namaPengguna}! Pesanan layanan yang masuk ke tokomu akan
           ditampilkan di halaman ini.
@@ -101,6 +133,12 @@ const styles = StyleSheet.create({
   headerCard: {
     marginBottom: 20,
   },
+  topBadgeRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
   badge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -109,13 +147,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
-    marginBottom: 12,
     gap: 6,
   },
   badgeText: {
     fontSize: 12,
     fontWeight: '700',
     color: UI_THEME.primary,
+  },
+  profileBadgeBtn: {
+    backgroundColor: '#DDF3EE',
+    borderRadius: 12,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderWidth: 1,
+    borderColor: UI_THEME.primary,
+  },
+  profileBadgeText: {
+    fontSize: 13,
+    fontWeight: '800',
+    color: UI_THEME.textTitle,
   },
   title: {
     fontSize: 24,

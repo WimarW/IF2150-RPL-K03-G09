@@ -35,7 +35,7 @@ import type {
   JenisJasa,
   PemberiJasaDetail,
 } from '../../services/serviceCatalogService';
-import type { RootStackParamList } from '../../navigation/types';
+import type { RootStackParamList, ScreenName } from '../../navigation/types';
 
 type IoniconName = keyof typeof Ionicons.glyphMap;
 
@@ -57,7 +57,11 @@ function getRecommendationIcon(jenisJasa: string | null): IoniconName {
   const lower = (jenisJasa ?? '').toLowerCase();
   if (lower.includes('mobil')) return 'car-outline';
   if (lower.includes('motor')) return 'bicycle-outline';
-  if (/\bac\b/.test(lower) || lower.includes('cuci ac') || lower.includes('servis ac')) {
+  if (
+    /\bac\b/.test(lower) ||
+    lower.includes('cuci ac') ||
+    lower.includes('servis ac')
+  ) {
     return 'snow-outline';
   }
   if (lower.includes('sofa')) return 'bed-outline';
@@ -300,7 +304,11 @@ OnProgressCard.displayName = 'OnProgressCard';
 // Komponen Utama HomeView (UI-04)
 // ============================================================================
 
-export const HomeView: React.FC = () => {
+export interface HomeViewProps {
+  onNavigate?: (screen: ScreenName) => void;
+}
+
+export const HomeView: React.FC<HomeViewProps> = ({ onNavigate }) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { width } = useWindowDimensions();
@@ -330,6 +338,11 @@ export const HomeView: React.FC = () => {
    */
   const navigateIfRegistered = useCallback(
     (routeName: 'Notification' | 'Profile', label: string) => {
+      if (routeName === 'Profile' && onNavigate) {
+        onNavigate('Profile');
+        return;
+      }
+
       const parentRouteNames =
         navigation.getParent()?.getState()?.routeNames ?? [];
       const currentRouteNames = navigation.getState()?.routeNames ?? [];
@@ -345,7 +358,7 @@ export const HomeView: React.FC = () => {
         );
       }
     },
-    [navigation]
+    [navigation, onNavigate]
   );
 
   /**
@@ -470,7 +483,7 @@ export const HomeView: React.FC = () => {
         {/* UI-04-03 & UI-04-04: Sapaan Pengguna & Avatar Profil */}
         <View style={styles.greetingRow}>
           <View style={styles.greetingTextWrap}>
-            <Text style={styles.greetingTitle} numberOfLines={1}>
+            <Text style={styles.greetingTitle} numberOfLines={1} testID="home-greeting-title">
               Halo, {greetingName}! 👋
             </Text>
             <Text style={styles.greetingSubtitle}>
