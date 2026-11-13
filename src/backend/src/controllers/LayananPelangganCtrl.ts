@@ -5,7 +5,7 @@ import prisma from '../database/prisma';
 import { TiketLaporan, toTiketDto, statusDb } from '../models/TiketLaporan';
 import { LayananPelanggan } from '../models/LayananPelanggan';
 import { NotifikasiController } from './NotifikasiController';
-import { kirimNotifikasiAman } from './TiketLaporanController';
+import { cleanupUploadedFile, kirimNotifikasiAman } from './TiketLaporanController';
 
 export class LayananPelangganCtrl extends PenggunaController {
 
@@ -91,7 +91,11 @@ export class LayananPelangganCtrl extends PenggunaController {
         const idCs = req.user!.idPengguna;
         const idTiket = String(req.params.id);
         const isi = String(req.body?.text ?? '').trim();
-        if (!isi) { res.status(400).json({ success: false, message: 'Balasan tidak boleh kosong.' }); return; }
+        if (!isi && !req.file) {
+            cleanupUploadedFile(req.file);
+            res.status(400).json({ success: false, message: 'Balasan tidak boleh kosong.' });
+            return;
+        }
         try {
             const hasil = await prisma.$transaction(async (tx) => {
                 await TiketLaporan.kunci(tx, idTiket);
@@ -109,11 +113,14 @@ export class LayananPelangganCtrl extends PenggunaController {
                 if (t.statusTiket === 'Open') await TiketLaporan.updateStatusTiket(tx, t.idTiket, 'Diproses');
                 return { code: 201, message: 'Balasan terkirim.', idPelapor: t.idPengguna };
             });
-            if (hasil.idPelapor) {
+            if (hasil.code >= 400) {
+                cleanupUploadedFile(req.file);
+            } else if (hasil.idPelapor) {
                 await kirimNotifikasiAman(LayananPelangganCtrl.notifikasi, hasil.idPelapor, `CS membalas tiket #${idTiket}`);
             }
             res.status(hasil.code).json({ success: hasil.code < 300, message: hasil.message });
         } catch (e) {
+            cleanupUploadedFile(req.file);
             console.error('[LayananPelangganCtrl.balasTiket]', e);
             res.status(500).json({ success: false, message: 'Gagal mengirim balasan.' });
         }
@@ -130,8 +137,12 @@ export class LayananPelangganCtrl extends PenggunaController {
                 if (!t) return { code: 404, message: 'Tiket tidak ditemukan.' };
                 if (t.statusTiket === 'Selesai') return { code: 409, message: 'Tiket sudah ditutup.' };
                 if (t.idLayananPelanggan && t.idLayananPelanggan !== idCs) return { code: 403, message: 'Tiket ditangani CS lain.' };
+                if (!t.idLayananPelanggan) {
+                    await TiketLaporan.klaim(tx, t.idTiket, idCs);
+                } else {
+                    await LayananPelanggan.kurangiBeban(tx, t.idLayananPelanggan);
+                }
                 await TiketLaporan.updateStatusTiket(tx, t.idTiket, 'Selesai');
-                if (t.idLayananPelanggan) await LayananPelanggan.kurangiBeban(tx, t.idLayananPelanggan);
                 return { code: 200, message: 'Tiket ditutup.', idPelapor: t.idPengguna };
             });
             if (hasil.idPelapor) {
