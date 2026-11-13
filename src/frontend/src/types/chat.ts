@@ -72,6 +72,12 @@ export interface DummyContract {
   hasRating?: boolean;
   nilaiRating?: number | null;
   komentar?: string | null;
+  /** UC10 dua arah: apakah pengguna yang login sudah memberi rating pada kontrak ini */
+  hasRatedByMe?: boolean;
+  /** Rating yang diberikan oleh pengguna yang login kepada lawan transaksinya */
+  nilaiRatingDiberikan?: number | null;
+  ulasanDiberikan?: string | null;
+  tagsDiberikan?: string[];
   waktu: string;
   tanggalWaktu?: string;
   tanggalSelesai?: string;
@@ -123,6 +129,11 @@ export interface ProviderJobItem {
   hasRating: boolean;
   nilaiRating?: number | null;
   komentar?: string | null;
+  /** UC10 dua arah: penyedia jasa sudah memberi rating ke pelanggan */
+  hasRatedByMe?: boolean;
+  nilaiRatingDiberikan?: number | null;
+  ulasanDiberikan?: string | null;
+  tagsDiberikan?: string[];
 }
 
 export interface ContractFormValues {

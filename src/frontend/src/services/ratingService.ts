@@ -6,7 +6,20 @@ import {
   getAuthToken,
 } from './api';
 
-export type RatingTag = 'Tepat Waktu' | 'Kerja Bersih' | 'Ramah';
+/** Tag rating dari Pelanggan untuk Penyedia Jasa */
+export type CustomerRatingTag = 'Tepat Waktu' | 'Kerja Bersih' | 'Ramah';
+
+/** Tag rating dari Penyedia Jasa untuk Pelanggan (UC10 dua arah) */
+export type ProviderRatingTag =
+  | 'Ramah'
+  | 'Komunikatif'
+  | 'Instruksi Jelas'
+  | 'Bayar Tepat Waktu';
+
+export type RatingTag = CustomerRatingTag | ProviderRatingTag;
+
+/** Peran pemberi rating, menentukan teks & pilihan tag pada UI-11 */
+export type RaterRole = 'PELANGGAN' | 'PEMBERI_JASA';
 
 export type ContractStatusBackend =
   | 'In Progress'
@@ -102,13 +115,19 @@ interface BackendKontrakRecord {
       akumulasiRating?: number;
     };
   };
-  ratings?: Array<{
-    idRating?: string;
-    idPenggunaPemberi?: string;
-    nilaiRating?: number;
-    ulasan?: string | null;
-    tags?: string[];
-  }>;
+  ratings?: BackendRatingRow[];
+  /** Field turunan per pengguna login dari GET /api/kontrak (UC10 dua arah) */
+  hasRatedByMe?: boolean;
+  ratingDariSaya?: BackendRatingRow | null;
+}
+
+interface BackendRatingRow {
+  idRating?: string;
+  idPenggunaPemberi?: string;
+  idPenggunaPenerima?: string;
+  nilaiRating?: number;
+  ulasan?: string | null;
+  tags?: string[];
 }
 
 export const INITIAL_CUSTOMER_TRANSACTIONS: CustomerTransactionItem[] = [
@@ -279,13 +298,16 @@ export function mapBackendKontrakToTransaction(
     raw.pemberiJasa?.pengguna?.namaPengguna ||
     raw.pemberiJasa?.namaToko ||
     'Penyedia Jasa';
+  // Rating 2 arah: hanya rating yang diberikan pelanggan sendiri yang menentukan tombol "Beri Rating".
+  const ratingRows = Array.isArray(raw.ratings) ? raw.ratings : [];
   const latestRating =
-    Array.isArray(raw.ratings) && raw.ratings.length > 0
-      ? raw.ratings[0]
-      : undefined;
-  const hasRating = Boolean(
-    raw.hasRating || (Array.isArray(raw.ratings) && raw.ratings.length > 0)
-  );
+    raw.ratingDariSaya ??
+    ratingRows.find((r) => r.idPenggunaPemberi === raw.idPelanggan) ??
+    undefined;
+  const hasRating =
+    typeof raw.hasRatedByMe === 'boolean'
+      ? raw.hasRatedByMe
+      : Boolean(latestRating);
 
   return {
     idKontrak: raw.idKontrakPekerjaan,
@@ -460,6 +482,26 @@ export async function verifyContractForRating(
 }
 
 /**
+ * Store riwayat pelanggan (UI-10) hanya diperbarui bila penilaian ditujukan ke penyedia jasa
+ * pada kontrak tersebut, agar rating Penyedia -> Pelanggan tidak menyembunyikan tombol
+ * "Beri Rating" milik pelanggan.
+ */
+function markCustomerStoreIfCustomerRated(payload: CreateRatingPayload): void {
+  const item = customerTransactionsStore.find(
+    (tx) => tx.idKontrak === payload.idKontrakPekerjaan
+  );
+  if (item && item.idPenggunaPenyedia !== payload.idPenggunaPenerima) {
+    return;
+  }
+  markContractRatedInStore(
+    payload.idKontrakPekerjaan,
+    payload.nilaiRating,
+    payload.ulasan,
+    payload.tags
+  );
+}
+
+/**
  * POST /api/ratings
  * Mengirim penilaian bintang (1-5), ulasan opsional, dan tag chip ke backend (`UC10`).
  */
@@ -489,12 +531,7 @@ export async function submitRating(
       body: sanitizedPayload,
     });
 
-    markContractRatedInStore(
-      sanitizedPayload.idKontrakPekerjaan,
-      sanitizedPayload.nilaiRating,
-      sanitizedPayload.ulasan,
-      sanitizedPayload.tags
-    );
+    markCustomerStoreIfCustomerRated(sanitizedPayload);
 
     return {
       success: true,
@@ -515,12 +552,7 @@ export async function submitRating(
       `[ratingService] Backend tidak terjangkau di ${API_BASE_URL}. Menggunakan fallback store lokal.`
     );
 
-    markContractRatedInStore(
-      sanitizedPayload.idKontrakPekerjaan,
-      sanitizedPayload.nilaiRating,
-      sanitizedPayload.ulasan,
-      sanitizedPayload.tags
-    );
+    markCustomerStoreIfCustomerRated(sanitizedPayload);
 
     return {
       success: true,

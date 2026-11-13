@@ -4,6 +4,7 @@
  * - Tabel 6.12 DPPL (UI-12-01 s.d. UI-12-07)
  * - UC01 (Tujuan pengalihan setelah pendaftaran penyedia jasa berhasil)
  * - UC04, UC06, UC11 (Pelaporan pekerjaan telah selesai oleh penyedia jasa -> mengubah status dari 'On Progress' ke 'Menunggu Konfirmasi Pelanggan')
+ * - UC10 dua arah (Penyedia jasa memberi rating ke pelanggan setelah pekerjaan dikonfirmasi selesai -> Tombol "Beri Rating" & Modal UI-11)
  */
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -26,6 +27,7 @@ import { HistoryFilterTab, ProviderJobItem } from '../../types/chat';
 import {
   contractService,
   getCachedProviderHistory,
+  mapContractRecordToProviderItem,
   resetMockContracts,
   subscribeContracts,
 } from '../../services/contractService';
@@ -34,6 +36,27 @@ import {
   shouldShowMenungguKonfirmasiLabel,
   shouldShowPekerjaanSelesaiButton,
 } from '../../controllers/useContractController';
+import { shouldShowProviderBeriRatingButton } from '../../controllers/useRatingController';
+import { RatingModal } from '../rating/RatingView';
+
+/**
+ * Kontrak yang dialog Beri Penilaian-nya (UI-11) sudah pernah dimunculkan otomatis pada sesi ini.
+ * Bila ditutup, dialog tidak muncul lagi otomatis, tetapi tombol "Beri Rating Pelanggan" tetap tersedia.
+ */
+const autoPromptedRatingIds = new Set<string>();
+
+function pickJobToAutoPrompt(
+  candidates: ProviderJobItem[]
+): ProviderJobItem | null {
+  const job = candidates.find(
+    (item) =>
+      shouldShowProviderBeriRatingButton(item) &&
+      !autoPromptedRatingIds.has(item.idKontrak)
+  );
+  if (!job) return null;
+  autoPromptedRatingIds.add(job.idKontrak);
+  return job;
+}
 
 export const INITIAL_PROVIDER_JOBS: ProviderJobItem[] =
   getCachedProviderHistory();
@@ -93,6 +116,9 @@ export const ProviderHistoryView: React.FC<ProviderHistoryViewProps> = ({
   const [selectedJob, setSelectedJob] = useState<ProviderJobItem | null>(null);
   const [submittingId, setSubmittingId] = useState<string | null>(null);
   const [bannerMessage, setBannerMessage] = useState<string | null>(null);
+  const [ratingTarget, setRatingTarget] = useState<ProviderJobItem | null>(
+    null
+  );
 
   const syncJobs = useCallback(() => {
     if (initialJobs) return;
@@ -115,11 +141,83 @@ export const ProviderHistoryView: React.FC<ProviderHistoryViewProps> = ({
     useCallback(() => {
       if (!initialJobs) {
         syncJobs();
-        void contractService.fetchContractHistory().then(() => {
-          syncJobs();
-        });
+        contractService
+          .fetchContractHistory()
+          .then((records) => {
+            syncJobs();
+            // UC10 dua arah (Skenario Normal): setelah pelanggan mengonfirmasi selesai,
+            // dialog Beri Penilaian untuk pelanggan otomatis muncul di sisi penyedia jasa.
+            const jobToPrompt = pickJobToAutoPrompt(
+              records.map(mapContractRecordToProviderItem)
+            );
+            if (jobToPrompt) {
+              setRatingTarget((current) => current ?? jobToPrompt);
+            }
+          })
+          .catch((err: unknown) => {
+            console.warn(
+              '[ProviderHistoryView] Gagal memuat riwayat pekerjaan:',
+              err instanceof Error ? err.message : err
+            );
+          });
       }
     }, [initialJobs, syncJobs])
+  );
+
+  /**
+   * Membuka dialog Beri Penilaian (UI-11) dari tombol "Beri Rating" (Skenario Alternatif 1 UC10).
+   */
+  const handleOpenRatingModal = useCallback((item: ProviderJobItem) => {
+    setSelectedJob(null);
+    setBannerMessage(null);
+    setRatingTarget(item);
+  }, []);
+
+  const handleCancelRatingModal = useCallback(() => {
+    setRatingTarget(null);
+  }, []);
+
+  /**
+   * Setelah rating ke pelanggan berhasil disimpan: tandai kontrak `hasRatedByMe = true`
+   * sehingga tombol "Beri Rating" tersembunyi, lalu tampilkan banner sukses.
+   */
+  const handleRatingSubmitted = useCallback(
+    (result: {
+      idKontrakPekerjaan: string;
+      nilaiRating: number;
+      ulasan: string;
+      tags: string[];
+      message: string;
+    }) => {
+      const ratedPatch: Partial<ProviderJobItem> = {
+        hasRatedByMe: true,
+        nilaiRatingDiberikan: result.nilaiRating,
+        ulasanDiberikan: result.ulasan || null,
+        tagsDiberikan: result.tags,
+      };
+      if (initialJobs) {
+        setJobs((prev) =>
+          prev.map((job) =>
+            job.idKontrak === result.idKontrakPekerjaan
+              ? { ...job, ...ratedPatch }
+              : job
+          )
+        );
+      } else {
+        contractService.markContractRatedByProvider(
+          result.idKontrakPekerjaan,
+          result.nilaiRating,
+          result.ulasan,
+          result.tags
+        );
+        syncJobs();
+      }
+      setRatingTarget(null);
+      setBannerMessage(
+        `Penilaian ${result.nilaiRating} bintang untuk pelanggan berhasil dikirim. Terima kasih!`
+      );
+    },
+    [initialJobs, syncJobs]
   );
 
   const filteredJobs = useMemo(
@@ -243,6 +341,7 @@ export const ProviderHistoryView: React.FC<ProviderHistoryViewProps> = ({
       item.statusPekerjaan
     );
     const isCompleted = item.statusDisplay === 'Selesai';
+    const showRateButton = shouldShowProviderBeriRatingButton(item);
     const isSubmitting = submittingId === item.idKontrak;
     const avatarBg = getCustomerAvatarBackground(
       item.inisialPelanggan,
@@ -331,6 +430,37 @@ export const ProviderHistoryView: React.FC<ProviderHistoryViewProps> = ({
                 </Text>
               )}
             </TouchableOpacity>
+          </View>
+        )}
+
+        {/* UC10 dua arah: Tombol "Beri Rating" untuk pelanggan / indikator sudah dinilai */}
+        {isCompleted && (
+          <View style={styles.completeActionRow}>
+            {showRateButton ? (
+              <TouchableOpacity
+                style={styles.rateButton}
+                onPress={() => handleOpenRatingModal(item)}
+                activeOpacity={0.85}
+                testID={`UI-12-rate-btn-${item.idKontrak}`}
+                accessibilityRole="button"
+                accessibilityLabel={`Beri rating untuk ${item.namaPelanggan}`}
+              >
+                <Ionicons name="star" size={14} color="#153B65" />
+                <Text style={styles.rateButtonText}>Beri Rating Pelanggan</Text>
+              </TouchableOpacity>
+            ) : (
+              <View
+                style={styles.ratedBadgeBox}
+                testID={`UI-12-rated-indicator-${item.idKontrak}`}
+              >
+                <Ionicons name="star" size={14} color="#F4A340" />
+                <Text style={styles.ratedBadgeText}>
+                  {typeof item.nilaiRatingDiberikan === 'number'
+                    ? `Kamu menilai ${item.nilaiRatingDiberikan}/5`
+                    : 'Pelanggan Telah Dinilai'}
+                </Text>
+              </View>
+            )}
           </View>
         )}
       </TouchableOpacity>
@@ -480,12 +610,37 @@ export const ProviderHistoryView: React.FC<ProviderHistoryViewProps> = ({
                   {selectedJob.statusDisplay === 'Selesai' &&
                     typeof selectedJob.nilaiRating === 'number' && (
                       <View style={styles.modalRow}>
-                        <Text style={styles.modalLabel}>Rating Pelanggan</Text>
+                        <Text style={styles.modalLabel}>Rating dari Pelanggan</Text>
                         <Text style={styles.modalRatingValue}>
                           ★ {selectedJob.nilaiRating.toFixed(1)}
                         </Text>
                       </View>
                     )}
+                  {selectedJob.statusDisplay === 'Selesai' &&
+                    selectedJob.hasRatedByMe && (
+                      <View style={styles.modalRow}>
+                        <Text style={styles.modalLabel}>Penilaian Anda</Text>
+                        <Text style={styles.modalValue}>
+                          {typeof selectedJob.nilaiRatingDiberikan === 'number'
+                            ? `★ ${selectedJob.nilaiRatingDiberikan}/5`
+                            : 'Telah dinilai'}
+                          {selectedJob.ulasanDiberikan
+                            ? ` — "${selectedJob.ulasanDiberikan}"`
+                            : ''}
+                        </Text>
+                      </View>
+                    )}
+                  {shouldShowProviderBeriRatingButton(selectedJob) && (
+                    <TouchableOpacity
+                      style={styles.modalRateBtn}
+                      onPress={() => handleOpenRatingModal(selectedJob)}
+                      testID="UI-12-modal-rate-btn"
+                    >
+                      <Text style={styles.modalRateBtnText}>
+                        Beri Rating Pelanggan
+                      </Text>
+                    </TouchableOpacity>
+                  )}
 
                   {shouldShowPekerjaanSelesaiButton(
                     selectedJob.statusPekerjaan
@@ -517,6 +672,22 @@ export const ProviderHistoryView: React.FC<ProviderHistoryViewProps> = ({
             </View>
           </View>
         </Modal>
+
+        {/* Modal Beri Penilaian (UI-11) dari Penyedia Jasa untuk Pelanggan (UC10 dua arah) */}
+        {ratingTarget ? (
+          <RatingModal
+            visible={Boolean(ratingTarget)}
+            raterRole="PEMBERI_JASA"
+            idKontrakPekerjaan={ratingTarget.idKontrak}
+            idPenggunaPemberi={ratingTarget.idPemberiJasa}
+            idPenggunaPenerima={ratingTarget.idPelanggan}
+            namaPenerima={ratingTarget.namaPelanggan}
+            inisialPenerima={ratingTarget.inisialPelanggan}
+            detailPekerjaan={ratingTarget.rincianPekerjaan}
+            onCancel={handleCancelRatingModal}
+            onSuccess={handleRatingSubmitted}
+          />
+        ) : null}
       </View>
     </SafeAreaView>
   );
@@ -770,6 +941,48 @@ const styles = StyleSheet.create({
   completeWorkButtonText: {
     color: '#FFFFFF',
     fontSize: 13,
+    fontWeight: '800',
+  },
+  rateButton: {
+    height: 40,
+    borderRadius: 12,
+    backgroundColor: '#F4A340',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+  },
+  rateButtonText: {
+    fontSize: 13,
+    fontWeight: '800',
+    color: '#153B65',
+  },
+  ratedBadgeBox: {
+    height: 40,
+    borderRadius: 12,
+    backgroundColor: '#F7F9F8',
+    borderWidth: 1,
+    borderColor: '#E5EDF2',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+  },
+  ratedBadgeText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#153B65',
+  },
+  modalRateBtn: {
+    marginTop: 16,
+    backgroundColor: '#F4A340',
+    paddingVertical: 12,
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+  modalRateBtnText: {
+    color: '#153B65',
+    fontSize: 14,
     fontWeight: '800',
   },
   buttonDisabled: {
