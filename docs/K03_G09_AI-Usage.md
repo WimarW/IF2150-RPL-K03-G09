@@ -90,6 +90,7 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | Gemini | Membantu penulisan kode | Jika saya ingin mengimplmentasikan X dengan Typescript and Express bagaiaman snippet kode contohnya | Memvalidasi kode hasil output dan memahami apa yang sedang dilakukan dalamnya |
 | Gemini | Debugging Kode Typescript| Mengapa fungsi X menjalankan pembuatan user, namun tidak mengembalikan response HTTP  | Melihat apakah bug yang ditemukan valid dan mengkonfirmasi perbaikannya dengan testing |
 | Gemini | Perbaikan DockerFile dan DockerCompose | Mengapa file docker-compose.yml ini dan DockerFile untuk backend ini tidak dapat berjalan dengan error X | Melihat apakah masalah yang ditemukan valid dan mengkonfirmasi perbaikannya dengan testing |
+| Claude | Perbaikan bug dan error yang masih terjadi dalam app | Claude tolong cek file di branch develop terus kamu cari bugnya dan coba difix | mengecek hasilnya dengan testing lanjutan untuk menambahkan ekkurangan yang masih ada |
 
 
 ---
