@@ -1,12 +1,23 @@
-import { apiRequest } from './api';
+import {
+  API_BASE_URL,
+  ApiError,
+  apiRequest,
+  ensureDevAuthToken,
+  getAuthToken,
+} from './api';
 
 export type RatingTag = 'Tepat Waktu' | 'Kerja Bersih' | 'Ramah';
 
 export type ContractStatusBackend =
   | 'In Progress'
+  | 'On Progress'
+  | 'Menunggu'
+  | 'Menunggu Konfirmasi Pelanggan'
   | 'Completed'
   | 'Done'
-  | 'Cancelled';
+  | 'Cancelled'
+  | 'Dibatalkan'
+  | 'Ditolak';
 
 export type HistoryDisplayStatus = 'On Progress' | 'Selesai' | 'Dibatalkan';
 
@@ -28,13 +39,14 @@ export interface RatingRecord {
   nilaiRating: number;
   ulasan?: string | null;
   tags?: string[];
-  waktuRating: string;
+  waktuRating?: string;
+  tanggalRating?: string;
 }
 
 export interface CreateRatingResponse {
   success: boolean;
   message: string;
-  data?: RatingRecord;
+  data?: RatingRecord | { rating?: RatingRecord; penerima?: unknown };
 }
 
 export interface VerifyRatingResponse {
@@ -42,9 +54,10 @@ export interface VerifyRatingResponse {
   canRate: boolean;
   message?: string;
   data?: {
-    idKontrak: string;
-    statusPekerjaan: ContractStatusBackend;
-    hasRating: boolean;
+    idKontrak?: string;
+    idKontrakPekerjaan?: string;
+    statusPekerjaan?: ContractStatusBackend;
+    hasRating?: boolean;
     idPenggunaPenerima?: string;
     namaPenerima?: string;
     detailPekerjaan?: string;
@@ -68,6 +81,34 @@ export interface CustomerTransactionItem {
   nilaiRatingDiberikan?: number;
   ulasanDiberikan?: string;
   tagsDiberikan?: string[];
+}
+
+interface BackendKontrakRecord {
+  idKontrakPekerjaan: string;
+  idPelanggan: string;
+  idPemberiJasa: string;
+  detailPekerjaan: string;
+  persetujuanHarga: number;
+  statusPekerjaan: string;
+  hasRating: boolean;
+  createdAt: string;
+  pemberiJasa?: {
+    idPemberiJasa?: string;
+    namaToko?: string;
+    jenisJasa?: string | null;
+    pengguna?: {
+      namaPengguna?: string;
+      avatarUrl?: string | null;
+      akumulasiRating?: number;
+    };
+  };
+  ratings?: Array<{
+    idRating?: string;
+    idPenggunaPemberi?: string;
+    nilaiRating?: number;
+    ulasan?: string | null;
+    tags?: string[];
+  }>;
 }
 
 export const INITIAL_CUSTOMER_TRANSACTIONS: CustomerTransactionItem[] = [
@@ -123,11 +164,26 @@ type StoreListener = (items: CustomerTransactionItem[]) => void;
 let customerTransactionsStore: CustomerTransactionItem[] =
   INITIAL_CUSTOMER_TRANSACTIONS.map((item) => ({ ...item }));
 
+let lastBackendError: string | null = null;
+let lastSyncSource: 'backend' | 'offline' = 'offline';
+
 const listeners = new Set<StoreListener>();
 
 function notifyListeners() {
   const snapshot = getCustomerTransactionsSnapshot();
   listeners.forEach((listener) => listener(snapshot));
+}
+
+export function getLastBackendSyncStatus(): {
+  source: 'backend' | 'offline';
+  error: string | null;
+  apiBaseUrl: string;
+} {
+  return {
+    source: lastSyncSource,
+    error: lastBackendError,
+    apiBaseUrl: API_BASE_URL,
+  };
 }
 
 export function getCustomerTransactionsSnapshot(): CustomerTransactionItem[] {
@@ -153,6 +209,8 @@ export function resetCustomerTransactionsStore(
     ...item,
     tagsDiberikan: item.tagsDiberikan ? [...item.tagsDiberikan] : undefined,
   }));
+  lastBackendError = null;
+  lastSyncSource = 'offline';
   notifyListeners();
 }
 
@@ -167,11 +225,97 @@ export function getInitialsFromName(name: string): string {
 }
 
 export function mapBackendStatusToDisplay(
-  status: ContractStatusBackend
+  status: string
 ): HistoryDisplayStatus {
-  if (status === 'Done') return 'Selesai';
-  if (status === 'Cancelled') return 'Dibatalkan';
+  const normalized = status.trim().toLowerCase();
+  if (normalized === 'done') return 'Selesai';
+  if (
+    normalized === 'cancelled' ||
+    normalized === 'dibatalkan' ||
+    normalized === 'ditolak'
+  ) {
+    return 'Dibatalkan';
+  }
   return 'On Progress';
+}
+
+function formatIsoTimestamp(iso: string): string {
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return iso;
+  const months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'Mei',
+    'Jun',
+    'Jul',
+    'Agu',
+    'Sep',
+    'Okt',
+    'Nov',
+    'Des',
+  ];
+  const day = date.getDate();
+  const month = months[date.getMonth()] ?? '';
+  const year = date.getFullYear();
+  const hh = String(date.getHours()).padStart(2, '0');
+  const mm = String(date.getMinutes()).padStart(2, '0');
+  return `${day} ${month} ${year} · ${hh}.${mm}`;
+}
+
+function formatRupiah(amount: number): string {
+  try {
+    return `Rp ${amount.toLocaleString('id-ID')}`;
+  } catch {
+    return `Rp ${amount}`;
+  }
+}
+
+export function mapBackendKontrakToTransaction(
+  raw: BackendKontrakRecord
+): CustomerTransactionItem {
+  const namaPenyedia =
+    raw.pemberiJasa?.pengguna?.namaPengguna ||
+    raw.pemberiJasa?.namaToko ||
+    'Penyedia Jasa';
+  const latestRating =
+    Array.isArray(raw.ratings) && raw.ratings.length > 0
+      ? raw.ratings[0]
+      : undefined;
+  const hasRating = Boolean(
+    raw.hasRating || (Array.isArray(raw.ratings) && raw.ratings.length > 0)
+  );
+
+  return {
+    idKontrak: raw.idKontrakPekerjaan,
+    judulPekerjaan: raw.detailPekerjaan,
+    detailPekerjaan: raw.detailPekerjaan,
+    waktuTransaksi: formatIsoTimestamp(raw.createdAt),
+    idPenggunaPelanggan: raw.idPelanggan,
+    idPenggunaPenyedia: raw.idPemberiJasa,
+    namaPenyedia,
+    inisialPenyedia: getInitialsFromName(namaPenyedia),
+    biayaKesepakatan: raw.persetujuanHarga,
+    hargaFormatted: formatRupiah(raw.persetujuanHarga),
+    statusPekerjaan: raw.statusPekerjaan as ContractStatusBackend,
+    displayStatus: mapBackendStatusToDisplay(raw.statusPekerjaan),
+    hasRating,
+    nilaiRatingDiberikan: latestRating?.nilaiRating,
+    ulasanDiberikan: latestRating?.ulasan ?? undefined,
+    tagsDiberikan: latestRating?.tags,
+  };
+}
+
+async function resolveAuthHeaders(
+  explicitToken?: string
+): Promise<Record<string, string>> {
+  const headers: Record<string, string> = {};
+  const token = explicitToken || getAuthToken() || (await ensureDevAuthToken());
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+  return headers;
 }
 
 export function markContractRatedInStore(
@@ -222,19 +366,48 @@ export async function verifyContractForRating(
   token?: string
 ): Promise<VerifyRatingResponse> {
   try {
-    const headers: Record<string, string> = {};
-    if (token) {
-      headers.Authorization = `Bearer ${token}`;
+    const headers = await resolveAuthHeaders(token);
+    const data = await apiRequest<{
+      canRate?: boolean;
+      idKontrakPekerjaan?: string;
+      idPenggunaPemberi?: string;
+      idPenggunaPenerima?: string;
+      detailPekerjaan?: string;
+      statusPekerjaan?: ContractStatusBackend;
+      hasRating?: boolean;
+      success?: boolean;
+      message?: string;
+    }>(`/ratings/verify/${encodeURIComponent(idKontrak)}`, {
+      method: 'GET',
+      headers,
+    });
+
+    const canRate = Boolean(data?.canRate);
+    return {
+      success: canRate,
+      canRate,
+      message: data?.message || (canRate ? 'Kontrak pekerjaan siap untuk diberi rating.' : undefined),
+      data: {
+        idKontrak: data?.idKontrakPekerjaan || idKontrak,
+        idKontrakPekerjaan: data?.idKontrakPekerjaan || idKontrak,
+        statusPekerjaan: data?.statusPekerjaan,
+        hasRating: data?.hasRating,
+        idPenggunaPenerima: data?.idPenggunaPenerima,
+        detailPekerjaan: data?.detailPekerjaan,
+      },
+    };
+  } catch (err) {
+    // Jika server merespons dengan status HTTP (misal 400/401/403/404), tampilkan error asli dari server
+    if (err instanceof ApiError && err.status > 0) {
+      console.warn('[ratingService] Verifikasi gagal dari server:', err.status, err.message);
+      return {
+        success: false,
+        canRate: false,
+        message: err.message,
+      };
     }
-    const response = await apiRequest<VerifyRatingResponse>(
-      `/ratings/verify/${encodeURIComponent(idKontrak)}`,
-      {
-        method: 'GET',
-        headers,
-      }
-    );
-    return response;
-  } catch {
+
+    // Fallback offline hanya jika server tidak dapat dijangkau (status === 0 / Jest unit test)
     const localContract = customerTransactionsStore.find(
       (item) => item.idKontrak === idKontrak
     );
@@ -286,28 +459,45 @@ export async function submitRating(
   };
 
   try {
-    const headers: Record<string, string> = {};
-    if (token) {
-      headers.Authorization = `Bearer ${token}`;
-    }
+    const headers = await resolveAuthHeaders(token);
 
-    const response = await apiRequest<CreateRatingResponse>('/ratings', {
+    // `apiRequest` otomatis me-unwrap `json.data` dari backend (`{ rating, penerima }`)
+    const data = await apiRequest<{
+      rating?: RatingRecord;
+      penerima?: unknown;
+      idRating?: string;
+    }>('/ratings', {
       method: 'POST',
       headers,
       body: sanitizedPayload,
     });
 
-    if (response.success) {
-      markContractRatedInStore(
-        sanitizedPayload.idKontrakPekerjaan,
-        sanitizedPayload.nilaiRating,
-        sanitizedPayload.ulasan,
-        sanitizedPayload.tags
-      );
+    markContractRatedInStore(
+      sanitizedPayload.idKontrakPekerjaan,
+      sanitizedPayload.nilaiRating,
+      sanitizedPayload.ulasan,
+      sanitizedPayload.tags
+    );
+
+    return {
+      success: true,
+      message: 'Rating berhasil disimpan',
+      data: data?.rating ?? data,
+    };
+  } catch (err) {
+    // Jika server membalas HTTP error (400/401/403/404/500), JANGAN sembunyikan error!
+    if (err instanceof ApiError && err.status > 0) {
+      console.warn('[ratingService] Submit rating ditolak server:', err.status, err.message);
+      return {
+        success: false,
+        message: err.message,
+      };
     }
 
-    return response;
-  } catch {
+    console.warn(
+      `[ratingService] Backend tidak terjangkau di ${API_BASE_URL}. Menggunakan fallback store lokal.`
+    );
+
     markContractRatedInStore(
       sanitizedPayload.idKontrakPekerjaan,
       sanitizedPayload.nilaiRating,
@@ -333,36 +523,46 @@ export async function submitRating(
 }
 
 /**
- * Mengambil daftar riwayat transaksi pelanggan (`UI-10`).
+ * Mengambil daftar riwayat transaksi pelanggan dari `GET /api/kontrak` (`UI-10`).
  */
 export async function fetchCustomerTransactions(
   token?: string
 ): Promise<CustomerTransactionItem[]> {
   try {
-    const headers: Record<string, string> = {};
-    if (token) {
-      headers.Authorization = `Bearer ${token}`;
-    }
-    const response = await apiRequest<{
-      success: boolean;
-      data?: CustomerTransactionItem[];
-    }>('/kontrak/riwayat', {
+    const headers = await resolveAuthHeaders(token);
+    const data = await apiRequest<
+      BackendKontrakRecord[] | CustomerTransactionItem[]
+    >('/kontrak', {
       method: 'GET',
       headers,
     });
 
-    if (response?.success && Array.isArray(response.data)) {
-      customerTransactionsStore = response.data.map((item) => ({
-        ...item,
-        inisialPenyedia:
-          item.inisialPenyedia || getInitialsFromName(item.namaPenyedia),
-        displayStatus:
-          item.displayStatus || mapBackendStatusToDisplay(item.statusPekerjaan),
-      }));
+    if (Array.isArray(data)) {
+      customerTransactionsStore = data.map((item) => {
+        if ('idKontrakPekerjaan' in item) {
+          return mapBackendKontrakToTransaction(item as BackendKontrakRecord);
+        }
+        const tx = item as CustomerTransactionItem;
+        return {
+          ...tx,
+          inisialPenyedia:
+            tx.inisialPenyedia || getInitialsFromName(tx.namaPenyedia),
+          displayStatus:
+            tx.displayStatus || mapBackendStatusToDisplay(tx.statusPekerjaan),
+        };
+      });
+      lastSyncSource = 'backend';
+      lastBackendError = null;
       notifyListeners();
     }
-  } catch {
-    // Gunakan state lokal jika backend belum aktif / offline
+  } catch (err) {
+    lastSyncSource = 'offline';
+    lastBackendError =
+      err instanceof Error ? err.message : 'Gagal terhubung ke backend.';
+    console.warn(
+      `[ratingService] Gagal memuat riwayat dari ${API_BASE_URL}/kontrak:`,
+      lastBackendError
+    );
   }
 
   return getCustomerTransactionsSnapshot();
@@ -376,16 +576,20 @@ export async function confirmContractCompletion(
   token?: string
 ): Promise<CustomerTransactionItem | null> {
   try {
-    const headers: Record<string, string> = {};
-    if (token) {
-      headers.Authorization = `Bearer ${token}`;
-    }
+    const headers = await resolveAuthHeaders(token);
     await apiRequest(`/kontrak/${encodeURIComponent(idKontrak)}/konfirmasi`, {
       method: 'PATCH',
       headers,
     });
-  } catch {
-    // Fallback ke update store lokal
+  } catch (err) {
+    if (err instanceof ApiError && err.status > 0) {
+      console.warn(
+        '[ratingService] Konfirmasi kontrak gagal dari server:',
+        err.status,
+        err.message
+      );
+      return null;
+    }
   }
 
   return markContractDoneInStore(idKontrak);
