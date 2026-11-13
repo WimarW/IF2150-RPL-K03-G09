@@ -5,6 +5,14 @@ const DEFAULT_PORT = 5000;
 
 function extractExpoHostIp(): string | null {
   try {
+    if (
+      Platform.OS === 'web' &&
+      typeof window !== 'undefined' &&
+      window.location?.hostname
+    ) {
+      return window.location.hostname;
+    }
+
     const scriptURL: string | undefined =
       NativeModules?.SourceCode?.scriptURL;
     if (!scriptURL) return null;
@@ -101,6 +109,7 @@ export type Role = 'PELANGGAN' | 'PEMBERI_JASA' | 'LAYANAN_PELANGGAN';
 export interface SessionUser {
   idPengguna: string;
   namaPengguna: string;
+  username?: string;
   email: string;
   role: Role;
   idPemberiJasa?: string;
@@ -112,6 +121,7 @@ export interface SessionUser {
 export const DEV_USER: SessionUser = {
   idPengguna: 'usr-pelanggan-001',
   namaPengguna: 'Naufal Hasbialhaq',
+  username: 'budi_pelanggan',
   email: 'naufal.h@example.com',
   role: 'PELANGGAN',
   idPemberiJasa: undefined,
@@ -120,14 +130,25 @@ export const DEV_USER: SessionUser = {
 export type SessionListener = (user: SessionUser) => void;
 
 let currentSessionUser: SessionUser = { ...DEV_USER };
+let devLoginPromise: Promise<string | null> | null = null;
 const sessionListeners = new Set<SessionListener>();
-
-export function setAuthToken(token: string | null): void {
-  authToken = token;
-}
 
 export function getAuthToken(): string | null {
   return authToken;
+}
+
+export function setAuthToken(
+  token: string | null,
+  user?: Partial<SessionUser>
+): void {
+  authToken = token;
+  if (user) {
+    currentSessionUser = {
+      ...currentSessionUser,
+      ...user,
+    };
+    sessionListeners.forEach((listener) => listener(currentSessionUser));
+  }
 }
 
 /**
@@ -181,15 +202,64 @@ export function subscribeSession(
 }
 
 /**
- * React Hook untuk membaca sesi pengguna secara reaktif di berbagai layar.
+ * Memastikan sesi dev memiliki JWT token valid dari `POST /api/auth/login`
+ * saat belum login manual.
  */
-export function useSessionUser(): {
+export async function ensureDevAuthToken(): Promise<string | null> {
+  if (authToken) {
+    return authToken;
+  }
+
+  if (typeof process !== 'undefined' && process.env?.JEST_WORKER_ID) {
+    return null;
+  }
+
+  if (devLoginPromise) {
+    return devLoginPromise;
+  }
+
+  devLoginPromise = (async () => {
+    try {
+      const loginData = await apiRequest<{
+        token?: string;
+        user?: Partial<SessionUser>;
+      }>('/auth/login', {
+        method: 'POST',
+        skipAuth: true,
+        body: {
+          username: currentSessionUser.username || DEV_USER.username,
+          password: 'PasswordAman123',
+        },
+      });
+
+      if (loginData?.token) {
+        setAuthToken(loginData.token, loginData.user);
+        return loginData.token;
+      }
+      return null;
+    } catch (err) {
+      console.warn(
+        '[api] Auto-login dev session gagal:',
+        err instanceof Error ? err.message : err
+      );
+      return null;
+    } finally {
+      devLoginPromise = null;
+    }
+  })();
+
+  return devLoginPromise;
+}
+
+export interface UseSessionUserResult {
   user: SessionUser;
   isPelanggan: boolean;
   isPenyediaJasa: boolean;
   isCS: boolean;
   updateRole: (role: Role, idPemberiJasa?: string) => SessionUser;
-} {
+}
+
+export function useSessionUser(): UseSessionUserResult {
   const [user, setUser] = useState<SessionUser>(() => getCurrentUser());
 
   useEffect(() => {
@@ -221,6 +291,7 @@ export interface ApiRequestOptions {
   headers?: Record<string, string>;
   timeoutMs?: number;
   signal?: AbortSignal;
+  skipAuth?: boolean;
 }
 
 export interface ApiResponse<T> {
@@ -308,6 +379,7 @@ export async function apiRequest<T>(
     headers = {},
     timeoutMs = REQUEST_TIMEOUT_MS,
     signal,
+    skipAuth = false,
   } = options;
 
   const normalizedPath = path.startsWith('/') ? path : `/${path}`;
@@ -324,7 +396,9 @@ export async function apiRequest<T>(
           'Content-Type': 'application/json',
           'X-User-Id': currentSessionUser.idPengguna,
           'X-User-Role': currentSessionUser.role,
-          ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+          ...(!skipAuth && authToken
+            ? { Authorization: `Bearer ${authToken}` }
+            : {}),
           ...headers,
         },
         body:

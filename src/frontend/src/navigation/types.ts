@@ -1,5 +1,6 @@
 import type { NavigatorScreenParams } from '@react-navigation/native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import type { SortKey } from '../services/serviceCatalogService';
 
 export type UserRole = 'PELANGGAN' | 'PEMBERI_JASA' | 'LAYANAN_PELANGGAN';
 
@@ -98,21 +99,22 @@ export type RootStackParamList = {
         initialCategoryName?: string;
       }
     | undefined;
-  SearchResult:
-    | {
-        keyword?: string;
-        kategori?: string;
-        initialSort?: 'terdekat' | 'rating_terbaik' | 'harga_termurah';
-        focusProviderId?: string;
-        query?: string;
-        categoryId?: string;
-        categoryName?: string;
-        idKategori?: string;
-        namaKategori?: string;
-      }
-    | undefined;
+  SearchResult: {
+    keyword: string;
+    kategori?: string;
+    initialSort?: SortKey;
+    focusProviderId?: string;
+  };
   CustomerChat: ChatRouteParams | undefined;
   ProviderChat: ChatRouteParams | undefined;
+  Rating: {
+    idKontrakPekerjaan: string;
+    idPenggunaPenerima: string;
+    namaPenerima: string;
+    inisialPenerima?: string;
+    detailPekerjaan: string;
+    initialStars?: number;
+  };
   Notification: undefined;
   Profile: undefined;
 };

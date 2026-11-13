@@ -19,6 +19,7 @@ import { CustomerChatView } from '../views/chat/CustomerChatView';
 import { ProviderChatView } from '../views/chat/ProviderChatView';
 import { NotificationView } from '../views/chat/notifications/NotificationView';
 import { ProviderHistoryView } from '../views/history/ProviderHistoryView';
+import { RatingView } from '../views/rating/RatingView';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -219,6 +220,12 @@ export const RootNavigator: React.FC = () => {
             </TouchableOpacity>
           ),
         })}
+      />
+      {/* Penilaian & Ulasan (UC10 - UI-11) */}
+      <Stack.Screen
+        name="Rating"
+        component={RatingView}
+        options={{ animation: 'slide_from_bottom' }}
       />
     </Stack.Navigator>
   );

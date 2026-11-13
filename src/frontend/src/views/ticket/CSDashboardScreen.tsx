@@ -1,11 +1,13 @@
 import React, { useCallback, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, RefreshControl, ActivityIndicator } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { api, avatarColor, waktuRelatif } from '../../services/ticketService';
 
 type Filter = 'Semua' | 'Tiket Baru' | 'Diproses' | 'Selesai';
 
 export default function CSDashboardScreen({ navigation }: any) {
+  const insets = useSafeAreaInsets();
   const [filter, setFilter] = useState<Filter>('Semua');
   const [tickets, setTickets] = useState<any[]>([]);
   const [stats, setStats] = useState({ tiketBaru: 0, diproses: 0, selesai: 0 });
@@ -65,7 +67,7 @@ export default function CSDashboardScreen({ navigation }: any) {
   );
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { paddingTop: insets.top + 15 }]}>
       <View style={styles.header}>
         <View>
           <Text style={styles.title}>Beranda CS</Text>
@@ -100,7 +102,7 @@ export default function CSDashboardScreen({ navigation }: any) {
         />
       )}
 
-      <View style={styles.bottomNav}>
+      <View style={[styles.bottomNav, { paddingBottom: 12 + insets.bottom }]}>
         <Text style={{ color: '#1ABC9C', fontSize: 12, fontWeight: '600' }}>Beranda</Text>
       </View>
     </View>
@@ -108,7 +110,7 @@ export default function CSDashboardScreen({ navigation }: any) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F8F9FA', padding: 20, paddingTop: 50 },
+  container: { flex: 1, backgroundColor: '#F8F9FA', paddingHorizontal: 20 },
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 25 },
   title: { fontSize: 26, fontWeight: 'bold', color: '#1A237E' },
   subtitle: { fontSize: 14, color: '#78909C', marginTop: 5 },
@@ -139,5 +141,5 @@ const styles = StyleSheet.create({
   badgeText: { fontSize: 10, fontWeight: 'bold', color: '#1A237E' },
   ticketDesc: { fontSize: 12, color: '#78909C', marginBottom: 8 },
   ticketTime: { fontSize: 10, color: '#B0BEC5' },
-  bottomNav: { borderTopWidth: 1, borderColor: '#E0E0E0', paddingVertical: 12, alignItems: 'center', backgroundColor: 'white' },
+  bottomNav: { borderTopWidth: 1, borderColor: '#E0E0E0', paddingTop: 12, marginHorizontal: -20, alignItems: 'center', backgroundColor: 'white' },
 });
