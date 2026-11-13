@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useSessionUser } from '../services/api';
 import { ProviderHistoryView } from './history/ProviderHistoryView';

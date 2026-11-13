@@ -1,3 +1,11 @@
+/**
+ * UI-10 Riwayat Pelanggan — Kelas DPPL C02 PenggunaUI & C17 KontrakPekerjaanUI
+ * Traceability:
+ * - Tabel 6.10 DPPL (UI-10-01 s.d. UI-10-06)
+ * - UC07 (Pelanggan mengonfirmasi penyelesaian pekerjaan dan pembayaran -> Tombol "Konfirmasi Selesai")
+ * - UC10 (Pelanggan memberikan rating dan ulasan -> Tombol "Beri Rating" & Modal UI-11)
+ */
+
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Modal,
@@ -21,6 +29,10 @@ import {
   getLastBackendSyncStatus,
   subscribeCustomerTransactions,
 } from '../../services/ratingService';
+import {
+  contractService,
+  subscribeContracts,
+} from '../../services/contractService';
 import {
   filterTransactionsByTab,
   shouldShowBeriRatingButton,
@@ -61,6 +73,7 @@ function getStatusBadgeTheme(status: HistoryDisplayStatus): StatusBadgeTheme {
 /**
  * Layar Riwayat Transaksi Pelanggan (`UI-10` / Kelas DPPL `C02 PenggunaUI`).
  * Mendukung:
+ * - UC07: Tombol "Konfirmasi Selesai" pada pesanan yang dilaporkan selesai oleh penyedia jasa.
  * - Skenario Normal `UC10`: Konfirmasi pesanan selesai otomatis memunculkan dialog Beri Penilaian (`UI-11`).
  * - Skenario Alternatif 1 `UC10`: Jika dialog ditutup (`‹ Kembali`), tombol "Beri Rating" (`UI-10-06`)
  *   tetap tersedia di kartu riwayat dan dapat dibuka kapan saja.
@@ -95,11 +108,17 @@ export const CustomerHistoryView: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const unsubscribe = subscribeCustomerTransactions((updatedItems) => {
+    const unsubscribeRating = subscribeCustomerTransactions((updatedItems) => {
       setTransactions(updatedItems);
     });
+    const unsubscribeContracts = subscribeContracts(() => {
+      setTransactions(getCustomerTransactionsSnapshot());
+    });
     loadFromBackend();
-    return unsubscribe;
+    return () => {
+      unsubscribeRating();
+      unsubscribeContracts();
+    };
   }, [loadFromBackend]);
 
   const filteredTransactions = useMemo(
@@ -117,14 +136,15 @@ export const CustomerHistoryView: React.FC = () => {
   }, []);
 
   /**
-   * Menangani Skenario Normal `UC10`:
-   * Saat pelanggan mengonfirmasi pekerjaan selesai (`Done`), dialog popup Beri Penilaian (`UI-11`)
-   * langsung ditampilkan. Jika pengguna menutup popup (`‹ Kembali`), pengguna tetap dapat menilai
-   * di kemudian hari melalui tombol "Beri Rating" (`UI-10-06`).
+   * Menangani `UC07` (Konfirmasi Selesai oleh Pelanggan) & Skenario Normal `UC10`:
+   * Saat pelanggan mengonfirmasi pekerjaan selesai (`Done`), status kontrak diperbarui
+   * ke backend (`PATCH /api/kontrak/:id/konfirmasi`) maupun store penyedia jasa (`UI-12`),
+   * lalu dialog popup Beri Penilaian (`UI-11`) langsung ditampilkan.
    */
   const handleConfirmOrderCompleted = useCallback(
     async (item: CustomerTransactionItem) => {
       const updated = await confirmContractCompletion(item.idKontrak);
+      await contractService.confirmWorkByCustomer(item.idKontrak);
       if (updated) {
         setRatingTarget(updated);
       }
@@ -145,6 +165,7 @@ export const CustomerHistoryView: React.FC = () => {
    * Setelah submit berhasil (`201 Created`):
    * - Modal `UI-11` ditutup kembali ke layar Riwayat (`UI-10`)
    * - Status `hasRating` langsung `true` sehingga tombol "Beri Rating" (`UI-10-06`) seketika tersembunyi
+   * - Menyinkronkan nilai rating ke store `contractService` (untuk tampilan `UI-12` Penyedia Jasa)
    * - Menampilkan feedback sukses kepada pengguna.
    */
   const handleRatingSubmitted = useCallback(
@@ -155,6 +176,11 @@ export const CustomerHistoryView: React.FC = () => {
       tags: string[];
       message: string;
     }) => {
+      contractService.markContractRated(
+        result.idKontrakPekerjaan,
+        result.nilaiRating,
+        result.ulasan
+      );
       setRatingTarget(null);
       setTransactions(getCustomerTransactionsSnapshot());
       setFeedbackBanner(
@@ -171,7 +197,10 @@ export const CustomerHistoryView: React.FC = () => {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl refreshing={isRefreshing} onRefresh={loadFromBackend} />
+          <RefreshControl
+            refreshing={isRefreshing}
+            onRefresh={loadFromBackend}
+          />
         }
       >
         {/* UI-10-01: Header Judul & Subjudul */}
@@ -190,7 +219,9 @@ export const CustomerHistoryView: React.FC = () => {
                 testID={`UI-10-02-filter-${tab}`}
                 style={[
                   styles.filterChip,
-                  isActive ? styles.filterChipActive : styles.filterChipInactive,
+                  isActive
+                    ? styles.filterChipActive
+                    : styles.filterChipInactive,
                 ]}
                 onPress={() => setActiveFilter(tab)}
                 activeOpacity={0.8}
@@ -222,7 +253,10 @@ export const CustomerHistoryView: React.FC = () => {
 
         {/* Banner Feedback Sukses Penilaian */}
         {feedbackBanner ? (
-          <View testID="UI-10-rating-success-banner" style={styles.successBanner}>
+          <View
+            testID="UI-10-rating-success-banner"
+            style={styles.successBanner}
+          >
             <Ionicons name="checkmark-circle" size={18} color="#078875" />
             <Text style={styles.successBannerText}>{feedbackBanner}</Text>
             <TouchableOpacity
@@ -251,6 +285,8 @@ export const CustomerHistoryView: React.FC = () => {
                 item.statusPekerjaan === 'Done' ||
                 item.displayStatus === 'Selesai';
               const isOnProgress = item.displayStatus === 'On Progress';
+              const isReportedDoneByProvider =
+                item.statusPekerjaan === 'Menunggu Konfirmasi Pelanggan';
 
               return (
                 <View
@@ -313,6 +349,13 @@ export const CustomerHistoryView: React.FC = () => {
                     <Text style={styles.priceText}>{item.hargaFormatted}</Text>
                   </View>
 
+                  {/* Indikator jika penyedia jasa telah melaporkan pekerjaan selesai (UC06 -> UC07) */}
+                  {isReportedDoneByProvider ? (
+                    <Text style={styles.reportedCompletedNote}>
+                      Penyedia jasa telah melaporkan pekerjaan ini selesai
+                    </Text>
+                  ) : null}
+
                   {/* Baris Tombol Aksi untuk Pesanan Selesai (`UI-10-05` & `UI-10-06`) */}
                   {isDone ? (
                     <View style={styles.actionButtonsRow}>
@@ -357,7 +400,7 @@ export const CustomerHistoryView: React.FC = () => {
                     </View>
                   ) : null}
 
-                  {/* Tombol Konfirmasi Pesanan Selesai untuk Skenario Normal UC10 */}
+                  {/* Tombol Konfirmasi Pesanan Selesai (UC07 & Skenario Normal UC10) */}
                   {isOnProgress ? (
                     <View style={styles.actionButtonsRow}>
                       <TouchableOpacity
@@ -438,7 +481,10 @@ export const CustomerHistoryView: React.FC = () => {
                 <View style={styles.detailItemRow}>
                   <Text style={styles.detailLabel}>Status</Text>
                   <Text style={styles.detailValue}>
-                    {detailTarget.displayStatus}
+                    {detailTarget.statusPekerjaan ===
+                    'Menunggu Konfirmasi Pelanggan'
+                      ? 'Menunggu Konfirmasi Pelanggan'
+                      : detailTarget.displayStatus}
                   </Text>
                 </View>
                 <View style={styles.detailItemRow}>
@@ -654,6 +700,12 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#153B65',
   },
+  reportedCompletedNote: {
+    marginTop: 10,
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#C47A00',
+  },
   actionButtonsRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -722,14 +774,18 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   emptyContainer: {
-    paddingVertical: 48,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: '#E5EDF2',
+    padding: 28,
     alignItems: 'center',
   },
   emptyTitle: {
     fontSize: 16,
     fontWeight: '700',
     color: '#153B65',
-    marginBottom: 4,
+    marginBottom: 6,
   },
   emptySubtitle: {
     fontSize: 13,
@@ -739,10 +795,12 @@ const styles = StyleSheet.create({
   detailModalBackdrop: {
     flex: 1,
     backgroundColor: 'rgba(21, 59, 101, 0.45)',
+    alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 24,
+    padding: 24,
   },
   detailModalCard: {
+    width: '100%',
     backgroundColor: '#FFFFFF',
     borderRadius: 20,
     padding: 20,
@@ -751,24 +809,29 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '700',
     color: '#153B65',
-    marginBottom: 14,
+    marginBottom: 16,
   },
   detailItemRow: {
-    marginBottom: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E9F0ED',
+    gap: 12,
   },
   detailLabel: {
-    fontSize: 11,
-    fontWeight: '600',
+    fontSize: 13,
     color: '#7A8FA8',
-    marginBottom: 2,
   },
   detailValue: {
-    fontSize: 14,
+    flex: 1,
+    fontSize: 13,
     fontWeight: '600',
     color: '#153B65',
+    textAlign: 'right',
   },
   detailCloseButton: {
-    marginTop: 12,
+    marginTop: 18,
     height: 44,
     borderRadius: 12,
     backgroundColor: '#153B65',

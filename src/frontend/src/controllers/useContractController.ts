@@ -7,16 +7,22 @@
  * - Antarmuka UI-08 (UI-08-04, UI-08-05, UI-08-09) & UI-09 (UI-09-06, UI-09-07, UI-09-08, UI-09-09)
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   ContractFormErrors,
   ContractFormValues,
   ContractRecord,
+  CustomerTransactionItem,
+  HistoryFilterTab,
+  ProviderJobItem,
 } from '../types/chat';
 import {
   contractService,
   DEFAULT_JASA_NAME,
   getCachedContractByPartner,
+  getCachedCustomerHistory,
+  getCachedProviderHistory,
+  normalizeStatusPekerjaan,
   subscribeContracts,
 } from '../services/contractService';
 
@@ -364,6 +370,262 @@ export function useContractController(
     kirimInput,
     acceptContract,
     rejectContract,
+  };
+}
+
+// ============================================================================
+// Helper & Controller Riwayat Transaksi Pelanggan (UI-10) & Penyedia Jasa (UI-12)
+// ============================================================================
+
+/**
+ * UI-10-02: Memfilter daftar transaksi pelanggan berdasarkan chip tab ("Semua", "Selesai", "On Progress").
+ */
+export function filterCustomerTransactionsByTab(
+  items: CustomerTransactionItem[],
+  activeTab: HistoryFilterTab
+): CustomerTransactionItem[] {
+  if (activeTab === 'Semua') {
+    return items;
+  }
+  if (activeTab === 'Selesai') {
+    return items.filter(
+      (item) =>
+        item.statusDisplay === 'Selesai' || item.statusPekerjaan === 'Done'
+    );
+  }
+  return items.filter(
+    (item) =>
+      item.statusDisplay === 'On Progress' ||
+      item.statusPekerjaan === 'On Progress' ||
+      item.statusPekerjaan === 'Menunggu Konfirmasi Pelanggan'
+  );
+}
+
+/**
+ * UI-12-03: Memfilter daftar pekerjaan penyedia jasa berdasarkan chip tab ("Semua", "Selesai", "On Progress").
+ */
+export function filterProviderJobsByTab(
+  items: ProviderJobItem[],
+  activeTab: HistoryFilterTab
+): ProviderJobItem[] {
+  if (activeTab === 'Semua') {
+    return items;
+  }
+  if (activeTab === 'Selesai') {
+    return items.filter(
+      (item) =>
+        item.statusDisplay === 'Selesai' || item.statusPekerjaan === 'Done'
+    );
+  }
+  return items.filter(
+    (item) =>
+      item.statusDisplay === 'On Progress' ||
+      item.statusPekerjaan === 'On Progress' ||
+      item.statusPekerjaan === 'Menunggu Konfirmasi Pelanggan'
+  );
+}
+
+/**
+ * UC07 (UI-10): Tombol "Konfirmasi Selesai" hanya tampil pada pesanan yang telah dilaporkan selesai oleh penyedia jasa
+ * (statusPekerjaan === 'Menunggu Konfirmasi Pelanggan').
+ */
+export function shouldShowKonfirmasiSelesaiButton(
+  statusPekerjaan?: string
+): boolean {
+  return (
+    normalizeStatusPekerjaan(statusPekerjaan) ===
+    'Menunggu Konfirmasi Pelanggan'
+  );
+}
+
+/**
+ * UI-10-05: Tombol "Lihat Detail" tampil pada transaksi yang telah selesai.
+ */
+export function shouldShowLihatDetailButton(
+  statusPekerjaan?: string,
+  statusDisplay?: string
+): boolean {
+  return (
+    normalizeStatusPekerjaan(statusPekerjaan) === 'Done' ||
+    statusDisplay === 'Selesai'
+  );
+}
+
+/**
+ * UI-10-06: Tombol "Beri Rating" hanya aktif/tampil jika status selesai ('Done'/'Selesai') dan belum dinilai (!hasRating).
+ */
+export function shouldShowBeriRatingButton(
+  statusPekerjaan?: string,
+  hasRating?: boolean,
+  statusDisplay?: string
+): boolean {
+  const isCompleted =
+    normalizeStatusPekerjaan(statusPekerjaan) === 'Done' ||
+    statusDisplay === 'Selesai';
+  return isCompleted && !hasRating;
+}
+
+/**
+ * UC06 (UI-12-07): Tombol "Pekerjaan Telah Selesai" tampil pada kartu pekerjaan penyedia jasa
+ * yang masih berstatus murni 'On Progress'.
+ */
+export function shouldShowPekerjaanSelesaiButton(
+  statusPekerjaan?: string
+): boolean {
+  return normalizeStatusPekerjaan(statusPekerjaan) === 'On Progress';
+}
+
+/**
+ * UI-12: Menampilkan indikator "Menunggu Konfirmasi" ketika penyedia jasa telah melaporkan pekerjaan selesai
+ * dan sedang menunggu konfirmasi dari pelanggan (statusPekerjaan === 'Menunggu Konfirmasi Pelanggan').
+ */
+export function shouldShowMenungguKonfirmasiLabel(
+  statusPekerjaan?: string
+): boolean {
+  return (
+    normalizeStatusPekerjaan(statusPekerjaan) ===
+    'Menunggu Konfirmasi Pelanggan'
+  );
+}
+
+export interface UseOrderHistoryControllerOptions {
+  initialTab?: HistoryFilterTab;
+  onShowFeedback?: (message: string) => void;
+}
+
+/**
+ * Custom hook controller untuk mengelola layar Riwayat Transaksi Pelanggan (UI-10)
+ * dan Riwayat Pekerjaan Penyedia Jasa (UI-12).
+ */
+export function useOrderHistoryController(
+  options?: UseOrderHistoryControllerOptions
+) {
+  const [activeTab, setActiveTab] = useState<HistoryFilterTab>(
+    options?.initialTab ?? 'Semua'
+  );
+  const [customerTransactions, setCustomerTransactions] = useState<
+    CustomerTransactionItem[]
+  >(() => getCachedCustomerHistory());
+  const [providerJobs, setProviderJobs] = useState<ProviderJobItem[]>(() =>
+    getCachedProviderHistory()
+  );
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [processingContractId, setProcessingContractId] = useState<
+    string | null
+  >(null);
+
+  const syncFromCache = useCallback(() => {
+    setCustomerTransactions(getCachedCustomerHistory());
+    setProviderJobs(getCachedProviderHistory());
+  }, []);
+
+  useEffect(() => {
+    syncFromCache();
+    const unsubscribe = subscribeContracts(() => {
+      syncFromCache();
+    });
+    return unsubscribe;
+  }, [syncFromCache]);
+
+  const refreshHistory = useCallback(
+    async (statusFilter?: string) => {
+      setIsLoading(true);
+      try {
+        await contractService.fetchContractHistory(
+          statusFilter ? { status: statusFilter } : undefined
+        );
+        syncFromCache();
+      } catch (err: unknown) {
+        const msg =
+          err instanceof Error
+            ? err.message
+            : 'Gagal memuat riwayat kontrak pekerjaan.';
+        options?.onShowFeedback?.(msg);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [options, syncFromCache]
+  );
+
+  /**
+   * UC06 (UI-12-07): Penyedia jasa menekan tombol "Pekerjaan Telah Selesai".
+   */
+  const reportJobCompleted = useCallback(
+    async (idKontrak: string): Promise<ContractRecord | null> => {
+      if (!idKontrak || processingContractId) return null;
+      setProcessingContractId(idKontrak);
+      try {
+        const updated = await contractService.completeWorkByProvider(idKontrak);
+        syncFromCache();
+        options?.onShowFeedback?.(
+          'Pekerjaan dilaporkan selesai. Menunggu konfirmasi pelanggan.'
+        );
+        return updated;
+      } catch (err: unknown) {
+        const msg =
+          err instanceof Error
+            ? err.message
+            : 'Gagal melaporkan penyelesaian pekerjaan.';
+        options?.onShowFeedback?.(msg);
+        return null;
+      } finally {
+        setProcessingContractId(null);
+      }
+    },
+    [options, processingContractId, syncFromCache]
+  );
+
+  /**
+   * UC07 (UI-10): Pelanggan menekan tombol "Konfirmasi Selesai".
+   */
+  const confirmJobCompleted = useCallback(
+    async (idKontrak: string): Promise<ContractRecord | null> => {
+      if (!idKontrak || processingContractId) return null;
+      setProcessingContractId(idKontrak);
+      try {
+        const updated = await contractService.confirmWorkByCustomer(idKontrak);
+        syncFromCache();
+        options?.onShowFeedback?.(
+          'Pekerjaan telah dikonfirmasi selesai. Silakan berikan penilaian Anda.'
+        );
+        return updated;
+      } catch (err: unknown) {
+        const msg =
+          err instanceof Error
+            ? err.message
+            : 'Gagal mengonfirmasi penyelesaian pekerjaan.';
+        options?.onShowFeedback?.(msg);
+        return null;
+      } finally {
+        setProcessingContractId(null);
+      }
+    },
+    [options, processingContractId, syncFromCache]
+  );
+
+  const filteredCustomerTransactions = useMemo(
+    () => filterCustomerTransactionsByTab(customerTransactions, activeTab),
+    [customerTransactions, activeTab]
+  );
+
+  const filteredProviderJobs = useMemo(
+    () => filterProviderJobsByTab(providerJobs, activeTab),
+    [providerJobs, activeTab]
+  );
+
+  return {
+    activeTab,
+    setActiveTab,
+    customerTransactions,
+    filteredCustomerTransactions,
+    providerJobs,
+    filteredProviderJobs,
+    isLoading,
+    processingContractId,
+    refreshHistory,
+    reportJobCompleted,
+    confirmJobCompleted,
   };
 }
 
