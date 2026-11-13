@@ -13,6 +13,7 @@ import {
 import {
   confirmContractCompletion,
   getCustomerTransactionsSnapshot,
+  mapBackendKontrakToTransaction,
   resetCustomerTransactionsStore,
   submitRating,
   verifyContractForRating,
@@ -133,6 +134,33 @@ describe('UI-11 Beri Penilaian & UI-10 Riwayat Pelanggan (UC10)', () => {
       expect(ratedContract.hasRating).toBe(true);
       expect(ratedContract.nilaiRatingDiberikan).toBe(5);
       expect(shouldShowBeriRatingButton(ratedContract)).toBe(false);
+    });
+
+    it('memetakan format respon Prisma GET /api/kontrak ke CustomerTransactionItem dengan akurat', () => {
+      const mapped = mapBackendKontrakToTransaction({
+        idKontrakPekerjaan: '333e8400-e29b-41d4-a716-446655440002',
+        idPelanggan: '111e8400-e29b-41d4-a716-446655440001',
+        idPemberiJasa: '222e8400-e29b-41d4-a716-446655440002',
+        detailPekerjaan: 'Cuci & setrika · 3 kg',
+        persetujuanHarga: 60000,
+        statusPekerjaan: 'Done',
+        hasRating: false,
+        createdAt: '2026-05-08T09:10:00.000Z',
+        pemberiJasa: {
+          idPemberiJasa: '222e8400-e29b-41d4-a716-446655440002',
+          pengguna: {
+            namaPengguna: 'Siti Bersih',
+          },
+        },
+        ratings: [],
+      });
+
+      expect(mapped.idKontrak).toBe('333e8400-e29b-41d4-a716-446655440002');
+      expect(mapped.namaPenyedia).toBe('Siti Bersih');
+      expect(mapped.inisialPenyedia).toBe('SB');
+      expect(mapped.displayStatus).toBe('Selesai');
+      expect(mapped.hasRating).toBe(false);
+      expect(shouldShowBeriRatingButton(mapped)).toBe(true);
     });
   });
 });
