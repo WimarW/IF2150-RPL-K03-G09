@@ -164,7 +164,7 @@ Tuliskan sistematika pembahasan dokumen ini secara ringkas dan runut bab demi ba
   
 **CariUang** adalah perangkat lunak berbasis *mobile application* (dikembangkan dengan React Native/Expo untuk perangkat Android) yang berperan sebagai penghubung antara pekerja jasa sektor informal (**Pemberi Jasa**, seperti teknisi AC, tukang listrik, jasa kebersihan rumah, tukang ledeng, penjahit, dan tukang sol sepatu) dengan masyrakat yang membutuhkan layanan tersebut (**Pelanggan**), serta didukung oleh pihak **Layanan Pelanggan (*Customer Service*)** untuk menangani aduan dan mediasi kendala. Perangkat lunak ini dibangun untuk menjawab keterbatasan akses pemasaran pekerja informal, ketidakpastian pencarian tenaga kerja terdekat yang tepercaya, serta minimnya rekam jejak reputasi dan mekanisme penyelesaian sengketa.<br>
   
-Secara garis besar, CariUang beroperasi dengan arsitektur *client–server* berpola **MVC (*Model-View-Controller*)** yang terdiri atas tiga komponen utama: <br>
+Secara garis besar, CariUang beroperasi dengan arsitektur *client-server* berpola **MVC (*Model-View-Controller*)** yang terdiri atas tiga komponen utama: <br>
 1. **Aplikasi Mobile (*Frontend*: *View* & *Client Controller*):** Menyediakan antarmuka multi-peran bagi Pelanggan, Pemberi Jasa, dan Layanan Pelanggan untuk autentikasi, pencarian katalog jasa beserta pemetaan lokasi berbasis radius GPS, ruang percakapan (*chat*), pengelolaan kontrak pekerjaan, penilaian (*rating*) dua arah, pengajuan dan mediasi tiket laporan, serta pusat notifikasi.
 2. **Server Aplikasi (*Backend API & Real-Time Server*: *Controller* & *Model*):** Dibangun menggunakan Node.js, Express.js, Socket.IO, dan Prisma ORM. Bagian ini menjalankan seluruh logika bisnis, termasuk autentikasi dan otorisasi berbasis JWT, perhitungan jarak lokasi (*Haversine*), mekanisme *optimistic locking* saat pemesanan jasa agar satu pemberi jasa tidak dipesan ganda secara bersamaan, *background worker* pembatalan otomatis kontrak apabila tidak direspons dalam 30 menit, distribusi tiket laporan secara otomatis ke petugas CS yang tersedia, serta pengiriman notifikasi *real-time*.
 3. **Basis Data Relasional (*DBMS*):** Menggunakan PostgreSQL 16 (dijalankan melalui Docker Compose) untuk menyimpan secara persisten data pengguna, profil pemberi jasa, kategori jasa, kontrak pekerjaan, riwayat komunikasi, tiket laporan, rating, dan notifikasi.
@@ -230,7 +230,7 @@ Tabel 2.3. Daftar *Use Case* Perangkat Lunak CariUang
 | UC07 | Mengonfirmasi status pekerjaan | Pelanggan mengonfirmasi laporan penyelesaian pekerjaan dari pemberi jasa sehingga status pekerjaan berubah menjadi *Done*. | Pelanggan | KF13 |
 | UC08 | Melaporkan masalah | Pelanggan atau pemberi jasa mengajukan tiket laporan kendala beserta keterangan dan bukti foto kepada layanan pelanggan. | Pelanggan, Pemberi Jasa | KF14, KF15, KF16 |
 | UC09 | Merespon laporan masalah | Layanan pelanggan menerima notifikasi tiket baru, meninjau laporan, berkomunikasi di ruang mediasi dengan pelapor, dan menutup tiket setelah selesai. | Layanan Pelanggan, Pelanggan, Pemberi Jasa | KF15, KF17, KF18 |
-| UC10 | Memberi rating | Pelanggan dan pemberi jasa saling memberikan skor penilaian (1–5) dan ulasan setelah kontrak selesai untuk memperbarui akumulasi rata-rata rating profil. | Pelanggan, Pemberi Jasa | KF19, KF20 |
+| UC10 | Memberi rating | Pelanggan dan pemberi jasa saling memberikan skor penilaian (1-5) dan ulasan setelah kontrak selesai untuk memperbarui akumulasi rata-rata rating profil. | Pelanggan, Pemberi Jasa | KF19, KF20 |
 | UC11 | Memasuki akun dalam perangkat lunak | Pelanggan, pemberi jasa, dan layanan pelanggan melakukan autentikasi (*login*) menggunakan akun yang telah terdaftar untuk mengakses fitur sesuai peran. | Pelanggan, Pemberi Jasa, Layanan Pelanggan | KF21 |
 | UC12 | Mendaftar akun ke perangkat lunak | Pelanggan dan pemberi jasa mendaftarkan akun baru pada aplikasi CariUang. | Pelanggan, Pemberi Jasa | KF21 |
 
@@ -332,20 +332,20 @@ Tabel 4.1.1. Identifikasi Tingkat Pengujian Kelas
 | C10 | LayananPelanggan | Mendalam | Memuat algoritma pemilihan staf CS berbeban terkecil (`cariLayananKosong()`, `ALGO-019` dengan penguncian baris `FOR UPDATE`) serta manajemen beban tiket (`tambahBeban`, `kurangiBeban`). | C10-UT01 s.d. C10-UT05, INT-TC08, INT-TC09 |
 | C11 | LayananPelangganUI | Tidak perlu | Lapisan *View* React Native (Meja Kerja CS & tampilan detail tiket) tanpa logika bisnis internal; teruji melalui `UC09`, `UC11`. | - |
 | C12 | LayananPelangganController | Mendalam | Memuat otorisasi login khusus peran CS, validasi filter tiket (`ALGO-020`), *auto-claim* & perubahan status `Open` → `Diproses` saat membalas (`ALGO-021`), serta penutupan tiket dan pengurangan beban CS. | C12-UT01 s.d. C12-UT06, INT-TC09 |
-| C13 | KategoriJasa | Sedang | Kelas entitas kategori jasa yang berisi *getter/setter* (`ALGO-022`–`ALGO-029`) serta operasi penyimpanan dan pengurutan alfabetis via Prisma (`ALGO-031`, `Q-015`). | C13-UT01 s.d. C13-UT03, INT-TC02 |
+| C13 | KategoriJasa | Sedang | Kelas entitas kategori jasa yang berisi *getter/setter* (`ALGO-022`-`ALGO-029`) serta operasi penyimpanan dan pengurutan alfabetis via Prisma (`ALGO-031`, `Q-015`). | C13-UT01 s.d. C13-UT03, INT-TC02 |
 | C14 | KategoriJasaUI | Tidak perlu | Lapisan *View* React Native (form pendaftaran jasa & daftar kategori beranda) tanpa logika bisnis; teruji melalui `UC01`, `UC02`. | - |
 | C15 | KategoriJasaController | Mendalam | Memuat validasi input pendaftaran jasa (`validateKategoriJasa()`, `ALGO-033`), transaksi penyimpanan kategori & pembaruan peran penyedia (`ALGO-034`, `ALGO-035`), dan pemfilteran kategori (`filterKategoriJasa()`). | C15-UT01 s.d. C15-UT06, INT-TC02 |
-| C16 | KontrakPekerjaan | Mendalam | Memuat aturan transisi status pekerjaan (`VALID_TRANSITIONS`, `KNF22`), *optimistic locking* pemesanan (`KNF04`, `KNF19`), konstruksi/validasi kontrak (`ALGO-036`–`ALGO-040`), dan *worker* *auto-cancel* 30 menit (`KNF11`). | C16-UT01 s.d. C16-UT07, INT-TC05, INT-TC06, INT-TC07 |
+| C16 | KontrakPekerjaan | Mendalam | Memuat aturan transisi status pekerjaan (`VALID_TRANSITIONS`, `KNF22`), *optimistic locking* pemesanan (`KNF04`, `KNF19`), konstruksi/validasi kontrak (`ALGO-036`-`ALGO-040`), dan *worker* *auto-cancel* 30 menit (`KNF11`). | C16-UT01 s.d. C16-UT07, INT-TC05, INT-TC06, INT-TC07 |
 | C17 | KontrakPekerjaanUI | Sedang | Mencakup *hook* `useContractController` di sisi klien yang menjalankan sanitasi/validasi form kontrak, pemetaan status kartu, filter tab riwayat, dan aturan visibilitas tombol aksi. | C17-UT01 s.d. C17-UT04 |
-| C18 | KontrakPekerjaanController | Mendalam | Mengatur seluruh siklus bisnis kontrak (`kirimInput`, `konfirmasiPersetujuanPenyedia`, `selesaikanPekerjaan`, `konfirmasiPekerjaan`, `ALGO-041`–`ALGO-043`), larangan *self-contract*, serta integrasi notifikasi & chat. | C18-UT01 s.d. C18-UT07, INT-TC05, INT-TC07 |
-| C19 | Komunikasi | Mendalam | Memuat inisialisasi pesan, isolasi dan pengurutan riwayat percakapan dua arah (`ALGO-044`–`ALGO-048`), penandaan pesan terbaca, dan agregasi daftar percakapan serta jumlah belum terbaca (`unreadCount`). | C19-UT01 s.d. C19-UT05, INT-TC04 |
+| C18 | KontrakPekerjaanController | Mendalam | Mengatur seluruh siklus bisnis kontrak (`kirimInput`, `konfirmasiPersetujuanPenyedia`, `selesaikanPekerjaan`, `konfirmasiPekerjaan`, `ALGO-041`-`ALGO-043`), larangan *self-contract*, serta integrasi notifikasi & chat. | C18-UT01 s.d. C18-UT07, INT-TC05, INT-TC07 |
+| C19 | Komunikasi | Mendalam | Memuat inisialisasi pesan, isolasi dan pengurutan riwayat percakapan dua arah (`ALGO-044`-`ALGO-048`), penandaan pesan terbaca, dan agregasi daftar percakapan serta jumlah belum terbaca (`unreadCount`). | C19-UT01 s.d. C19-UT05, INT-TC04 |
 | C20 | KomunikasiUI | Tidak perlu | Lapisan *View* React Native (daftar percakapan & ruang obrolan) tanpa logika bisnis internal; teruji melalui `UC03`, `UC04`. | - |
-| C21 | KomunikasiController | Mendalam | Memuat validasi pesan (anti-*self-message*, batas 1000 karakter, anti-*spoofing* pengirim), kontrol akses riwayat chat (`ALGO-049`–`ALGO-052`), pemancaran *Socket.IO*, dan pemicuan notifikasi aman. | C21-UT01 s.d. C21-UT06, INT-TC04 |
+| C21 | KomunikasiController | Mendalam | Memuat validasi pesan (anti-*self-message*, batas 1000 karakter, anti-*spoofing* pengirim), kontrol akses riwayat chat (`ALGO-049`-`ALGO-052`), pemancaran *Socket.IO*, dan pemicuan notifikasi aman. | C21-UT01 s.d. C21-UT06, INT-TC04 |
 | C22 | TiketLaporan | Sedang | Mengelola operasi persistensi tiket, penomoran `A-xxxx`, statistik status, dan pengambilan/penambahan pesan mediasi via Prisma (`Q-008`). | C22-UT01 s.d. C22-UT03, INT-TC08, INT-TC09 |
 | C23 | TiketLaporanUI | Tidak perlu | Lapisan *View* React Native (buat tiket, daftar tiket saya, detail mediasi) tanpa logika bisnis internal; teruji melalui `UC08`, `UC09`. | - |
 | C24 | TiketLaporanController | Mendalam | Memuat validasi form aduan (`validasiFormTiket()`, `ALGO-053`), transaksi pembuatan tiket + penugasan otomatis CS (`ALGO-013`, `ALGO-054`), notifikasi non-blokir (`ALGO-055`), dan kontrol akses pelapor. | C24-UT01 s.d. C24-UT06, INT-TC08, INT-TC09 |
-| C25 | Rating | Mendalam | Memuat sanitasi *ulasan* & *tags* (`makeRating()`, `ALGO-057`), validasi nilai batas 1–5 (`ALGO-056`), serta kalkulasi rata-rata array PostgreSQL dengan pembulatan 2 desimal (`updateRatingPengguna()`, `ALGO-058`). | C25-UT01 s.d. C25-UT06, INT-TC10 |
-| C26 | RatingUI | Sedang | Mencakup *hook* `useRatingController` di sisi klien yang mengelola label predikat bintang (1–5), multi-pilih *tag* per peran, aktivasi tombol kirim, dan logika visibilitas tombol *Beri Rating* dua arah. | C26-UT01 s.d. C26-UT04 |
+| C25 | Rating | Mendalam | Memuat sanitasi *ulasan* & *tags* (`makeRating()`, `ALGO-057`), validasi nilai batas 1-5 (`ALGO-056`), serta kalkulasi rata-rata array PostgreSQL dengan pembulatan 2 desimal (`updateRatingPengguna()`, `ALGO-058`). | C25-UT01 s.d. C25-UT06, INT-TC10 |
+| C26 | RatingUI | Sedang | Mencakup *hook* `useRatingController` di sisi klien yang mengelola label predikat bintang (1-5), multi-pilih *tag* per peran, aktivasi tombol kirim, dan logika visibilitas tombol *Beri Rating* dua arah. | C26-UT01 s.d. C26-UT04 |
 | C27 | RatingController | Mendalam | Memuat validasi parameter rating (`validateRatingValue()`, `ALGO-064`), penegakan status kontrak wajib `Done`, pencegahan rating ganda per kontrak, dan pengambilan riwayat rating pengguna. | C27-UT01 s.d. C27-UT06, INT-TC10 |
 | C28 | Notifikasi | Tidak perlu | Kelas model akses data murni Prisma ORM tanpa aturan bisnis (terdokumentasi langsung di `Notifikasi.ts`); teruji tidak langsung melalui `C30` dan pengujian integrasi. | - |
 | C29 | NotifikasiUI | Tidak perlu | Lapisan *View* React Native (daftar notifikasi & *badge* belum dibaca) tanpa logika bisnis internal; teruji melalui `UC04`, `UC08`, `UC09`. | - |
@@ -353,427 +353,202 @@ Tabel 4.1.1. Identifikasi Tingkat Pengujian Kelas
 
 ## 4.2 Pengujian Unit Kelas
 
-Pengujian unit dilakukan pada kelas bertingkat Mendalam dan Sedang. Kelas Mendalam diuji pada seluruh operasi public dengan kasus normal, batas, dan negatif, serta mencapai *coverage* minimal 70%. Kelas Sedang diuji minimal dengan satu kasus normal dan satu kasus gagal pada operasi public utama.
+Pengujian unit dilakukan pada seluruh kelas bertingkat **Mendalam** (13 kelas) dan **Sedang** (7 kelas). Kelas **Mendalam** diuji pada seluruh operasi `public` dengan kasus *Normal*, *Batas* (*Boundary*), dan *Negatif* serta memenuhi *coverage* ≥ 70%. Kelas **Sedang** diuji minimal dengan satu kasus *Normal* dan satu kasus *Negatif/Gagal* pada operasi `public` utama. Kelas bertingkat **Tidak perlu** (10 kelas) tidak diuji secara unit terpisah karena tidak memuat logika bisnis internal dan diverifikasi melalui pengujian *use case* pada Subbab 4.4.
 
-Cara menjalankan unit test: *[tuliskan perintah, mis. `pytest src/tests/`]*.
+Cara menjalankan unit test:
+- **Backend:** `cd src/backend && npx jest --verbose --coverage`
+- **Frontend:** `cd src/frontend && npx jest --verbose --coverage`
 
-Lokasi file test: *[path, mis. `src/tests/`]*.
+Lokasi file test:
+- **Backend:** `src/backend/tests/` (`auth.test.ts`, `serviceCatalog.test.ts`, `komunikasi.test.ts`, `kontrakPekerjaan.test.ts`, `tiketLaporan.test.ts`, `rating.test.ts`, `notifikasi.test.ts`)
+- **Frontend:** `src/frontend/tests/` (`catalogHelpers.test.ts`, `contractHelpers.test.ts`, `ratingUI.test.ts`)
+
+---
 
 ### 4.2.1 Kelas Pengguna
 
 **ID Kelas:** C01  
 **Nama Kelas:** Pengguna  
-**Tingkat:** *[Mendalam/Sedang/Tidak perlu]*
+**Tingkat:** Sedang
 
-Tabel 4.2.1. Hasil Pengujian Unit Kelas [C01]
+Tabel 4.2.1. Hasil Pengujian Unit Kelas C01
 
 | ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| *C01-UT01* | *`[operasi()]`* | *Normal* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *C01-UT02* | *`[operasi()]`* | *Batas* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *C01-UT03* | *`[operasi()]`* | *Negatif* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *...* | *...* | *...* | *...* | *...* | *...* | *...* |
+| C01-UT01 | `addNewRatingRiwayat()` | Normal | Inisialisasi `new Pengguna({ idPengguna: 'u-local-1' })`, lalu panggil berurutan `addNewRatingRiwayat(5)`, `addNewRatingRiwayat(4)`, dan `addNewRatingRiwayat(4)` | `getRiwayatRating()` mengembalikan `[5, 4, 4]` dan `getAkumulasiRating()` mengembalikan `4.33` (rata-rata 2 desimal) | `getRiwayatRating()` menghasilkan `[5, 4, 4]` dan `getAkumulasiRating()` menghasilkan `4.33` (`tests/rating.test.ts`) | Pass |
+| C01-UT02 | `addNewRatingRiwayat()` | Batas | Panggil `addNewRatingRiwayat(1)` (batas bawah) dan `addNewRatingRiwayat(5)` (batas atas) pada `new Pengguna({ idPengguna: 'u-local-batas' })` | Kedua nilai diterima tanpa *error*, `getRiwayatRating()` = `[1, 5]`, dan `getAkumulasiRating()` = `3` | Nilai `1` dan `5` diterima, `riwayatRating` = `[1, 5]` dan `akumulasiRating` = `3` (`tests/rating.test.ts`) | Pass |
+| C01-UT03 | `addNewRatingRiwayat()` | Negatif | Panggil `addNewRatingRiwayat(0)` dan `addNewRatingRiwayat(6)` pada objek `Pengguna` | Melempar *error* `'Nilai rating harus berada dalam rentang 1 hingga 5.'` | Kedua pemanggilan melempar *error* sesuai pesan validasi rentang (`tests/rating.test.ts`) | Pass |
+| C01-UT04 | `konfirmasiPekerjaan()` | Normal & Negatif | (1) Panggil `konfirmasiPekerjaan(idKontrak)` saat kontrak masih berstatus `'Menunggu'`; (2) Panggil saat kontrak berstatus `'Menunggu Konfirmasi Pelanggan'` milik `'cust-1'` | (1) Mengembalikan `false`; (2) Mengembalikan `true` dan mengubah status kontrak menjadi `'Done'` | (1) Mengembalikan `false`; (2) Mengembalikan `true` dan status berubah menjadi `'Done'` (`tests/kontrakPekerjaan.test.ts`) | Pass |
 
-Khusus kelas **Mendalam**:
-
-Tabel 4.2.1b. Ringkasan Cakupan Kelas [C01]
-
-| Informasi | Keterangan |
-| :--- | :--- |
-| Daftar operasi public pada DPPL | *[op1(), op2(), ...]* |
-| Operasi yang diuji | *[op1(), op2(), ...]* |
-| ID Algoritma yang tercakup | *[Algo-001, ...]* |
-| Coverage (wajib ≥ 70%) | *[% baris / % cabang, alat dan bukti pada 4.6]* |
+---
 
 ### 4.2.2 Kelas PenggunaUI
 
 **ID Kelas:** C02  
 **Nama Kelas:** PenggunaUI  
-**Tingkat:** *[Mendalam/Sedang/Tidak perlu]*
+**Tingkat:** Tidak perlu
 
-Tabel 4.2.2. Hasil Pengujian Unit Kelas [C02]
+Tidak dilakukan pengujian unit terpisah karena kelas ini merupakan lapisan antarmuka (*View* React Native untuk registrasi, profil, dan riwayat) tanpa logika bisnis internal. Pengujian dilakukan secara tidak langsung melalui pengujian *use case* (`UC10`, `UC11`, `UC12`) pada Subbab 4.4.
 
-| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| *C02-UT01* | *`[operasi()]`* | *Normal* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *C02-UT02* | *`[operasi()]`* | *Batas* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *C02-UT03* | *`[operasi()]`* | *Negatif* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *...* | *...* | *...* | *...* | *...* | *...* | *...* |
-
-Khusus kelas **Mendalam**:
-
-Tabel 4.2.2b. Ringkasan Cakupan Kelas [C02]
-
-| Informasi | Keterangan |
-| :--- | :--- |
-| Daftar operasi public pada DPPL | *[op1(), op2(), ...]* |
-| Operasi yang diuji | *[op1(), op2(), ...]* |
-| ID Algoritma yang tercakup | *[Algo-001, ...]* |
-| Coverage (wajib ≥ 70%) | *[% baris / % cabang, alat dan bukti pada 4.6]* |
+---
 
 ### 4.2.3 Kelas PenggunaController
 
 **ID Kelas:** C03  
 **Nama Kelas:** PenggunaController  
-**Tingkat:** *[Mendalam/Sedang/Tidak perlu]*
+**Tingkat:** Mendalam
 
-Tabel 4.2.3. Hasil Pengujian Unit Kelas [C03]
+Tabel 4.2.3. Hasil Pengujian Unit Kelas C03
 
 | ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| *C03-UT01* | *`[operasi()]`* | *Normal* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *C03-UT02* | *`[operasi()]`* | *Batas* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *C03-UT03* | *`[operasi()]`* | *Negatif* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *...* | *...* | *...* | *...* | *...* | *...* | *...* |
+| C03-UT01 | `validasiInfoRegistrasi()` | Normal | Kirim payload valid dengan spasi tepi pada `namaPengguna`/`username`/`email` huruf kapital serta alias `nomorTelpon`/`nomorTelepon` | Mengembalikan `valid: true` dengan data sudah di-*trim* dan email diubah ke *lowercase* | Mengembalikan `valid: true` dan `sanitizedData` terformat sesuai harapan (`tests/auth.test.ts`) | Pass |
+| C03-UT02 | `validasiInfoRegistrasi()` | Batas | Uji batas panjang password (`7` vs `8` karakter) dan panjang nomor telepon (`9`, `10`, `15`, `16` digit) | Password ≥ 8 karakter dan nomor `10-15` digit lolos; di luar batas ditolak (`valid: false`) | Password 7 karakter serta nomor 9 & 16 digit ditolak; batas 8 karakter & 10-15 digit lolos (`tests/auth.test.ts`) | Pass |
+| C03-UT03 | `validasiInfoRegistrasi()` | Negatif | Kirim field wajib kosong/spasi (`namaPengguna`, `username`, `password`, `email`, `nomorTelpon`), format email invalid (`budi@`, `@example.com`), serta nomor non-angka/`+62` | Semua masukan tidak valid ditolak dengan `valid: false` dan pesan error deskriptif | Seluruh 14 variasi kasus negatif ditolak dengan `valid: false` (`tests/auth.test.ts`) | Pass |
+| C03-UT04 | `cekInfoLogin()` | Normal | Panggil dengan `username` valid (`'pelanggan1'`) dan `email` valid (`'pelanggan1@cariuang.id'`) beserta password benar | Mengembalikan `authenticated: true`, token JWT valid, `role` terresolusi, dan tanpa field `password` | Autentikasi berhasil untuk username & email, JWT terverifikasi, field `password` dihapus (`tests/auth.test.ts`) | Pass |
+| C03-UT05 | `cekInfoLogin()` | Negatif | Panggil dengan akun tidak ditemukan dan dengan akun ada tetapi password salah | Mengembalikan `authenticated: false` (tetap menjalankan `bcrypt.compare` ke *dummy hash* saat akun tidak ada) | Kedua kasus mengembalikan `authenticated: false` dan *dummy bcrypt* dijalankan (`tests/auth.test.ts`) | Pass |
+| C03-UT06 | `login()` | Normal & Negatif | Panggil handler `POST /api/auth/login` dengan input kosong, password salah, dan kredensial benar | Mengembalikan `400` untuk kosong, `401` untuk salah, dan `200` + JWT untuk benar | Handler mengembalikan `400`, `401`, dan `200` beserta token JWT (`tests/auth.test.ts`) | Pass |
+| C03-UT07 | `validasiUpdateProfil()`, `getProfile()`, `updateProfile()` | Normal & Negatif | Uji validasi profil (valid & invalid), `getProfile` (401 unauth, 404 tidak ada, 200 untuk 3 peran), dan `updateProfile` (401, 400 validasi, 404, 400 email duplikat, 200 sukses) | Setiap kondisi mengembalikan kode status HTTP dan payload respons yang sesuai | Seluruh cabang `401`, `400`, `404`, dan `200` (termasuk update `avatarUrl`) berjalan sesuai harapan (`tests/auth.test.ts`) | Pass |
+| C03-UT08 | `verifikasiStatusPekerjaan()`, `triggerRating()` | Normal & Negatif | Uji `verifikasiStatusPekerjaan` (kosong, tidak ada, `On Progress`, `Done`) dan `triggerRating` (`401`, `400` kosong/belum Done/sudah dinilai, `403` bukan peserta, `404`, `200` Pelanggan & Mitra) | Hanya kontrak `Done` milik peserta yang belum menilai yang mengembalikan `true` / `200` (`canRate: true`) | Seluruh cabang `false`/`true` dan HTTP `401`, `400`, `403`, `404`, `200` sesuai harapan (`tests/auth.test.ts`) | Pass |
 
-Khusus kelas **Mendalam**:
-
-Tabel 4.2.3b. Ringkasan Cakupan Kelas [C03]
+Tabel 4.2.3b. Ringkasan Cakupan Kelas C03
 
 | Informasi | Keterangan |
 | :--- | :--- |
-| Daftar operasi public pada DPPL | *[op1(), op2(), ...]* |
-| Operasi yang diuji | *[op1(), op2(), ...]* |
-| ID Algoritma yang tercakup | *[Algo-001, ...]* |
-| Coverage (wajib ≥ 70%) | *[% baris / % cabang, alat dan bukti pada 4.6]* |
+| Daftar operasi public pada DPPL | `validasiInfoRegistrasi()`, `validasiUpdateProfil()`, `cekInfoLogin()`, `login()`, `getProfile()`, `updateProfile()`, `verifikasiStatusPekerjaan()`, `triggerRating()` |
+| Operasi yang diuji | `validasiInfoRegistrasi()`, `validasiUpdateProfil()`, `cekInfoLogin()`, `login()`, `getProfile()`, `updateProfile()`, `verifikasiStatusPekerjaan()`, `triggerRating()` |
+| ID Algoritma yang tercakup | `ALGO-001`, `ALGO-017` |
+| Coverage (wajib ≥ 70%) | **94,77% Lines / 84,52% Branch / 100% Funcs** (`src/backend/src/controllers/PenggunaController.ts`, Jest `--coverage`, bukti pada Subbab 4.6) |
+
+---
 
 ### 4.2.4 Kelas PemberiJasa
 
 **ID Kelas:** C04  
 **Nama Kelas:** PemberiJasa  
-**Tingkat:** *[Mendalam/Sedang/Tidak perlu]*
+**Tingkat:** Mendalam
 
-Tabel 4.2.4. Hasil Pengujian Unit Kelas [C04]
+Tabel 4.2.4. Hasil Pengujian Unit Kelas C04
 
 | ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| *C04-UT01* | *`[operasi()]`* | *Normal* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *C04-UT02* | *`[operasi()]`* | *Batas* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *C04-UT03* | *`[operasi()]`* | *Negatif* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *...* | *...* | *...* | *...* | *...* | *...* | *...* |
+| C04-UT01 | `calculateHaversineDistance()` | Batas | Hitung jarak antara dua titik koordinat identik `(-6.8915, 107.6107)` | Mengembalikan jarak tepat `0` km | Mengembalikan `0` km (`tests/serviceCatalog.test.ts`) | Pass |
+| C04-UT02 | `calculateHaversineDistance()` | Normal | Hitung jarak GPS antara titik ITB Ganesha, Cisitu, dan Buah Batu | Mengembalikan jarak numerik akurat sesuai formula *Haversine* (Cisitu lebih dekat dari Buah Batu) | Jarak terhitung akurat sesuai jarak geografis (`tests/serviceCatalog.test.ts`) | Pass |
+| C04-UT03 | `searchPemberiJasa()` | Normal | Cari penyedia jasa dengan pengurutan terdekat (*Haversine*), *Rating Terbaik* (`DESC`), dan *Termurah* (`tarif ASC`) | Daftar penyedia terurut sesuai kriteria yang diminta | Urutan hasil sesuai untuk ketiga mode pengurutan (`tests/serviceCatalog.test.ts`) | Pass |
+| C04-UT04 | `getPemberiJasaByID()`, `getPemberiJasaByKategori()` | Normal & Negatif | Ambil detail penyedia berdasarkan `PJ_AHMAD_ID`, ambil berdasarkan kategori `KAT_AC_ID`, dan uji ID tidak ditemukan | Mengembalikan objek detail lengkap/daftar penyedia untuk ID valid, dan `null` untuk ID tidak ditemukan | Detail lengkap & daftar per kategori kembali akurat; ID tidak dikenal menghasilkan `null` (`tests/serviceCatalog.test.ts`) | Pass |
+| C04-UT05 | `makePemberiJasa()`, `simpanKeDb()`, `savePemberiJasa()` | Normal | Buat dan simpan penyedia jasa baru lengkap dengan `idKategoriJasa`, `jenisJasa`, `namaToko`, dan koordinat | Data tersimpan di `pengguna` (`role = PEMBERI_JASA`) dan `pemberi_jasa` dengan password ter-*hash* | Data tersimpan konsisten pada kedua entitas (`tests/auth.test.ts`, `tests/serviceCatalog.test.ts`) | Pass |
+| C04-UT06 | *Getter/Setter* atribut (`setIDPemberiJasa`, `setIDKategoriJasa`, `setJenisJasa`, `setNamaToko`, `setLatitude`, `setLongitude`, `setStatusKetersediaan`, `setIsOnline`, `setJarakKm`) | Normal | Inisialisasi `new PemberiJasa(...)`, perbarui seluruh atribut melalui *setter*, lalu baca kembali via *getter* | Seluruh *getter* mengembalikan nilai terbaru yang disetel | Seluruh 11 *getter/setter* mengembalikan nilai yang tepat (`tests/serviceCatalog.test.ts`) | Pass |
 
-Khusus kelas **Mendalam**:
-
-Tabel 4.2.4b. Ringkasan Cakupan Kelas [C04]
+Tabel 4.2.4b. Ringkasan Cakupan Kelas C04
 
 | Informasi | Keterangan |
 | :--- | :--- |
-| Daftar operasi public pada DPPL | *[op1(), op2(), ...]* |
-| Operasi yang diuji | *[op1(), op2(), ...]* |
-| ID Algoritma yang tercakup | *[Algo-001, ...]* |
-| Coverage (wajib ≥ 70%) | *[% baris / % cabang, alat dan bukti pada 4.6]* |
+| Daftar operasi public pada DPPL | `getIDPemberiJasa()`, `setIDPemberiJasa()`, `getIDKategoriJasa()`, `setIDKategoriJasa()`, `getJenisJasa()`, `setJenisJasa()`, `savePemberiJasa()`, `makePemberiJasa()`, `simpanKeDb()`, `getPemberiJasaByID()`, `getPemberiJasaByKategori()`, `searchPemberiJasa()`, serta *getter/setter* lokasi & ketersediaan |
+| Operasi yang diuji | `getIDPemberiJasa()`, `setIDPemberiJasa()`, `getIDKategoriJasa()`, `setIDKategoriJasa()`, `getIdKategoriJasa()`, `getJenisJasa()`, `setJenisJasa()`, `getNamaToko()`, `setNamaToko()`, `getLatitude()`, `setLatitude()`, `getLongitude()`, `setLongitude()`, `getStatusKetersediaan()`, `setStatusKetersediaan()`, `getIsOnline()`, `setIsOnline()`, `getJarakKm()`, `setJarakKm()`, `getDataPemberiJasa()`, `makePemberiJasa()`, `simpanKeDb()`, `savePemberiJasa()`, `getPemberiJasaByID()`, `getPemberiJasaByKategori()`, `searchPemberiJasa()` |
+| ID Algoritma yang tercakup | `ALGO-002`, `ALGO-003`, `ALGO-004`, `ALGO-005`, `ALGO-006`, `ALGO-012` |
+| Coverage (wajib ≥ 70%) | **85,10% Lines / 53,92% Branch / 86,11% Funcs** (`PemberiJasa.ts`) dan **100% Lines / 100% Branch** (`haversine.ts`, Jest `--coverage`, bukti pada Subbab 4.6) |
+
+---
 
 ### 4.2.5 Kelas PemberiJasaUI
 
 **ID Kelas:** C05  
 **Nama Kelas:** PemberiJasaUI  
-**Tingkat:** *[Mendalam/Sedang/Tidak perlu]*
+**Tingkat:** Tidak perlu
 
-Tabel 4.2.5. Hasil Pengujian Unit Kelas [C05]
+Tidak dilakukan pengujian unit terpisah karena kelas ini merupakan lapisan antarmuka (*View* React Native untuk hasil pencarian, kartu peta, registrasi penyedia, dan riwayat pekerjaan) tanpa logika bisnis internal. Pengujian dilakukan melalui pengujian *use case* (`UC01`, `UC02`, `UC04`, `UC06`, `UC11`) pada Subbab 4.4.
 
-| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| *C05-UT01* | *`[operasi()]`* | *Normal* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *C05-UT02* | *`[operasi()]`* | *Batas* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *C05-UT03* | *`[operasi()]`* | *Negatif* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *...* | *...* | *...* | *...* | *...* | *...* | *...* |
-
-Khusus kelas **Mendalam**:
-
-Tabel 4.2.5b. Ringkasan Cakupan Kelas [C05]
-
-| Informasi | Keterangan |
-| :--- | :--- |
-| Daftar operasi public pada DPPL | *[op1(), op2(), ...]* |
-| Operasi yang diuji | *[op1(), op2(), ...]* |
-| ID Algoritma yang tercakup | *[Algo-001, ...]* |
-| Coverage (wajib ≥ 70%) | *[% baris / % cabang, alat dan bukti pada 4.6]* |
+---
 
 ### 4.2.6 Kelas PemberiJasaController
 
 **ID Kelas:** C06  
 **Nama Kelas:** PemberiJasaController  
-**Tingkat:** *[Mendalam/Sedang/Tidak perlu]*
+**Tingkat:** Mendalam
 
-Tabel 4.2.6. Hasil Pengujian Unit Kelas [C06]
+Tabel 4.2.6. Hasil Pengujian Unit Kelas C06
 
 | ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| *C06-UT01* | *`[operasi()]`* | *Normal* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *C06-UT02* | *`[operasi()]`* | *Batas* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *C06-UT03* | *`[operasi()]`* | *Negatif* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *...* | *...* | *...* | *...* | *...* | *...* | *...* |
+| C06-UT01 | `registrasiPemberiJasa()` | Normal | Kirim payload registrasi penyedia jasa valid lengkap (`idKategoriJasa`, `jenisJasa`, `namaToko`, koordinat) | Mengembalikan `201`, role `PEMBERI_JASA`, password ter-*hash* bcrypt, tanpa field `password` | Mengembalikan `201`, data tersimpan di `pengguna` & `pemberiJasa` (`tests/auth.test.ts`) | Pass |
+| C06-UT02 | `registrasiPemberiJasa()` | Negatif | Kirim payload dengan `idKategoriJasa` kosong, `jenisJasa` kosong, format email/telepon salah, atau `username` duplikat | Mengembalikan `400` dengan pesan error validasi/duplikasi | Seluruh kasus negatif ditolak dengan status `400` (`tests/auth.test.ts`) | Pass |
+| C06-UT03 | `validatePemberiJasa()`, `fetchPemberiJasaById()`, `choosePemberiJasa()`, `getServiceByIdHandler()` | Normal & Negatif | Uji ID valid (`PJ_AHMAD_ID`/`PJ_SITI_ID`), ID kosong/spasi (`""`, `"   "`), ID tidak dikenal, dan error DB (`500`) | ID valid mengembalikan `true`/detail (`200`); kosong mengembalikan `false`/`null`/`400`; tidak ada mengembalikan `404`; error DB `500` | Seluruh cabang `true`/`false`/`null` dan HTTP `200`, `400`, `404`, `500` sesuai harapan (`tests/serviceCatalog.test.ts`) | Pass |
+| C06-UT04 | `showPemberiJasaFromKategori()`, `getServicesByCategoryHandler()` | Normal & Negatif | Panggil dengan `KAT_AC_ID`, string kosong `""`, dan simulasi error DB | `KAT_AC_ID` mengembalikan 1 penyedia (`200`), string kosong `[]`, error DB `500` | Mengembalikan `[]`, `200` (`count: 1`), dan `500` saat error (`tests/serviceCatalog.test.ts`) | Pass |
+| C06-UT05 | `searchServices()`, `searchServicesHandler()` | Normal & Negatif | Panggil pencarian dengan koordinat user (urut terdekat, rating terbaik, termurah) serta simulasi error DB (`500`) | Mengembalikan daftar terurut sesuai `sortBy` (`200`) dan `500` saat gagal | Ketiga mode pengurutan menghasilkan urutan tepat (`200`) dan error DB mengembalikan `500` (`tests/serviceCatalog.test.ts`) | Pass |
+| C06-UT06 | `searchServices()`, `buildSearchQuery()` | Batas | Uji filter batas `radiusKm = 2` dari ITB Ganesha serta `buildSearchQuery` dengan parameter kosong, `NaN`, dan `radiusKm = 0` | Hanya penyedia dengan `jarakKm <= 2` yang lolos; parameter tidak valid/batas `0` diabaikan pada *query string* | Filter `radiusKm <= 2` tepat dan `buildSearchQuery` menghasilkan `"?q=servis&long=107.6107&sortBy=terdekat"` (`tests/serviceCatalog.test.ts`, `tests/catalogHelpers.test.ts`) | Pass |
+| C06-UT07 | `isProviderAvailable()`, `filterAvailableProviders()` | Normal & Batas | Uji status `'Available'`, `' available '` (*case-insensitive* + spasi), dan `'On Progress'` | `'Available'` & `' available '` mengembalikan `true`; `'On Progress'` mengembalikan `false` dan tersaring keluar | Hasil filter hanya memuat penyedia berstatus *available* (`tests/catalogHelpers.test.ts`) | Pass |
 
-Khusus kelas **Mendalam**:
-
-Tabel 4.2.6b. Ringkasan Cakupan Kelas [C06]
+Tabel 4.2.6b. Ringkasan Cakupan Kelas C06
 
 | Informasi | Keterangan |
 | :--- | :--- |
-| Daftar operasi public pada DPPL | *[op1(), op2(), ...]* |
-| Operasi yang diuji | *[op1(), op2(), ...]* |
-| ID Algoritma yang tercakup | *[Algo-001, ...]* |
-| Coverage (wajib ≥ 70%) | *[% baris / % cabang, alat dan bukti pada 4.6]* |
+| Daftar operasi public pada DPPL | `registrasiPemberiJasa()`, `validatePemberiJasa()`, `setInformasiKategoriJasa()`, `fetchPemberiJasaById()`, `showPemberiJasaFromKategori()`, `choosePemberiJasa()`, `searchServices()`, `searchServicesHandler()`, `getServiceByIdHandler()`, `getServicesByCategoryHandler()` |
+| Operasi yang diuji | Seluruh 10 operasi public backend di atas serta *helper* `useCatalogController` (`buildSearchQuery`, `isProviderAvailable`, `filterAvailableProviders`) |
+| ID Algoritma yang tercakup | `ALGO-007`, `ALGO-008`, `ALGO-009`, `ALGO-010`, `ALGO-011`, `ALGO-012` |
+| Coverage (wajib ≥ 70%) | **91,15% Lines / 80,76% Branch / 100% Funcs** (`src/backend/src/controllers/PemberiJasaController.ts`, Jest `--coverage`, bukti pada Subbab 4.6) |
+
+---
 
 ### 4.2.7 Kelas Pelanggan
 
 **ID Kelas:** C07  
 **Nama Kelas:** Pelanggan  
-**Tingkat:** *[Mendalam/Sedang/Tidak perlu]*
+**Tingkat:** Tidak perlu
 
-Tabel 4.2.7. Hasil Pengujian Unit Kelas [C07]
+Tidak dilakukan pengujian unit terpisah karena kelas ini merupakan subkelas *entity/DTO* murni dari `Pengguna` tanpa aturan bisnis tambahan (hanya konstruksi `makePelanggan()`, serialisasi `toResponse()`, dan persistensi `simpanKeDb()`). Kelas ini teruji secara tidak langsung melalui `C09 PelangganController` (`auth.test.ts`, *coverage* `Pelanggan.ts` tercatat **100% Lines**) dan pengujian *use case* (`UC12`).
 
-| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| *C07-UT01* | *`[operasi()]`* | *Normal* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *C07-UT02* | *`[operasi()]`* | *Batas* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *C07-UT03* | *`[operasi()]`* | *Negatif* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *...* | *...* | *...* | *...* | *...* | *...* | *...* |
-
-Khusus kelas **Mendalam**:
-
-Tabel 4.2.7b. Ringkasan Cakupan Kelas [C07]
-
-| Informasi | Keterangan |
-| :--- | :--- |
-| Daftar operasi public pada DPPL | *[op1(), op2(), ...]* |
-| Operasi yang diuji | *[op1(), op2(), ...]* |
-| ID Algoritma yang tercakup | *[Algo-001, ...]* |
-| Coverage (wajib ≥ 70%) | *[% baris / % cabang, alat dan bukti pada 4.6]* |
+---
 
 ### 4.2.8 Kelas PelangganUI
 
 **ID Kelas:** C08  
 **Nama Kelas:** PelangganUI  
-**Tingkat:** *[Mendalam/Sedang/Tidak perlu]*
+**Tingkat:** Tidak perlu
 
-Tabel 4.2.8. Hasil Pengujian Unit Kelas [C08]
+Tidak dilakukan pengujian unit terpisah karena kelas ini merupakan lapisan antarmuka (*View* React Native untuk login, beranda, rekomendasi pencarian, dan obrolan pelanggan) tanpa logika bisnis internal. Pengujian dilakukan melalui pengujian *use case* (`UC02`, `UC03`, `UC05`, `UC07`, `UC11`, `UC12`) pada Subbab 4.4.
 
-| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| *C08-UT01* | *`[operasi()]`* | *Normal* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *C08-UT02* | *`[operasi()]`* | *Batas* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *C08-UT03* | *`[operasi()]`* | *Negatif* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *...* | *...* | *...* | *...* | *...* | *...* | *...* |
-
-Khusus kelas **Mendalam**:
-
-Tabel 4.2.8b. Ringkasan Cakupan Kelas [C08]
-
-| Informasi | Keterangan |
-| :--- | :--- |
-| Daftar operasi public pada DPPL | *[op1(), op2(), ...]* |
-| Operasi yang diuji | *[op1(), op2(), ...]* |
-| ID Algoritma yang tercakup | *[Algo-001, ...]* |
-| Coverage (wajib ≥ 70%) | *[% baris / % cabang, alat dan bukti pada 4.6]* |
+---
 
 ### 4.2.9 Kelas PelangganController
 
 **ID Kelas:** C09  
 **Nama Kelas:** PelangganController  
-**Tingkat:** *[Mendalam/Sedang/Tidak perlu]*
+**Tingkat:** Sedang
 
-Tabel 4.2.9. Hasil Pengujian Unit Kelas [C09]
+Tabel 4.2.9. Hasil Pengujian Unit Kelas C09
 
 | ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| *C09-UT01* | *`[operasi()]`* | *Normal* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *C09-UT02* | *`[operasi()]`* | *Batas* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *C09-UT03* | *`[operasi()]`* | *Negatif* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *...* | *...* | *...* | *...* | *...* | *...* | *...* |
+| C09-UT01 | `registrasiPelanggan()` | Normal | Kirim payload registrasi pelanggan valid lengkap (`namaPengguna`, `username`, `password`, `email`, `nomorTelpon`) | Mengembalikan `201`, role `PELANGGAN`, password tersimpan sebagai *hash bcrypt*, dan respons tanpa field `password` | Mengembalikan `201`, `bcrypt.compare` bernilai `true`, dan field `password` tidak dikembalikan (`tests/auth.test.ts`) | Pass |
+| C09-UT02 | `registrasiPelanggan()` | Negatif | Kirim payload dengan password 3 karakter, email `'salah'`, dan nomor telepon `'0812'` | Mengembalikan `400`, `success: false`, dan tidak menyimpan data ke basis data | Mengembalikan `400` dan `mockStore.pengguna.size === 0` (`tests/auth.test.ts`) | Pass |
+| C09-UT03 | `registrasiPelanggan()` | Negatif | Kirim payload dengan `username` atau `email` yang sudah terdaftar sebelumnya | Mengembalikan `400` dengan pesan `'Username sudah terdaftar'` atau `'Email sudah terdaftar'` | Kedua percobaan duplikasi mengembalikan `400` dengan pesan yang sesuai (`tests/auth.test.ts`) | Pass |
 
-Khusus kelas **Mendalam**:
-
-Tabel 4.2.9b. Ringkasan Cakupan Kelas [C09]
-
-| Informasi | Keterangan |
-| :--- | :--- |
-| Daftar operasi public pada DPPL | *[op1(), op2(), ...]* |
-| Operasi yang diuji | *[op1(), op2(), ...]* |
-| ID Algoritma yang tercakup | *[Algo-001, ...]* |
-| Coverage (wajib ≥ 70%) | *[% baris / % cabang, alat dan bukti pada 4.6]* |
+---
 
 ### 4.2.10 Kelas LayananPelanggan
 
 **ID Kelas:** C10  
 **Nama Kelas:** LayananPelanggan  
-**Tingkat:** *[Mendalam/Sedang/Tidak perlu]*
+**Tingkat:** Mendalam
 
-Tabel 4.2.10. Hasil Pengujian Unit Kelas [C10]
-
-| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| *C10-UT01* | *`[operasi()]`* | *Normal* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *C10-UT02* | *`[operasi()]`* | *Batas* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *C10-UT03* | *`[operasi()]`* | *Negatif* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *...* | *...* | *...* | *...* | *...* | *...* | *...* |
-
-Khusus kelas **Mendalam**:
-
-Tabel 4.2.10b. Ringkasan Cakupan Kelas [C10]
-
-| Informasi | Keterangan |
-| :--- | :--- |
-| Daftar operasi public pada DPPL | *[op1(), op2(), ...]* |
-| Operasi yang diuji | *[op1(), op2(), ...]* |
-| ID Algoritma yang tercakup | *[Algo-001, ...]* |
-| Coverage (wajib ≥ 70%) | *[% baris / % cabang, alat dan bukti pada 4.6]* |
-
-### 4.2.11 Kelas LayananPelangganUI
-
-**ID Kelas:** C11  
-**Nama Kelas:** LayananPelangganUI  
-**Tingkat:** *[Mendalam/Sedang/Tidak perlu]*
-
-Tabel 4.2.11. Hasil Pengujian Unit Kelas [C11]
+Tabel 4.2.10. Hasil Pengujian Unit Kelas C10
 
 | ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| *C11-UT01* | *`[operasi()]`* | *Normal* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *C11-UT02* | *`[operasi()]`* | *Batas* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *C11-UT03* | *`[operasi()]`* | *Negatif* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *...* | *...* | *...* | *...* | *...* | *...* | *...* |
+| C10-UT01 | `cariLayananKosong()` | Normal | Sediakan beberapa staf CS berstatus `Available` dengan beban tiket berbeda (`cs-1`: 3, `cs-2`: 1), lalu panggil `cariLayananKosong(tx)` | Mengembalikan ID staf CS dengan `jumlahTiketDipegang` terkecil (`cs-2`) | Mengembalikan `'cs-2'` yang memiliki beban terkecil (`tests/tiketLaporan.test.ts`) | Pass |
+| C10-UT02 | `cariLayananKosong()` | Batas & Negatif | Atur seluruh staf CS tidak memenuhi syarat (`status !== 'Available'` dan `jumlahTiketDipegang >= 5`), lalu panggil `cariLayananKosong(tx)` | Mengembalikan `null` karena tidak ada staf CS yang tersedia | Mengembalikan `null` (`tests/tiketLaporan.test.ts`) | Pass |
+| C10-UT03 | `tambahBeban()` | Normal & Batas | (1) Panggil `tambahBeban(tx, 'cs-2')` dari beban `1`; (2) Panggil `tambahBeban(tx, 'cs-boundary')` dari batas beban `4` berstatus `'Available'` | (1) Beban naik menjadi `2`; (2) Beban naik menjadi `5` dan status otomatis berubah menjadi `'Busy'` | Beban bertambah `+1` dan pada batas `5` status berubah menjadi `'Busy'` (`tests/tiketLaporan.test.ts`) | Pass |
+| C10-UT04 | `kurangiBeban()` | Normal & Batas | (1) Panggil `kurangiBeban(tx, 'cs-boundary')` dari beban `5` (`'Busy'`); (2) Panggil saat beban sudah `0` | (1) Beban turun menjadi `4` dan status kembali `'Available'`; (2) Beban tetap `0` (tidak negatif) | Beban turun ke `4` (`'Available'`) dan pada beban `0` tetap `0` (`tests/tiketLaporan.test.ts`) | Pass |
+| C10-UT05 | Konstruktor, `getStatus()`, `getJumlahTiketDipegang()`, `toJSON()` | Normal | Inisialisasi `new LayananPelanggan(...)` dengan `status: 'Available'` dan `jumlahTiketDipegang: 4`, lalu panggil *getter* dan `toJSON()` | Mengembalikan `'Available'`, `4`, dan objek JSON lengkap berisi `idLayananPelanggan`, `status`, dan `jumlahTiketDipegang` | Seluruh *getter* dan `toJSON()` mengembalikan nilai sesuai harapan (`tests/tiketLaporan.test.ts`) | Pass |
 
-Khusus kelas **Mendalam**:
-
-Tabel 4.2.11b. Ringkasan Cakupan Kelas [C11]
-
-| Informasi | Keterangan |
-| :--- | :--- |
-| Daftar operasi public pada DPPL | *[op1(), op2(), ...]* |
-| Operasi yang diuji | *[op1(), op2(), ...]* |
-| ID Algoritma yang tercakup | *[Algo-001, ...]* |
-| Coverage (wajib ≥ 70%) | *[% baris / % cabang, alat dan bukti pada 4.6]* |
-
-### 4.2.12 Kelas LayananPelangganController
-
-**ID Kelas:** C12  
-**Nama Kelas:** LayananPelangganController  
-**Tingkat:** *[Mendalam/Sedang/Tidak perlu]*
-
-Tabel 4.2.12. Hasil Pengujian Unit Kelas [C12]
-
-| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| *C12-UT01* | *`[operasi()]`* | *Normal* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *C12-UT02* | *`[operasi()]`* | *Batas* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *C12-UT03* | *`[operasi()]`* | *Negatif* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *...* | *...* | *...* | *...* | *...* | *...* | *...* |
-
-Khusus kelas **Mendalam**:
-
-Tabel 4.2.12b. Ringkasan Cakupan Kelas [C12]
+Tabel 4.2.10b. Ringkasan Cakupan Kelas C10
 
 | Informasi | Keterangan |
 | :--- | :--- |
-| Daftar operasi public pada DPPL | *[op1(), op2(), ...]* |
-| Operasi yang diuji | *[op1(), op2(), ...]* |
-| ID Algoritma yang tercakup | *[Algo-001, ...]* |
-| Coverage (wajib ≥ 70%) | *[% baris / % cabang, alat dan bukti pada 4.6]* |
-
-### 4.2.13 Kelas KategoriJasa
-
-**ID Kelas:** C13  
-**Nama Kelas:** KategoriJasa  
-**Tingkat:** *[Mendalam/Sedang/Tidak perlu]*
-
-Tabel 4.2.13. Hasil Pengujian Unit Kelas [C13]
-
-| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| *C13-UT01* | *`[operasi()]`* | *Normal* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *C13-UT02* | *`[operasi()]`* | *Batas* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *C13-UT03* | *`[operasi()]`* | *Negatif* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *...* | *...* | *...* | *...* | *...* | *...* | *...* |
-
-Khusus kelas **Mendalam**:
-
-Tabel 4.2.13b. Ringkasan Cakupan Kelas [C13]
-
-| Informasi | Keterangan |
-| :--- | :--- |
-| Daftar operasi public pada DPPL | *[op1(), op2(), ...]* |
-| Operasi yang diuji | *[op1(), op2(), ...]* |
-| ID Algoritma yang tercakup | *[Algo-001, ...]* |
-| Coverage (wajib ≥ 70%) | *[% baris / % cabang, alat dan bukti pada 4.6]* |
-
-### 4.2.14 Kelas KategoriJasaUI
-
-**ID Kelas:** C14  
-**Nama Kelas:** KategoriJasaUI  
-**Tingkat:** *[Mendalam/Sedang/Tidak perlu]*
-
-Tabel 4.2.14. Hasil Pengujian Unit Kelas [C14]
-
-| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| *C14-UT01* | *`[operasi()]`* | *Normal* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *C14-UT02* | *`[operasi()]`* | *Batas* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *C14-UT03* | *`[operasi()]`* | *Negatif* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *...* | *...* | *...* | *...* | *...* | *...* | *...* |
-
-Khusus kelas **Mendalam**:
-
-Tabel 4.2.14b. Ringkasan Cakupan Kelas [C14]
-
-| Informasi | Keterangan |
-| :--- | :--- |
-| Daftar operasi public pada DPPL | *[op1(), op2(), ...]* |
-| Operasi yang diuji | *[op1(), op2(), ...]* |
-| ID Algoritma yang tercakup | *[Algo-001, ...]* |
-| Coverage (wajib ≥ 70%) | *[% baris / % cabang, alat dan bukti pada 4.6]* |
-
-### 4.2.15 Kelas KategoriJasaController
-
-**ID Kelas:** C15  
-**Nama Kelas:** KategoriJasaController  
-**Tingkat:** *[Mendalam/Sedang/Tidak perlu]*
-
-Tabel 4.2.15. Hasil Pengujian Unit Kelas [C15]
-
-| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| *C15-UT01* | *`[operasi()]`* | *Normal* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *C15-UT02* | *`[operasi()]`* | *Batas* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *C15-UT03* | *`[operasi()]`* | *Negatif* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *...* | *...* | *...* | *...* | *...* | *...* | *...* |
-
-Khusus kelas **Mendalam**:
-
-Tabel 4.2.15b. Ringkasan Cakupan Kelas [C15]
-
-| Informasi | Keterangan |
-| :--- | :--- |
-| Daftar operasi public pada DPPL | *[op1(), op2(), ...]* |
-| Operasi yang diuji | *[op1(), op2(), ...]* |
-| ID Algoritma yang tercakup | *[Algo-001, ...]* |
-| Coverage (wajib ≥ 70%) | *[% baris / % cabang, alat dan bukti pada 4.6]* |
-
-### 4.2.16 Kelas KontrakPekerjaan
-
-**ID Kelas:** C16  
-**Nama Kelas:** KontrakPekerjaan  
-**Tingkat:** *[Mendalam/Sedang/Tidak perlu]*
-
-Tabel 4.2.16. Hasil Pengujian Unit Kelas [C16]
-
-| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| *C16-UT01* | *`[operasi()]`* | *Normal* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *C16-UT02* | *`[operasi()]`* | *Batas* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *C16-UT03* | *`[operasi()]`* | *Negatif* | *[Prosedur/masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *Pass/Fail* |
-| *...* | *...* | *...* | *...* | *...* | *...* | *...* |
-
-Khusus kelas **Mendalam**:
-
-Tabel 4.2.16b. Ringkasan Cakupan Kelas [C16]
-
-| Informasi | Keterangan |
-| :--- | :--- |
-| Daftar operasi public pada DPPL | *[op1(), op2(), ...]* |
-| Operasi yang diuji | *[op1(), op2(), ...]* |
-| ID Algoritma yang tercakup | *[Algo-001, ...]* |
-| Coverage (wajib ≥ 70%) | *[% baris / % cabang, alat dan bukti pada 4.6]* |
+| Daftar operasi public pada DPPL | `getStatus()`, `getJumlahTiketDipegang()`, `cariLayananKosong()`, `tambahBeban()`, `kurangiBeban()`, `toJSON()` |
+| Operasi yang diuji | `getStatus()`, `getJumlahTiketDipegang()`, `cariLayananKosong()`, `tambahBeban()`, `kurangiBeban()`, `toJSON()` |
+| ID Algoritma yang tercakup | `ALGO-019` (`Q-013`) |
+| Coverage (wajib ≥ 70%) | **100% Lines / 77,77% Branch / 100% Funcs** (`src/backend/src/models/LayananPelanggan.ts`, Jest `--coverage`, bukti pada Subbab 4.6) |
 
 ### 4.2.11 Kelas KontrakPekerjaanUI
 
@@ -854,7 +629,7 @@ Tabel 4.2.14. Hasil Pengujian Unit Kelas [C21]
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | C21-UT01 | `kirimPesan()` | Normal | Panggil `kirimPesan({ idPengirim: 'pelanggan-01', idPenerima: 'penyedia-01', isiPesan: <pesan valid> })` dengan `RealtimeEmitter` dan `NotifikasiController` tiruan. | Pesan tersimpan di DB; event Socket.IO `chat:new` terpancar ke penerima; `NotifikasiController.buatNotifikasi()` dipanggil untuk `penyedia-01`. | *[Hasil aktual]* | *Pass/Fail* |
 | C21-UT02 | `kirimPesan()` | Batas | Kirim pesan dengan panjang tepat 1 karakter, tepat 1000 karakter, dan 1001 karakter. | Pesan 1 dan 1000 karakter tersimpan; pesan 1001 karakter ditolak dengan `400`. | *[Hasil aktual]* | *Pass/Fail* |
-| C21-UT03 | `kirimPesan()` | Negatif | Kirim pesan dengan (a) `idPengirim` kosong; (b) `idPenerima` kosong; (c) `idPengirim = idPenerima`; (d) `isiPesan` kosong/spasi atau bukan *string*; (e) `idPenerima` tidak terdaftar. | (a)–(d) ditolak dengan `400`; (e) ditolak dengan `404` penerima tidak ditemukan; tidak ada pesan yang tersimpan. | *[Hasil aktual]* | *Pass/Fail* |
+| C21-UT03 | `kirimPesan()` | Negatif | Kirim pesan dengan (a) `idPengirim` kosong; (b) `idPenerima` kosong; (c) `idPengirim = idPenerima`; (d) `isiPesan` kosong/spasi atau bukan *string*; (e) `idPenerima` tidak terdaftar. | (a)-(d) ditolak dengan `400`; (e) ditolak dengan `404` penerima tidak ditemukan; tidak ada pesan yang tersimpan. | *[Hasil aktual]* | *Pass/Fail* |
 | C21-UT04 | `sendChat()` | Normal/*Resilience* | Atur `buatNotifikasi()` agar melempar error, lalu panggil `sendChat()` dengan pesan valid. | Pesan tetap tersimpan dan event `chat:new` tetap terpancar; error notifikasi tidak diteruskan ke pemanggil. | *[Hasil aktual]* | *Pass/Fail* |
 | C21-UT05 | `sendChatHandler()` | Negatif | Panggil `POST /api/chats` (a) tanpa data autentikasi; (b) dengan JWT `pelanggan-01` tetapi `idPengirim` pada *body* diisi `penyedia-01` (*spoofing*). | (a) `401 Unauthorized`; (b) `403 Forbidden`; pesan tidak tersimpan. | *[Hasil aktual]* | *Pass/Fail* |
 | C21-UT06 | `getChatHistoryHandler()`, `getConversationsHandler()`, `markChatReadHandler()` | Normal & Negatif | Panggil ketiga *handler* dengan (a) JWT valid dan lawan bicara valid (mode `startChat` dan `loadChat`); (b) parameter lawan bicara kosong; (c) tanpa autentikasi; (d) meminta riwayat percakapan milik pengguna lain. | (a) `200` beserta riwayat chat/daftar percakapan/jumlah pesan yang ditandai terbaca; (b) `400`; (c) `401`; (d) `403`. | *[Hasil aktual]* | *Pass/Fail* |
@@ -944,7 +719,7 @@ Tabel 4.2.18. Hasil Pengujian Unit Kelas [C26]
 
 | ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| C26-UT01 | `getRatingPredicate()`, `toggleRatingTag()` | Normal & Batas | (a) Panggil `getRatingPredicate()` dengan bintang `0` sampai `5`; (b) pilih tag `'Tepat Waktu'` dan `'Kerja Bersih'`, lalu pilih ulang `'Tepat Waktu'`; (c) ambil opsi tag untuk peran `PELANGGAN` dan `PEMBERI_JASA`. | (a) `0` → `'Pilih bintang penilaian'`, `1`–`5` → `'Sangat Buruk'`, `'Buruk'`, `'Cukup'`, `'Baik'`, `'Sangat Baik'`; (b) tag terpilih menjadi `['Tepat Waktu', 'Kerja Bersih']` lalu `['Kerja Bersih']`; (c) daftar tag sesuai peran masing-masing. | *[Hasil aktual]* | *Pass/Fail* |
+| C26-UT01 | `getRatingPredicate()`, `toggleRatingTag()` | Normal & Batas | (a) Panggil `getRatingPredicate()` dengan bintang `0` sampai `5`; (b) pilih tag `'Tepat Waktu'` dan `'Kerja Bersih'`, lalu pilih ulang `'Tepat Waktu'`; (c) ambil opsi tag untuk peran `PELANGGAN` dan `PEMBERI_JASA`. | (a) `0` → `'Pilih bintang penilaian'`, `1`-`5` → `'Sangat Buruk'`, `'Buruk'`, `'Cukup'`, `'Baik'`, `'Sangat Baik'`; (b) tag terpilih menjadi `['Tepat Waktu', 'Kerja Bersih']` lalu `['Kerja Bersih']`; (c) daftar tag sesuai peran masing-masing. | *[Hasil aktual]* | *Pass/Fail* |
 | C26-UT02 | `isSubmitRatingEnabled()`, `validateRatingInput()` | Batas & Negatif | (a) Panggil `isSubmitRatingEnabled()` dengan (`0`, `false`), (`5`, `true`), (`1`, `false`), (`5`, `false`); (b) panggil `validateRatingInput()` dengan skor `5`, `0`, `6`, serta pemberi = penerima (`'pengguna-sama'`). | (a) Tombol nonaktif untuk bintang 0 atau saat sedang *submit*, aktif untuk (`1`, `false`) dan (`5`, `false`); (b) hanya skor `5` dengan pemberi ≠ penerima yang mengembalikan `true`. | *[Hasil aktual]* | *Pass/Fail* |
 | C26-UT03 | `shouldShowBeriRatingButton()`, `shouldShowProviderBeriRatingButton()` | Normal | Panggil dengan kontrak berstatus `On Progress`, `Done` belum dinilai, `Done` sudah dinilai, `Dibatalkan`, dan `Menunggu Konfirmasi Pelanggan`, baik dari sisi pelanggan maupun penyedia jasa. | Tombol *Beri Rating* hanya tampil (`true`) untuk kontrak `Done` yang belum dinilai oleh pengguna login; selain itu `false`. | *[Hasil aktual]* | *Pass/Fail* |
 | C26-UT04 | `extractPerUserRatingFromBackendRow()` | Normal | Gunakan baris kontrak `Done` dengan `hasRating = true` dan satu rating dari `pelanggan-1` ke `mitra-1`, lalu panggil `extractPerUserRatingFromBackendRow(row, 'mitra-1')`; petakan juga baris dengan rating dari `mitra-1` ke `pelanggan-1` untuk sisi pelanggan. | Untuk penyedia: `hasRatedByMe = false`, `diterima.nilaiRating = 5`, `diberikan = null`; untuk pelanggan: tombol *Beri Rating* tetap tampil walaupun penyedia sudah menilai lebih dulu. | *[Hasil aktual]* | *Pass/Fail* |
@@ -1201,13 +976,21 @@ Tabel 4.6. Bukti Hasil Pengujian
 
 | ID Pengujian | Bukti Hasil Pengujian |
 | :--- | :--- |
-| *C02-UT01 – C02-UT08* | *[Sisipkan hasil keluaran unit test]* |
-| *C02 (coverage)* | *[Sisipkan laporan coverage kelas C02]* |
+| C03, C04, C06, C10, C12, C15, C16, C18, C19, C21, C24, C25, C27 (coverage)| <img src="./assets/coverage-mendalam.png" > |
+| C03-UT01 - C03-UT08, C06-UT01 - C06-UT02, C09-UT01 - C09-UT03, C12-UT01 | <img src="./assets/ut-auth.png"> |
+| C04-UT01 - C04-UT06, C06-UT03 - C06-UT06, C13-UT01 - C13-UT03, C15-UT01 - C15-UT05 | <img src="./assets/ut-serviceCatalog.png">  | 
+| C19-UT01 - C19-UT05, C21-UT01 - C21-UT06 | <img src="./assets/ut-komunikasi.png"> |
+| C01-UT04, C16-UT01 - C16-UT07, C18-UT01 - C18-UT07 | <img src="./assets/ut-kontrak.png"> |
+| C10-UT01 - C10-UT05, C12-UT02 - C12-UT06, C22-UT01 - C22-UT03, C24-UT01 - C24-UT06| <img src="./assets/ut-tiket.png"> |
+| C01-UT01 - C01-UT03, C25-UT01 - C25-UT06, C27-UT01 - C27-UT06 | <img src="./assets/ut-rating.png"> |
+| C30-UT01 - C30-UT03| <img src="./assets/ut-notifikasi.png"> |
+| C06-UT06 - C06-UT07, C15-UT06 | <img src="./assets/ut-fe-katalog.png"> |
+| C17-UT01 - C17-UT04 | <img src="./assets/ut-fe-kontrak.png"> |
+| C26-UT01 - C26-UT04 | <img src="./assets/ut-fe-rating.png"> |
 | *INT-TC01* | *[Sisipkan bukti pengujian integrasi]* |
 | *UC01-TC01* | *[Sisipkan tangkapan layar UC01-TC01 sesuai prosedur pengujian]* |
 | *UC01-TC02* | *[Sisipkan tangkapan layar UC01-TC02 sesuai prosedur pengujian]* |
 | *KNF01-TC01* | *[Sisipkan bukti pengukuran parameter KNF01-TC01]* |
-| *...* | *...* |
 
 <br>
 
