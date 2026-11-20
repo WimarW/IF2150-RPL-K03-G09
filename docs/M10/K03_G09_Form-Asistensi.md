@@ -4,32 +4,26 @@
 
 | Informasi | Keterangan |
 | --- | --- |
-| **Hari** | *\[Hari\]* |
-| **Tanggal** | *\[DD/MM/YYYY\]* |
-| **Kelas** | *\[Kelas\]* |
-| **Nomor Kelompok** | *\[Nomor Kelompok\]*  |
-| **Nama Kelompok** | *\[Nama Kelompok\]*  |
-| **Nama Perangkat Lunak** | *\[Nama P/L\]*  |
-| **Dokumen** | *\[Nama Dokumen yang diasistensikan\]*  |
+| **Hari** | *xxx* |
+| **Tanggal** | *xxxx* |
+| **Kelas** | *K3* |
+| **Nomor Kelompok** | *09*  |
+| **Nama Kelompok** | *9naga*  |
+| **Nama Perangkat Lunak** | *Cari Uang*  |
+| **Dokumen** | *K03_G09_SKPL*  |
 
 ### Anggota Kelompok
 
 | NIM | Nama |
 | --- | --- |
-| *\[NIM 1\]* | *\[Nama Anggota 1\]* |
-| *\[NIM 2\]* | *\[Nama Anggota 2\]* |
-| *\[NIM 3\]* | *\[Nama Anggota 3\]* |
-| *\[NIM 4\]* | *\[Nama Anggota 4\]* |
-| *\[NIM 5\]* | *\[Nama Anggota 5\]* |
+| 13525120 | Naufal Hasbialhaq |
+| 13525009 | Wimar Widiarto |
+| 13525093 | Vinsensius Juan Setiady |
+| 13525126 | Raymond Edson Sabajan |
 
 ### Catatan
 
-| Catatan |
-| --- |
-| 1. *\[Berikan catatan hasil asistensi\]*  |
-| 2. ... |
-| 3. ... |
-| 4. ... |
+Asistensi akbar
 
 **Notes for this section:**  
 *Catatan dapat dituliskan dalam bentuk paragraf atau poin-poin, disesuaikan saja.* 

@@ -162,3 +162,9 @@
 | 13-11-2026 | Yohanes Nicholas Setiawan | Membantu proses debugging aplikasi | 3 Jam | Done | - |
 | 13-11-2026 | Wimar Widiarto | Membantu proses debugging aplikasi | 3 Jam | Done | - | 
 |
+
+### Milestone 10
+
+| Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
+| :--- | :--- | :--- | :--- | :--- | :--- | 
+| 20-11-2026 | Naufal Hasbialhaq |  4.4.1 4.4.2 4.4.3 4.4.4 | 3 jam | Done | - |
