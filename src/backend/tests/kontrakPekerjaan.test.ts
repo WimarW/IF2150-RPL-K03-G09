@@ -161,8 +161,8 @@ function setupMockPrisma(): void {
         }
         return null;
       },
-      findMany: async ({ where }: any) => {
-        const results: MockKontrakRow[] = [];
+      findMany: async ({ where, include }: any) => {
+        const results: any[] = [];
         for (const row of Array.from(mockDb.kontrakPekerjaan.values())) {
           if (
             where?.statusPekerjaan &&
@@ -172,6 +172,12 @@ function setupMockPrisma(): void {
           }
           if (where?.OR) {
             const matchedOr = where.OR.some((cond: any) => {
+              if (cond.idPelanggan && cond.idPemberiJasa) {
+                return (
+                  row.idPelanggan === cond.idPelanggan &&
+                  row.idPemberiJasa === cond.idPemberiJasa
+                );
+              }
               if (cond.idPelanggan) {
                 return row.idPelanggan === cond.idPelanggan;
               }
@@ -194,7 +200,7 @@ function setupMockPrisma(): void {
             });
             if (!matchedOr) continue;
           }
-          results.push({ ...row });
+          results.push(include?.ratings ? { ...row, ratings: [] } : { ...row });
         }
         return results;
       },
@@ -293,12 +299,14 @@ function setupMockPrisma(): void {
 }
 
 function createMockReqRes(options: {
+  user?: { idPengguna: string; username: string; role: Role };
   headers?: Record<string, string>;
   body?: Record<string, any>;
   params?: Record<string, string>;
   query?: Record<string, string>;
 }) {
   const req = {
+    user: options.user,
     headers: options.headers ?? {},
     body: options.body ?? {},
     params: options.params ?? {},
@@ -785,5 +793,181 @@ describe('[KF02][KF06][KF07][KF10][KF11][KF12][KF13] KontrakPekerjaan & KontrakP
     });
     expect(mockDb.kontrakPekerjaan.size).toBe(0);
     expect(mockDb.notifikasi).toHaveLength(0);
+  });
+
+  it('[C01, C16, C18] Cakupan lengkap handler REST KontrakPekerjaanController, batas harga 0, addRating, dan Pengguna.konfirmasiPekerjaan() normal', async () => {
+    // C16: batas persetujuanHarga (0 ditolak, 1 diterima)
+    expect(KontrakPekerjaan.validateKontrakInput('Survei gratis', 0).valid).toBe(false);
+    expect(KontrakPekerjaan.validateKontrakInput('Survei minimal', 1).valid).toBe(true);
+
+    // C18: handleShowKontrakForm
+    const formCall = createMockReqRes({});
+    controller.handleShowKontrakForm(formCall.req, formCall.res);
+    expect(formCall.res.getStatus()).toBe(200);
+    expect(formCall.res.getJson().success).toBe(true);
+
+    // C18: handleKirimInput menolak expectedVersion tidak valid (0)
+    const badVersion = createMockReqRes({
+      user: { idPengguna: 'cust-1', username: 'pelanggan1', role: Role.PELANGGAN },
+      body: {
+        idPemberiJasa: 'provider-1',
+        detailPekerjaan: 'Cuci AC',
+        persetujuanHarga: 100000,
+        expectedVersion: 0,
+      },
+    });
+    await controller.handleKirimInput(badVersion.req, badVersion.res);
+    expect(badVersion.res.getStatus()).toBe(400);
+
+    // Buat kontrak valid via handleKirimInput dengan kirimKeChat = true
+    const createdCall = createMockReqRes({
+      user: { idPengguna: 'cust-1', username: 'pelanggan1', role: Role.PELANGGAN },
+      body: {
+        idPemberiJasa: 'provider-1',
+        detailPekerjaan: 'Servis Kulkas',
+        persetujuanHarga: 150000,
+        kirimKeChat: true,
+      },
+    });
+    await controller.handleKirimInput(createdCall.req, createdCall.res);
+    expect(createdCall.res.getStatus()).toBe(201);
+    const idKontrak = createdCall.res.getJson().data.idKontrakPekerjaan;
+
+    // C18: handleGetKontrakById -> 404, 403, 200
+    const getMissing = createMockReqRes({
+      user: { idPengguna: 'cust-1', username: 'pelanggan1', role: Role.PELANGGAN },
+      params: { id: 'kontrak-tidak-ada' },
+    });
+    await controller.handleGetKontrakById(getMissing.req, getMissing.res);
+    expect(getMissing.res.getStatus()).toBe(404);
+
+    const getForbidden = createMockReqRes({
+      user: { idPengguna: 'cust-2', username: 'pelanggan2', role: Role.PELANGGAN },
+      params: { id: idKontrak },
+    });
+    await controller.handleGetKontrakById(getForbidden.req, getForbidden.res);
+    expect(getForbidden.res.getStatus()).toBe(403);
+
+    const getOk = createMockReqRes({
+      user: { idPengguna: 'cust-1', username: 'pelanggan1', role: Role.PELANGGAN },
+      params: { id: idKontrak },
+    });
+    await controller.handleGetKontrakById(getOk.req, getOk.res);
+    expect(getOk.res.getStatus()).toBe(200);
+
+    // C18: handleGetDaftarKontrak -> 401 & 200
+    const listUnauth = createMockReqRes({});
+    await controller.handleGetDaftarKontrak(listUnauth.req, listUnauth.res);
+    expect(listUnauth.res.getStatus()).toBe(401);
+
+    const listOk = createMockReqRes({
+      user: { idPengguna: 'cust-1', username: 'pelanggan1', role: Role.PELANGGAN },
+      query: { status: STATUS_PEKERJAAN.MENUNGGU },
+    });
+    await controller.handleGetDaftarKontrak(listOk.req, listOk.res);
+    expect(listOk.res.getStatus()).toBe(200);
+    expect(listOk.res.getJson().data).toHaveLength(1);
+
+    // C18: handleGetKontrakByChatPartner -> 401, 400, 200
+    const partnerUnauth = createMockReqRes({ params: { idLawanBicara: 'provider-1' } });
+    await controller.handleGetKontrakByChatPartner(partnerUnauth.req, partnerUnauth.res);
+    expect(partnerUnauth.res.getStatus()).toBe(401);
+
+    const partnerEmpty = createMockReqRes({
+      user: { idPengguna: 'cust-1', username: 'pelanggan1', role: Role.PELANGGAN },
+      params: { idLawanBicara: '   ' },
+    });
+    await controller.handleGetKontrakByChatPartner(partnerEmpty.req, partnerEmpty.res);
+    expect(partnerEmpty.res.getStatus()).toBe(400);
+
+    const partnerOk = createMockReqRes({
+      user: { idPengguna: 'cust-1', username: 'pelanggan1', role: Role.PELANGGAN },
+      params: { idLawanBicara: 'provider-1' },
+    });
+    await controller.handleGetKontrakByChatPartner(partnerOk.req, partnerOk.res);
+    expect(partnerOk.res.getStatus()).toBe(200);
+    expect(partnerOk.res.getJson().data.kontrakAktif.idKontrakPekerjaan).toBe(idKontrak);
+
+    // C18: handleKonfirmasiPersetujuan validasi aksi invalid, missing decision, version invalid
+    const missingDecision = createMockReqRes({
+      user: { idPengguna: 'provider-1', username: 'pakbudi', role: Role.PEMBERI_JASA },
+      params: { id: idKontrak },
+      body: {},
+    });
+    await controller.handleKonfirmasiPersetujuan(missingDecision.req, missingDecision.res);
+    expect(missingDecision.res.getStatus()).toBe(400);
+
+    const invalidAction = createMockReqRes({
+      user: { idPengguna: 'provider-1', username: 'pakbudi', role: Role.PEMBERI_JASA },
+      params: { id: idKontrak },
+      body: { aksi: 'batalin' },
+    });
+    await controller.handleKonfirmasiPersetujuan(invalidAction.req, invalidAction.res);
+    expect(invalidAction.res.getStatus()).toBe(400);
+
+    const invalidVerApprove = createMockReqRes({
+      user: { idPengguna: 'provider-1', username: 'pakbudi', role: Role.PEMBERI_JASA },
+      params: { id: idKontrak },
+      body: { aksi: 'terima', expectedVersion: -1 },
+    });
+    await controller.handleKonfirmasiPersetujuan(invalidVerApprove.req, invalidVerApprove.res);
+    expect(invalidVerApprove.res.getStatus()).toBe(400);
+
+    // C18: handleTolakKontrak
+    const rejectCall = createMockReqRes({
+      user: { idPengguna: 'provider-1', username: 'pakbudi', role: Role.PEMBERI_JASA },
+      params: { id: idKontrak },
+      body: { kirimKeChat: true },
+    });
+    await controller.handleTolakKontrak(rejectCall.req, rejectCall.res);
+    expect(rejectCall.res.getStatus()).toBe(200);
+
+    // Buat kontrak ke-2 untuk menguji handleKonfirmasiPekerjaan error branches + Pengguna.konfirmasiPekerjaan normal + addRating
+    const k2 = await controller.kirimInput('Ganti kompresor', 200000, 'cust-1', 'provider-1');
+    const idK2 = k2.getIdKontrakPekerjaan()!;
+
+    // handleKonfirmasiPekerjaan: 404, 403, 400 (masih Menunggu)
+    const conf404 = createMockReqRes({
+      user: { idPengguna: 'cust-1', username: 'pelanggan1', role: Role.PELANGGAN },
+      params: { id: 'tidak-ada' },
+    });
+    await controller.handleKonfirmasiPekerjaan(conf404.req, conf404.res);
+    expect(conf404.res.getStatus()).toBe(404);
+
+    const conf403 = createMockReqRes({
+      user: { idPengguna: 'cust-2', username: 'pelanggan2', role: Role.PELANGGAN },
+      params: { id: idK2 },
+    });
+    await controller.handleKonfirmasiPekerjaan(conf403.req, conf403.res);
+    expect(conf403.res.getStatus()).toBe(403);
+
+    const conf400 = createMockReqRes({
+      user: { idPengguna: 'cust-1', username: 'pelanggan1', role: Role.PELANGGAN },
+      params: { id: idK2 },
+    });
+    await controller.handleKonfirmasiPekerjaan(conf400.req, conf400.res);
+    expect(conf400.res.getStatus()).toBe(400);
+
+    // Terima kontrak & selesaikan pekerjaan dengan kirimKeChat = true
+    await controller.konfirmasiPersetujuanPenyedia(idK2, 'provider-1', true);
+    const selesaiCall = createMockReqRes({
+      user: { idPengguna: 'provider-1', username: 'pakbudi', role: Role.PEMBERI_JASA },
+      params: { id: idK2 },
+      body: { kirimKeChat: true },
+    });
+    await controller.handleSelesaikanPekerjaan(selesaiCall.req, selesaiCall.res);
+    expect(selesaiCall.res.getStatus()).toBe(200);
+
+    // C01: Pengguna.konfirmasiPekerjaan() normal mengembalikan true & mengubah status ke Done
+    const pelangganEntity = new Pengguna({ idPengguna: 'cust-1' });
+    const confirmedOk = await pelangganEntity.konfirmasiPekerjaan(idK2);
+    expect(confirmedOk).toBe(true);
+    expect(mockDb.kontrakPekerjaan.get(idK2)?.statusPekerjaan).toBe(STATUS_PEKERJAAN.DONE);
+
+    // C16: addRating() memperbarui hasRating = true pada kontrak
+    const fetchedK2 = await KontrakPekerjaan.fetchKontrakPekerjaan(idK2);
+    const rated = await fetchedK2!.addRating();
+    expect(rated).toBe(true);
+    expect(mockDb.kontrakPekerjaan.get(idK2)?.hasRating).toBe(true);
   });
 });
