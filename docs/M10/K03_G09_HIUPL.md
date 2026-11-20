@@ -1102,24 +1102,81 @@ Tabel 4.6. Bukti Hasil Pengujian
 
 # BAB 5: Traceability
 
-Petakan setiap KF ke KNF, use case, kelas perancangan, file implementasi, dan test case. Tabel traceability berikut akan menjadi sarana verifikasi KF. Setiap KF memiliki minimal satu test case dan dinyatakan terpenuhi apabila **seluruh** test case terkaitnya berkesimpulan `Pass`. KF yang tidak diimplementasikan tetap dicantumkan beserta alasannya.
+Bab ini menyajikan matriks kerunutan (*traceability*) yang memetakan setiap Kebutuhan Fungsional (KF) pada SKPL ke Kebutuhan Non-Fungsional (KNF) terkait, *use case*, kelas perancangan pada DPPL, berkas implementasi pada Subbab 3.2 dan 3.3, serta *test case* pada BAB 4. Matriks ini menjadi sarana verifikasi pemenuhan KF. Setiap KF memiliki minimal satu *test case* dan dinyatakan terpenuhi apabila **seluruh** *test case* terkaitnya berkesimpulan `Pass`. Seluruh KF01 s.d. KF21 telah diimplementasikan, sehingga tidak ada KF yang dikecualikan dari matriks ini.
+
+Keterangan pemetaan:
+- Kolom **KNF Terkait** diturunkan dari kesamaan nomor kebutuhan asal (R-XX) pada Tabel 3.1 dan Tabel 3.2 SKPL.
+- Kolom **Use Case ID** mengacu pada Tabel 2.3 dokumen ini.
+- Kolom **Implementasi File Terkait** memuat berkas utama yang merealisasikan KF. Daftar lengkap berkas per kelas tercantum pada Tabel 3.2 dan Tabel 3.3.
+- Kolom **Test Case (Unit/Integrasi/KNF)** memuat *test case* unit pada Subbab 4.2, *test case* integrasi pada Subbab 4.3, dan *test case* KNF pada Subbab 4.5.
 
 Tabel 5.1. Matriks Kerunutan KF terhadap Implementasi dan Pengujian
 
 | KF ID | KNF Terkait | Use Case ID | Kelas Terkait | Implementasi File Terkait | Test Case (UC) | Test Case (Unit/Integrasi/KNF) |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| *KF05* | *KNF01* | *UC03* | *C02 - Pesanan* | *`src/...`* | *UC03-TC01* | *C02-UT05, INT-TC04, KNF01-TC01* |
-| *KF01* | *-* | *UC01<br>UC02* | *[C01 - Nama kelas]<br>[C02 - Nama kelas]* | *[path/ke/file1]<br>[path/ke/file2]* | *UC01-TC01, UC01-TC02<br>UC02-TC01* | *-* |
-| *KF02* | *[KNFXX atau -]* | *[UCXX]* | *[CXX - Nama kelas]* | *[path/ke/file]* | *[UCXX-TCYY]* | *[CXX-UTYY, INT-TCYY, KNFXX-TCYY atau -]* |
-| *KFXX* | *-* | *[UCXX atau -]* | *[CXX - Nama kelas atau -]* | *Tidak diimplementasikan: [alasan]* | *-* | *-* |
-| *...* | *...* | *...* | *...* | *...* | *...* | *...* |
+| KF01 | KNF01, KNF02 | UC02 | C08 - PelangganUI<br>C13 - KategoriJasa<br>C14 - KategoriJasaUI<br>C15 - KategoriJasaController | `src/frontend/src/views/home/HomeView.tsx`<br>`src/backend/src/models/KategoriJasa.ts`<br>`src/backend/src/controllers/KategoriJasaController.ts`<br>`src/backend/src/routes/services.routes.ts` | UC02-TC01, UC02-TC02 | C06-UT04, C13-UT01 - C13-UT03, C15-UT06, INT-TC02, KNF01-TC01, KNF02-TC01 |
+| KF02 | KNF03, KNF04 | UC02 | C04 - PemberiJasa<br>C06 - PemberiJasaController<br>C16 - KontrakPekerjaan<br>C18 - KontrakPekerjaanController | `src/backend/src/controllers/PemberiJasaController.ts`<br>`src/backend/src/models/KontrakPekerjaan.ts`<br>`src/backend/src/controllers/KontrakPekerjaanController.ts`<br>`src/backend/src/routes/kontrakRoutes.ts` | UC02-TC01 | C06-UT03, C06-UT07, C18-UT01, C18-UT02, INT-TC05, INT-TC06, KNF03-TC01, KNF04-TC01 |
+| KF03 | KNF05, KNF06 | UC02 | C04 - PemberiJasa<br>C05 - PemberiJasaUI<br>C06 - PemberiJasaController | `src/backend/src/utils/haversine.ts`<br>`src/backend/src/models/PemberiJasa.ts`<br>`src/frontend/src/views/home/SearchResultView.tsx`<br>`src/frontend/src/components/MapViewCard.tsx`<br>`src/frontend/src/controllers/useCatalogController.ts` | UC02-TC01, UC02-TC02 | C04-UT01 - C04-UT03, C06-UT05, C06-UT06, INT-TC03, KNF05-TC01, KNF06-TC01 |
+| KF04 | KNF08, KNF09 | UC01 | C06 - PemberiJasaController<br>C14 - KategoriJasaUI<br>C15 - KategoriJasaController | `src/frontend/src/views/service/ServiceRegistrationView.tsx`<br>`src/backend/src/controllers/KategoriJasaController.ts`<br>`src/backend/src/controllers/PemberiJasaController.ts`<br>`src/backend/src/routes/services.routes.ts` | UC01-TC01, UC01-TC02 | C06-UT01, C06-UT02, C15-UT01 - C15-UT05, INT-TC02, KNF08-TC01, KNF08b-TC01 |
+| KF05 | KNF10 | UC01 | C04 - PemberiJasa<br>C13 - KategoriJasa<br>C15 - KategoriJasaController | `src/backend/src/models/PemberiJasa.ts`<br>`src/backend/src/models/KategoriJasa.ts`<br>`src/backend/src/controllers/KategoriJasaController.ts`<br>`src/backend/prisma/schema.prisma` | UC01-TC01 | C04-UT05, C13-UT01 - C13-UT03, C15-UT01 - C15-UT05, INT-TC02, KNF10-TC01 |
+| KF06 | KNF12 | UC04 | C18 - KontrakPekerjaanController<br>C28 - Notifikasi<br>C29 - NotifikasiUI<br>C30 - NotifikasiController | `src/backend/src/controllers/KontrakPekerjaanController.ts`<br>`src/backend/src/controllers/NotifikasiController.ts`<br>`src/backend/src/models/Notifikasi.ts`<br>`src/frontend/src/views/chat/notifications/NotificationView.tsx` | - | C18-UT01, C30-UT01, C30-UT02, INT-TC04, INT-TC05, KNF12-TC01 |
+| KF07 | KNF11 | UC04 | C16 - KontrakPekerjaan<br>C18 - KontrakPekerjaanController | `src/backend/src/workers/autoCancelKontrakWorker.ts`<br>`src/backend/src/models/KontrakPekerjaan.ts`<br>`src/backend/src/server.ts` | - | KNF11-TC01, *[C16-UTxx auto-cancel 30 menit: menunggu tabel unit test C16]* |
+| KF08 | KNF13 | UC02 | C04 - PemberiJasa<br>C05 - PemberiJasaUI<br>C06 - PemberiJasaController | `src/backend/src/controllers/PemberiJasaController.ts`<br>`src/backend/src/routes/services.routes.ts`<br>`src/frontend/src/views/home/SearchResultView.tsx`<br>`src/frontend/src/components/MapViewCard.tsx` | UC02-TC01 | C04-UT04, C06-UT03, INT-TC03, KNF13-TC01 |
+| KF09 | KNF14, KNF15, KNF16 | UC03<br>UC04 | C19 - Komunikasi<br>C20 - KomunikasiUI<br>C21 - KomunikasiController | `src/backend/src/models/Komunikasi.ts`<br>`src/backend/src/controllers/KomunikasiController.ts`<br>`src/backend/src/routes/chats.routes.ts`<br>`src/backend/src/server.ts`<br>`src/frontend/src/views/chat/ChatRoom.tsx`<br>`src/frontend/src/controllers/useChatController.ts` | UC03-TC01, UC03-TC02<br>UC04-TC01, UC04-TC02 | C19-UT01 - C19-UT05, C21-UT01 - C21-UT06, INT-TC04, KNF14-TC01, KNF15-TC01, KNF16-TC01 |
+| KF10 | KNF17, KNF18 | UC05 | C17 - KontrakPekerjaanUI<br>C18 - KontrakPekerjaanController | `src/frontend/src/components/chat/ContractCard.tsx`<br>`src/frontend/src/views/chat/CustomerChatView.tsx`<br>`src/frontend/src/controllers/useContractController.ts`<br>`src/backend/src/controllers/KontrakPekerjaanController.ts`<br>`src/backend/src/routes/kontrakRoutes.ts` | UC05-TC01, UC05-TC02 | C17-UT01, C17-UT02, C18-UT01, C18-UT02, INT-TC05, KNF17-TC01, KNF18-TC01 |
+| KF11 | KNF19 | UC05 | C16 - KontrakPekerjaan<br>C17 - KontrakPekerjaanUI<br>C18 - KontrakPekerjaanController | `src/backend/src/models/KontrakPekerjaan.ts`<br>`src/backend/src/controllers/KontrakPekerjaanController.ts`<br>`src/frontend/src/views/chat/ProviderChatView.tsx`<br>`src/frontend/src/components/chat/ContractCard.tsx` | UC05-TC01, UC05-TC02, UC05-TC03 | C16-UT01 - C16-UT07, C18-UT03, C18-UT04, INT-TC05, INT-TC06, KNF19-TC01 |
+| KF12 | KNF20 | UC06 | C16 - KontrakPekerjaan<br>C17 - KontrakPekerjaanUI<br>C18 - KontrakPekerjaanController | `src/backend/src/controllers/KontrakPekerjaanController.ts`<br>`src/frontend/src/views/history/ProviderHistoryView.tsx`<br>`src/frontend/src/controllers/useContractController.ts` | UC06-TC01, UC06-TC02 | C17-UT04, C18-UT05, INT-TC07, KNF20-TC01 |
+| KF13 | KNF21, KNF22 | UC07 | C01 - Pengguna<br>C16 - KontrakPekerjaan<br>C17 - KontrakPekerjaanUI<br>C18 - KontrakPekerjaanController | `src/backend/src/controllers/KontrakPekerjaanController.ts`<br>`src/backend/src/models/Pengguna.ts`<br>`src/frontend/src/views/history/CustomerHistoryView.tsx`<br>`src/frontend/src/controllers/useContractController.ts` | UC07-TC01, UC07-TC02 | C01-UT04, C17-UT03, C17-UT04, C18-UT06, INT-TC07, KNF21-TC01, KNF22-TC01 |
+| KF14 | - | UC08 | C22 - TiketLaporan<br>C23 - TiketLaporanUI<br>C24 - TiketLaporanController | `src/frontend/src/views/ticket/CreateTicketScreen.tsx`<br>`src/backend/src/controllers/TiketLaporanController.ts`<br>`src/backend/src/routes/tickets.routes.ts`<br>`src/backend/src/middlewares/upload.middleware.ts` | *[menunggu Subbab 4.4.8]* | C22-UT01, C24-UT01 - C24-UT05, INT-TC08 |
+| KF15 | KNF23 | UC08<br>UC09 | C10 - LayananPelanggan<br>C12 - LayananPelangganController<br>C22 - TiketLaporan<br>C24 - TiketLaporanController | `src/backend/src/models/TiketLaporan.ts`<br>`src/backend/src/models/LayananPelanggan.ts`<br>`src/backend/src/controllers/TiketLaporanController.ts`<br>`src/backend/src/controllers/LayananPelangganCtrl.ts`<br>`src/frontend/src/views/ticket/TicketDetailScreen.tsx` | *[menunggu Subbab 4.4.8 dan 4.4.9]* | C10-UT01 - C10-UT03, C12-UT02 - C12-UT06, C22-UT01 - C22-UT03, C24-UT03, C24-UT06, INT-TC08, INT-TC09, KNF23-TC01 |
+| KF16 | - | UC08 | C04 - PemberiJasa<br>C22 - TiketLaporan<br>C23 - TiketLaporanUI<br>C24 - TiketLaporanController | `src/frontend/src/views/ticket/CreateTicketScreen.tsx`<br>`src/backend/src/controllers/TiketLaporanController.ts`<br>`src/backend/src/routes/tickets.routes.ts`<br>`src/backend/src/middlewares/upload.middleware.ts` | *[menunggu Subbab 4.4.8]* | C22-UT01, C24-UT01 - C24-UT05 |
+| KF17 | KNF23 | UC08<br>UC09 | C10 - LayananPelanggan<br>C12 - LayananPelangganController<br>C22 - TiketLaporan<br>C24 - TiketLaporanController | `src/backend/src/models/TiketLaporan.ts`<br>`src/backend/src/models/LayananPelanggan.ts`<br>`src/backend/src/controllers/TiketLaporanController.ts`<br>`src/backend/src/controllers/LayananPelangganCtrl.ts`<br>`src/frontend/src/views/ticket/TicketDetailScreen.tsx` | *[menunggu Subbab 4.4.8 dan 4.4.9]* | C10-UT01 - C10-UT03, C12-UT02 - C12-UT06, C22-UT01 - C22-UT03, C24-UT03, C24-UT06, INT-TC09, KNF23-TC01 |
+| KF18 | KNF24, KNF25, KNF26 | UC09 | C11 - LayananPelangganUI<br>C24 - TiketLaporanController<br>C28 - Notifikasi<br>C30 - NotifikasiController | `src/backend/src/controllers/TiketLaporanController.ts`<br>`src/backend/src/controllers/NotifikasiController.ts`<br>`src/backend/src/models/Notifikasi.ts`<br>`src/frontend/src/views/ticket/CSDashboardScreen.tsx` | *[menunggu Subbab 4.4.9]* | C24-UT03 - C24-UT05, C30-UT01 - C30-UT03, INT-TC08, KNF24-TC01, KNF25-TC01, KNF26-TC01 |
+| KF19 | KNF27 | UC10 | C03 - PenggunaController<br>C25 - Rating<br>C26 - RatingUI<br>C27 - RatingController | `src/backend/src/models/Rating.ts`<br>`src/backend/src/controllers/RatingController.ts`<br>`src/backend/src/routes/ratings.routes.ts`<br>`src/frontend/src/views/rating/RatingView.tsx`<br>`src/frontend/src/controllers/useRatingController.ts` | *[menunggu Subbab 4.4.10]* | C03-UT08, C25-UT01, C25-UT02, C26-UT01 - C26-UT04, C27-UT01 - C27-UT05, INT-TC10, KNF27-TC01 |
+| KF20 | KNF28 | UC10 | C01 - Pengguna<br>C25 - Rating<br>C27 - RatingController | `src/backend/src/models/Rating.ts`<br>`src/backend/src/models/Pengguna.ts`<br>`src/backend/src/controllers/RatingController.ts`<br>`src/backend/prisma/schema.prisma` | *[menunggu Subbab 4.4.10]* | C01-UT01 - C01-UT03, C25-UT03 - C25-UT06, C27-UT06, INT-TC10, KNF28-TC01 |
+| KF21 | KNF07, KNF08, KNF09 | UC11<br>UC12 | C01 - Pengguna<br>C03 - PenggunaController<br>C06 - PemberiJasaController<br>C09 - PelangganController<br>C12 - LayananPelangganController | `src/backend/src/controllers/PenggunaController.ts`<br>`src/backend/src/controllers/PelangganController.ts`<br>`src/backend/src/routes/auth.routes.ts`<br>`src/backend/src/middlewares/auth.middleware.ts`<br>`src/frontend/src/views/auth/LoginView.tsx`<br>`src/frontend/src/views/auth/RegisterCustomerView.tsx`<br>`src/frontend/src/views/auth/RegisterProviderView.tsx` | UC11-TC01, UC11-TC02<br>UC12-TC01, UC12-TC02 | C03-UT01 - C03-UT07, C06-UT01, C06-UT02, C09-UT01 - C09-UT03, C12-UT01, INT-TC01, KNF07-TC01, KNF08-TC01, KNF08b-TC01 |
 
 Tabel 5.2. Matriks Kerunutan KNF terhadap Pengujian
 
 | ID KNF | Parameter | KF/UC Terkait | Test Case |
 | :--- | :--- | :--- | :--- |
-| *KNF01* | *Reliability* | *KF05 / UC03* | *KNF01-TC01* |
-| *KNFXX* | *[Parameter]* | *[KFXX / UCXX atau -]* | *[KNFXX-TCYY]* |
-| *...* | *...* | *...* | *...* |
+| KNF01 | *Response time* | KF01 / UC02 | KNF01-TC01 |
+| KNF02 | *Ergonomy* | KF01 / UC02 | KNF02-TC01 |
+| KNF03 | *Response time* | KF02 / UC02 | KNF03-TC01 |
+| KNF04 | *Reliability* | KF02, KF11 / UC02, UC05 | KNF04-TC01 |
+| KNF05 | *Response time* | KF03 / UC02 | KNF05-TC01 |
+| KNF06 | *Reliability* | KF03 / UC02 | KNF06-TC01 |
+| KNF07 | *Availability* | KF21 / UC12 | KNF07-TC01 |
+| KNF08 | *Security* | KF04, KF21 / UC01, UC12 | KNF08-TC01 |
+| KNF09 | *Response time* | KF04, KF21 / UC01, UC12 | KNF08b-TC01 |
+| KNF10 | *Response time* | KF05 / UC01 | KNF10-TC01 |
+| KNF11 | *Ergonomy* | KF07 / UC04 | KNF11-TC01 |
+| KNF12 | *Response time* | KF06 / UC04 | KNF12-TC01 |
+| KNF13 | *Ergonomy* | KF08 / UC02 | KNF13-TC01 |
+| KNF14 | *Security* | KF09 / UC03, UC04 | KNF14-TC01 |
+| KNF15 | *Response time* | KF09 / UC03, UC04 | KNF15-TC01 |
+| KNF16 | *Reliability* | KF09 / UC03, UC04 | KNF16-TC01 |
+| KNF17 | *Ergonomy* | KF10 / UC05 | KNF17-TC01 |
+| KNF18 | *Security* | KF10 / UC05 | KNF18-TC01 |
+| KNF19 | *Reliability* | KF11 / UC05 | KNF19-TC01 |
+| KNF20 | *Ergonomy* | KF12 / UC06 | KNF20-TC01 |
+| KNF21 | *Reliability* | KF13 / UC07 | KNF21-TC01 |
+| KNF22 | *Reliability* | KF13 / UC07 | KNF22-TC01 |
+| KNF23 | *Availability* | KF15, KF17 / UC08, UC09 | KNF23-TC01 |
+| KNF24 | *Reliability* | KF18 / UC08, UC09 | KNF24-TC01 |
+| KNF25 | *Response time* | KF18 / UC08, UC09 | KNF25-TC01 |
+| KNF26 | *Reliability* | KF18 / UC09 | KNF26-TC01 |
+| KNF27 | *Ergonomy* | KF19 / UC10 | KNF27-TC01 |
+| KNF28 | *Reliability* | KF20 / UC10 | KNF28-TC01 |
+
+Catatan:
+- Pada Tabel 3.2 SKPL, kebutuhan *Response time* validasi input formulir (R07) tercantum dengan ID ganda `KNF08`. Pada BAB 5 kebutuhan tersebut dirujuk sebagai `KNF09` agar urutan ID KNF01 s.d. KNF28 tetap unik, sedangkan *test case*-nya mengikuti ID pada Tabel 4.5, yaitu `KNF08b-TC01`.
+- Berdasarkan Tabel 4.5, terdapat *test case* KNF yang belum berkesimpulan `Pass` penuh sehingga KF terkaitnya belum dapat dinyatakan terpenuhi seluruhnya:
+  - `KNF06-TC01` (KF03): akurasi GPS belum terverifikasi pada perangkat fisik.
+  - `KNF13-TC01` (KF08): skema kontrak belum menyimpan lokasi pelanggan secara terpisah.
+  - `KNF14-TC01` (KF09): enkripsi *End-to-End* belum diimplementasikan.
+  - `KNF15-TC01` (KF09): lolos pada sisi *backend*, tetapi belum memenuhi target pada antarmuka *mobile*.
+- `KNF07-TC01` dan `KNF23-TC01` berkesimpulan `Pass (Terbatas)` karena uji ketersediaan 24 jam penuh belum dilakukan.
+- Rencana perbaikan setiap *test case* di atas tercantum pada kolom Kesimpulan Tabel 4.5.
 
 </div>
