@@ -169,3 +169,4 @@
 | :--- | :--- | :--- | :--- | :--- | :--- | 
 | 20-11-2026 | Naufal Hasbialhaq |  4.4.1 4.4.2 4.4.3 4.4.4 | 3 jam | Done | - |
 | 20-11-2026 | Raymond Edson Sabajan |  4.4.5 4.4.6 4.4.7 | 3 jam | Done | - |
+| 20-11-2026 | Vinsensius Juan Setiady | 4.4.8 4.4.9 | 1 jam | Done | - |
