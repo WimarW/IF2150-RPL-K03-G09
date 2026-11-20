@@ -23,10 +23,7 @@
 
 ### Catatan
 
-Asistensi akbar
-
-**Notes for this section:**  
-*Catatan dapat dituliskan dalam bentuk paragraf atau poin-poin, disesuaikan saja.* 
+Asistensi akbar membahas Milestone 10 yang mencakup Identitas dan Daftar Perubahan, BAB 1 Pendahuluan, BAB 2 Deskripsi Umum Perangkat Lunak, BAB 3 Implementasi , BAB 4 Hasil Pengujian, serta BAB 5 Traceability. dan membahas rincian dari setiap bab
 
 ## Dokumentasi
 
