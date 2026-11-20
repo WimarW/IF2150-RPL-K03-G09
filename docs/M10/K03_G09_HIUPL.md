@@ -58,8 +58,8 @@ Dipersiapkan oleh:
 
 | Revisi | Deskripsi |
 | :--- | :--- |
-| *A* | *Deskripsikan perubahan yang dilakukan dari dokumen sebelumnya pada dokumen ini. Jika tidak terdapat perubahan, harap kosongkan tabel.* |
-| *B* |  |
+| *A* | Menambahkan file auth.middleware.ts ke dalam Implementasi Modul untuk kelas PenggunaController (di M9 belum ada) |
+| *B* | Menambahkan file MyTicketScreen.tsx untuk UI Tiket (sudah disebutkan pada dokumen Implementasi pada Tabel B.1 No. 18) |
 | *C* |  |
 | ... |  |
 
@@ -255,13 +255,13 @@ Tabel 3.1. Lingkungan Implementasi
 
 | Aspek | Keterangan |
 | :--- | :--- |
-| *Hardware* | *[Spesifikasi perangkat keras]* |
-| *Operating System* | *[Nama dan versi OS]* |
-| *Bahasa Pemrograman* | *[Bahasa dan versi]* |
-| *Framework/Library* | *[Daftar framework/library beserta versi]* |
-| *DBMS* | *[Nama dan versi DBMS]* |
-| *Development Tools* | *[IDE, version control, tools lain]* |
-| *Testing Tools* | *[Framework unit test, alat ukur performa, alat coverage]* |
+| *Hardware* | *Menggunakan laptop atau PC* |
+| *Operating System* | *Windows 10 atau yang terbaru, macOS* |
+| *Bahasa Pemrograman* | *TypeScript 5.7.2 (backend), TypeScript ~6.0.3 (frontend)* |
+| *Framework/Library* | *<ul> Framework <li>React Native 0.88.1 <li> Expo SDK ~58.0.22 <li> Express.js 4.21.2 </ul> <ul> Library <li> React Navigation v7 <li> Socket.IO 4.8.4 </li> </ul>* |
+| *DBMS* | *<ul> <li> PostgreSQL 16 (via Docker image `postgres:16-alpine`)<li>Prisma ORM 5.22.0 </li> </ul>* |
+| *Development Tools* | *<ul> <li> IDE : Visual Studio Code <li> Version Control: Git <li> Remote Repository: GitHub </li> </ul>* |
+| *Testing Tools* | *<ul> <li> Jest (~30.5.2) <li> Jest-Expo (~58.0.14)</li> </ul>* |
 
 ## 3.2 Implementasi Modul
 
@@ -271,9 +271,36 @@ Tabel 3.2. Implementasi Modul
 
 | No | ID Kelas | Nama Modul/Kelas | Nama File Fisik | Nama File Executable |
 | :--- | :--- | :--- | :--- | :--- |
-| 1 | *[C01]* | *[Nama modul/kelas]* | *[path/ke/file]* | *[Nama file executable, atau - jika tidak ada]* |
-| 2 | *[C02]* | *[Nama modul/kelas]* | *[path/ke/file]* | *[...]* |
-| ... | *...* | *...* | *...* | *...* |
+| 1 | C01 | Pengguna | `src/backend/src/models/Pengguna.ts`<br>`src/backend/prisma/schema.prisma` (`model Pengguna`) | - |
+| 2 | C02 | PenggunaUI | `src/frontend/src/views/auth/RegisterCustomerView.tsx`<br>`src/frontend/src/views/profile/ProfileView.tsx`<br>`src/frontend/src/views/history/CustomerHistoryView.tsx`<br>`src/frontend/src/views/chat/ConversationListView.tsx`<br>`src/frontend/src/controllers/useAuthController.ts` | - |
+| 3 | C03 | PenggunaController | `src/backend/src/controllers/PenggunaController.ts`<br>`src/backend/src/routes/auth.routes.ts`<br>`src/backend/src/routes/user.routes.ts` <br> `src/backend/src/middlewares/auth.middleware.ts` | - |
+| 4 | C04 | PemberiJasa | `src/backend/src/models/PemberiJasa.ts`<br>`src/backend/prisma/schema.prisma` (`model PemberiJasa`) | - |
+| 5 | C05 | PemberiJasaUI | `src/frontend/src/views/home/SearchResultView.tsx`<br>`src/frontend/src/components/MapViewCard.tsx`<br>`src/frontend/src/views/auth/RegisterProviderView.tsx`<br>`src/frontend/src/views/history/ProviderHistoryView.tsx`<br>`src/frontend/src/views/chat/ProviderChatView.tsx`<br>`src/frontend/src/views/auth/LoginView.tsx` | - |
+| 6 | C06 | PemberiJasaController | `src/backend/src/controllers/PemberiJasaController.ts`<br>`src/backend/src/routes/services.routes.ts`<br>`src/backend/src/routes/auth.routes.ts`<br>`src/frontend/src/controllers/useCatalogController.ts` | - |
+| 7 | C07 | Pelanggan | `src/backend/src/models/Pelanggan.ts` | - |
+| 8 | C08 | PelangganUI | `src/frontend/src/views/auth/LoginView.tsx`<br>`src/frontend/src/views/auth/RegisterCustomerView.tsx`<br>`src/frontend/src/views/home/HomeView.tsx`<br>`src/frontend/src/views/home/SearchRecommendationView.tsx`<br>`src/frontend/src/views/chat/CustomerChatView.tsx`<br>`src/frontend/src/navigation/RootNavigator.tsx`<br>`src/frontend/src/navigation/MainTabNavigator.tsx` | - |
+| 9 | C09 | PelangganController | `src/backend/src/controllers/PelangganController.ts`<br>`src/backend/src/routes/auth.routes.ts` | - |
+| 10 | C10 | LayananPelanggan | `src/backend/src/models/LayananPelanggan.ts`<br>`src/backend/prisma/schema.prisma` (`model LayananPelanggan`) | - |
+| 11 | C11 | LayananPelangganUI | `src/frontend/src/views/ticket/CSDashboardScreen.tsx`<br>`src/frontend/src/views/ticket/TicketDetailScreen.tsx`<br>`src/frontend/src/views/auth/LoginView.tsx` | - |
+| 12 | C12 | LayananPelangganController | `src/backend/src/controllers/LayananPelangganCtrl.ts`<br>`src/backend/src/routes/cs.routes.ts`<br>`src/backend/src/routes/auth.routes.ts` | - |
+| 13 | C13 | KategoriJasa | `src/backend/src/models/KategoriJasa.ts`<br>`src/backend/prisma/schema.prisma` (`model KategoriJasa`) | - |
+| 14 | C14 | KategoriJasaUI | `src/frontend/src/views/service/ServiceRegistrationView.tsx`<br>`src/frontend/src/views/home/HomeView.tsx`<br>`src/frontend/src/views/home/SearchRecommendationView.tsx` | - |
+| 15 | C15 | KategoriJasaController | `src/backend/src/controllers/KategoriJasaController.ts`<br>`src/backend/src/routes/services.routes.ts`<br>`src/frontend/src/controllers/useCatalogController.ts` | - |
+| 16 | C16 | KontrakPekerjaan | `src/backend/src/models/KontrakPekerjaan.ts`<br>`src/backend/prisma/schema.prisma` (`model KontrakPekerjaan`)<br>`src/backend/src/workers/autoCancelKontrakWorker.ts` | - |
+| 17 | C17 | KontrakPekerjaanUI | `src/frontend/src/components/chat/ContractCard.tsx`<br>`src/frontend/src/views/chat/CustomerChatView.tsx`<br>`src/frontend/src/views/chat/ProviderChatView.tsx`<br>`src/frontend/src/views/history/CustomerHistoryView.tsx`<br>`src/frontend/src/views/history/ProviderHistoryView.tsx`<br>`src/frontend/src/controllers/useContractController.ts`<br>`src/frontend/src/services/contractService.ts` | - |
+| 18 | C18 | KontrakPekerjaanController | `src/backend/src/controllers/KontrakPekerjaanController.ts`<br>`src/backend/src/routes/kontrakRoutes.ts` | - |
+| 19 | C19 | Komunikasi | `src/backend/src/models/Komunikasi.ts`<br>`src/backend/prisma/schema.prisma` (`model Komunikasi`) | - |
+| 20 | C20 | KomunikasiUI | `src/frontend/src/views/ChatScreen.tsx`<br>`src/frontend/src/views/chat/ConversationListView.tsx`<br>`src/frontend/src/views/chat/CustomerChatView.tsx`<br>`src/frontend/src/views/chat/ProviderChatView.tsx`<br>`src/frontend/src/views/chat/ChatRoom.tsx`<br>`src/frontend/src/components/chat/ChatBubble.tsx`<br>`src/frontend/src/components/chat/MessageInput.tsx`<br>`src/frontend/src/components/chat/ChatHeader.tsx`<br>`src/frontend/src/components/chat/ConversationCard.tsx`<br>`src/frontend/src/components/chat/SearchField.tsx`<br>`src/frontend/src/controllers/useChatController.ts`<br>`src/frontend/src/services/chatService.ts` | - |
+| 21 | C21 | KomunikasiController | `src/backend/src/controllers/KomunikasiController.ts`<br>`src/backend/src/routes/chats.routes.ts`<br>`src/backend/src/server.ts` | - |
+| 22 | C22 | TiketLaporan | `src/backend/src/models/TiketLaporan.ts`<br>`src/backend/prisma/schema.prisma` (`model TiketLaporan`)<br>`src/backend/prisma/migrations/20261112100000_tiket_nomor_sequence/migration.sql` | - |
+| 23 | C23 | TiketLaporanUI | `src/frontend/src/views/ticket/CreateTicketScreen.tsx`<br>`src/frontend/src/views/ticket/TicketDetailScreen.tsx`<br>`src/frontend/src/views/ticket/MyTicketsScreen.tsx`<br>`src/frontend/src/services/ticketService.ts` | - |
+| 24 | C24 | TiketLaporanController | `src/backend/src/controllers/TiketLaporanController.ts`<br>`src/backend/src/routes/tickets.routes.ts`<br>`src/backend/src/middlewares/upload.middleware.ts` | - |
+| 25 | C25 | Rating | `src/backend/src/models/Rating.ts`<br>`src/backend/prisma/schema.prisma` (`model Rating`) | - |
+| 26 | C26 | RatingUI | src/frontend/src/views/rating/RatingView.tsx<br>src/frontend/src/controllers/useRatingController.ts<br>src/frontend/src/services/ratingService.ts | - |
+| 27 | C27 | RatingController | src/backend/src/controllers/RatingController.ts<br>src/backend/src/routes/ratings.routes.ts | - |
+| 28 | C28 | Notifikasi | src/backend/src/models/Notifikasi.ts<br>src/backend/prisma/schema.prisma (model Notifikasi) | - |
+| 29 | C29 | NotifikasiUI | src/frontend/src/views/chat/notifications/NotificationView.tsx<br>src/frontend/src/components/notifications/NotificationCard.tsx<br>src/frontend/src/controllers/useNotificationController.ts<br>src/frontend/src/services/notificationService.ts<br>src/frontend/src/context/UnreadContext.tsx<br>src/frontend/src/components/chat/UnreadBadge.tsx | - |
+| 30 | C30 | NotifikasiController | src/backend/src/controllers/NotifikasiController.ts <br> src/backend/src/routes/notifications.routes.ts | - |
 
 ## 3.3 Implementasi Antarmuka
 
@@ -283,9 +310,28 @@ Tabel 3.3. Implementasi Antarmuka
 
 | No | ID Antarmuka | Nama Antarmuka | Nama File Fisik | Nama File Executable |
 | :--- | :--- | :--- | :--- | :--- |
-| 1 | *[I-01]* | *[Nama layar]* | *[path/ke/file]* | *[Nama file executable, atau - jika tidak ada]* |
-| 2 | *[I-02]* | *[Nama layar]* | *[path/ke/file]* | *[...]* |
-| ... | *...* | *...* | *...* | *...* |
+| 1 | UI-01 (I-01) | Login | `src/frontend/src/views/auth/LoginView.tsx.` | - |
+| 2 | UI-02 (I-02) | Buat Akun Pengguna | `src/frontend/src/views/auth/RegisterCustomerView.tsx` | - |
+| 3 | UI-03 (I-03) | Buat Akun Pemilik Jasa | src/frontend/src/views/auth/RegisterCustomerView.tsx | - |
+| 4 | UI-04 (I-04) | Home / Beranda | `src/frontend/src/views/home/HomeView.tsx` | - |
+| 5 | UI-05 (I-05) | Rekomendasi Pencarian | src/frontend/src/views/home/SearchRecommendationView.tsx | - |
+| 6 | UI-06 (I-06) | Hasil Pencarian | src/frontend/src/views/home/SearchResultView.tsx <br> src/frontend/src/components/MapViewCard.tsx | - |
+| 7 | UI-07 (I-07) | Daftar Pesan | src/frontend/src/views/chat/CustomerChatView.tsx <br> src/frontend/src/views/ChatScreen.tsx | - |
+| 8 | UI-08 (I-08) | Ruang Obrolan (Chat Channel) Pelanggan | src/frontend/src/views/chat/CustomerChatView.tsx <br> src/frontend/src/views/chat/ChatRoom.tsx <br> src/frontend/src/components/chat/ContractCard.tsx | - | 
+| 9 | UI-09 (I-09) | Ruang Obrolan (Chat Channel) Pemilik Jasa | src/frontend/src/views/chat/ProviderChatView.tsx <br> src/frontend/src/views/chat/ChatRoom.tsx <br> src/frontend/src/components/chat/ContractCard.tsx | - | 
+| 10 | UI-10 (I-10) | Riwayat (Pelanggan) | src/frontend/src/views/history/CustomerHistoryView.tsx <br> src/frontend/src/views/RiwayatScreen.tsx | - |
+| 11 | UI-11 (I-11) | Beri Penilaian | src/frontend/src/views/rating/RatingView.tsx | - |
+| 12 | UI-12 (I-12) | Riwayat Pekerjaan (Pemilik Jasa) | src/frontend/src/views/history/ProviderHistoryView.tsx <br> src/frontend/src/views/RiwayatScreen.tsx |
+| 13 | UI-13 (I-13) | Notifikasi | src/frontend/src/views/chat/notifications/NotificationView.tsx <br> src/frontend/src/components/notifications/NotificationCard.tsx | - |
+| 14 | UI-14 (I-14) | Profil | src/frontend/src/views/profile/ProfileView.tsx | - |
+| 15 | UI-15 (I-15) | Buat Tiket Laporan | src/frontend/src/views/ticket/CreateTicketScreen.tsx | - |
+| 16 | UI-16 (I-16) | Daftar Penyedia Jasa | src/frontend/src/views/service/ServiceRegistrationView.tsx <br> src/frontend/src/views/home/SearchResultView.tsx | - |
+| 17 | UI-17 (I-17) | Home untuk CS | src/frontend/src/views/ticket/CSDashboardScreen.tsx <br> src/frontend/src/views/cs/CSHomeView.tsx | - |
+| 18 | UI-18 (I-18) | Detail Tiket (Chat Channel CS & Pelapor) | src/frontend/src/views/ticket/TicketDetailScreen.tsx | - |
+| 19 | UI-19 (I-19) | Tiket Saya | src/frontend/src/views/ticket/MyTicketsScreen.tsx | - |
+
+
+
 
 ## 3.4 File Lain
 
@@ -560,10 +606,10 @@ Tabel 4.2.11. Hasil Pengujian Unit Kelas [C17]
 
 | ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| C17-UT01 | `sanitizeHargaInput()`, `validateContractForm()` | Normal & Batas | Panggil `sanitizeHargaInput()` dengan `'0'`, `'000'`, dan `'0100000'`; panggil `formatHargaRibuan('100000')`; panggil `validateContractForm()` dengan deskripsi `"Bersihin rumah wimar"` dan `totalHarga` `'0'` serta `100000`. | Sanitasi menghasilkan `'0'`, `'0'`, dan `'100000'` (nol di depan terhapus); format menghasilkan `'100.000'`; validasi mengembalikan `isValid = true` dengan `parsedHarga` bernilai `0` dan `100000`. | *[Hasil aktual]* | *Pass/Fail* |
-| C17-UT02 | `validateContractForm()` | Negatif | Panggil `validateContractForm()` dengan (a) deskripsi `''`/`'   '` dan harga `'100000'`; (b) deskripsi valid dan harga `'-5000'`. | (a) `isValid = false` dan `errors.deskripsi` terisi; (b) `isValid = false` dan `errors.totalHarga` terisi. | *[Hasil aktual]* | *Pass/Fail* |
-| C17-UT03 | `filterCustomerTransactionsByTab()`, `filterProviderJobsByTab()` | Normal | Ambil data riwayat pelanggan dan riwayat pekerjaan penyedia jasa (masing-masing ≥ 4 entri dengan status campuran), lalu filter dengan tab `'Semua'`, `'Selesai'`, dan `'On Progress'`. | Tab `Semua` mengembalikan seluruh data; tab `Selesai` hanya berisi item dengan `statusDisplay = 'Selesai'`; tab `On Progress` hanya berisi item dengan `statusDisplay = 'On Progress'` (berlaku untuk pelanggan dan penyedia jasa). | *[Hasil aktual]* | *Pass/Fail* |
-| C17-UT04 | `shouldShowPekerjaanSelesaiButton()`, `shouldShowKonfirmasiSelesaiButton()`, `shouldShowBeriRatingButton()` | Normal & Batas | Panggil tiap fungsi dengan status `'On Progress'`, `'Menunggu Konfirmasi Pelanggan'`, dan `'Done'`; untuk Beri Rating gunakan kombinasi (`'Done'`, `hasRating = false`), (`'Done'`, `hasRating = true`), dan (`'On Progress'`, `hasRating = false`). | Tombol *Pekerjaan Telah Selesai* `true` hanya untuk `On Progress`; tombol *Konfirmasi Selesai* `true` hanya untuk `Menunggu Konfirmasi Pelanggan`; tombol *Beri Rating* `true` hanya untuk `Done` dan belum dinilai, selain itu `false`. | *[Hasil aktual]* | *Pass/Fail* |
+| C17-UT01 | `sanitizeHargaInput()`, `validateContractForm()` | Normal & Batas | Panggil `sanitizeHargaInput()` dengan `'0'`, `'000'`, dan `'0100000'`; panggil `formatHargaRibuan('100000')`; panggil `validateContractForm()` dengan deskripsi `"Bersihin rumah wimar"` dan `totalHarga` `'0'` serta `100000`. | Sanitasi menghasilkan `'0'`, `'0'`, dan `'100000'` (nol di depan terhapus); format menghasilkan `'100.000'`; validasi mengembalikan `isValid = true` dengan `parsedHarga` bernilai `0` dan `100000`. | `sanitizeHargaInput()` menghasilkan `'0'`, `'0'`, `'100000'`; `formatHargaRibuan()` menghasilkan `'100.000'`; `validateContractForm()` mengembalikan `isValid = true` dengan `parsedHarga` `0` dan `100000`. Sesuai harapan. | Pass |
+| C17-UT02 | `validateContractForm()` | Negatif | Panggil `validateContractForm()` dengan (a) deskripsi `'   '` (hanya spasi) dan harga `'100000'`; (b) deskripsi valid dan harga `'-5000'`. | (a) `isValid = false` dan `errors.deskripsi` terisi; (b) `isValid = false` dan `errors.totalHarga` terisi. | (a) `isValid = false` dengan `errors.deskripsi` terisi; (b) `isValid = false` dengan `errors.totalHarga` terisi. Sesuai harapan. | Pass |
+| C17-UT03 | `filterCustomerTransactionsByTab()`, `filterProviderJobsByTab()` | Normal | Ambil data riwayat pelanggan dan riwayat pekerjaan penyedia jasa (masing-masing ≥ 4 entri dengan status campuran), lalu filter dengan tab `'Semua'`, `'Selesai'`, dan `'On Progress'`. | Tab `Semua` mengembalikan seluruh data; tab `Selesai` hanya berisi item dengan `statusDisplay = 'Selesai'`; tab `On Progress` hanya berisi item dengan `statusDisplay = 'On Progress'` (berlaku untuk pelanggan dan penyedia jasa). | Tab `Semua` mengembalikan seluruh data; tab `Selesai` dan `On Progress` hanya berisi item dengan `statusDisplay` yang sesuai, baik untuk riwayat pelanggan maupun penyedia jasa. Sesuai harapan. | Pass |
+| C17-UT04 | `shouldShowPekerjaanSelesaiButton()`, `shouldShowKonfirmasiSelesaiButton()`, `shouldShowBeriRatingButton()` | Normal & Batas | Panggil tiap fungsi dengan status `'On Progress'`, `'Menunggu Konfirmasi Pelanggan'`, dan `'Done'`; untuk Beri Rating gunakan kombinasi (`'Done'`, `hasRating = false`), (`'Done'`, `hasRating = true`), dan (`'On Progress'`, `hasRating = false`). | Tombol *Pekerjaan Telah Selesai* `true` hanya untuk `On Progress`; tombol *Konfirmasi Selesai* `true` hanya untuk `Menunggu Konfirmasi Pelanggan`; tombol *Beri Rating* `true` hanya untuk `Done` dan belum dinilai, selain itu `false`. | *Pekerjaan Telah Selesai* hanya `true` untuk `On Progress`; *Konfirmasi Selesai* hanya `true` untuk `Menunggu Konfirmasi Pelanggan`; *Beri Rating* hanya `true` untuk (`Done`, belum dinilai). Sesuai harapan. | Pass |
 
 ### 4.2.12 Kelas KontrakPekerjaanController
 
@@ -575,13 +621,13 @@ Tabel 4.2.12. Hasil Pengujian Unit Kelas [C18]
 
 | ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| C18-UT01 | `kirimInput()` | Normal | Pelanggan `cust-1` memanggil `kirimInput('Servis resleting jaket kulit', 85000, 'cust-1', 'provider-1', 1)`; ulangi melalui `handleKirimInput()` dengan JWT pelanggan dan `kirimKeChat = true`. | Kontrak tersimpan dengan status `Menunggu`, `persetujuanHarga = 85000`, dan `expiresAt` terisi; notifikasi tersimpan untuk `provider-1` (event `notification:new`); kartu kontrak tersisip ke Komunikasi (event `chat:new` & `kontrak:new`); respons HTTP `201`. | *[Hasil aktual]* | *Pass/Fail* |
-| C18-UT02 | `kirimInput()` | Negatif | (a) `kirimInput('Memesan jasa milik sendiri', 100000, 'provider-1', 'provider-1', 1)` dan versi HTTP-nya; (b) `kirimInput()` dengan deskripsi `'   '` atau harga `-1000`. | (a) Ditolak `400 SELF_CONTRACT_FORBIDDEN`; (b) ditolak sebagai input tidak valid; pada kedua kasus tidak ada kontrak maupun notifikasi yang tersimpan. | *[Hasil aktual]* | *Pass/Fail* |
-| C18-UT03 | `konfirmasiPersetujuanPenyedia()` | Normal | Untuk kontrak berstatus `Menunggu`: (a) `konfirmasiPersetujuanPenyedia(id, 'provider-1', true, 2)`; (b) pada kontrak lain, `konfirmasiPersetujuanPenyedia(id, 'provider-1', false)`. | (a) Status menjadi `On Progress`, ketersediaan penyedia tetap terkunci, dan `version` bertambah; (b) status menjadi `Ditolak` dan ketersediaan penyedia kembali `Available`. | *[Hasil aktual]* | *Pass/Fail* |
-| C18-UT04 | `konfirmasiPersetujuanPenyedia()` | Negatif | (a) Panggil dengan `idPemberiJasa` yang bukan pemilik kontrak (mis. `provider-2`); (b) panggil pada kontrak yang sudah berstatus `On Progress`/`Ditolak`. | (a) Ditolak `403 FORBIDDEN_PROVIDER`; (b) ditolak `400 INVALID_STATE_TRANSITION`; status kontrak tidak berubah. | *[Hasil aktual]* | *Pass/Fail* |
-| C18-UT05 | `selesaikanPekerjaan()` | Normal & Negatif | (a) Kontrak `On Progress`, panggil `selesaikanPekerjaan(id, 'provider-1')`; (b) panggil pada kontrak yang masih berstatus `Menunggu`. | (a) Status menjadi `Menunggu Konfirmasi Pelanggan` dan notifikasi terkirim ke pelanggan; (b) ditolak `400 INVALID_STATE_TRANSITION` dan status tidak berubah. | *[Hasil aktual]* | *Pass/Fail* |
-| C18-UT06 | `konfirmasiPekerjaan()` | Normal & Negatif | (a) Kontrak `Menunggu Konfirmasi Pelanggan`, panggil `konfirmasiPekerjaan(id, 'cust-1')`; (b) panggil pada kontrak yang masih `Menunggu`/`On Progress` (termasuk melalui `Pengguna.konfirmasiPekerjaan()`). | (a) Mengembalikan `true`, status menjadi `Done`, dan ketersediaan penyedia kembali `Available`; (b) ditolak (mengembalikan `false`/error transisi status) dan status tidak berubah. | *[Hasil aktual]* | *Pass/Fail* |
-| C18-UT07 | `getKontrakPekerjaan()` | Normal & Negatif | Panggil `handleGetKontrakById()` dengan (a) JWT valid dan ID kontrak yang ada; (b) tanpa header `Authorization`; (c) ID `kontrak-tidak-ada`. | (a) `200` beserta detail kontrak; (b) `401 Unauthorized`; (c) `404` kontrak tidak ditemukan (`getKontrakPekerjaan()` mengembalikan `null`). | *[Hasil aktual]* | *Pass/Fail* |
+| C18-UT01 | `kirimInput()` | Normal | Pelanggan `cust-1` memanggil `kirimInput('Servis resleting jaket kulit', 85000, 'cust-1', 'provider-1', 1)`; ulangi melalui `handleKirimInput()` dengan JWT pelanggan dan `kirimKeChat = true`. | Kontrak tersimpan dengan status `Menunggu`, `persetujuanHarga = 85000`, dan `expiresAt` terisi; notifikasi tersimpan untuk `provider-1` (event `notification:new`); kartu kontrak tersisip ke Komunikasi (event `chat:new` & `kontrak:new`); respons HTTP `201`. | Kontrak tersimpan berstatus `Menunggu` dengan `persetujuanHarga = 85000` dan `expiresAt` terisi; notifikasi `NOTIF-…` (`statusBaca = false`) tersimpan untuk `provider-1`; pesan kontrak tercatat di Komunikasi; event `notification:new`, `kontrak:new`, dan `chat:new` terpancar; respons `201`. Sesuai harapan. | Pass |
+| C18-UT02 | `kirimInput()` | Negatif | (a) `kirimInput('Memesan jasa milik sendiri', 100000, 'provider-1', 'provider-1', 1)` dan versi HTTP-nya; (b) `kirimInput()` dengan deskripsi `'   '` atau harga `-1000`. | (a) Ditolak `400 SELF_CONTRACT_FORBIDDEN`; (b) ditolak sebagai input tidak valid; pada kedua kasus tidak ada kontrak maupun notifikasi yang tersimpan. | (a) Ditolak `400 SELF_CONTRACT_FORBIDDEN` (pemanggilan langsung maupun via HTTP); (b) ditolak `400 INVALID_INPUT`; jumlah kontrak dan notifikasi tetap 0. Sesuai harapan. | Pass |
+| C18-UT03 | `konfirmasiPersetujuanPenyedia()` | Normal | Untuk kontrak berstatus `Menunggu`: (a) `konfirmasiPersetujuanPenyedia(id, 'provider-1', true, 2)`; (b) pada kontrak lain, `konfirmasiPersetujuanPenyedia(id, 'provider-1', false)`. | (a) Status menjadi `On Progress`, ketersediaan penyedia tetap terkunci, dan `version` bertambah; (b) status menjadi `Ditolak` dan ketersediaan penyedia kembali `Available`. | (a) Status menjadi `On Progress` dan `version` penyedia naik menjadi 3; (b) status menjadi `Ditolak` dan `statusKetersediaan` penyedia kembali `Available`. Sesuai harapan. | Pass |
+| C18-UT04 | `konfirmasiPersetujuanPenyedia()` | Negatif | (a) Panggil dengan `idPemberiJasa` yang bukan pemilik kontrak (mis. `provider-2`); (b) panggil pada kontrak yang sudah berstatus `On Progress`/`Ditolak`. | (a) Ditolak `403 FORBIDDEN_PROVIDER`; (b) ditolak `400 INVALID_STATE_TRANSITION`; status kontrak tidak berubah. | (a) Ditolak `403 FORBIDDEN_PROVIDER` dan status tetap `Menunggu`; (b) ditolak `400 INVALID_STATE_TRANSITION` dan status tetap `On Progress`. Sesuai harapan. | Pass |
+| C18-UT05 | `selesaikanPekerjaan()` | Normal & Negatif | (a) Kontrak `On Progress`, panggil `selesaikanPekerjaan(id, 'provider-1')`; (b) panggil pada kontrak yang masih berstatus `Menunggu`. | (a) Status menjadi `Menunggu Konfirmasi Pelanggan` dan notifikasi terkirim ke pelanggan; (b) ditolak `400 INVALID_STATE_TRANSITION` dan status tidak berubah. | (a) Status menjadi `Menunggu Konfirmasi Pelanggan` dan notifikasi tersimpan untuk `cust-1`; (b) ditolak `400 INVALID_STATE_TRANSITION` dan status tetap `Menunggu`. Sesuai harapan. | Pass |
+| C18-UT06 | `konfirmasiPekerjaan()` | Normal & Negatif | (a) Kontrak `Menunggu Konfirmasi Pelanggan`, panggil `konfirmasiPekerjaan(id, 'cust-1')`; (b) panggil pada kontrak yang masih `Menunggu` (termasuk melalui `Pengguna.konfirmasiPekerjaan()`) dan pada kontrak yang sudah `Done` (konfirmasi ulang). | (a) Mengembalikan `true`, status menjadi `Done`, dan ketersediaan penyedia kembali `Available`; (b) mengembalikan `false` dan status tidak berubah. | (a) Mengembalikan `true`, status menjadi `Done`, dan penyedia kembali `Available`; (b) mengembalikan `false` saat status `Menunggu` maupun `Done`, status tidak berubah. Sesuai harapan. | Pass |
+| C18-UT07 | `getKontrakPekerjaan()` | Normal & Negatif | Panggil `handleGetKontrakById()` dengan (a) JWT valid dan ID kontrak yang ada; (b) tanpa header `Authorization`; (c) ID `kontrak-tidak-ada`. | (a) `200` beserta detail kontrak; (b) `401 Unauthorized`; (c) `404` kontrak tidak ditemukan (`getKontrakPekerjaan()` mengembalikan `null`). | (a) `200` dengan detail kontrak; (b) `401` dan *middleware* tidak meneruskan ke *handler*; (c) `404 CONTRACT_NOT_FOUND`. Selain itu, pengguna yang tidak terlibat mendapat `403`. Sesuai harapan. | Pass |
 
 Tabel 4.2.12b. Ringkasan Cakupan Kelas [C18]
 
@@ -590,7 +636,7 @@ Tabel 4.2.12b. Ringkasan Cakupan Kelas [C18]
 | Daftar operasi public pada DPPL | `getKontrakPekerjaan()`, `konfirmasiPekerjaan()`, `showKontrakForm()`, `kirimInput()` |
 | Operasi yang diuji | `kirimInput()`, `konfirmasiPersetujuanPenyedia()`, `selesaikanPekerjaan()`, `konfirmasiPekerjaan()`, `getKontrakPekerjaan()`; `showKontrakForm()` diuji di sisi klien melalui C17-UT01 |
 | ID Algoritma yang tercakup | ALGO-036 (melalui `statusUpdate()` *private*), ALGO-041, ALGO-042, ALGO-043 |
-| Coverage (wajib ≥ 70%) | *[% baris / % cabang, alat dan bukti pada 4.6]* |
+| Coverage (wajib ≥ 70%) | 85,95% baris / 72,26% cabang (Jest + Istanbul, `npx jest --coverage`; bukti pada 4.6) |
 
 ### 4.2.13 Kelas Komunikasi
 
@@ -602,11 +648,11 @@ Tabel 4.2.13. Hasil Pengujian Unit Kelas [C19]
 
 | ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| C19-UT01 | `constructor()`, `getIDChat()`, `getAtributInternal()` | Normal | Buat `new Komunikasi({ idPengirim: 'pelanggan-01', idPenerima: 'penyedia-01', isiPesan: 'Halo, apakah biaya servis AC bisa dinego menjadi 150rb?' })`. | `getIDChat()` berawalan `CHAT-`; atribut `idPengguna`, `idPenerima`, dan `isiPesan` sesuai masukan; `isChatTerbaca = false`, `statusChat = 'SENT'`, `durasiChat = 0`, dan `waktuTerkirim` bertipe `Date`. | *[Hasil aktual]* | *Pass/Fail* |
-| C19-UT02 | `saveChat()`, `simpanPesan()`, `getPesan()` | Normal | Simpan pesan `CHAT-NEGOSIASI-001` dengan `saveChat()`, ambil dengan `getPesan('CHAT-NEGOSIASI-001')`, lalu simpan pesan kedua `CHAT-NEGOSIASI-002` dengan `simpanPesan()`; panggil juga `getPesan('CHAT-TIDAK-ADA')`. | Pesan tersimpan dengan ID, pengirim, dan penerima yang sesuai; `getPesan()` mengembalikan isi pesan yang sama; jumlah pesan di DB menjadi 2; ID yang tidak ada mengembalikan `null`. | *[Hasil aktual]* | *Pass/Fail* |
-| C19-UT03 | `getChatHistory()` | Normal | Isi DB dengan pesan `CHAT-02` (10:05) dan `CHAT-01` (10:00) antara `pelanggan-01` ↔ `penyedia-01`, serta `CHAT-LAIN` antara `pelanggan-01` ↔ `penyedia-02`; panggil `getChatHistory('pelanggan-01', 'penyedia-01')`. | Mengembalikan 2 pesan dengan urutan `['CHAT-01', 'CHAT-02']` (ASC) dan tidak memuat `CHAT-LAIN`. | *[Hasil aktual]* | *Pass/Fail* |
-| C19-UT04 | `markMessagesAsRead()` | Normal & Batas | Isi DB dengan 2 pesan *unread* dari `penyedia-01` ke `pelanggan-01` dan 1 pesan *unread* dari `pelanggan-01` ke `penyedia-01`; panggil `markMessagesAsRead('pelanggan-01', 'penyedia-01')`. | Mengembalikan `2`; hanya 2 pesan dari lawan bicara yang berubah menjadi `isChatTerbaca = true`, sedangkan pesan milik pengguna login tetap `false`. | *[Hasil aktual]* | *Pass/Fail* |
-| C19-UT05 | `getConversationsByUser()` | Normal & Batas | (a) Isi DB dengan percakapan `pelanggan-01` bersama `penyedia-01` (1 *unread*) dan `penyedia-02` (2 *unread*), lalu panggil `getConversationsByUser('pelanggan-01')`; (b) panggil untuk pengguna tanpa percakapan. | (a) Mengembalikan 2 percakapan terurut dari yang terbaru dengan `isiPesanTerakhir` dan `unreadCount` (1 dan 2) yang tepat; (b) mengembalikan *array* kosong. | *[Hasil aktual]* | *Pass/Fail* |
+| C19-UT01 | `constructor()`, `getIDChat()`, `getAtributInternal()` | Normal | Buat `new Komunikasi({ idPengirim: 'pelanggan-01', idPenerima: 'penyedia-01', isiPesan: 'Halo, apakah biaya servis AC bisa dinego menjadi 150rb?' })`. | `getIDChat()` berawalan `CHAT-`; atribut `idPengguna`, `idPenerima`, dan `isiPesan` sesuai masukan; `isChatTerbaca = false`, `statusChat = 'SENT'`, `durasiChat = 0`, dan `waktuTerkirim` bertipe `Date`. | `getIDChat()` berawalan `CHAT-`; atribut sesuai masukan dengan `isChatTerbaca = false`, `statusChat = 'SENT'`, `durasiChat = 0`, dan `waktuTerkirim` bertipe `Date`. Sesuai harapan. | Pass |
+| C19-UT02 | `saveChat()`, `simpanPesan()`, `getPesan()` | Normal | Simpan pesan `CHAT-NEGOSIASI-001` dengan `saveChat()`, ambil dengan `getPesan('CHAT-NEGOSIASI-001')`, lalu simpan pesan kedua `CHAT-NEGOSIASI-002` dengan `simpanPesan()`; panggil juga `getPesan('CHAT-TIDAK-ADA')`. | Pesan tersimpan dengan ID, pengirim, dan penerima yang sesuai; `getPesan()` mengembalikan isi pesan yang sama; jumlah pesan di DB menjadi 2; ID yang tidak ada mengembalikan `null`. | Kedua pesan tersimpan dengan ID, pengirim, dan penerima yang sesuai; `getPesan()` mengembalikan isi pesan yang sama; jumlah pesan menjadi 2; `getPesan('CHAT-TIDAK-ADA')` mengembalikan `null`. Sesuai harapan. | Pass |
+| C19-UT03 | `getChatHistory()` | Normal | Isi DB dengan pesan `CHAT-02` (10:05) dan `CHAT-01` (10:00) antara `pelanggan-01` ↔ `penyedia-01`, serta `CHAT-LAIN` antara `pelanggan-01` ↔ `penyedia-02`; panggil `getChatHistory('pelanggan-01', 'penyedia-01')`. | Mengembalikan 2 pesan dengan urutan `['CHAT-01', 'CHAT-02']` (ASC) dan tidak memuat `CHAT-LAIN`. | Mengembalikan 2 pesan dengan urutan `['CHAT-01', 'CHAT-02']` dan tidak memuat `CHAT-LAIN`. Sesuai harapan. | Pass |
+| C19-UT04 | `markMessagesAsRead()` | Normal & Batas | Isi DB dengan 2 pesan *unread* dari `penyedia-01` ke `pelanggan-01` dan 1 pesan *unread* dari `pelanggan-01` ke `penyedia-01`; panggil `markMessagesAsRead('pelanggan-01', 'penyedia-01')`. | Mengembalikan `2`; hanya 2 pesan dari lawan bicara yang berubah menjadi `isChatTerbaca = true`, sedangkan pesan milik pengguna login tetap `false`. | Mengembalikan `2`; `CHAT-R1` dan `CHAT-R2` menjadi terbaca, sedangkan `CHAT-R3` tetap `false`. Sesuai harapan. | Pass |
+| C19-UT05 | `getConversationsByUser()` | Normal & Batas | (a) Isi DB dengan percakapan `pelanggan-01` bersama `penyedia-01` (1 *unread*) dan `penyedia-02` (2 *unread*), lalu panggil `getConversationsByUser('pelanggan-01')`; (b) panggil untuk pengguna tanpa percakapan. | (a) Mengembalikan 2 percakapan terurut dari yang terbaru dengan `isiPesanTerakhir` dan `unreadCount` (1 dan 2) yang tepat; (b) mengembalikan *array* kosong. | (a) 2 percakapan terurut dari yang terbaru (`penyedia-01` dengan `unreadCount = 1`, lalu `penyedia-02` dengan `unreadCount = 2`); (b) mengembalikan `[]`. Sesuai harapan. | Pass |
 
 Tabel 4.2.13b. Ringkasan Cakupan Kelas [C19]
 
@@ -615,7 +661,7 @@ Tabel 4.2.13b. Ringkasan Cakupan Kelas [C19]
 | Daftar operasi public pada DPPL | `constructor()`, `saveChat()`, `simpanPesan()`, `getIDChat()`, `getPesan()`, `getChatHistory()` |
 | Operasi yang diuji | `constructor()`, `saveChat()`, `simpanPesan()`, `getIDChat()`, `getPesan()`, `getChatHistory()`, serta tambahan non-DPPL `markMessagesAsRead()` dan `getConversationsByUser()` |
 | ID Algoritma yang tercakup | ALGO-044, ALGO-045, ALGO-046, ALGO-047, ALGO-048 |
-| Coverage (wajib ≥ 70%) | *[% baris / % cabang, alat dan bukti pada 4.6]* |
+| Coverage (wajib ≥ 70%) | 100% baris / 78,26% cabang (Jest + Istanbul, `npx jest --coverage`; bukti pada 4.6) |
 
 ### 4.2.14 Kelas KomunikasiController
 
@@ -627,12 +673,12 @@ Tabel 4.2.14. Hasil Pengujian Unit Kelas [C21]
 
 | ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| C21-UT01 | `kirimPesan()` | Normal | Panggil `kirimPesan({ idPengirim: 'pelanggan-01', idPenerima: 'penyedia-01', isiPesan: <pesan valid> })` dengan `RealtimeEmitter` dan `NotifikasiController` tiruan. | Pesan tersimpan di DB; event Socket.IO `chat:new` terpancar ke penerima; `NotifikasiController.buatNotifikasi()` dipanggil untuk `penyedia-01`. | *[Hasil aktual]* | *Pass/Fail* |
-| C21-UT02 | `kirimPesan()` | Batas | Kirim pesan dengan panjang tepat 1 karakter, tepat 1000 karakter, dan 1001 karakter. | Pesan 1 dan 1000 karakter tersimpan; pesan 1001 karakter ditolak dengan `400`. | *[Hasil aktual]* | *Pass/Fail* |
-| C21-UT03 | `kirimPesan()` | Negatif | Kirim pesan dengan (a) `idPengirim` kosong; (b) `idPenerima` kosong; (c) `idPengirim = idPenerima`; (d) `isiPesan` kosong/spasi atau bukan *string*; (e) `idPenerima` tidak terdaftar. | (a)-(d) ditolak dengan `400`; (e) ditolak dengan `404` penerima tidak ditemukan; tidak ada pesan yang tersimpan. | *[Hasil aktual]* | *Pass/Fail* |
-| C21-UT04 | `sendChat()` | Normal/*Resilience* | Atur `buatNotifikasi()` agar melempar error, lalu panggil `sendChat()` dengan pesan valid. | Pesan tetap tersimpan dan event `chat:new` tetap terpancar; error notifikasi tidak diteruskan ke pemanggil. | *[Hasil aktual]* | *Pass/Fail* |
-| C21-UT05 | `sendChatHandler()` | Negatif | Panggil `POST /api/chats` (a) tanpa data autentikasi; (b) dengan JWT `pelanggan-01` tetapi `idPengirim` pada *body* diisi `penyedia-01` (*spoofing*). | (a) `401 Unauthorized`; (b) `403 Forbidden`; pesan tidak tersimpan. | *[Hasil aktual]* | *Pass/Fail* |
-| C21-UT06 | `getChatHistoryHandler()`, `getConversationsHandler()`, `markChatReadHandler()` | Normal & Negatif | Panggil ketiga *handler* dengan (a) JWT valid dan lawan bicara valid (mode `startChat` dan `loadChat`); (b) parameter lawan bicara kosong; (c) tanpa autentikasi; (d) meminta riwayat percakapan milik pengguna lain. | (a) `200` beserta riwayat chat/daftar percakapan/jumlah pesan yang ditandai terbaca; (b) `400`; (c) `401`; (d) `403`. | *[Hasil aktual]* | *Pass/Fail* |
+| C21-UT01 | `kirimPesan()` | Normal | Panggil `kirimPesan({ idPengirim: 'pelanggan-01', idPenerima: 'penyedia-01', isiPesan: <pesan valid> })` dengan `RealtimeEmitter` dan `NotifikasiController` tiruan. | Pesan tersimpan di DB; event Socket.IO `chat:new` terpancar ke penerima; `NotifikasiController.buatNotifikasi()` dipanggil untuk `penyedia-01`. | Pesan tersimpan (spasi di awal/akhir di-*trim*); `chat:new` terpancar ke `penyedia-01`; `buatNotifikasi()` dipanggil untuk `penyedia-01` dengan isi "Pesan baru: …". Sesuai harapan. | Pass |
+| C21-UT02 | `kirimPesan()` | Batas | Kirim pesan dengan panjang tepat 1 karakter, tepat 1000 karakter, dan 1001 karakter. | Pesan 1 dan 1000 karakter tersimpan; pesan 1001 karakter ditolak dengan `400`. | Pesan 1 karakter dan 1000 karakter tersimpan (total 2 pesan); pesan 1001 karakter ditolak `400 MESSAGE_TOO_LONG`. Sesuai harapan. | Pass |
+| C21-UT03 | `kirimPesan()` | Negatif | Kirim pesan dengan (a) `idPengirim` kosong; (b) `idPenerima` kosong; (c) `idPengirim = idPenerima`; (d) `isiPesan` kosong/spasi atau bukan *string*; (e) `idPenerima` tidak terdaftar. | (a) ditolak `401 UNAUTHORIZED`; (b) `400 INVALID_RECIPIENT`; (c) `400 SELF_MESSAGE_NOT_ALLOWED`; (d) `400 EMPTY_MESSAGE`/`INVALID_MESSAGE_TYPE`; (e) `404 RECIPIENT_NOT_FOUND`; tidak ada pesan yang tersimpan. | (a) `401 UNAUTHORIZED`; (b) `400 INVALID_RECIPIENT`; (c) `400 SELF_MESSAGE_NOT_ALLOWED`; (d) `400 EMPTY_MESSAGE`/`INVALID_MESSAGE_TYPE`; (e) `404 RECIPIENT_NOT_FOUND`. Sesuai harapan. | Pass |
+| C21-UT04 | `sendChat()` | Normal/*Resilience* | Atur `buatNotifikasi()` agar melempar error, lalu panggil `sendChat()` dengan pesan valid. | Pesan tetap tersimpan dan event `chat:new` tetap terpancar; error notifikasi tidak diteruskan ke pemanggil. | Pesan tetap tersimpan dan dikembalikan ke pemanggil; error notifikasi hanya dicatat ke `console.error`. Sesuai harapan. | Pass |
+| C21-UT05 | `sendChatHandler()` | Negatif | Panggil `POST /api/chats` (a) tanpa data autentikasi; (b) dengan JWT `pelanggan-01` tetapi `idPengirim` pada *body* diisi `penyedia-01` (*spoofing*). | (a) `401 Unauthorized`; (b) `403 Forbidden`; pesan tidak tersimpan. | (a) `401`; (b) `403`; permintaan valid menghasilkan `201`. Sesuai harapan. | Pass |
+| C21-UT06 | `getChatHistoryHandler()`, `getConversationsHandler()`, `markChatReadHandler()` | Normal & Negatif | Panggil ketiga *handler* dengan (a) JWT valid dan lawan bicara valid (mode `startChat` dan `loadChat`); (b) parameter lawan bicara kosong; (c) tanpa autentikasi; (d) meminta riwayat percakapan milik pengguna lain. | (a) `200` beserta riwayat chat/daftar percakapan/jumlah pesan yang ditandai terbaca; (b) `400`; (c) `401`; (d) `403`. | (a) `200` untuk mode `startChat`/`loadChat`, daftar percakapan, dan penandaan terbaca; (b) `400`; (c) `401`; (d) `403`. Sesuai harapan. | Pass |
 
 Tabel 4.2.14b. Ringkasan Cakupan Kelas [C21]
 
@@ -641,7 +687,7 @@ Tabel 4.2.14b. Ringkasan Cakupan Kelas [C21]
 | Daftar operasi public pada DPPL | `sendChat()`, `kirimPesan()`, `getRiwayatChat()`, `loadChat()`, `startChat()` |
 | Operasi yang diuji | `sendChat()`, `kirimPesan()`, `getRiwayatChat()`, `loadChat()`, `startChat()` (melalui `getChatHistoryHandler()`), serta `sendChatHandler()`, `getConversationsHandler()`, dan `markChatReadHandler()` |
 | ID Algoritma yang tercakup | ALGO-049, ALGO-050, ALGO-051, ALGO-052 |
-| Coverage (wajib ≥ 70%) | *[% baris / % cabang, alat dan bukti pada 4.6]* |
+| Coverage (wajib ≥ 70%) | 92,07% baris / 88,70% cabang (Jest + Istanbul, `npx jest --coverage`; bukti pada 4.6) |
 
 ### 4.2.15 Kelas TiketLaporan
 
@@ -653,9 +699,9 @@ Tabel 4.2.15. Hasil Pengujian Unit Kelas [C22]
 
 | ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| C22-UT01 | `generateId()`, `simpan()` | Normal | Panggil `generateId()`, lalu `simpan()` dengan `idTiket` hasil *generate*, `idPengguna`, `jenisTiket = 'Kendala Aplikasi'`, `keteranganTiket` terisi, dan `buktiFotoUrl` berisi path foto. | `generateId()` menghasilkan nomor berformat `A-xxxx`; tiket tersimpan dengan `statusTiket = 'Open'` beserta `buktiFotoUrl` yang sesuai. | *[Hasil aktual]* | *Pass/Fail* |
-| C22-UT02 | `getDetailTiket()`, `daftarCs()`, `daftarPelapor()` | Normal & Negatif | (a) Panggil `getDetailTiket()` dengan ID tiket yang ada; (b) panggil `daftarCs(idCs)` dan `daftarPelapor(idPengguna)`; (c) panggil `getDetailTiket('A-TIDAK-ADA')`. | (a) Mengembalikan detail tiket beserta data pelapor; (b) `daftarCs()` mengembalikan tiket milik CS tersebut ditambah tiket aktif yang belum ditugaskan, `daftarPelapor()` hanya mengembalikan tiket milik pelapor; (c) mengembalikan `null`. | *[Hasil aktual]* | *Pass/Fail* |
-| C22-UT03 | `updateStatusTiket()`, `tambahPesan()` | Normal | Panggil `updateStatusTiket(db, idTiket, 'Diproses')`, lalu `tambahPesan(db, { idTiket, idPengirim, idPenerima, isiPesan })`. | Status tiket berubah menjadi `Diproses`; pesan mediasi tersimpan pada tabel `komunikasi` dengan kolom `idTiket` terisi sesuai tiket terkait. | *[Hasil aktual]* | *Pass/Fail* |
+| C22-UT01 | `generateId()`, `simpan()` | Normal | Panggil `generateId()`, lalu `simpan()` dengan `idTiket` hasil *generate*, `idPengguna`, `jenisTiket = 'Kendala Aplikasi'`, `keteranganTiket` terisi, dan `buktiFotoUrl` berisi path foto. | `generateId()` menghasilkan nomor berformat `A-xxxx`; tiket tersimpan dengan `statusTiket = 'Open'` beserta `buktiFotoUrl` yang sesuai. | `generateId()` menghasilkan `A-2041`; tiket tersimpan dengan `statusTiket = 'Open'`, `buktiFotoUrl = 'bukti-crash.jpg'`, dan petugas `cs-1`. Sesuai harapan. | Pass |
+| C22-UT02 | `getDetailTiket()`, `daftarCs()`, `daftarPelapor()` | Normal & Negatif | (a) Panggil `getDetailTiket()` dengan ID tiket yang ada; (b) panggil `daftarCs(idCs)` dan `daftarPelapor(idPengguna)`; (c) panggil `getDetailTiket('A-TIDAK-ADA')`. | (a) Mengembalikan detail tiket beserta data pelapor; (b) `daftarCs()` mengembalikan tiket milik CS tersebut ditambah tiket aktif yang belum ditugaskan, `daftarPelapor()` hanya mengembalikan tiket milik pelapor; (c) mengembalikan `null`. | (a) Detail `A-1` beserta data pelapor; (b) `daftarCs('cs-1')` mengembalikan `A-1` & `A-2` (tiket `Selesai` tanpa petugas tidak ikut), `daftarPelapor('pelanggan-2')` mengembalikan `A-2` & `A-3`; (c) `null`. Sesuai harapan. | Pass |
+| C22-UT03 | `updateStatusTiket()`, `tambahPesan()` | Normal | Panggil `updateStatusTiket(db, idTiket, 'Diproses')`, lalu `tambahPesan(db, { idTiket, idPengirim, idPenerima, isiPesan })`. | Status tiket berubah menjadi `Diproses`; pesan mediasi tersimpan pada tabel `komunikasi` dengan kolom `idTiket` terisi sesuai tiket terkait. | Status tiket menjadi `Diproses`; pesan tersimpan pada `komunikasi` dengan `idTiket = 'A-10'` dan lampiran dinormalisasi menjadi `/uploads/bukti-transfer.png`. Sesuai harapan. | Pass |
 
 ### 4.2.16 Kelas TiketLaporanController
 
@@ -667,12 +713,12 @@ Tabel 4.2.16. Hasil Pengujian Unit Kelas [C24]
 
 | ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| C24-UT01 | `validasiFormTiket()` | Normal | Panggil `validasiFormTiket()` untuk setiap `jenisTiket` valid (`Laporan Pembayaran`, `Kendala Aplikasi`, `Perilaku Pengguna`, `Lainnya`) dengan `keteranganTiket = 'Pembayaran belum terkonfirmasi oleh sistem'`. | Mengembalikan `true` untuk seluruh jenis tiket valid. | *[Hasil aktual]* | *Pass/Fail* |
-| C24-UT02 | `validasiFormTiket()` | Negatif | Panggil dengan (a) `jenisTiket` `'Kategori Asal'`, `'   '`, `123`, atau `undefined`; (b) `jenisTiket = 'Kendala Aplikasi'` dengan `keteranganTiket` `''`, `'    '`, `null`, atau `999`. | Mengembalikan `false` untuk seluruh masukan tidak valid. | *[Hasil aktual]* | *Pass/Fail* |
-| C24-UT03 | `buatTiketHandler()` | Normal | Pelanggan dan Pemberi Jasa (JWT valid) masing-masing mengirim `POST /api/tickets` dengan form valid; tersedia beberapa CS dengan beban berbeda. | Respons `201`; tiket ditugaskan otomatis ke CS dengan beban terkecil; `tambahBeban()` menaikkan beban CS sebesar +1; `buatNotifikasi()` dipanggil untuk CS terpilih dengan menyertakan nomor tiket. | *[Hasil aktual]* | *Pass/Fail* |
-| C24-UT04 | `buatTiketHandler()` | Batas | (a) Kirim form valid saat tidak ada CS yang memenuhi syarat (`cariLayananKosong()` mengembalikan `null`); (b) kirim form valid saat `buatNotifikasi()` melempar error. | (a) Respons `201` dengan `assignedTo: null` tanpa memanggil `tambahBeban()` maupun notifikasi; (b) respons tetap `201` dan tiket tetap tersimpan. | *[Hasil aktual]* | *Pass/Fail* |
-| C24-UT05 | `buatTiketHandler()` | Negatif | (a) Kirim form dengan `jenisTiket` tidak valid; (b) akses dengan peran `LAYANAN_PELANGGAN`; (c) simulasikan error DB saat `$transaction`. | (a) `400` tanpa menjalankan `$transaction`; (b) `403 Forbidden`; (c) `500` dengan pesan kesalahan server. | *[Hasil aktual]* | *Pass/Fail* |
-| C24-UT06 | `tiketSayaHandler()`, `detailTiketHandler()`, `kirimPesanPelaporHandler()` | Normal & Negatif | (a) Pelapor mengambil daftar & detail tiket miliknya serta mengirim pesan valid; (b) pengguna lain mengakses detail tiket bukan miliknya; (c) kirim pesan kosong; (d) kirim pesan ke ID tiket yang tidak ada; (e) kirim pesan ke tiket berstatus `Selesai`. | (a) `200` untuk daftar/detail dan `201` untuk pesan; (b) `403` akses ditolak; (c) `400`; (d) `404`; (e) `409`. | *[Hasil aktual]* | *Pass/Fail* |
+| C24-UT01 | `validasiFormTiket()` | Normal | Panggil `validasiFormTiket()` untuk setiap `jenisTiket` valid (`Laporan Pembayaran`, `Kendala Aplikasi`, `Perilaku Pengguna`, `Lainnya`) dengan `keteranganTiket = 'Pembayaran belum terkonfirmasi oleh sistem'`. | Mengembalikan `true` untuk seluruh jenis tiket valid. | Mengembalikan `true` untuk keempat jenis tiket. Sesuai harapan. | Pass |
+| C24-UT02 | `validasiFormTiket()` | Negatif | Panggil dengan (a) `jenisTiket` `'Kategori Asal'`, `'   '`, `123`, atau `undefined`; (b) `jenisTiket = 'Kendala Aplikasi'` dengan `keteranganTiket` `''`, `'    '`, `null`, atau `999`. | Mengembalikan `false` untuk seluruh masukan tidak valid. | Mengembalikan `false` untuk seluruh masukan tidak valid. Sesuai harapan. | Pass |
+| C24-UT03 | `buatTiketHandler()` | Normal | Pelanggan dan Pemberi Jasa (JWT valid) masing-masing mengirim `POST /api/tickets` dengan form valid; tersedia beberapa CS dengan beban berbeda. | Respons `201`; tiket ditugaskan otomatis ke CS dengan beban terkecil; `tambahBeban()` menaikkan beban CS sebesar +1; `buatNotifikasi()` dipanggil untuk CS terpilih dengan menyertakan nomor tiket. | Respons `201` untuk Pelanggan maupun Pemberi Jasa; tiket ditugaskan ke CS dengan beban terkecil, beban CS bertambah 1, dan notifikasi terkirim ke CS tersebut dengan nomor tiket. Sesuai harapan. | Pass |
+| C24-UT04 | `buatTiketHandler()` | Batas | (a) Kirim form valid saat tidak ada CS yang memenuhi syarat (`cariLayananKosong()` mengembalikan `null`); (b) kirim form valid saat `buatNotifikasi()` melempar error. | (a) Respons `201` dengan `assignedTo: null` tanpa memanggil `tambahBeban()` maupun notifikasi; (b) respons tetap `201` dan tiket tetap tersimpan. | (a) `201` dengan `assignedTo: null`, tanpa pemanggilan `tambahBeban()` maupun notifikasi; (b) tetap `201` dan tiket tersimpan. Sesuai harapan. | Pass |
+| C24-UT05 | `buatTiketHandler()` | Negatif | (a) Kirim form dengan `jenisTiket` tidak valid; (b) akses dengan peran `LAYANAN_PELANGGAN`; (c) simulasikan error DB saat `$transaction`. | (a) `400` tanpa menjalankan `$transaction`; (b) `403 Forbidden`; (c) `500` dengan pesan kesalahan server. | (a) `400` dan `$transaction` tidak dijalankan; (b) `403`; (c) `500`. Sesuai harapan. | Pass |
+| C24-UT06 | `tiketSayaHandler()`, `detailTiketHandler()`, `kirimPesanPelaporHandler()` | Normal & Negatif | (a) Pelapor mengambil daftar & detail tiket miliknya serta mengirim pesan valid; (b) pengguna lain mengakses detail tiket bukan miliknya; (c) kirim pesan kosong; (d) kirim pesan ke ID tiket yang tidak ada; (e) kirim pesan ke tiket berstatus `Selesai`. | (a) `200` untuk daftar/detail dan `201` untuk pesan; (b) `403` akses ditolak; (c) `400`; (d) `404`; (e) `409`. | (a) `200` untuk daftar/detail dan `201` untuk pesan; (b) `403`; (c) `400`; (d) `404`; (e) `409`. Sesuai harapan. | Pass |
 
 Tabel 4.2.16b. Ringkasan Cakupan Kelas [C24]
 
@@ -681,7 +727,7 @@ Tabel 4.2.16b. Ringkasan Cakupan Kelas [C24]
 | Daftar operasi public pada DPPL | `validasiFormTiket()`, `buatTiket()`, `teruskanKeNotifikasi()`, `getTiketLaporan()`, `balasTiket()`, `tutupTiket()` |
 | Operasi yang diuji | `validasiFormTiket()`, `buatTiketHandler()` (realisasi `buatTiket()` & `teruskanKeNotifikasi()`), `detailTiketHandler()` (realisasi `getTiketLaporan()`), `tiketSayaHandler()`, `kirimPesanPelaporHandler()`; `balasTiket()` & `tutupTiket()` direalisasikan pada `LayananPelangganCtrl` dan diuji pada C12 |
 | ID Algoritma yang tercakup | ALGO-013, ALGO-053, ALGO-054, ALGO-055 |
-| Coverage (wajib ≥ 70%) | *[% baris / % cabang, alat dan bukti pada 4.6]* |
+| Coverage (wajib ≥ 70%) | 96,05% baris / 84,84% cabang (Jest + Istanbul, `npx jest --coverage`; bukti pada 4.6) |
 
 ### 4.2.17 Kelas Rating
 
@@ -693,12 +739,12 @@ Tabel 4.2.17. Hasil Pengujian Unit Kelas [C25]
 
 | ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| C25-UT01 | `makeRating()`, *getter*, `toJSON()` | Normal | Panggil `makeRating('id-1', 'pemberi', 'penerima', 'kontrak', 5, 'Bagus', ['Tepat Waktu'])`, lalu panggil seluruh *getter* dan `toJSON()`. | `getIdRating()`, `getIdPemberi()`, `getIdPenerima()`, `getIdKontrakPekerjaan()`, `getRatingValue()`, `getUlasan()`, `getTags()`, dan `getTanggalRating()` mengembalikan nilai sesuai masukan; `toJSON()` memuat seluruh atribut tersebut. | *[Hasil aktual]* | *Pass/Fail* |
-| C25-UT02 | `makeRating()` | Batas & Negatif | Panggil `makeRating()` dengan (a) `ulasan = 12345`; (b) `tags = ['tepat waktu', 99, null]`; (c) `nilaiRating = 0` (di luar 1..5). | (a) `getUlasan()` bernilai `null` tanpa *crash* dan nilai rating tetap; (b) `getTags()` menjadi `['tepat waktu']`; (c) `getRatingValue()` bernilai `-1`. | *[Hasil aktual]* | *Pass/Fail* |
-| C25-UT03 | `simpanKeDb()` | Normal | Buat rating valid (nilai 1..5) untuk kontrak `Done`, lalu panggil `simpanKeDb()`. | Entri rating tersimpan di tabel `rating` dan kolom `hasRating` pada kontrak terkait berubah menjadi `true`. | *[Hasil aktual]* | *Pass/Fail* |
-| C25-UT04 | `simpanKeDb()` | Negatif | Buat rating dengan `nilaiRating` di luar batas (tersimpan sebagai `-1`), lalu panggil `simpanKeDb()`. | Melempar error dan tidak ada data rating yang tersimpan. | *[Hasil aktual]* | *Pass/Fail* |
-| C25-UT05 | `updateRatingPengguna()` | Normal | Panggil `updateRatingPengguna()` secara berurutan dengan nilai rating `5`, `4`, lalu `4` untuk pengguna penerima yang sama. | `riwayatRating` berturut-turut menjadi `[5]`, `[5, 4]`, `[5, 4, 4]` dengan `akumulasiRating` `5`, `4.5`, dan `4.33` (pembulatan 2 desimal). | *[Hasil aktual]* | *Pass/Fail* |
-| C25-UT06 | `updateRatingPengguna()` | Negatif | Panggil `updateRatingPengguna()` dengan (a) rating bernilai `-1`; (b) `idPenerima` yang tidak terdaftar. | Melempar error pada kedua kasus dan data rating pengguna tidak berubah. | *[Hasil aktual]* | *Pass/Fail* |
+| C25-UT01 | `makeRating()`, *getter*, `toJSON()` | Normal | Panggil `makeRating('id-1', 'pemberi', 'penerima', 'kontrak', 5, 'Bagus', ['Tepat Waktu'])`, lalu panggil seluruh *getter* dan `toJSON()`. | `getIdRating()`, `getIdPemberi()`, `getIdPenerima()`, `getIdKontrakPekerjaan()`, `getRatingValue()`, `getUlasan()`, `getTags()`, dan `getTanggalRating()` mengembalikan nilai sesuai masukan; `toJSON()` memuat seluruh atribut tersebut. | Seluruh *getter* mengembalikan nilai sesuai masukan dan `toJSON()` memuat seluruh atribut. Sesuai harapan. | Pass |
+| C25-UT02 | `makeRating()` | Batas & Negatif | Panggil `makeRating()` dengan (a) `ulasan = 12345`; (b) `tags = ['tepat waktu', 99, null]`; (c) `nilaiRating = 0` (di luar 1..5). | (a) `getUlasan()` bernilai `null` tanpa *crash* dan nilai rating tetap; (b) `getTags()` menjadi `['tepat waktu']`; (c) `getRatingValue()` bernilai `-1`. | (a) `getUlasan()` bernilai `null` tanpa *crash*, nilai rating tetap `4`; (b) `getTags()` menjadi `['tepat waktu']`; (c) `getRatingValue()` bernilai `-1`. Sesuai harapan. | Pass |
+| C25-UT03 | `simpanKeDb()` | Normal | Buat rating valid (nilai 1..5) untuk kontrak `Done`, lalu panggil `simpanKeDb()`. | Entri rating tersimpan di tabel `rating` dan kolom `hasRating` pada kontrak terkait berubah menjadi `true`. | Entri rating tersimpan dan `hasRating` kontrak berubah menjadi `true`. Sesuai harapan. | Pass |
+| C25-UT04 | `simpanKeDb()` | Negatif | Buat rating dengan `nilaiRating` di luar batas (tersimpan sebagai `-1`), lalu panggil `simpanKeDb()`. | Melempar error dan tidak ada data rating yang tersimpan. | `simpanKeDb()` melempar error dan tidak ada rating yang tersimpan. Sesuai harapan. | Pass |
+| C25-UT05 | `updateRatingPengguna()` | Normal | Panggil `updateRatingPengguna()` secara berurutan dengan nilai rating `5`, `4`, lalu `4` untuk pengguna penerima yang sama. | `riwayatRating` berturut-turut menjadi `[5]`, `[5, 4]`, `[5, 4, 4]` dengan `akumulasiRating` `5`, `4.5`, dan `4.33` (pembulatan 2 desimal). | `riwayatRating` menjadi `[5]`, `[5, 4]`, `[5, 4, 4]` dengan `akumulasiRating` `5`, `4.5`, `4.33`. Sesuai harapan. | Pass |
+| C25-UT06 | `updateRatingPengguna()` | Negatif | Panggil `updateRatingPengguna()` dengan (a) rating bernilai `-1`; (b) `idPenerima` yang tidak terdaftar. | Melempar error pada kedua kasus dan data rating pengguna tidak berubah. | Melempar error pada kedua kasus. Sesuai harapan. | Pass |
 
 Tabel 4.2.17b. Ringkasan Cakupan Kelas [C25]
 
@@ -707,7 +753,7 @@ Tabel 4.2.17b. Ringkasan Cakupan Kelas [C25]
 | Daftar operasi public pada DPPL | `getIdRating()`, `getIdPemberi()`, `getIdPenerima()`, `getIdKontrakPekerjaan()`, `getRatingValue()`, `makeRating()`, `simpanKeDb()`, `updateRatingPengguna()` |
 | Operasi yang diuji | Seluruh operasi pada DPPL, serta tambahan `getTanggalRating()`, `getUlasan()`, `getTags()`, dan `toJSON()` |
 | ID Algoritma yang tercakup | ALGO-056, ALGO-057, ALGO-058, ALGO-059, ALGO-060, ALGO-061, ALGO-062, ALGO-063 |
-| Coverage (wajib ≥ 70%) | *[% baris / % cabang, alat dan bukti pada 4.6]* |
+| Coverage (wajib ≥ 70%) | 98,30% baris / 81,48% cabang (Jest + Istanbul, `npx jest --coverage`; bukti pada 4.6) |
 
 ### 4.2.18 Kelas RatingUI
 
@@ -719,10 +765,10 @@ Tabel 4.2.18. Hasil Pengujian Unit Kelas [C26]
 
 | ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| C26-UT01 | `getRatingPredicate()`, `toggleRatingTag()` | Normal & Batas | (a) Panggil `getRatingPredicate()` dengan bintang `0` sampai `5`; (b) pilih tag `'Tepat Waktu'` dan `'Kerja Bersih'`, lalu pilih ulang `'Tepat Waktu'`; (c) ambil opsi tag untuk peran `PELANGGAN` dan `PEMBERI_JASA`. | (a) `0` → `'Pilih bintang penilaian'`, `1`-`5` → `'Sangat Buruk'`, `'Buruk'`, `'Cukup'`, `'Baik'`, `'Sangat Baik'`; (b) tag terpilih menjadi `['Tepat Waktu', 'Kerja Bersih']` lalu `['Kerja Bersih']`; (c) daftar tag sesuai peran masing-masing. | *[Hasil aktual]* | *Pass/Fail* |
-| C26-UT02 | `isSubmitRatingEnabled()`, `validateRatingInput()` | Batas & Negatif | (a) Panggil `isSubmitRatingEnabled()` dengan (`0`, `false`), (`5`, `true`), (`1`, `false`), (`5`, `false`); (b) panggil `validateRatingInput()` dengan skor `5`, `0`, `6`, serta pemberi = penerima (`'pengguna-sama'`). | (a) Tombol nonaktif untuk bintang 0 atau saat sedang *submit*, aktif untuk (`1`, `false`) dan (`5`, `false`); (b) hanya skor `5` dengan pemberi ≠ penerima yang mengembalikan `true`. | *[Hasil aktual]* | *Pass/Fail* |
-| C26-UT03 | `shouldShowBeriRatingButton()`, `shouldShowProviderBeriRatingButton()` | Normal | Panggil dengan kontrak berstatus `On Progress`, `Done` belum dinilai, `Done` sudah dinilai, `Dibatalkan`, dan `Menunggu Konfirmasi Pelanggan`, baik dari sisi pelanggan maupun penyedia jasa. | Tombol *Beri Rating* hanya tampil (`true`) untuk kontrak `Done` yang belum dinilai oleh pengguna login; selain itu `false`. | *[Hasil aktual]* | *Pass/Fail* |
-| C26-UT04 | `extractPerUserRatingFromBackendRow()` | Normal | Gunakan baris kontrak `Done` dengan `hasRating = true` dan satu rating dari `pelanggan-1` ke `mitra-1`, lalu panggil `extractPerUserRatingFromBackendRow(row, 'mitra-1')`; petakan juga baris dengan rating dari `mitra-1` ke `pelanggan-1` untuk sisi pelanggan. | Untuk penyedia: `hasRatedByMe = false`, `diterima.nilaiRating = 5`, `diberikan = null`; untuk pelanggan: tombol *Beri Rating* tetap tampil walaupun penyedia sudah menilai lebih dulu. | *[Hasil aktual]* | *Pass/Fail* |
+| C26-UT01 | `getRatingPredicate()`, `toggleRatingTag()` | Normal & Batas | (a) Panggil `getRatingPredicate()` dengan bintang `0` sampai `5`; (b) pilih tag `'Tepat Waktu'` dan `'Kerja Bersih'`, lalu pilih ulang `'Tepat Waktu'`; (c) ambil opsi tag untuk peran `PELANGGAN` dan `PEMBERI_JASA`. | (a) `0` → `'Pilih bintang penilaian'`, `1`–`5` → `'Sangat Buruk'`, `'Buruk'`, `'Cukup'`, `'Baik'`, `'Sangat Baik'`; (b) tag terpilih menjadi `['Tepat Waktu', 'Kerja Bersih']` lalu `['Kerja Bersih']`; (c) daftar tag sesuai peran masing-masing. | (a) Label predikat sesuai untuk 0–5; (b) tag menjadi `['Tepat Waktu', 'Kerja Bersih']` lalu `['Kerja Bersih']`; (c) `PELANGGAN` mendapat tag pelanggan, `PEMBERI_JASA` mendapat tag khusus penyedia. Sesuai harapan. | Pass |
+| C26-UT02 | `isSubmitRatingEnabled()`, `validateRatingInput()` | Batas & Negatif | (a) Panggil `isSubmitRatingEnabled()` dengan (`0`, `false`), (`5`, `true`), (`1`, `false`), (`5`, `false`); (b) panggil `validateRatingInput()` dengan skor `5`, `0`, `6`, serta pemberi = penerima (`'pengguna-sama'`). | (a) Tombol nonaktif untuk bintang 0 atau saat sedang *submit*, aktif untuk (`1`, `false`) dan (`5`, `false`); (b) hanya skor `5` dengan pemberi ≠ penerima yang mengembalikan `true`. | (a) Tombol nonaktif untuk (`0`, `false`) dan (`5`, `true`), aktif untuk (`1`, `false`) dan (`5`, `false`); (b) hanya skor `5` dengan pemberi ≠ penerima yang `true`. Sesuai harapan. | Pass |
+| C26-UT03 | `shouldShowBeriRatingButton()`, `shouldShowProviderBeriRatingButton()` | Normal | Panggil dengan kontrak berstatus `On Progress`, `Done` belum dinilai, `Done` sudah dinilai, `Dibatalkan`, dan `Menunggu Konfirmasi Pelanggan`, baik dari sisi pelanggan maupun penyedia jasa. | Tombol *Beri Rating* hanya tampil (`true`) untuk kontrak `Done` yang belum dinilai oleh pengguna login; selain itu `false`. | Tombol *Beri Rating* hanya `true` untuk kontrak `Done` yang belum dinilai pengguna login, baik di sisi pelanggan maupun penyedia jasa. Sesuai harapan. | Pass |
+| C26-UT04 | `extractPerUserRatingFromBackendRow()` | Normal | Gunakan baris kontrak `Done` dengan `hasRating = true` dan satu rating dari `pelanggan-1` ke `mitra-1`, lalu panggil `extractPerUserRatingFromBackendRow(row, 'mitra-1')`; petakan juga baris dengan rating dari `mitra-1` ke `pelanggan-1` untuk sisi pelanggan. | Untuk penyedia: `hasRatedByMe = false`, `diterima.nilaiRating = 5`, `diberikan = null`; untuk pelanggan: tombol *Beri Rating* tetap tampil walaupun penyedia sudah menilai lebih dulu. | Penyedia: `hasRatedByMe = false`, `diterima.nilaiRating = 5`, `diberikan = null`; pelanggan: `hasRating = false` sehingga tombol *Beri Rating* tetap tampil. Sesuai harapan. | Pass |
 
 ### 4.2.19 Kelas RatingController
 
@@ -734,12 +780,12 @@ Tabel 4.2.19. Hasil Pengujian Unit Kelas [C27]
 
 | ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| C27-UT01 | `validateRatingValue()` | Normal | Panggil `validateRatingValue()` dengan seluruh ID terisi (pemberi, penerima, kontrak) dan skor `1` sampai `5`. | Mengembalikan `true` untuk seluruh skor 1..5. | *[Hasil aktual]* | *Pass/Fail* |
-| C27-UT02 | `validateRatingValue()` | Batas & Negatif | Panggil dengan (a) skor `0` dan `6`; (b) salah satu ID wajib kosong atau hanya spasi. | Mengembalikan `false` pada seluruh kasus. | *[Hasil aktual]* | *Pass/Fail* |
-| C27-UT03 | `createRating()` | Normal | Pada kontrak berstatus `Done`: (a) Pelanggan mengirim rating untuk Penyedia Jasa; (b) Penyedia Jasa mengirim rating balik untuk Pelanggan pada kontrak yang sama. | Kedua rating berhasil disimpan (`201`) dan rata-rata rating masing-masing penerima diperbarui (*two-way rating*). | *[Hasil aktual]* | *Pass/Fail* |
-| C27-UT04 | `createRating()` | Negatif | Pelanggan yang sudah memberi rating pada kontrak tertentu mengirim rating kedua untuk kontrak yang sama. | Ditolak (`400`/`409`) dengan pesan "Anda sudah memberikan rating untuk kontrak pekerjaan ini." dan tidak ada rating baru yang tersimpan. | *[Hasil aktual]* | *Pass/Fail* |
-| C27-UT05 | `createRating()` | Negatif | Kirim rating untuk kontrak yang berstatus selain `Done` (mis. `On Progress`). | Ditolak `400` dengan pesan "Pekerjaan belum berstatus Done" dan tidak ada rating yang tersimpan. | *[Hasil aktual]* | *Pass/Fail* |
-| C27-UT06 | `getRatingsByUser()` | Normal & Negatif | Panggil `GET` rating pengguna dengan (a) ID pengguna valid yang memiliki rating; (b) ID kosong atau hanya spasi; (c) ID pengguna yang tidak terdaftar. | (a) `200` beserta `akumulasiRating`, `riwayatRating`, `totalRating`, dan daftar ulasan; (b) `400`; (c) `404`. | *[Hasil aktual]* | *Pass/Fail* |
+| C27-UT01 | `validateRatingValue()` | Normal | Panggil `validateRatingValue('pemberi-1', 'penerima-1', 'kontrak-1', skor)` untuk skor `1`, `2`, `3`, `4`, dan `5`. | Mengembalikan `true` untuk seluruh skor 1..5. | Mengembalikan `true` untuk kelima skor. Sesuai harapan. | Pass |
+| C27-UT02 | `validateRatingValue()` | Batas & Negatif | Panggil dengan (a) skor `0` dan `6`; (b) salah satu ID wajib kosong atau hanya spasi. | Mengembalikan `false` pada seluruh kasus. | Mengembalikan `false` untuk skor `0`, `6`, `NaN`, dan ID kosong/spasi. Sesuai harapan. | Pass |
+| C27-UT03 | `createRating()` | Normal | Pada kontrak berstatus `Done`: (a) Pelanggan mengirim rating untuk Penyedia Jasa; (b) Penyedia Jasa mengirim rating balik untuk Pelanggan pada kontrak yang sama. | Kedua rating berhasil disimpan (`201`) dan rata-rata rating masing-masing penerima diperbarui (*two-way rating*). | Kedua rating tersimpan dengan respons `201`; `akumulasiRating` penerima masing-masing menjadi `5` (penyedia) dan `4` (pelanggan). Sesuai harapan. | Pass |
+| C27-UT04 | `createRating()` | Negatif | Pelanggan yang sudah memberi rating pada kontrak tertentu mengirim rating kedua untuk kontrak yang sama. | Ditolak `400` dengan pesan "Anda sudah memberikan rating untuk kontrak pekerjaan ini." dan tidak ada rating baru yang tersimpan. | Ditolak `400` dengan pesan "Anda sudah memberikan rating untuk kontrak pekerjaan ini.". Sesuai harapan. | Pass |
+| C27-UT05 | `createRating()` | Negatif | Kirim rating untuk kontrak yang berstatus selain `Done` (mis. `On Progress`). | Ditolak `400` dengan pesan "Pekerjaan belum berstatus Done" dan tidak ada rating yang tersimpan. | Ditolak `400` dengan pesan "Pekerjaan belum berstatus Done". Sesuai harapan. | Pass |
+| C27-UT06 | `getRatingsByUser()` | Normal & Negatif | Panggil `GET` rating pengguna dengan (a) ID pengguna valid yang memiliki rating; (b) ID kosong atau hanya spasi; (c) ID pengguna yang tidak terdaftar. | (a) `200` beserta `akumulasiRating`, `riwayatRating`, `totalRating`, dan daftar ulasan; (b) `400`; (c) `404`. | (a) `200` beserta `akumulasiRating`, `riwayatRating`, `totalRating`, dan daftar ulasan; (b) `400`; (c) `404`. Sesuai harapan. | Pass |
 
 Tabel 4.2.19b. Ringkasan Cakupan Kelas [C27]
 
@@ -748,7 +794,7 @@ Tabel 4.2.19b. Ringkasan Cakupan Kelas [C27]
 | Daftar operasi public pada DPPL | `validateRatingValue()` |
 | Operasi yang diuji | `validateRatingValue()`, serta tambahan `createRating()` dan `getRatingsByUser()` |
 | ID Algoritma yang tercakup | ALGO-064 |
-| Coverage (wajib ≥ 70%) | *[% baris / % cabang, alat dan bukti pada 4.6]* |
+| Coverage (wajib ≥ 70%) | 88,63% baris / 84,37% cabang (Jest + Istanbul, `npx jest --coverage`; bukti pada 4.6) |
 
 ### 4.2.20 Kelas NotifikasiController
 
@@ -760,9 +806,9 @@ Tabel 4.2.20. Hasil Pengujian Unit Kelas [C30]
 
 | ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| C30-UT01 | `buatNotifikasi()` | Normal | Panggil `buatNotifikasi('provider-1', 'Pesanan baru masuk')` dengan `RealtimeEmitter` dan `PushGateway` tiruan. | Notifikasi tersimpan di DB dengan ID berawalan `NOTIF-` dan `statusBaca = false`; event Socket.IO `notification:new` terpancar ke `provider-1`; `pushGateway.sendPush()` dipanggil dengan isi notifikasi. | *[Hasil aktual]* | *Pass/Fail* |
-| C30-UT02 | `buatNotifikasi()` | Negatif | Panggil `buatNotifikasi()` dengan (a) `idPenerima` kosong/bukan *string*; (b) `isiNotifikasi` kosong, hanya spasi, atau bukan *string*. | Melempar error `400` (`INVALID_RECIPIENT` / `INVALID_NOTIFICATION_CONTENT`); tidak ada notifikasi yang tersimpan maupun terkirim. | *[Hasil aktual]* | *Pass/Fail* |
-| C30-UT03 | `tandaiSatuNotifikasiTerbaca()`, `tandaiSemuaNotifikasiTerbaca()` | Normal & Negatif | (a) Pengguna login menandai satu notifikasi miliknya, lalu menandai seluruh notifikasinya; (b) pengguna login menandai notifikasi milik pengguna lain. | (a) `statusBaca` berubah menjadi `true` dan `updatedCount` sesuai jumlah notifikasi belum terbaca milik pengguna; (b) ditolak `403 FORBIDDEN` dan `statusBaca` notifikasi tidak berubah. | *[Hasil aktual]* | *Pass/Fail* |
+| C30-UT01 | `buatNotifikasi()` | Normal | Panggil `buatNotifikasi('user-1', 'Pesanan baru masuk!')` dengan `RealtimeEmitter` dan `PushGateway` tiruan. | Notifikasi tersimpan di DB dengan ID berawalan `NOTIF-` dan `statusBaca = false`; event Socket.IO `notification:new` terpancar ke `user-1`; `pushGateway.sendPush()` dipanggil dengan isi notifikasi. | Notifikasi tersimpan dengan ID `NOTIF-…`, `statusBaca = false`; `notification:new` terpancar ke `user-1`; `sendPush('user-1', 'Pesanan baru masuk!')` dipanggil. Sesuai harapan. | Pass |
+| C30-UT02 | `buatNotifikasi()` | Negatif | Panggil `buatNotifikasi()` dengan (a) `idPenerima = ''`; (b) `isiNotifikasi = '   '` (hanya spasi). | Melempar error `400` (`INVALID_RECIPIENT` / `INVALID_NOTIFICATION_CONTENT`); tidak ada notifikasi yang tersimpan maupun terkirim. | (a) `400 INVALID_RECIPIENT`; (b) `400 INVALID_NOTIFICATION_CONTENT`. Sesuai harapan. | Pass |
+| C30-UT03 | `tandaiSatuNotifikasiTerbaca()`, `tandaiSemuaNotifikasiTerbaca()` | Normal & Negatif | (a) Pengguna login menandai satu notifikasi miliknya, lalu menandai seluruh notifikasinya; (b) pengguna login menandai notifikasi milik pengguna lain; (c) menandai ID notifikasi yang tidak ada. | (a) `statusBaca` berubah menjadi `true` dan `updatedCount` sesuai jumlah notifikasi belum terbaca milik pengguna; (b) ditolak `403 FORBIDDEN` dan `statusBaca` notifikasi tidak berubah; (c) ditolak `404 NOTIFICATION_NOT_FOUND`. | (a) `statusBaca` menjadi `true` dan `updatedCount = 2`; (b) `403 FORBIDDEN`; (c) `404 NOTIFICATION_NOT_FOUND`. Sesuai harapan. | Pass |
 
 <br>
 
