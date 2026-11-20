@@ -1,0 +1,337 @@
+{
+  "_env": {
+    "health": {
+      "status": "ok",
+      "uptime": 2167.498953857
+    },
+    "nodeVersion": "v24.22.2"
+  },
+  "KNF01": {
+    "n": 5,
+    "avgMs": 28.37,
+    "minMs": 9.58,
+    "maxMs": 99.48,
+    "p95Ms": 99.48,
+    "catCount": 6,
+    "svcCount": 6,
+    "target": "< 2000 ms",
+    "pass": true
+  },
+  "KNF02": {
+    "httpStatus": 200,
+    "totalCategories": 6,
+    "sampleCategories": [
+      "Jasa Kebersihan Rumah",
+      "Perbaikan AC & Kulkas",
+      "Perbaikan Elektronik & AC",
+      "Servis",
+      "Servis",
+      "Tukang Ledeng & Pipa"
+    ]
+  },
+  "KNF03": {
+    "n": 5,
+    "avgMs": 8.72,
+    "minMs": 8.38,
+    "maxMs": 9.09,
+    "p95Ms": 9.09,
+    "httpStatus": 200,
+    "providerName": "Ahmad Jaya AC & Elektronik",
+    "target": "< 1000 ms",
+    "pass": true
+  },
+  "KNF04": {
+    "versionBefore": 1,
+    "versionAfter": 2,
+    "providerStatusAfter": "On Progress",
+    "httpStatuses": [
+      201,
+      409
+    ],
+    "loserCode": "OPTIMISTIC_LOCK_CONFLICT",
+    "activeContractsInDb": 1,
+    "pass": true
+  },
+  "KNF05": {
+    "n": 5,
+    "avgMs": 10.33,
+    "minMs": 8.18,
+    "maxMs": 14.32,
+    "p95Ms": 14.32,
+    "resultCount": 6,
+    "sampleDistancesKm": [
+      0,
+      0,
+      0.06,
+      0.22,
+      0.79
+    ],
+    "sortedAscending": true,
+    "target": "<= 2000 ms",
+    "pass": true
+  },
+  "KNF06": {
+    "testedOnHardware": false,
+    "codeFinding": "useCatalogController.ts:462 uses Location.Accuracy.Balanced (~100m), not Location.Accuracy.High (~10m)."
+  },
+  "KNF07": {
+    "healthChecks": "10/10 HTTP 200",
+    "registerEndpointReachable": true,
+    "serverUptimeSec": 2167.5
+  },
+  "KNF08_Security": {
+    "sqliLoginStatus": 401,
+    "sqliRegEmailStatus": 400,
+    "shortPasswordStatus": 400,
+    "sqliPhoneStatus": 400,
+    "passwordHashPrefix": "$2b$10$",
+    "isBcryptHash": true,
+    "penggunaTableIntactCount": 17,
+    "pass": true
+  },
+  "KNF08b_KNF09_ResponseTime": {
+    "invalidValidation": {
+      "n": 5,
+      "avgMs": 3.23,
+      "minMs": 2.57,
+      "maxMs": 3.87,
+      "p95Ms": 3.87
+    },
+    "validRegistrationWithBcrypt": {
+      "n": 5,
+      "avgMs": 93.17,
+      "minMs": 89.1,
+      "maxMs": 95.13,
+      "p95Ms": 95.13
+    },
+    "target": "<= 2000 ms",
+    "pass": true
+  },
+  "KNF10": {
+    "n": 5,
+    "avgMs": 18.72,
+    "minMs": 16.38,
+    "maxMs": 20.74,
+    "p95Ms": 20.74,
+    "httpStatuses": [
+      201,
+      201,
+      201,
+      201,
+      201
+    ],
+    "dbNamaTokoUpdated": "Toko Uji KNF10 Update 5",
+    "target": "< 1000 ms",
+    "pass": true
+  },
+  "KNF12": {
+    "socketNotifDelivery": {
+      "n": 5,
+      "avgMs": 14.84,
+      "minMs": 13.59,
+      "maxMs": 16.22,
+      "p95Ms": 16.22
+    },
+    "httpOrderCreate": {
+      "n": 5,
+      "avgMs": 16.03,
+      "minMs": 14.33,
+      "maxMs": 17.45,
+      "p95Ms": 17.45
+    },
+    "dbNotifCountForProvider": 6,
+    "target": "< 1000 ms",
+    "pass": true
+  },
+  "KNF14": {
+    "sentPlaintext": "Rahasia KNF14 E2EE Check (knf_mwoyqq2m)",
+    "storedInDbIsiPesan": "Rahasia KNF14 E2EE Check (knf_mwoyqq2m)",
+    "exactPlaintextMatch": true,
+    "pass": false
+  },
+  "KNF15": {
+    "socketChatDelivery": {
+      "n": 5,
+      "avgMs": 11.24,
+      "minMs": 9.25,
+      "maxMs": 15,
+      "p95Ms": 15
+    },
+    "httpSendChat": {
+      "n": 5,
+      "avgMs": 16.31,
+      "minMs": 13.69,
+      "maxMs": 18.96,
+      "p95Ms": 18.96
+    },
+    "frontendPollingMs": 3000,
+    "target": "<= 1000 ms",
+    "passBackendRealtime": true
+  },
+  "KNF17": {
+    "httpStatus": 200,
+    "sampleKeys": [
+      "detailPekerjaan",
+      "persetujuanHarga",
+      "idPemberiJasa"
+    ],
+    "pass": true
+  },
+  "KNF18": {
+    "xssStatus": 400,
+    "sqliStatus": 400,
+    "negativePriceStatus": 400,
+    "zeroPriceStatus": 400,
+    "emptyDetailStatus": 400,
+    "pass": true
+  },
+  "KNF19": {
+    "acceptHttpStatus": 200,
+    "contractStatusInDb": "On Progress",
+    "providerAvailabilityInDb": "On Progress",
+    "secondBookingBlockedStatus": 409,
+    "pass": true
+  },
+  "KNF13": {
+    "httpStatus": 200,
+    "detailPekerjaan": "Servis AC 1 PK di Jl. Ganesha No. 10 Bandung",
+    "returnedKeys": [
+      "idKontrakPekerjaan",
+      "idPelanggan",
+      "idPemberiJasa",
+      "detailPekerjaan",
+      "persetujuanHarga",
+      "statusPekerjaan",
+      "hasRating",
+      "createdAt",
+      "expiresAt"
+    ],
+    "hasDedicatedCustomerLocationField": false
+  },
+  "KNF20": {
+    "selesaiHttpStatus": 200,
+    "contractStatusAfterSelesai": "Menunggu Konfirmasi Pelanggan",
+    "socketNotifReceivedMs": 20.88,
+    "notifMessageInDb": "Pekerjaan \"Servis AC 1 PK di Jl. Ganesha No. 10 Bandung\" telah selesai dikerjakan oleh penyedia jasa. Mohon konfirmasi penyelesaian dan pembayaran sebesar Rp 150.000.",
+    "pass": true
+  },
+  "KNF21": {
+    "confirmHttpStatus": 200,
+    "contractStatusInDb": "Done",
+    "providerAvailabilityAfterDone": "Available",
+    "pass": true
+  },
+  "KNF22": {
+    "menungguToDoneStatus": 400,
+    "menungguToDoneMsg": "Konfirmasi penyelesaian gagal: status kontrak saat ini adalah 'Menunggu' (harus 'Menunggu Konfirmasi Pelanggan' atau 'On Progress')",
+    "validToDoneStatus": 200,
+    "doneToDoneStatus": 400,
+    "pass": true
+  },
+  "KNF27": {
+    "beforeDoneRejectedStatus": 400,
+    "verifyEndpointStatus": 200,
+    "customerToProviderStatus": 201,
+    "providerToCustomerStatus": 201,
+    "duplicateRejectedStatus": 400,
+    "pass": true
+  },
+  "KNF28": {
+    "providerDbRating": {
+      "akumulasiRating": 5,
+      "riwayatRating": [
+        5
+      ]
+    },
+    "customerDbRating": {
+      "akumulasiRating": 4,
+      "riwayatRating": [
+        4
+      ]
+    },
+    "pass": true
+  },
+  "KNF23": {
+    "ticketsMineChecks": "10/10 HTTP 200",
+    "csStatsStatus": 200
+  },
+  "KNF24": {
+    "tableExists": true,
+    "columnCount": 8,
+    "columns": [
+      "id_tiket(text)",
+      "id_pengguna(text)",
+      "id_layanan_pelanggan(text)",
+      "jenis_tiket(text)",
+      "keterangan_tiket(text)",
+      "bukti_foto_url(text)",
+      "tanggal_tiket(timestamp without time zone)",
+      "status_tiket(text)"
+    ],
+    "pass": true
+  },
+  "KNF25": {
+    "httpTicketCreate": {
+      "n": 5,
+      "avgMs": 21.87,
+      "minMs": 18.54,
+      "maxMs": 32.26,
+      "p95Ms": 32.26
+    },
+    "csNotifDelivery": {
+      "n": 5,
+      "avgMs": 21.04,
+      "minMs": 17.85,
+      "maxMs": 31.25,
+      "p95Ms": 31.25
+    },
+    "assignedToCsCount": 5,
+    "createdTickets": [
+      "A-2021",
+      "A-2022",
+      "A-2023",
+      "A-2024",
+      "A-2025"
+    ],
+    "target": "< 1000 ms + CS notification",
+    "pass": true
+  },
+  "KNF26": {
+    "ticketId": "A-2025",
+    "userMessageWhileOpenStatus": 201,
+    "csReplyStatus": 201,
+    "statusAfterReply": "Diproses",
+    "messagesStoredInChannel": 2,
+    "csCloseStatus": 200,
+    "statusAfterClose": "Selesai",
+    "userMessageAfterCloseStatus": 409,
+    "userMessageAfterCloseMsg": "Tiket sudah ditutup.",
+    "pass": true
+  },
+  "KNF16": {
+    "concurrentRequests": 1000,
+    "success201": 1000,
+    "persistedInDb": 1000,
+    "httpErrors": {},
+    "networkErrors": 0,
+    "totalDurationMs": 3238.61,
+    "throughputReqPerSec": 308.77,
+    "latency": {
+      "n": 1000,
+      "avgMs": 2409.38,
+      "minMs": 1111.23,
+      "maxMs": 2938.17,
+      "p95Ms": 2797.72
+    },
+    "pass": true
+  },
+  "KNF11": {
+    "expiresAtOffsetMinutes": 30,
+    "contractStatusBefore": "Menunggu",
+    "providerStatusBefore": "On Progress",
+    "contractStatusAfterWorker": "Dibatalkan",
+    "providerStatusAfterWorker": "Available",
+    "workerWaitElapsedSec": 53.7,
+    "pass": true
+  }
+}
