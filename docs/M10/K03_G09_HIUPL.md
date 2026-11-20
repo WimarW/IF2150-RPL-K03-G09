@@ -1082,6 +1082,13 @@ Tabel 4.6. Bukti Hasil Pengujian
 | UC03-TC02 | <img src="./assets/UC03-TestAlt1-1.png.jpeg" width="240"> |
 | UC04-TC01 | <img src="./assets/UC04-TestNormal-1.png.jpeg" width="240"> <img src="./assets/UC04-TestNormal-2.png.jpeg" width="240"> |
 | UC04-TC02 | <img src="./assets/UC04-TestAlt1-1.png.jpeg" width="240"> <img src="./assets/UC04-TestAlt1-2.png.jpeg" width="240"> |
+| UC05-TC01 | <img src="./assets/UC05-TestNormal1.jpeg" width="240"> <img src="./assets/UC05-TestNormal1-2.jpeg" width="240"> |
+| UC05-TC02 | <img src="./assets/UC05-TestAlt1.jpeg" width="240"> |
+| UC05-TC03 | <img src="./assets/UC05-TestAlt2.jpeg" width="240"> |
+| UC06-TC01 | <img src="./assets/UC06-TestNormal1.jpeg" width="240"> |
+| UC06-TC02 | <img src="./assets/UC06-TestAlt1.jpeg" width="240"> |
+| UC07-TC01 | <img src="./assets/UC07-TestNormal1.jpeg" width="240"> |
+| UC07-TC02 | <img src="./assets/UC07-TestAlt1.jpeg" width="240"> |
 | UC11-TC01 | <img src="./assets/UC11-NormalTest-1.png.jpeg" width="220"> <img src="./assets/UC11-NormalTest-2.png.jpeg" width="220"> <img src="./assets/UC11-NormalTest-3.png.jpeg" width="220"> |
 | UC11-TC02 | <img src="./assets/UC11-NormalAlt1-1.png.jpeg" width="240"> |
 | UC12-TC01 | <img src="./assets/UC12-TestNormal-1.png.jpeg" width="240"> <img src="./assets/UC12-TestNormal-2.png.jpeg" width="240"> |
