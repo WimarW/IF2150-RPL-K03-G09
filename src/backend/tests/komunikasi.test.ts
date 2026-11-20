@@ -18,6 +18,7 @@ interface MockKomunikasiRow {
   idChat: string;
   idPengguna: string;
   idPenerima: string;
+  idTiket?: string | null;
   isiPesan: string;
   waktuTerkirim: Date;
   isChatTerbaca: boolean;
@@ -32,15 +33,17 @@ const matchesSimpleFilter = (
   row: MockKomunikasiRow,
   filter: Record<string, unknown>
 ): boolean => {
-  if (filter.OR && Array.isArray(filter.OR)) {
-    return filter.OR.some((branch) =>
-      matchesSimpleFilter(row, branch as Record<string, unknown>)
-    );
-  }
-
   for (const [key, value] of Object.entries(filter)) {
     if (value === undefined) continue;
-    if ((row as unknown as Record<string, unknown>)[key] !== value) {
+    if (key === 'OR' && Array.isArray(value)) {
+      const orMatched = value.some((branch) =>
+        matchesSimpleFilter(row, branch as Record<string, unknown>)
+      );
+      if (!orMatched) return false;
+      continue;
+    }
+    const rowVal = (row as unknown as Record<string, unknown>)[key];
+    if (value === null ? rowVal != null : rowVal !== value) {
       return false;
     }
   }
@@ -77,6 +80,7 @@ jest.mock('../src/database/prisma', () => {
           idChat: data.idChat,
           idPengguna: data.idPengguna,
           idPenerima: data.idPenerima,
+          idTiket: data.idTiket ?? null,
           isiPesan: data.isiPesan,
           waktuTerkirim:
             data.waktuTerkirim instanceof Date
