@@ -58,8 +58,8 @@ Dipersiapkan oleh:
 
 | Revisi | Deskripsi |
 | :--- | :--- |
-| *A* | *Deskripsikan perubahan yang dilakukan dari dokumen sebelumnya pada dokumen ini. Jika tidak terdapat perubahan, harap kosongkan tabel.* |
-| *B* |  |
+| *A* | Menambahkan file auth.middleware.ts ke dalam Implementasi Modul untuk kelas PenggunaController (di M9 belum ada) |
+| *B* | Menambahkan file MyTicketScreen.tsx untuk UI Tiket (sudah disebutkan pada dokumen Implementasi pada Tabel B.1 No. 18) |
 | *C* |  |
 | ... |  |
 
@@ -219,13 +219,13 @@ Tabel 3.1. Lingkungan Implementasi
 
 | Aspek | Keterangan |
 | :--- | :--- |
-| *Hardware* | *[Spesifikasi perangkat keras]* |
-| *Operating System* | *[Nama dan versi OS]* |
-| *Bahasa Pemrograman* | *[Bahasa dan versi]* |
-| *Framework/Library* | *[Daftar framework/library beserta versi]* |
-| *DBMS* | *[Nama dan versi DBMS]* |
-| *Development Tools* | *[IDE, version control, tools lain]* |
-| *Testing Tools* | *[Framework unit test, alat ukur performa, alat coverage]* |
+| *Hardware* | *Menggunakan laptop atau PC* |
+| *Operating System* | *Windows 10 atau yang terbaru, macOS* |
+| *Bahasa Pemrograman* | *TypeScript 5.7.2 (backend), TypeScript ~6.0.3 (frontend)* |
+| *Framework/Library* | *<ul> Framework <li>React Native 0.88.1 <li> Expo SDK ~58.0.22 <li> Express.js 4.21.2 </ul> <ul> Library <li> React Navigation v7 <li> Socket.IO 4.8.4 </li> </ul>* |
+| *DBMS* | *<ul> <li> PostgreSQL 16 (via Docker image `postgres:16-alpine`)<li>Prisma ORM 5.22.0 </li> </ul>* |
+| *Development Tools* | *<ul> <li> IDE : Visual Studio Code <li> Version Control: Git <li> Remote Repository: GitHub </li> </ul>* |
+| *Testing Tools* | *<ul> <li> Jest (~30.5.2) <li> Jest-Expo (~58.0.14)</li> </ul>* |
 
 ## 3.2 Implementasi Modul
 
@@ -235,9 +235,36 @@ Tabel 3.2. Implementasi Modul
 
 | No | ID Kelas | Nama Modul/Kelas | Nama File Fisik | Nama File Executable |
 | :--- | :--- | :--- | :--- | :--- |
-| 1 | *[C01]* | *[Nama modul/kelas]* | *[path/ke/file]* | *[Nama file executable, atau - jika tidak ada]* |
-| 2 | *[C02]* | *[Nama modul/kelas]* | *[path/ke/file]* | *[...]* |
-| ... | *...* | *...* | *...* | *...* |
+| 1 | C01 | Pengguna | `src/backend/src/models/Pengguna.ts`<br>`src/backend/prisma/schema.prisma` (`model Pengguna`) | - |
+| 2 | C02 | PenggunaUI | `src/frontend/src/views/auth/RegisterCustomerView.tsx`<br>`src/frontend/src/views/profile/ProfileView.tsx`<br>`src/frontend/src/views/history/CustomerHistoryView.tsx`<br>`src/frontend/src/views/chat/ConversationListView.tsx`<br>`src/frontend/src/controllers/useAuthController.ts` | - |
+| 3 | C03 | PenggunaController | `src/backend/src/controllers/PenggunaController.ts`<br>`src/backend/src/routes/auth.routes.ts`<br>`src/backend/src/routes/user.routes.ts` <br> `src/backend/src/middlewares/auth.middleware.ts` | - |
+| 4 | C04 | PemberiJasa | `src/backend/src/models/PemberiJasa.ts`<br>`src/backend/prisma/schema.prisma` (`model PemberiJasa`) | - |
+| 5 | C05 | PemberiJasaUI | `src/frontend/src/views/home/SearchResultView.tsx`<br>`src/frontend/src/components/MapViewCard.tsx`<br>`src/frontend/src/views/auth/RegisterProviderView.tsx`<br>`src/frontend/src/views/history/ProviderHistoryView.tsx`<br>`src/frontend/src/views/chat/ProviderChatView.tsx`<br>`src/frontend/src/views/auth/LoginView.tsx` | - |
+| 6 | C06 | PemberiJasaController | `src/backend/src/controllers/PemberiJasaController.ts`<br>`src/backend/src/routes/services.routes.ts`<br>`src/backend/src/routes/auth.routes.ts`<br>`src/frontend/src/controllers/useCatalogController.ts` | - |
+| 7 | C07 | Pelanggan | `src/backend/src/models/Pelanggan.ts` | - |
+| 8 | C08 | PelangganUI | `src/frontend/src/views/auth/LoginView.tsx`<br>`src/frontend/src/views/auth/RegisterCustomerView.tsx`<br>`src/frontend/src/views/home/HomeView.tsx`<br>`src/frontend/src/views/home/SearchRecommendationView.tsx`<br>`src/frontend/src/views/chat/CustomerChatView.tsx`<br>`src/frontend/src/navigation/RootNavigator.tsx`<br>`src/frontend/src/navigation/MainTabNavigator.tsx` | - |
+| 9 | C09 | PelangganController | `src/backend/src/controllers/PelangganController.ts`<br>`src/backend/src/routes/auth.routes.ts` | - |
+| 10 | C10 | LayananPelanggan | `src/backend/src/models/LayananPelanggan.ts`<br>`src/backend/prisma/schema.prisma` (`model LayananPelanggan`) | - |
+| 11 | C11 | LayananPelangganUI | `src/frontend/src/views/ticket/CSDashboardScreen.tsx`<br>`src/frontend/src/views/ticket/TicketDetailScreen.tsx`<br>`src/frontend/src/views/auth/LoginView.tsx` | - |
+| 12 | C12 | LayananPelangganController | `src/backend/src/controllers/LayananPelangganCtrl.ts`<br>`src/backend/src/routes/cs.routes.ts`<br>`src/backend/src/routes/auth.routes.ts` | - |
+| 13 | C13 | KategoriJasa | `src/backend/src/models/KategoriJasa.ts`<br>`src/backend/prisma/schema.prisma` (`model KategoriJasa`) | - |
+| 14 | C14 | KategoriJasaUI | `src/frontend/src/views/service/ServiceRegistrationView.tsx`<br>`src/frontend/src/views/home/HomeView.tsx`<br>`src/frontend/src/views/home/SearchRecommendationView.tsx` | - |
+| 15 | C15 | KategoriJasaController | `src/backend/src/controllers/KategoriJasaController.ts`<br>`src/backend/src/routes/services.routes.ts`<br>`src/frontend/src/controllers/useCatalogController.ts` | - |
+| 16 | C16 | KontrakPekerjaan | `src/backend/src/models/KontrakPekerjaan.ts`<br>`src/backend/prisma/schema.prisma` (`model KontrakPekerjaan`)<br>`src/backend/src/workers/autoCancelKontrakWorker.ts` | - |
+| 17 | C17 | KontrakPekerjaanUI | `src/frontend/src/components/chat/ContractCard.tsx`<br>`src/frontend/src/views/chat/CustomerChatView.tsx`<br>`src/frontend/src/views/chat/ProviderChatView.tsx`<br>`src/frontend/src/views/history/CustomerHistoryView.tsx`<br>`src/frontend/src/views/history/ProviderHistoryView.tsx`<br>`src/frontend/src/controllers/useContractController.ts`<br>`src/frontend/src/services/contractService.ts` | - |
+| 18 | C18 | KontrakPekerjaanController | `src/backend/src/controllers/KontrakPekerjaanController.ts`<br>`src/backend/src/routes/kontrakRoutes.ts` | - |
+| 19 | C19 | Komunikasi | `src/backend/src/models/Komunikasi.ts`<br>`src/backend/prisma/schema.prisma` (`model Komunikasi`) | - |
+| 20 | C20 | KomunikasiUI | `src/frontend/src/views/ChatScreen.tsx`<br>`src/frontend/src/views/chat/ConversationListView.tsx`<br>`src/frontend/src/views/chat/CustomerChatView.tsx`<br>`src/frontend/src/views/chat/ProviderChatView.tsx`<br>`src/frontend/src/views/chat/ChatRoom.tsx`<br>`src/frontend/src/components/chat/ChatBubble.tsx`<br>`src/frontend/src/components/chat/MessageInput.tsx`<br>`src/frontend/src/components/chat/ChatHeader.tsx`<br>`src/frontend/src/components/chat/ConversationCard.tsx`<br>`src/frontend/src/components/chat/SearchField.tsx`<br>`src/frontend/src/controllers/useChatController.ts`<br>`src/frontend/src/services/chatService.ts` | - |
+| 21 | C21 | KomunikasiController | `src/backend/src/controllers/KomunikasiController.ts`<br>`src/backend/src/routes/chats.routes.ts`<br>`src/backend/src/server.ts` | - |
+| 22 | C22 | TiketLaporan | `src/backend/src/models/TiketLaporan.ts`<br>`src/backend/prisma/schema.prisma` (`model TiketLaporan`)<br>`src/backend/prisma/migrations/20261112100000_tiket_nomor_sequence/migration.sql` | - |
+| 23 | C23 | TiketLaporanUI | `src/frontend/src/views/ticket/CreateTicketScreen.tsx`<br>`src/frontend/src/views/ticket/TicketDetailScreen.tsx`<br>`src/frontend/src/views/ticket/MyTicketsScreen.tsx`<br>`src/frontend/src/services/ticketService.ts` | - |
+| 24 | C24 | TiketLaporanController | `src/backend/src/controllers/TiketLaporanController.ts`<br>`src/backend/src/routes/tickets.routes.ts`<br>`src/backend/src/middlewares/upload.middleware.ts` | - |
+| 25 | C25 | Rating | `src/backend/src/models/Rating.ts`<br>`src/backend/prisma/schema.prisma` (`model Rating`) | - |
+| 26 | C26 | RatingUI | src/frontend/src/views/rating/RatingView.tsx<br>src/frontend/src/controllers/useRatingController.ts<br>src/frontend/src/services/ratingService.ts | - |
+| 27 | C27 | RatingController | src/backend/src/controllers/RatingController.ts<br>src/backend/src/routes/ratings.routes.ts | - |
+| 28 | C28 | Notifikasi | src/backend/src/models/Notifikasi.ts<br>src/backend/prisma/schema.prisma (model Notifikasi) | - |
+| 29 | C29 | NotifikasiUI | src/frontend/src/views/chat/notifications/NotificationView.tsx<br>src/frontend/src/components/notifications/NotificationCard.tsx<br>src/frontend/src/controllers/useNotificationController.ts<br>src/frontend/src/services/notificationService.ts<br>src/frontend/src/context/UnreadContext.tsx<br>src/frontend/src/components/chat/UnreadBadge.tsx | - |
+| 30 | C30 | NotifikasiController | src/backend/src/controllers/NotifikasiController.ts <br> src/backend/src/routes/notifications.routes.ts | - |
 
 ## 3.3 Implementasi Antarmuka
 
@@ -247,9 +274,28 @@ Tabel 3.3. Implementasi Antarmuka
 
 | No | ID Antarmuka | Nama Antarmuka | Nama File Fisik | Nama File Executable |
 | :--- | :--- | :--- | :--- | :--- |
-| 1 | *[I-01]* | *[Nama layar]* | *[path/ke/file]* | *[Nama file executable, atau - jika tidak ada]* |
-| 2 | *[I-02]* | *[Nama layar]* | *[path/ke/file]* | *[...]* |
-| ... | *...* | *...* | *...* | *...* |
+| 1 | UI-01 (I-01) | Login | `src/frontend/src/views/auth/LoginView.tsx.` | - |
+| 2 | UI-02 (I-02) | Buat Akun Pengguna | `src/frontend/src/views/auth/RegisterCustomerView.tsx` | - |
+| 3 | UI-03 (I-03) | Buat Akun Pemilik Jasa | src/frontend/src/views/auth/RegisterCustomerView.tsx | - |
+| 4 | UI-04 (I-04) | Home / Beranda | `src/frontend/src/views/home/HomeView.tsx` | - |
+| 5 | UI-05 (I-05) | Rekomendasi Pencarian | src/frontend/src/views/home/SearchRecommendationView.tsx | - |
+| 6 | UI-06 (I-06) | Hasil Pencarian | src/frontend/src/views/home/SearchResultView.tsx <br> src/frontend/src/components/MapViewCard.tsx | - |
+| 7 | UI-07 (I-07) | Daftar Pesan | src/frontend/src/views/chat/CustomerChatView.tsx <br> src/frontend/src/views/ChatScreen.tsx | - |
+| 8 | UI-08 (I-08) | Ruang Obrolan (Chat Channel) Pelanggan | src/frontend/src/views/chat/CustomerChatView.tsx <br> src/frontend/src/views/chat/ChatRoom.tsx <br> src/frontend/src/components/chat/ContractCard.tsx | - | 
+| 9 | UI-09 (I-09) | Ruang Obrolan (Chat Channel) Pemilik Jasa | src/frontend/src/views/chat/ProviderChatView.tsx <br> src/frontend/src/views/chat/ChatRoom.tsx <br> src/frontend/src/components/chat/ContractCard.tsx | - | 
+| 10 | UI-10 (I-10) | Riwayat (Pelanggan) | src/frontend/src/views/history/CustomerHistoryView.tsx <br> src/frontend/src/views/RiwayatScreen.tsx | - |
+| 11 | UI-11 (I-11) | Beri Penilaian | src/frontend/src/views/rating/RatingView.tsx | - |
+| 12 | UI-12 (I-12) | Riwayat Pekerjaan (Pemilik Jasa) | src/frontend/src/views/history/ProviderHistoryView.tsx <br> src/frontend/src/views/RiwayatScreen.tsx |
+| 13 | UI-13 (I-13) | Notifikasi | src/frontend/src/views/chat/notifications/NotificationView.tsx <br> src/frontend/src/components/notifications/NotificationCard.tsx | - |
+| 14 | UI-14 (I-14) | Profil | src/frontend/src/views/profile/ProfileView.tsx | - |
+| 15 | UI-15 (I-15) | Buat Tiket Laporan | src/frontend/src/views/ticket/CreateTicketScreen.tsx | - |
+| 16 | UI-16 (I-16) | Daftar Penyedia Jasa | src/frontend/src/views/service/ServiceRegistrationView.tsx <br> src/frontend/src/views/home/SearchResultView.tsx | - |
+| 17 | UI-17 (I-17) | Home untuk CS | src/frontend/src/views/ticket/CSDashboardScreen.tsx <br> src/frontend/src/views/cs/CSHomeView.tsx | - |
+| 18 | UI-18 (I-18) | Detail Tiket (Chat Channel CS & Pelapor) | src/frontend/src/views/ticket/TicketDetailScreen.tsx | - |
+| 19 | UI-19 (I-19) | Tiket Saya | src/frontend/src/views/ticket/MyTicketsScreen.tsx | - |
+
+
+
 
 ## 3.4 File Lain
 
