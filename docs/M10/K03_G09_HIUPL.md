@@ -7,24 +7,24 @@ HASIL IMPLEMENTASI DAN UJI PERANGKAT LUNAK (HIUPL)
 </h1>
 <br>
 
-## *Nama Perangkat Lunak*
-### *[Logo Perangkat Lunak]*
+## Cari Uang
+### <img src="../M7/assets/diagram//cariuang.svg" width="100" height="100">
 
-### Untuk: *[Nama Asisten]*
+### Untuk: Agatha Tatianingseto
 
 Dipersiapkan oleh:
 | Informasi | Keterangan |
 | --- | --- |
-| Kelas | *\[Kelas\]* |
-| Kelompok | *\[Nomor Kelompok\]*  |
+| Kelas | 3 |
+| Kelompok | 9 |
 
 | NIM | Nama |
 |---|---|
-| *[NIM 1]* | *[Nama Anggota 1]* |
-| *[NIM 2]* | *[Nama Anggota 2]* |
-| *[NIM 3]* | *[Nama Anggota 3]* |
-| *[NIM 4]* | *[Nama Anggota 4]* |
-| *[NIM 5]* | *[Nama Anggota 5]* |
+| 13525120 | Naufal Hasbialhaq |
+| 13525009 | Wimar Widiarto |
+| 13525093 | Vinsensius Juan Setiady |
+| 13525126 | Raymond Edson Sabajan |
+| 13525048 | Yohanes Nicholas Setiawan |
 
 ---
 
@@ -92,28 +92,32 @@ Tabel 1.3. Definisi Istilah dan Singkatan
 | *INT* | *Singkatan dari Integration Test, yaitu test case yang menguji interaksi antarkomponen.* |
 | *Boundary* | *Kasus uji pada nilai batas masukan, misalnya nilai minimum, maksimum, atau tepat di ambang aturan.* |
 | *Coverage* | *Persentase baris/cabang kode yang dieksekusi oleh pengujian.* |
-| *...* | *...* |
 
 ## 1.4 Aturan Penomoran
-Tuliskan aturan penomoran (ID) yang digunakan dalam dokumen ini. Gunakan pola ID yang **sama** dengan yang sudah dipakai pada dokumen-dokumen sebelumnya (SKPL, APL, DPPL), kecuali untuk ID pengujian yang baru diperkenalkan pada dokumen ini.
 
 Tabel 1.4. Aturan Penomoran
 
 | Hal/Bagian | Penomoran | Keterangan |
 | :--- | :--- | :--- |
-| *Kebutuhan Fungsional* | *KFXX* | *Sesuai SKPL* |
-| *Kebutuhan Non-Fungsional* | *KNFXX* | *Sesuai SKPL* |
-| *Use Case* | *UCXX* | *Sesuai SKPL* |
-| *Kelas* | *CXX* | *Sesuai DPPL* |
-| *Antarmuka* | *I-XX* | *Sesuai DPPL* |
+| *Kebutuhan Fungsional* | *KFXX* | *XX Menyatakan ID kebutuhan fungsional dari perangkat lunak* |
+| *Kebutuhan Non-Fungsional* | *KNFXX* | *XX Menyatakan ID kebutuhan non fungsional dari perangkat lunak* |
+| *Use Case* | *UCXX* | *XX Menyatakan ID kasus yang mungkin terjadi di perangkat lunak* |
+| *Kelas* | *CXX* | *XX Menyatakan ID kelas di perangkat lunak* |
+| *Antarmuka* | *I-XX* | *XX Menyatakan ID antarmuka di perangkat lunak* |
 | *Test Case Unit* | *CXX-UTYY* | *XX adalah nomor kelas, YY adalah nomor urut test case unit pada kelas tersebut* |
 | *Test Case Integrasi* | *INT-TCYY* | *YY adalah nomor urut test case integrasi* |
 | *Test Case Use Case* | *UCXX-TCYY* | *XX adalah nomor use case, YY adalah nomor urut test case pada use case tersebut* |
 | *Test Case KNF* | *KNFXX-TCYY* | *XX adalah nomor KNF, YY adalah nomor urut test case pada KNF tersebut* |
-| *...* | *...* | *...* |
 
 ## 1.5 Referensi
-Cantumkan daftar buku, panduan, atau dokumentasi lain yang dirujuk dalam pembuatan dokumen dan pengembangan P/L, **minimal dokumen SKPL, APL, DPPL, dan Implementasi (Tugas 9)**. Tambahkan dokumentasi *framework*/*library*/*testing tool* atau referensi lain apabila digunakan.
+- [Dokumen SKPL](../M5/K03_G09_SKPL.md)
+- [Dokumen APL](../M6/K03_G09_APL.md)
+- [Dokumen DPPL](../M7/DPPL.md)
+- [Dokumen DPPL2](../M8/K03_G09_DPPL2.md)
+- [Dokumen Implementasi](../M9/K03_G09_Implementasi.md)
+- [Dokumentasi ExpressJS](https://expressjs.com/)
+- [Dokumentasi React Expo](https://expressjs.com/)
+- [Dokumentasi Jest](https://jestjs.io/docs/getting-started)
 
 ## 1.6 Deskripsi Umum Dokumen (Ikhtisar)
 Tuliskan sistematika pembahasan dokumen ini secara ringkas dan runut bab demi bab, dengan maksimal 1 paragraf.
