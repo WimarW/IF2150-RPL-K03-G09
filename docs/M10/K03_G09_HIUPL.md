@@ -1002,9 +1002,8 @@ Tabel 4.4.11. Hasil Pengujian Use Case [UC11]
 
 | ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| *UC11-TC01* | *[KFXX]* | *Normal* | *[Langkah-langkah pengujian]* | *[Data masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *[Pass/Fail. Jika Fail: penjelasan dan solusi]* |
-| *UC11-TC02* | *[KFXX]* | *Alternatif 1: [Nama skenario]* | *[Langkah-langkah pengujian]* | *[Data masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *[Pass/Fail. Jika Fail: penjelasan dan solusi]* |
-| *...* | *...* | *...* | *...* | *...* | *...* | *...* | *...* |
+| UC11-TC01 | KF21 | Normal | 1. Buka halaman **Login**.<br>2. Masukkan email dan password akun terdaftar.<br>3. Tekan **"Lanjut →"**.<br>4. Ulangi untuk peran Pelanggan, Pemberi Jasa, dan CS. | CS: `cs@cariuang.id` / `PasswordAman123`<br>Pemberi Jasa: `ahmad@cariuang.id` / `PasswordAman123`<br>Pelanggan: `budi@pelanggan.com` / `PasswordAman123` | Login berhasil dan pengguna diarahkan ke beranda sesuai perannya. | Ketiga akun berhasil login: CS masuk ke **Beranda CS**, sedangkan Ahmad dan Budi masuk ke **Beranda** sesuai akun masing-masing (bukti pada 4.6). | Pass |
+| UC11-TC02 | KF21 | Alternatif 1: Verifikasi data login yang invalid | 1. Buka halaman **Login**.<br>2. Masukkan username/email dan password yang tidak valid.<br>3. Tekan **"Lanjut →"**. | Email/Username: `naufalhasbialhaq`<br>Password: password tidak valid | Login ditolak dan muncul pesan kesalahan kredensial di halaman **Login**. | Muncul banner merah `"Username/email atau password salah."` dan tetap di halaman **Login** (bukti pada 4.6). | Pass |
 
 ### 4.4.12 Use Case Mendaftar akun ke perangkat lunak
 
@@ -1015,9 +1014,8 @@ Tabel 4.4.12. Hasil Pengujian Use Case [UC12]
 
 | ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| *UC12-TC01* | *[KFXX]* | *Normal* | *[Langkah-langkah pengujian]* | *[Data masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *[Pass/Fail. Jika Fail: penjelasan dan solusi]* |
-| *UC12-TC02* | *[KFXX]* | *Alternatif 1: [Nama skenario]* | *[Langkah-langkah pengujian]* | *[Data masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *[Pass/Fail. Jika Fail: penjelasan dan solusi]* |
-| *...* | *...* | *...* | *...* | *...* | *...* | *...* | *...* |
+| UC12-TC01 | KF21 | Normal | 1. Buka halaman **Buat akun pengguna** lewat **"Daftar sekarang"**.<br>2. Isi seluruh kolom valid dan centang Ketentuan Layanan.<br>3. Tekan **"Buat Akun →"**. | Nama: `Rina Uji Coba`<br>Email: `rina.uji@gmail.com`<br>Password & Konfirmasi: `PasswordAman123`<br>Ketentuan Layanan: dicentang | Akun tersimpan dan pengguna langsung masuk ke halaman **Beranda**. | Akun berhasil dibuat dan langsung diarahkan ke **Beranda** (`Halo, Rina!`, avatar `RU`) (bukti pada 4.6). | Pass |
+| UC12-TC02 | KF21 | Alternatif 1: Verifikasi data yang invalid pada daftar | 1. Buka halaman **Buat akun pengguna**.<br>2. Uji input format salah (email, password < 8 karakter, konfirmasi berbeda).<br>3. Uji input valid dengan email yang sudah terdaftar, lalu tekan **"Buat Akun →"**. | **Uji 1:** `Rina Uji`, `rinatanpaat`, `12335`, konfirmasi `123456`<br>**Uji 2:** `Budi Duplikat`, `budi@pelanggan.com`, `PasswordAman123` (ketentuan dicentang) | Uji 1 menampilkan error validasi instan dan tombol tetap nonaktif; Uji 2 ditolak server karena email sudah terdaftar. | Uji 1 menampilkan error format email, password min. 8 karakter, dan konfirmasi tidak cocok (tombol nonaktif); Uji 2 menampilkan banner `"Email sudah terdaftar. Silakan gunakan alamat email lain."` (bukti pada 4.6). | Pass |
 
 <br>
 
@@ -1064,6 +1062,10 @@ Tabel 4.6. Bukti Hasil Pengujian
 | UC03-TC02 | <img src="./assets/UC03-TestAlt1-1.png.jpeg" width="240"> |
 | UC04-TC01 | <img src="./assets/UC04-TestNormal-1.png.jpeg" width="240"> <img src="./assets/UC04-TestNormal-2.png.jpeg" width="240"> |
 | UC04-TC02 | <img src="./assets/UC04-TestAlt1-1.png.jpeg" width="240"> <img src="./assets/UC04-TestAlt1-2.png.jpeg" width="240"> |
+| UC11-TC01 | <img src="./assets/UC11-NormalTest-1.png.jpeg" width="220"> <img src="./assets/UC11-NormalTest-2.png.jpeg" width="220"> <img src="./assets/UC11-NormalTest-3.png.jpeg" width="220"> |
+| UC11-TC02 | <img src="./assets/UC11-NormalAlt1-1.png.jpeg" width="240"> |
+| UC12-TC01 | <img src="./assets/UC12-TestNormal-1.png.jpeg" width="240"> <img src="./assets/UC12-TestNormal-2.png.jpeg" width="240"> |
+| UC12-TC02 | <img src="./assets/UC12-TestAlt1-1.png.jpeg" width="240"> <img src="./assets/UC12-TestAlt1-2.png.jpeg" width="240"> |
 | *KNF01-TC01* | *[Sisipkan bukti pengukuran parameter KNF01-TC01]* |
 
 <br>
