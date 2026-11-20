@@ -100,10 +100,13 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 
 
 
-### Milestone 9
+### Milestone 10
 | Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
 | :--- | :--- | :--- | :--- |
 | Gemini | Memberi input testing berdasarkan data test dan memberi ide prosedur | beri ide prosedur untu mengetest use case ini | Mengecek ulang hasil AI |
+| Gemini | Membantu pembuatan dan perbaikan test script | Mengecek ulang hasil AI |
+| Gemini | Pembuatan Test script KNF | Mengecek ulang hasil test script dan kesesuaian hasilnya | 
+
 
 ---
 ### Pernyataan Integritas dan Persetujuan

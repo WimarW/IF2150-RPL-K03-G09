@@ -169,3 +169,6 @@
 | :--- | :--- | :--- | :--- | :--- | :--- | 
 | 20-11-2026 | Naufal Hasbialhaq |  4.4.1 4.4.2 4.4.3 4.4.4 | 3 jam | Done | - |
 | 20-11-2026 | Raymond Edson Sabajan |  4.4.5 4.4.6 4.4.7 | 3 jam | Done | - |
+| 20-11-2026 | Wimar Widiarto | Bab 1, 2, 4.2.1-4.2.10, 4.5 | 5 jam | Done | - |
+| 20-11-2026 | Yohanes Nicholas Setiawan | 4.2.11-4.2.20, 4.4.10, 4.3, 5 | 5 jam | Done | - |
+| 20-11-2026 | Vinsensius Juan Setiady | 4.4.8,4.4.9, Bab 3 | 3 Jam | Done | - | 
