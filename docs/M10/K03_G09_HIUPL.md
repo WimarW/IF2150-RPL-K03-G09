@@ -152,8 +152,7 @@ Dokumen Hasil Implementasi dan Uji Perangkat Lunak (HIUPL) ini disusun untuk men
 - [Dokumentasi Jest](https://jestjs.io/docs/getting-started)
 
 ## 1.6 Deskripsi Umum Dokumen (Ikhtisar)
-Tuliskan sistematika pembahasan dokumen ini secara ringkas dan runut bab demi bab, dengan maksimal 1 paragraf.
-
+Dokumen Hasil Implementasi dan Uji Perangkat Lunak (HIUPL) CariUang ini disusun secara runut dalam lima bab, diawali oleh BAB 1 Pendahuluan yang menjelaskan tujuan penulisan dokumen, lingkup masalah, definisi istilah dan singkatan, aturan penomoran, referensi, serta ikhtisar dokumen. Dilanjutkan oleh BAB 2 Deskripsi Umum Perangkat Lunak yang memaparkan gambaran umum sistem (system overview), batasan dan keterkaitannya dengan sistem eksternal, serta pemodelan kasus penggunaan (use case). Kemudian BAB 3 Implementasi yang menjelaskan lingkungan implementasi beserta daftar modul/kelas, antarmuka pengguna, dan berkas pendukung lain yang telah dibangun. Berikutnya BAB 4 Hasil Pengujian yang melaporkan strategi dan kedalaman pengujian kelas, hasil pengujian unit, pengujian integrasi antarkomponen, pengujian use case, pengujian kebutuhan non-fungsional (KNF), serta bukti tangkapan layar hasil pengujian. Diakhiri oleh BAB 5 Traceability yang menyajikan matriks kerunutan antara kebutuhan fungsional dan non-fungsional terhadap use case, kelas perancangan, berkas implementasi, dan kasus uji sebagai sarana verifikasi pemenuhan spesifikasi perangkat lunak.
 <br>
 
 ---
