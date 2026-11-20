@@ -115,6 +115,8 @@ Tabel 1.4. Aturan Penomoran
 - [Dokumen DPPL](../M7/DPPL.md)
 - [Dokumen DPPL2](../M8/K03_G09_DPPL2.md)
 - [Dokumen Implementasi](../M9/K03_G09_Implementasi.md)
+- [Dokumentasi Node.js](https://nodejs.org/docs/latest/api/)
+- [Dokumentasi Prisma ORM](https://www.prisma.io/docs/getting-started)
 - [Dokumentasi ExpressJS](https://expressjs.com/)
 - [Dokumentasi React Expo](https://expressjs.com/)
 - [Dokumentasi Jest](https://jestjs.io/docs/getting-started)
