@@ -460,6 +460,106 @@ describe('Rating System Unit & Integration Tests [KF19, KF20 | UC10 | ALGO-056 s
 
       expect(() => pengguna.addNewRatingRiwayat(0)).toThrow(/rentang 1 hingga 5/i);
       expect(() => pengguna.addNewRatingRiwayat(6)).toThrow(/rentang 1 hingga 5/i);
+
+      const penggunaBatas = new Pengguna({ idPengguna: 'u-local-batas' });
+      penggunaBatas.addNewRatingRiwayat(1);
+      penggunaBatas.addNewRatingRiwayat(5);
+      expect(penggunaBatas.getRiwayatRating()).toEqual([1, 5]);
+      expect(penggunaBatas.getAkumulasiRating()).toBe(3);
+    });
+  });
+
+  describe('Validasi Negatif & Error Handling RatingController [C27 | KF19, KF20]', () => {
+    it('[C27] createRating menolak 401 unauth, 400 payload invalid (kontrak/nilai/ulasan/tags/penerima), 404 kontrak tidak ada, dan 403 bukan peserta kontrak', async () => {
+      // 401: tanpa user login
+      const reqUnauth = { body: { idKontrakPekerjaan: 'contract-done-1', nilaiRating: 5 } } as unknown as Request;
+      const resUnauth = createMockResponse();
+      await RatingController.createRating(reqUnauth, resUnauth);
+      expect(resUnauth.statusCode).toBe(401);
+
+      // 400: idKontrakPekerjaan kosong
+      const reqNoContract = {
+        user: { idPengguna: 'user-pelanggan-1', role: Role.PELANGGAN },
+        body: { idKontrakPekerjaan: '   ', nilaiRating: 5 },
+      } as unknown as Request;
+      const resNoContract = createMockResponse();
+      await RatingController.createRating(reqNoContract, resNoContract);
+      expect(resNoContract.statusCode).toBe(400);
+
+      // 400: nilaiRating di luar 1..5
+      const reqBadScore = {
+        user: { idPengguna: 'user-pelanggan-1', role: Role.PELANGGAN },
+        body: { idKontrakPekerjaan: 'contract-done-1', nilaiRating: 6 },
+      } as unknown as Request;
+      const resBadScore = createMockResponse();
+      await RatingController.createRating(reqBadScore, resBadScore);
+      expect(resBadScore.statusCode).toBe(400);
+
+      // 400: ulasan bukan string
+      const reqBadUlasan = {
+        user: { idPengguna: 'user-pelanggan-1', role: Role.PELANGGAN },
+        body: { idKontrakPekerjaan: 'contract-done-1', nilaiRating: 5, ulasan: 12345 },
+      } as unknown as Request;
+      const resBadUlasan = createMockResponse();
+      await RatingController.createRating(reqBadUlasan, resBadUlasan);
+      expect(resBadUlasan.statusCode).toBe(400);
+
+      // 400: tags bukan array of string
+      const reqBadTags = {
+        user: { idPengguna: 'user-pelanggan-1', role: Role.PELANGGAN },
+        body: { idKontrakPekerjaan: 'contract-done-1', nilaiRating: 5, tags: [123, true] },
+      } as unknown as Request;
+      const resBadTags = createMockResponse();
+      await RatingController.createRating(reqBadTags, resBadTags);
+      expect(resBadTags.statusCode).toBe(400);
+
+      // 404: kontrak tidak ditemukan
+      const reqNotFound = {
+        user: { idPengguna: 'user-pelanggan-1', role: Role.PELANGGAN },
+        body: { idKontrakPekerjaan: 'contract-missing', nilaiRating: 5 },
+      } as unknown as Request;
+      const resNotFound = createMockResponse();
+      await RatingController.createRating(reqNotFound, resNotFound);
+      expect(resNotFound.statusCode).toBe(404);
+
+      // 403: bukan pihak dalam kontrak
+      const reqForbidden = {
+        user: { idPengguna: 'user-mitra-multi', role: Role.PEMBERI_JASA },
+        body: { idKontrakPekerjaan: 'contract-done-1', nilaiRating: 5 },
+      } as unknown as Request;
+      const resForbidden = createMockResponse();
+      await RatingController.createRating(reqForbidden, resForbidden);
+      expect(resForbidden.statusCode).toBe(403);
+
+      // 400: idPenggunaPenerima tidak cocok dengan mitra kontrak
+      const reqMismatch = {
+        user: { idPengguna: 'user-pelanggan-1', role: Role.PELANGGAN },
+        body: {
+          idKontrakPekerjaan: 'contract-done-1',
+          idPenggunaPenerima: 'user-mitra-multi',
+          nilaiRating: 5,
+        },
+      } as unknown as Request;
+      const resMismatch = createMockResponse();
+      await RatingController.createRating(reqMismatch, resMismatch);
+      expect(resMismatch.statusCode).toBe(400);
+    });
+
+    it('[C27] createRating & getRatingsByUser mengembalikan 500 saat terjadi kesalahan tak terduga pada DB', async () => {
+      (prisma.kontrakPekerjaan.findUnique as jest.Mock).mockRejectedValueOnce(new Error('DB failure'));
+      const reqErr = {
+        user: { idPengguna: 'user-pelanggan-1', role: Role.PELANGGAN },
+        body: { idKontrakPekerjaan: 'contract-done-1', nilaiRating: 5 },
+      } as unknown as Request;
+      const resErr = createMockResponse();
+      await RatingController.createRating(reqErr, resErr);
+      expect(resErr.statusCode).toBe(500);
+
+      (prisma.pengguna.findUnique as jest.Mock).mockRejectedValueOnce(new Error('DB failure'));
+      const reqGetErr = { params: { id: 'user-mitra-multi' } } as unknown as Request<{ id: string }>;
+      const resGetErr = createMockResponse();
+      await RatingController.getRatingsByUser(reqGetErr, resGetErr);
+      expect(resGetErr.statusCode).toBe(500);
     });
   });
 

@@ -52,6 +52,8 @@ const mockStore = {
   kategoriJasa: new Map<string, MockKategoriRow>(),
   pemberiJasa: new Map<string, MockPemberiJasaRow>(),
   layananPelanggan: new Map<string, MockLayananPelangganRow>(),
+  kontrakPekerjaan: new Map<string, any>(),
+  ratings: [] as any[],
 };
 
 jest.mock('../src/database/prisma', () => {
@@ -124,9 +126,48 @@ jest.mock('../src/database/prisma', () => {
           }
           return result;
         }),
-        findUnique: jest.fn(async ({ where }: any) => {
+        findUnique: jest.fn(async ({ where, include }: any) => {
           const found = mockStore.pengguna.get(where.idPengguna);
-          return found ? { ...found } : null;
+          if (!found) return null;
+          const result: any = { ...found };
+          if (include?.pemberiJasa) {
+            const pj = mockStore.pemberiJasa.get(found.idPengguna) ?? null;
+            if (pj && include.pemberiJasa?.include?.kategoriJasa) {
+              const kat = pj.idKategoriJasa
+                ? mockStore.kategoriJasa.get(pj.idKategoriJasa) ?? null
+                : null;
+              result.pemberiJasa = { ...pj, kategoriJasa: kat };
+            } else {
+              result.pemberiJasa = pj ? { ...pj } : null;
+            }
+          }
+          if (include?.layananPelanggan) {
+            const cs = mockStore.layananPelanggan.get(found.idPengguna) ?? null;
+            result.layananPelanggan = cs ? { ...cs } : null;
+          }
+          return result;
+        }),
+        update: jest.fn(async ({ where, data, include }: any) => {
+          const existing = mockStore.pengguna.get(where.idPengguna);
+          if (!existing) throw new Error('User not found');
+          const updated: MockPenggunaRow = {
+            ...existing,
+            ...(data.namaPengguna !== undefined ? { namaPengguna: data.namaPengguna } : {}),
+            ...(data.nomorTelpon !== undefined ? { nomorTelpon: data.nomorTelpon } : {}),
+            ...(data.email !== undefined ? { email: data.email } : {}),
+            ...(data.avatarUrl !== undefined ? { avatarUrl: data.avatarUrl } : {}),
+          };
+          mockStore.pengguna.set(where.idPengguna, updated);
+          const result: any = { ...updated };
+          if (include?.pemberiJasa) {
+            const pj = mockStore.pemberiJasa.get(updated.idPengguna) ?? null;
+            result.pemberiJasa = pj ? { ...pj, kategoriJasa: null } : null;
+          }
+          if (include?.layananPelanggan) {
+            const cs = mockStore.layananPelanggan.get(updated.idPengguna) ?? null;
+            result.layananPelanggan = cs ? { ...cs } : null;
+          }
+          return result;
         }),
         create: jest.fn(async ({ data }: any) => {
           const row: MockPenggunaRow = {
@@ -180,6 +221,23 @@ jest.mock('../src/database/prisma', () => {
           return { ...row };
         }),
       },
+      kontrakPekerjaan: {
+        findUnique: jest.fn(async ({ where }: any) => {
+          const kontrak = mockStore.kontrakPekerjaan.get(where.idKontrakPekerjaan);
+          return kontrak ? { ...kontrak } : null;
+        }),
+      },
+      rating: {
+        findFirst: jest.fn(async ({ where }: any) => {
+          return (
+            mockStore.ratings.find(
+              (r) =>
+                r.idKontrakPekerjaan === where.idKontrakPekerjaan &&
+                r.idPenggunaPemberi === where.idPenggunaPemberi
+            ) ?? null
+          );
+        }),
+      },
       $transaction: jest.fn(async (callback: any): Promise<any> => {
         return callback(delegates);
       }),
@@ -195,8 +253,11 @@ jest.mock('../src/database/prisma', () => {
   };
 });
 
-function createMockReqRes(body: Record<string, unknown> = {}) {
-  const req = { body } as unknown as Request;
+function createMockReqRes(
+  body: Record<string, unknown> = {},
+  options: { user?: { idPengguna: string; username: string; role: Role }; params?: Record<string, string> } = {}
+) {
+  const req = { body, user: options.user, params: options.params ?? {} } as unknown as Request;
   let statusCode = 200;
   let jsonPayload: any = null;
 
@@ -225,6 +286,8 @@ describe('Sistem Autentikasi: Registrasi & Login Multi-Role [KF21 | UC11, UC12]'
     mockStore.kategoriJasa.clear();
     mockStore.pemberiJasa.clear();
     mockStore.layananPelanggan.clear();
+    mockStore.kontrakPekerjaan.clear();
+    mockStore.ratings.length = 0;
     jest.restoreAllMocks();
   });
 
@@ -642,6 +705,204 @@ describe('Sistem Autentikasi: Registrasi & Login Multi-Role [KF21 | UC11, UC12]'
       expect(csBody.success).toBe(true);
       expect(csBody.data.token).toBeTruthy();
       expect(csBody.data.user.role).toBe(Role.LAYANAN_PELANGGAN);
+    });
+  });
+
+  describe('Profil Pengguna & Verifikasi Trigger Rating [C03 PenggunaController]', () => {
+    beforeEach(() => {
+      mockStore.pengguna.set('u-pel-1', {
+        idPengguna: 'u-pel-1',
+        namaPengguna: 'Budi Santoso',
+        username: 'budi_pel',
+        password: 'hashed-password',
+        email: 'budi@cariuang.id',
+        nomorTelpon: '081234567890',
+        role: Role.PELANGGAN,
+        avatarUrl: null,
+        akumulasiRating: 4.5,
+        riwayatRating: [4, 5],
+      });
+      mockStore.pengguna.set('u-mitra-1', {
+        idPengguna: 'u-mitra-1',
+        namaPengguna: 'Ahmad Teknik',
+        username: 'ahmad_mitra',
+        password: 'hashed-password',
+        email: 'ahmad@cariuang.id',
+        nomorTelpon: '081298765432',
+        role: Role.PEMBERI_JASA,
+        avatarUrl: 'https://cdn.example.com/ahmad.png',
+        akumulasiRating: 4.9,
+        riwayatRating: [5],
+      });
+      mockStore.pemberiJasa.set('u-mitra-1', {
+        idPemberiJasa: 'u-mitra-1',
+        namaToko: 'Ahmad Jaya AC',
+        idKategoriJasa: 'kat-ac-1',
+        jenisJasa: 'Servis AC',
+        latitude: -6.9,
+        longitude: 107.6,
+        statusKetersediaan: 'Available',
+        isOnline: true,
+        version: 1,
+      });
+      mockStore.pengguna.set('u-cs-1', {
+        idPengguna: 'u-cs-1',
+        namaPengguna: 'Rina CS',
+        username: 'rina_cs',
+        password: 'hashed-password',
+        email: 'rina@cariuang.id',
+        nomorTelpon: '081300001111',
+        role: Role.LAYANAN_PELANGGAN,
+        avatarUrl: null,
+        akumulasiRating: 0,
+        riwayatRating: [],
+      });
+      mockStore.layananPelanggan.set('u-cs-1', {
+        idLayananPelanggan: 'u-cs-1',
+        status: 'Available',
+        jumlahTiketDipegang: 1,
+      });
+      mockStore.kontrakPekerjaan.set('k-done-1', {
+        idKontrakPekerjaan: 'k-done-1',
+        idPelanggan: 'u-pel-1',
+        idPemberiJasa: 'u-mitra-1',
+        statusPekerjaan: 'Done',
+        hasRating: false,
+        detailPekerjaan: 'Cuci AC 2 unit',
+      });
+      mockStore.kontrakPekerjaan.set('k-progress-1', {
+        idKontrakPekerjaan: 'k-progress-1',
+        idPelanggan: 'u-pel-1',
+        idPemberiJasa: 'u-mitra-1',
+        statusPekerjaan: 'On Progress',
+        hasRating: false,
+        detailPekerjaan: 'Pasang stop kontak',
+      });
+    });
+
+    it('[C03] validasiUpdateProfil meloloskan input valid dan menolak field kosong atau format salah', () => {
+      const ok = PenggunaController.validasiUpdateProfil({
+        namaPengguna: '  Budi Baru  ',
+        email: '  Budi.Baru@CariUang.ID ',
+        nomorTelepon: '081234567890',
+        avatarUrl: 'https://cdn.example.com/budi.png',
+      });
+      expect(ok.valid).toBe(true);
+      expect(ok.sanitized).toEqual({
+        namaPengguna: 'Budi Baru',
+        email: 'budi.baru@cariuang.id',
+        nomorTelepon: '081234567890',
+        avatarUrl: 'https://cdn.example.com/budi.png',
+      });
+
+      expect(PenggunaController.validasiUpdateProfil({ namaPengguna: ' ', email: 'a@b.com', nomorTelpon: '081234567890' }).valid).toBe(false);
+      expect(PenggunaController.validasiUpdateProfil({ namaPengguna: 'A', email: ' ', nomorTelpon: '081234567890' }).valid).toBe(false);
+      expect(PenggunaController.validasiUpdateProfil({ namaPengguna: 'A', email: 'a@b.com', nomorTelpon: '' }).valid).toBe(false);
+      expect(PenggunaController.validasiUpdateProfil({ namaPengguna: 'A', email: 'invalid-email', nomorTelpon: '081234567890' }).valid).toBe(false);
+      expect(PenggunaController.validasiUpdateProfil({ namaPengguna: 'A', email: 'a@b.com', nomorTelpon: '0812abc' }).valid).toBe(false);
+    });
+
+    it('[C03] getProfile menangani 401 unauth, 404 tidak ditemukan, dan 200 untuk Pelanggan, PemberiJasa, serta CS', async () => {
+      const unauth = createMockReqRes();
+      await PenggunaController.getProfile(unauth.req, unauth.res);
+      expect(unauth.res.getStatus()).toBe(401);
+
+      const notFound = createMockReqRes({}, { user: { idPengguna: 'u-unknown', username: 'x', role: Role.PELANGGAN } });
+      await PenggunaController.getProfile(notFound.req, notFound.res);
+      expect(notFound.res.getStatus()).toBe(404);
+
+      const okPel = createMockReqRes({}, { user: { idPengguna: 'u-pel-1', username: 'budi_pel', role: Role.PELANGGAN } });
+      await PenggunaController.getProfile(okPel.req, okPel.res);
+      expect(okPel.res.getStatus()).toBe(200);
+      expect(okPel.res.getJson().data.email).toBe('budi@cariuang.id');
+
+      const okMitra = createMockReqRes({}, { user: { idPengguna: 'u-mitra-1', username: 'ahmad_mitra', role: Role.PEMBERI_JASA } });
+      await PenggunaController.getProfile(okMitra.req, okMitra.res);
+      expect(okMitra.res.getStatus()).toBe(200);
+      expect(okMitra.res.getJson().data.pemberiJasa.namaToko).toBe('Ahmad Jaya AC');
+
+      const okCs = createMockReqRes({}, { user: { idPengguna: 'u-cs-1', username: 'rina_cs', role: Role.LAYANAN_PELANGGAN } });
+      await PenggunaController.getProfile(okCs.req, okCs.res);
+      expect(okCs.res.getStatus()).toBe(200);
+      expect(okCs.res.getJson().data.layananPelanggan.status).toBe('Available');
+    });
+
+    it('[C03] updateProfile menangani 401, 400 validasi, 404 tidak ditemukan, 400 email duplikat, dan 200 sukses', async () => {
+      const unauth = createMockReqRes({ namaPengguna: 'X' });
+      await PenggunaController.updateProfile(unauth.req, unauth.res);
+      expect(unauth.res.getStatus()).toBe(401);
+
+      const badInput = createMockReqRes(
+        { namaPengguna: '', email: 'bad', nomorTelpon: '123' },
+        { user: { idPengguna: 'u-pel-1', username: 'budi_pel', role: Role.PELANGGAN } }
+      );
+      await PenggunaController.updateProfile(badInput.req, badInput.res);
+      expect(badInput.res.getStatus()).toBe(400);
+
+      const notFound = createMockReqRes(
+        { namaPengguna: 'Valid', email: 'valid@cariuang.id', nomorTelpon: '081234567890' },
+        { user: { idPengguna: 'u-missing', username: 'missing', role: Role.PELANGGAN } }
+      );
+      await PenggunaController.updateProfile(notFound.req, notFound.res);
+      expect(notFound.res.getStatus()).toBe(404);
+
+      const dupEmail = createMockReqRes(
+        { namaPengguna: 'Budi', email: 'ahmad@cariuang.id', nomorTelpon: '081234567890' },
+        { user: { idPengguna: 'u-pel-1', username: 'budi_pel', role: Role.PELANGGAN } }
+      );
+      await PenggunaController.updateProfile(dupEmail.req, dupEmail.res);
+      expect(dupEmail.res.getStatus()).toBe(400);
+
+      const okUpdate = createMockReqRes(
+        { namaPengguna: 'Budi Updated', email: 'budi.new@cariuang.id', nomorTelpon: '081299998888', avatarUrl: 'https://cdn.example.com/new.png' },
+        { user: { idPengguna: 'u-pel-1', username: 'budi_pel', role: Role.PELANGGAN } }
+      );
+      await PenggunaController.updateProfile(okUpdate.req, okUpdate.res);
+      expect(okUpdate.res.getStatus()).toBe(200);
+      expect(okUpdate.res.getJson().data.namaPengguna).toBe('Budi Updated');
+      expect(okUpdate.res.getJson().data.email).toBe('budi.new@cariuang.id');
+    });
+
+    it('[C03] verifikasiStatusPekerjaan dan triggerRating menangani seluruh status (401, 400, 403, 404, 200)', async () => {
+      expect(await PenggunaController.verifikasiStatusPekerjaan('')).toBe(false);
+      expect(await PenggunaController.verifikasiStatusPekerjaan('k-tidak-ada')).toBe(false);
+      expect(await PenggunaController.verifikasiStatusPekerjaan('k-progress-1')).toBe(false);
+      expect(await PenggunaController.verifikasiStatusPekerjaan('k-done-1')).toBe(true);
+
+      const unauth = createMockReqRes({}, { params: { idKontrak: 'k-done-1' } });
+      await PenggunaController.triggerRating(unauth.req, unauth.res);
+      expect(unauth.res.getStatus()).toBe(401);
+
+      const emptyParam = createMockReqRes({}, { user: { idPengguna: 'u-pel-1', username: 'budi_pel', role: Role.PELANGGAN }, params: { idKontrak: '   ' } });
+      await PenggunaController.triggerRating(emptyParam.req, emptyParam.res);
+      expect(emptyParam.res.getStatus()).toBe(400);
+
+      const notFound = createMockReqRes({}, { user: { idPengguna: 'u-pel-1', username: 'budi_pel', role: Role.PELANGGAN }, params: { idKontrak: 'k-none' } });
+      await PenggunaController.triggerRating(notFound.req, notFound.res);
+      expect(notFound.res.getStatus()).toBe(404);
+
+      const forbidden = createMockReqRes({}, { user: { idPengguna: 'u-cs-1', username: 'rina_cs', role: Role.LAYANAN_PELANGGAN }, params: { idKontrak: 'k-done-1' } });
+      await PenggunaController.triggerRating(forbidden.req, forbidden.res);
+      expect(forbidden.res.getStatus()).toBe(403);
+
+      const notDone = createMockReqRes({}, { user: { idPengguna: 'u-pel-1', username: 'budi_pel', role: Role.PELANGGAN }, params: { idKontrak: 'k-progress-1' } });
+      await PenggunaController.triggerRating(notDone.req, notDone.res);
+      expect(notDone.res.getStatus()).toBe(400);
+
+      const okPel = createMockReqRes({}, { user: { idPengguna: 'u-pel-1', username: 'budi_pel', role: Role.PELANGGAN }, params: { idKontrak: 'k-done-1' } });
+      await PenggunaController.triggerRating(okPel.req, okPel.res);
+      expect(okPel.res.getStatus()).toBe(200);
+      expect(okPel.res.getJson().data.idPenggunaPenerima).toBe('u-mitra-1');
+
+      const okMitra = createMockReqRes({}, { user: { idPengguna: 'u-mitra-1', username: 'ahmad_mitra', role: Role.PEMBERI_JASA }, params: { idKontrak: 'k-done-1' } });
+      await PenggunaController.triggerRating(okMitra.req, okMitra.res);
+      expect(okMitra.res.getStatus()).toBe(200);
+      expect(okMitra.res.getJson().data.idPenggunaPenerima).toBe('u-pel-1');
+
+      mockStore.ratings.push({ idKontrakPekerjaan: 'k-done-1', idPenggunaPemberi: 'u-pel-1' });
+      const alreadyRated = createMockReqRes({}, { user: { idPengguna: 'u-pel-1', username: 'budi_pel', role: Role.PELANGGAN }, params: { idKontrak: 'k-done-1' } });
+      await PenggunaController.triggerRating(alreadyRated.req, alreadyRated.res);
+      expect(alreadyRated.res.getStatus()).toBe(400);
     });
   });
 });

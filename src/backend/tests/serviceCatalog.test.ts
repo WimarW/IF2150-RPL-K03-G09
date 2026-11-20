@@ -689,4 +689,238 @@ describe('Issue #5: Backend Pendaftaran Jasa, Katalog Kategori, dan Pencarian Te
       expect(resObj.body.success).toBe(false);
     });
   });
+
+  describe('6. Cakupan Lengkap Operasi Public C04, C06, C13, C15 (Normal, Batas, Negatif)', () => {
+    beforeEach(() => {
+      jest.restoreAllMocks();
+    });
+
+    it('[C15] KategoriJasaController: showFormKategoriJasa, validateKategoriJasa (batas 0 & null), fetchKategoriJasaById, filterKategoriJasa, confirmDataTersimpan, dan handler HTTP', async () => {
+      const kCtrl = new KategoriJasaController(
+        new MockKategoriJasa(),
+        new PemberiJasaController(new MockPemberiJasa())
+      );
+
+      expect(kCtrl.showFormKategoriJasa()).toEqual({
+        jenisJasa: '',
+        deskripsiJasa: '',
+        tarif: 0,
+        jamKerja: '',
+        daerahKerja: '',
+      });
+      expect(kCtrl.validateKategoriJasa(null)).toBe(false);
+      expect(
+        kCtrl.validateKategoriJasa({
+          jenisJasa: 'Konsultasi Gratis',
+          deskripsiJasa: 'Survei lokasi',
+          tarif: 0,
+          jamKerja: '08:00 - 17:00',
+          daerahKerja: 'Bandung',
+        })
+      ).toBe(true);
+
+      await expect(
+        kCtrl.submitFormKategoriJasa({
+          jenisJasa: '',
+          deskripsiJasa: '',
+          tarif: -1,
+          jamKerja: '',
+          daerahKerja: '',
+        })
+      ).rejects.toThrow(/tidak valid/i);
+      expect(kCtrl.confirmDataTersimpan()).toBe(false);
+
+      expect(await kCtrl.fetchKategoriJasaById('')).toBeNull();
+      const foundKat = await kCtrl.fetchKategoriJasaById(KAT_CLEAN_ID);
+      expect(foundKat?.jenisJasa).toBe('Jasa Kebersihan Rumah');
+
+      const allFiltered = await kCtrl.filterKategoriJasa('');
+      expect(allFiltered.length).toBeGreaterThanOrEqual(3);
+      const acFiltered = await kCtrl.filterKategoriJasa('ac');
+      expect(acFiltered.some((k) => k.idKategoriJasa === KAT_AC_ID)).toBe(true);
+
+      // Handler GET /categories/:id -> 200 & 404
+      const okCat = createMockReqRes({ params: { id: KAT_CLEAN_ID } });
+      await kCtrl.getCategoryByIdHandler(okCat.req, okCat.res);
+      expect(okCat.resObj.statusCode).toBe(200);
+
+      const missingCat = createMockReqRes({ params: { id: 'kat-missing' } });
+      await kCtrl.getCategoryByIdHandler(missingCat.req, missingCat.res);
+      expect(missingCat.resObj.statusCode).toBe(404);
+
+      // Handler POST /categories -> 201
+      const createOk = createMockReqRes({
+        body: {
+          jenisJasa: 'Tukang Kunci',
+          deskripsiJasa: 'Duplikat kunci panggilan',
+          tarif: '50000',
+          jamKerja: '08:00 - 18:00',
+          daerahKerja: 'Bandung',
+        },
+      });
+      await kCtrl.createCategoryAndBindServiceHandler(createOk.req, createOk.res);
+      expect(createOk.resObj.statusCode).toBe(201);
+      expect(kCtrl.confirmDataTersimpan()).toBe(true);
+
+      // Handler POST /register dengan kategori invalid (tarif negatif) -> 400
+      const regInvalidKat = createMockReqRes({
+        body: {
+          idPemberiJasa: PJ_AHMAD_ID,
+          namaToko: 'Toko AC',
+          jenisJasa: 'Servis AC',
+          deskripsiJasa: 'Servis',
+          tarif: -100,
+          jamKerja: '08:00 - 17:00',
+          daerahKerja: 'Bandung',
+        },
+      });
+      await kCtrl.registerServiceProviderHandler(regInvalidKat.req, regInvalidKat.res);
+      expect(regInvalidKat.resObj.statusCode).toBe(400);
+
+      // Error 500 handlers
+      jest.spyOn(kCtrl, 'fetchAllKategoriJasa').mockRejectedValueOnce(new Error('DB err'));
+      const errAll = createMockReqRes({});
+      await kCtrl.getAllCategoriesHandler(errAll.req, errAll.res);
+      expect(errAll.resObj.statusCode).toBe(500);
+
+      jest.spyOn(kCtrl, 'fetchKategoriJasaById').mockRejectedValueOnce(new Error('DB err'));
+      const errById = createMockReqRes({ params: { id: KAT_CLEAN_ID } });
+      await kCtrl.getCategoryByIdHandler(errById.req, errById.res);
+      expect(errById.resObj.statusCode).toBe(500);
+    });
+
+    it('[C06] PemberiJasaController: validatePemberiJasa, showPemberiJasaFromKategori, choosePemberiJasa, filter radiusKm, dan handler kategori/error', async () => {
+      const pCtrl = new PemberiJasaController(new MockPemberiJasa());
+
+      expect(pCtrl.validatePemberiJasa('')).toBe(false);
+      expect(pCtrl.validatePemberiJasa('   ')).toBe(false);
+      expect(pCtrl.validatePemberiJasa(PJ_AHMAD_ID)).toBe(true);
+
+      expect(await pCtrl.fetchPemberiJasaById('   ')).toBeNull();
+      expect(await pCtrl.choosePemberiJasa('')).toBeNull();
+      const chosen = await pCtrl.choosePemberiJasa(PJ_SITI_ID);
+      expect(chosen?.namaPengguna).toBe('Siti Bersih');
+
+      expect(await pCtrl.showPemberiJasaFromKategori('')).toEqual([]);
+      const byKat = await pCtrl.showPemberiJasaFromKategori(KAT_AC_ID);
+      expect(byKat).toHaveLength(1);
+      expect(byKat[0].idPemberiJasa).toBe(PJ_AHMAD_ID);
+
+      // Filter radiusKm (batas ketat 2 km dari ITB Ganesha)
+      const within2Km = await pCtrl.searchServices({
+        lat: -6.8915,
+        long: 107.6107,
+        radiusKm: 2,
+        sortBy: 'nearest',
+      });
+      expect(within2Km.length).toBeGreaterThanOrEqual(1);
+      expect(within2Km.every((p) => (p.jarakKm ?? 99) <= 2)).toBe(true);
+
+      // Handler GET /category/:kategoriId -> 200 & 500
+      const catOk = createMockReqRes({ params: { kategoriId: KAT_AC_ID } });
+      await pCtrl.getServicesByCategoryHandler(catOk.req, catOk.res);
+      expect(catOk.resObj.statusCode).toBe(200);
+      expect(catOk.resObj.body.count).toBe(1);
+
+      jest.spyOn(pCtrl, 'showPemberiJasaFromKategori').mockRejectedValueOnce(new Error('DB err'));
+      const catErr = createMockReqRes({ params: { kategoriId: KAT_AC_ID } });
+      await pCtrl.getServicesByCategoryHandler(catErr.req, catErr.res);
+      expect(catErr.resObj.statusCode).toBe(500);
+
+      jest.spyOn(pCtrl, 'searchServices').mockRejectedValueOnce(new Error('DB err'));
+      const searchErr = createMockReqRes({ query: { q: 'ac' } });
+      await pCtrl.searchServicesHandler(searchErr.req, searchErr.res);
+      expect(searchErr.resObj.statusCode).toBe(500);
+
+      jest.spyOn(pCtrl, 'fetchPemberiJasaById').mockRejectedValueOnce(new Error('DB err'));
+      const detailErr = createMockReqRes({ params: { id: PJ_AHMAD_ID } });
+      await pCtrl.getServiceByIdHandler(detailErr.req, detailErr.res);
+      expect(detailErr.resObj.statusCode).toBe(500);
+    });
+
+    it('[C04, C13] Model PemberiJasa (getter/setter & getPemberiJasaByKategori) dan KategoriJasa (saveKategoriJasa & getKategoriById)', async () => {
+      const pj = new PemberiJasa(PJ_AHMAD_ID, KAT_AC_ID, 'Servis AC');
+
+      pj.setIDPemberiJasa('pj-updated');
+      pj.setIDKategoriJasa(KAT_CLEAN_ID);
+      pj.setJenisJasa('Kebersihan');
+      pj.setNamaToko('Toko Baru');
+      pj.setLatitude(-6.9);
+      pj.setLongitude(107.62);
+      pj.setStatusKetersediaan('On Progress');
+      pj.setIsOnline(false);
+      pj.setJarakKm(1.5);
+
+      expect(pj.getIDPemberiJasa()).toBe('pj-updated');
+      expect(pj.getIDKategoriJasa()).toBe(KAT_CLEAN_ID);
+      expect(pj.getIdKategoriJasa()).toBe(KAT_CLEAN_ID);
+      expect(pj.getJenisJasa()).toBe('Kebersihan');
+      expect(pj.getNamaToko()).toBe('Toko Baru');
+      expect(pj.getLatitude()).toBe(-6.9);
+      expect(pj.getLongitude()).toBe(107.62);
+      expect(pj.getStatusKetersediaan()).toBe('On Progress');
+      expect(pj.getIsOnline()).toBe(false);
+      expect(pj.getJarakKm()).toBe(1.5);
+      expect(pj.getDataPemberiJasa()).toBeNull();
+
+      jest.spyOn(prisma.pemberiJasa, 'findMany').mockResolvedValueOnce([
+        {
+          idPemberiJasa: PJ_AHMAD_ID,
+          namaToko: 'Ahmad Jaya AC',
+          idKategoriJasa: KAT_AC_ID,
+          jenisJasa: 'Perbaikan Elektronik & AC',
+          latitude: -6.8915,
+          longitude: 107.6107,
+          statusKetersediaan: 'Available',
+          isOnline: true,
+          version: 1,
+          pengguna: {
+            idPengguna: PJ_AHMAD_ID,
+            namaPengguna: 'Ahmad Teknik',
+            username: 'ahmad',
+            password: 'pw',
+            email: 'ahmad@cariuang.id',
+            nomorTelpon: '0812',
+            role: 'PEMBERI_JASA',
+            avatarUrl: null,
+            akumulasiRating: 4.9,
+            riwayatRating: [5],
+          },
+          kategoriJasa: {
+            idKategoriJasa: KAT_AC_ID,
+            jenisJasa: 'Perbaikan Elektronik & AC',
+            deskripsiJasa: 'Servis AC',
+            tarif: 120000,
+            jamKerja: '09:00 - 20:00',
+            daerahKerja: 'Bandung',
+          },
+        } as any,
+      ]);
+      const pjByKat = await pj.getPemberiJasaByKategori(KAT_AC_ID);
+      expect(pjByKat).toHaveLength(1);
+      expect(pjByKat[0].namaToko).toBe('Ahmad Jaya AC');
+
+      const katModel = new KategoriJasa();
+      jest.spyOn(prisma.kategoriJasa, 'findUnique').mockResolvedValueOnce(null);
+      expect(await katModel.getKategoriById('tidak-ada')).toBeNull();
+
+      jest.spyOn(prisma.kategoriJasa, 'create').mockResolvedValueOnce({
+        idKategoriJasa: 'kat-saved-1',
+        jenisJasa: 'Jasa Jahit',
+        deskripsiJasa: 'Permak pakaian',
+        tarif: 35000,
+        jamKerja: '08:00 - 17:00',
+        daerahKerja: 'Bandung',
+      });
+      const savedKat = await katModel.saveKategoriJasa({
+        idKategoriJasa: 'kat-saved-1',
+        jenisJasa: 'Jasa Jahit',
+        deskripsiJasa: 'Permak pakaian',
+        tarif: 35000,
+        jamKerja: '08:00 - 17:00',
+        daerahKerja: 'Bandung',
+      });
+      expect(savedKat.idKategoriJasa).toBe('kat-saved-1');
+    });
+  });
 });

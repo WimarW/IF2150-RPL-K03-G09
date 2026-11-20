@@ -8,6 +8,7 @@ import {
 import { LayananPelangganCtrl } from '../src/controllers/LayananPelangganCtrl';
 import { NotifikasiController } from '../src/controllers/NotifikasiController';
 import { LayananPelanggan } from '../src/models/LayananPelanggan';
+import { TiketLaporan } from '../src/models/TiketLaporan';
 import { authorizeRoles } from '../src/middlewares/auth.middleware';
 
 interface MockUserRow {
@@ -241,6 +242,17 @@ jest.mock('../src/database/prisma', () => {
           });
         }),
       },
+      $executeRawUnsafe: jest.fn(async () => 0),
+      $executeRaw: jest.fn(async (_strings: TemplateStringsArray, idLayananPelanggan: string) => {
+        const cs = mockStore.layananPelanggan.get(idLayananPelanggan);
+        if (cs) {
+          cs.jumlahTiketDipegang = Math.max(cs.jumlahTiketDipegang - 1, 0);
+          if (cs.jumlahTiketDipegang < 5 && cs.status === 'Busy') {
+            cs.status = 'Available';
+          }
+        }
+        return 1;
+      }),
       $transaction: jest.fn(async (callback: any): Promise<any> => {
         return callback(delegates);
       }),
@@ -672,7 +684,7 @@ describe('Sistem Tiket Laporan & Penugasan Otomatis CS [KF14 s.d. KF18 | UC08, U
         body: { text: 'Halo' },
       });
       await controller.kirimPesanPelaporHandler(notOwner.req, notOwner.res);
-      expect(notOwner.res.getStatus()).toBe(404);
+      expect(notOwner.res.getStatus()).toBe(403);
 
       const emptyMsg = createMockReqRes({
         user: { idPengguna: 'pelanggan-1', username: 'budi', role: Role.PELANGGAN },
@@ -871,6 +883,66 @@ describe('Sistem Tiket Laporan & Penugasan Otomatis CS [KF14 s.d. KF18 | UC08, U
       });
       await LayananPelangganCtrl.tutupTiket(doubleClose.req, doubleClose.res);
       expect(doubleClose.res.getStatus()).toBe(409);
+    });
+
+    it('[C10][KF15, KF17] LayananPelanggan constructor, getter, toJSON(), serta transisi status Busy/Available pada batas beban 5', async () => {
+      const csEntity = new LayananPelanggan({
+        idPengguna: 'cs-entity-1',
+        namaPengguna: 'Rina CS',
+        username: 'rinacs',
+        email: 'rina@cariuang.id',
+        nomorTelepon: '081234567890',
+        passwordHash: 'hashed',
+        status: 'Available',
+        jumlahTiketDipegang: 4,
+      });
+
+      expect(csEntity.getStatus()).toBe('Available');
+      expect(csEntity.getJumlahTiketDipegang()).toBe(4);
+      expect(csEntity.toJSON()).toMatchObject({
+        idLayananPelanggan: 'cs-entity-1',
+        status: 'Available',
+        jumlahTiketDipegang: 4,
+      });
+
+      mockStore.layananPelanggan.set('cs-boundary', {
+        idLayananPelanggan: 'cs-boundary',
+        status: 'Available',
+        jumlahTiketDipegang: 4,
+      });
+
+      await LayananPelanggan.tambahBeban(prisma as any, 'cs-boundary');
+      expect(mockStore.layananPelanggan.get('cs-boundary')?.jumlahTiketDipegang).toBe(5);
+      expect(mockStore.layananPelanggan.get('cs-boundary')?.status).toBe('Busy');
+
+      await LayananPelanggan.kurangiBeban(prisma as any, 'cs-boundary');
+      expect(mockStore.layananPelanggan.get('cs-boundary')?.jumlahTiketDipegang).toBe(4);
+      expect(mockStore.layananPelanggan.get('cs-boundary')?.status).toBe('Available');
+    });
+
+    it('[C22, C24][KF15, KF17] TiketLaporan.getDetailTiket mengembalikan null jika tidak ada dan kirimPesanPelaporHandler mengembalikan 404/500 dengan tepat', async () => {
+      const controller = new TiketLaporanController(new NotifikasiController());
+      const missing = await TiketLaporan.getDetailTiket('A-TIDAK-ADA', prisma as any);
+      expect(missing).toBeNull();
+
+      const notFoundMsg = createMockReqRes({
+        user: { idPengguna: 'pelanggan-1', username: 'budi', role: Role.PELANGGAN },
+        params: { id: 'A-TIDAK-ADA' },
+        body: { text: 'Halo CS' },
+      });
+      await controller.kirimPesanPelaporHandler(notFoundMsg.req, notFoundMsg.res);
+      expect(notFoundMsg.res.getStatus()).toBe(404);
+
+      const errSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined);
+      (prisma.$transaction as jest.Mock).mockRejectedValueOnce(new Error('DB crash'));
+      const errMsg = createMockReqRes({
+        user: { idPengguna: 'pelanggan-1', username: 'budi', role: Role.PELANGGAN },
+        params: { id: 'A-TIDAK-ADA' },
+        body: { text: 'Halo CS' },
+      });
+      await controller.kirimPesanPelaporHandler(errMsg.req, errMsg.res);
+      expect(errMsg.res.getStatus()).toBe(500);
+      errSpy.mockRestore();
     });
   });
 });
